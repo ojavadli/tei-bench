@@ -1,0 +1,627 @@
+{
+  "task_id": "gov_service_router",
+  "industry": "Government / Public Sector",
+  "metric": "classification",
+  "n_train": 15,
+  "n_test": 18,
+  "source": "Authored for TEI-Bench (Sonnet-generated, Sonnet-validated; kept only label-agreed examples).",
+  "agent_model": "claude-haiku-4-5",
+  "judge_model": "claude-sonnet-4-5",
+  "optimizer_model": "claude-sonnet-4-5",
+  "seed": 0,
+  "eval_repeats": 1,
+  "baseline_prompt": "You are a citizen-services router. Route the citizen's request to the correct government department. Classify into one of these categories: taxation, licensing, benefits, infrastructure, records, complaint.",
+  "optimized_prompt": "You are a citizen-services router. Your task is to classify the citizen's request into exactly ONE of these categories: taxation, licensing, benefits, infrastructure, records, complaint.\n\n**Output format requirement:** Return ONLY the category name as a single word in lowercase, nothing else. Do not add explanations, routing instructions, next steps, contact information, punctuation, or any other text.\n\n**Category definitions:**\n- **taxation**: Tax payments, tax accounts, tax disputes, tax calculations, tax filing questions, required distributions with tax implications, tax refunds, tax assessments\n- **licensing**: Permits, licenses, certifications, registrations, approvals for businesses, vehicles, professionals, activities, or facilities (including home-based businesses and daycares)\n- **benefits**: Social services, welfare, unemployment, disability benefits, retirement benefits (non-tax aspects), assistance programs, support programs, financial aid for living costs or medical expenses\n- **infrastructure**: Roads, bridges, water/sewer systems, storm drains, street maintenance, public facilities, utility infrastructure, physical public systems\n- **records**: Birth certificates, death certificates, property records, property deeds, public documents, record requests, copies of official documents\n- **complaint**: Grievances about services, misconduct, violations, quality issues, formal complaints about government operations, staff behavior, rudeness, poor service quality\n\n**Classification rules:**\n1. Focus on the primary subject matter and main intent of the request\n2. If requesting official documents or copies of records (deeds, certificates, etc.), classify as records\n3. If reporting poor service, staff misconduct, or expressing dissatisfaction with government operations, classify as complaint\n4. If seeking permits, approvals, certifications, or licenses for any activity or business, classify as licensing\n5. If requesting financial assistance, support programs, or aid due to hardship, classify as benefits\n6. If the request mentions tax implications or tax obligations, classify as taxation\n7. If the request is about physical public systems (drainage, roads, utilities), classify as infrastructure\n8. Return only the category word in lowercase with no additional characters",
+  "baseline_test": {
+    "objective_runs": [
+      0.9444444444444444
+    ],
+    "gpa_runs": [
+      0.857361111111111
+    ],
+    "objective_mean": 0.9444444444444444,
+    "gpa_mean": 0.857361111111111,
+    "gpa_dims": {
+      "target_alignment": 0.8333333333333331,
+      "reasoning_soundness": 0.8805555555555555,
+      "execution_accuracy": 0.831111111111111,
+      "output_integrity": 0.8844444444444444
+    },
+    "examples": [
+      {
+        "query": "The sidewalk in front of 342 Elm Street is completely cracked and uneven, creating a tripping hazard. My elderly neighbor fell there last week. When can the city fix this?",
+        "gold": "infrastructure",
+        "output": "**Route: Infrastructure**\n\nThis is a public safety issue related to sidewalk maintenance and repair. You should contact your city's **Department of Public Works** or **Department of Transportation/Streets & Sidewalks** (the exact name varies by municipality).\n\n**Recommended next steps:**\n1. File a formal complaint or service request through your city's website (many have online porthole systems)\n2. Provide the specific address (342 Elm Street) and photos if possible\n3. Mention the safety hazard and injury that occurred\n4. Request an inspection and timeline for repairs\n\nYou may also want to document the incident involving your neighbor's fall, as it could be relevant if liability questions arise later.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.98,
+          "output_integrity": 0.98,
+          "aggregate": 0.9575,
+          "rationale": "The agent correctly routed to 'Infrastructure' matching the reference answer, provided sound reasoning about sidewalk maintenance falling under public works/infrastructure, and added helpful but relev"
+        }
+      },
+      {
+        "query": "I need a certified copy of my daughter's birth certificate for her passport application. She was born in this county three years ago and I've lost the original document.",
+        "gold": "records",
+        "output": "**Classification: Records**\n\n**Recommended Department: Vital Records Office** (typically part of County Clerk or Health Department)\n\n**Next Steps:**\n1. Contact your county's Vital Records Office or County Clerk's office\n2. You'll need to provide:\n   - Your daughter's full name and date of birth\n   - Place of birth (hospital/location in the county)\n   - Your name and relationship to the child\n   - Valid ID for verification\n3. Request a certified copy specifically (note that certified copies are required for passport applications)\n4. Ask about:\n   - Processing time and fees\n   - Whether you can apply in person, by mail, or online\n   - Expedited options if needed for your passport timeline\n\nSince this is for a passport application, confirm with the passport office what specific format or number of certified copies you'll need.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.98,
+          "output_integrity": 0.98,
+          "aggregate": 0.9575,
+          "rationale": "The agent correctly identified 'Records' as the department, provided logically sound guidance about vital records procedures, maintained proper routing task focus, and delivered accurate information m"
+        }
+      },
+      {
+        "query": "I've been trying to reach someone in your office for three weeks now and nobody ever picks up the phone. This is absolutely unacceptable service for taxpayers who fund your salaries. The voicemail box is always full and emails go unanswered.",
+        "gold": "complaint",
+        "output": "I understand your frustration—unresponsive government services are a legitimate concern.\n\n**Classification: Complaint**\n\nYour issue should be routed to the **Complaint/Customer Service Department** or your office's **Administrative Services/Public Affairs office**.\n\n**Recommended next steps:**\n\n1. **Document everything** — note dates, times, phone numbers you called, and email addresses you used\n2. **Escalate formally** — submit a written complaint to:\n   - The department's main administrative office\n   - Your local elected representative (city council member, state legislator, etc.)\n   - The office's ombudsman or inspector general (if available)\n\n3. **Try alternative contact methods:**\n   - Visit in person during business hours\n   - Contact through the main department switchboard and ask to be transferred\n   - Check the website for a dedicated complaint form or email\n\n4. **Follow up in writing** — email complaints create a paper trail and are harder to ignore than phone calls\n\nYour elected representatives' offices often have constituent services staff specifically trained to cut through bureaucratic delays.\n\nIs there a specific service or benefit you're ultimately trying to access? That might help identify the right department to contact directly.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.45,
+          "reasoning_soundness": 0.7,
+          "execution_accuracy": 0.4,
+          "output_integrity": 0.5,
+          "aggregate": 0.5125,
+          "rationale": "The agent correctly identified this as a complaint but failed to execute the routing task as specified—it should have simply routed to 'complaint' department rather than providing extensive advice and"
+        }
+      },
+      {
+        "query": "My small business needs to set up payroll withholding for two new employees. What forms do I need to submit and what are the deadlines for remitting the withheld amounts?",
+        "gold": "taxation",
+        "output": "**Category: Taxation**\n\nYour request involves payroll tax withholding, which falls under tax administration and compliance.\n\n**Recommended routing:** Tax Department / Revenue Service\n\n**What to expect:** The taxation department will guide you on:\n- Required forms (typically W-4/equivalent employee withholding forms)\n- Employer registration requirements\n- Withholding calculation procedures\n- Remittance schedules and deadlines\n- Reporting obligations (quarterly and annual filings)\n\n**Next steps:** Contact your local tax authority's small business division or visit their website for employer resources and forms specific to your jurisdiction.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.88,
+          "output_integrity": 0.95,
+          "aggregate": 0.925,
+          "rationale": "The agent correctly identified 'taxation' as the department, provided sound reasoning about payroll tax withholding, though added helpful but not strictly required contextual information beyond the ro"
+        }
+      },
+      {
+        "query": "We're planning to hold a large community festival in the park with vendors and live music. What kind of authorization do we need from the city to host this event?",
+        "gold": "licensing",
+        "output": "# Event Authorization Request\n\n**Route: Licensing**\n\nFor hosting a large community festival with vendors and live music, you'll need to contact your city's **Licensing Department** (or equivalent, which may be called Permits, Events, or Business Licensing).\n\n## What you'll likely need:\n\n- **Event permit** - for the festival itself\n- **Vendor permits** - for each food/commercial vendor\n- **Music/entertainment license** - for live performances\n- **Park use permit** - if using public park space\n- Possible **liability insurance** requirements\n- **Health permits** - if food is being served\n\n## Next steps:\n\nContact your local city/municipal licensing office to:\n1. Confirm specific requirements for your location\n2. Get application forms and timelines\n3. Learn about any fees involved\n4. Understand safety and noise regulations\n\nThe specific requirements vary by jurisdiction, so starting with your local licensing department is the best first step.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.88,
+          "output_integrity": 0.95,
+          "aggregate": 0.925,
+          "rationale": "The agent correctly routed to 'Licensing' as required, provided sound reasoning about permit types, though added helpful but not strictly requested supplementary information that slightly exceeds the "
+        }
+      },
+      {
+        "query": "I'm currently receiving some form of monthly support but I'm not sure if the amount is correct based on my family size. Who can I contact to review my case and check if I should be getting more?",
+        "gold": "benefits",
+        "output": "# Benefits Department\n\nYour request should be routed to the **Benefits** department.\n\nThey handle:\n- Review of benefit eligibility and amounts\n- Adjustments based on family size and circumstances\n- Case assessments for programs like unemployment benefits, child support, disability payments, housing assistance, and other social support programs\n\n**Next steps:** Contact your local Benefits office or the benefits administration agency in your area. Have your case number and family information ready when you reach out.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.85,
+          "output_integrity": 0.95,
+          "aggregate": 0.9175,
+          "rationale": "The agent correctly identified 'Benefits' as the department, provided sound reasoning about why this department handles such cases, though the task asked only for routing (not additional guidance), an"
+        }
+      },
+      {
+        "query": "There's a huge pothole on Maple Street near the intersection with Oak Avenue that's been getting worse over the past month. It's causing damage to vehicles and is becoming a safety hazard for drivers in our neighborhood.",
+        "gold": "infrastructure",
+        "output": "**Classification: Infrastructure**\n\n**Recommended Department:** Department of Public Works / Transportation Department\n\n**Next Steps:**\n1. Contact your local Department of Public Works or Transportation Department\n2. Provide the specific location: Maple Street at Oak Avenue intersection\n3. Include details about the pothole's size, depth, and duration (worsening over the past month)\n4. Mention the safety hazard and vehicle damage concerns\n5. If available, provide photos of the damage\n\n**Alternative Contact Options:**\n- Your city/county's non-emergency service line\n- Local 311 service (if available in your area)\n- Your neighborhood's city council representative's office\n\nThis type of road maintenance issue falls under infrastructure management and should be prioritized for repair given the safety hazard you've described.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.98,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly identified 'infrastructure' as the department, provided sound reasoning about road maintenance falling under infrastructure management, executed the routing task accurately with th"
+        }
+      },
+      {
+        "query": "I need to request a certificate showing when and where my parents were married. They got married in this jurisdiction in 1992 and I need it for immigration purposes.",
+        "gold": "records",
+        "output": "# Route: **Records**\n\nYour request should be directed to the **Vital Records Department** (or equivalent Records/Registry office in your jurisdiction).\n\nThey handle the issuance of official certificates for vital events including:\n- Marriage certificates\n- Birth certificates\n- Death certificates\n\n**Next steps:**\n1. Contact your local Vital Records office\n2. Provide details: parents' names, marriage date (1992), and location\n3. Specify that you need an official certified copy for immigration purposes\n4. Be prepared to provide proof of your relationship to the couple and valid identification\n\nMost jurisdictions allow requests online, by mail, or in person.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly routed to 'Records' (matching the reference answer) and provided helpful, accurate context about vital records departments handling marriage certificates, though the task only requ"
+        }
+      },
+      {
+        "query": "I'm very disappointed with how my case was handled. The information I was given over the phone contradicted what was written on your website, and now I've wasted time and money following incorrect guidance.",
+        "gold": "complaint",
+        "output": "# Classification: **Complaint**\n\nThis should be routed to the **Complaints Department** or your organization's **Customer Service/Ombudsman Office**.\n\nYour concern involves:\n- Service quality issues\n- Inconsistent information provided\n- Impact on the citizen (wasted time and money)\n\n**Next steps for the citizen:**\n- Request to file a formal complaint\n- Ask about compensation or remedy options\n- Request clarification on the correct information\n- Ask for a review of how the misinformation occurred",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 0.85,
+          "output_integrity": 0.95,
+          "aggregate": 0.9125000000000001,
+          "rationale": "The agent correctly identified this as a complaint and provided appropriate routing, though it added helpful but unrequested guidance beyond the core classification task."
+        }
+      },
+      {
+        "query": "I'm a freelance graphic designer and this is my first year working for myself. Can someone explain what quarterly estimated payments are and how I'm supposed to calculate them?",
+        "gold": "taxation",
+        "output": "# Routing to: **Taxation**\n\nYour question about quarterly estimated tax payments falls under tax obligations for self-employed individuals.\n\n**Next steps:**\n- Contact your **Internal Revenue Service (IRS)** or your country's tax authority\n- In the US, visit **IRS.gov** or call 1-800-829-1040\n- Look for resources on \"estimated quarterly taxes\" or \"Form 1040-ES\"\n\n**What to expect:**\nThey can help you understand:\n- How to calculate estimated payments based on projected income\n- Payment deadlines and methods\n- Penalties for underpayment\n- Whether you need to make these payments\n\nYou may also want to consult a tax professional or accountant, especially in your first year, to ensure you're calculating correctly and taking advantage of any deductions available to self-employed workers.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9675,
+          "rationale": "The agent correctly routed to 'Taxation' matching the reference answer, provided sound reasoning about tax obligations for self-employed individuals, followed proper format, and added helpful context "
+        }
+      },
+      {
+        "query": "I need to renew my food handler's certificate before it expires next month. Can you tell me what documents I need and where to submit the application?",
+        "gold": "licensing",
+        "output": "# Routing: **Licensing**\n\nYour request should be directed to your **local Health Department** or **Environmental Health Services**.\n\n## What you'll typically need:\n\n- Current/expired food handler's certificate\n- Valid government-issued ID\n- Proof of residency (may be required)\n- Completed renewal application form\n- Renewal fee\n\n## Where to submit:\n\n1. **Local Health Department** - Usually the primary office for food handler certifications\n2. **Online portal** - Many jurisdictions now offer online renewal\n3. **Approved training providers** - Some allow direct submission through certified instructors\n\n## Next steps:\n\n- Contact your **county or city health department** directly to confirm:\n  - Specific document requirements for your jurisdiction\n  - Current renewal fees\n  - Processing times\n  - Whether you need to retake the food handler course or if renewal is automatic\n\nSince requirements vary by location, I recommend calling your local health department or checking their website for the most accurate information for your area.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.45,
+          "reasoning_soundness": 0.75,
+          "execution_accuracy": 0.6,
+          "output_integrity": 0.7,
+          "aggregate": 0.625,
+          "rationale": "The agent correctly identified 'Licensing' as the routing destination (matching the reference), but significantly exceeded the task scope by providing extensive procedural guidance when only routing w"
+        }
+      },
+      {
+        "query": "I need to update my information because my living situation has changed - I now have custody of my nephew and I think this might affect the support payments I receive for my household.",
+        "gold": "benefits",
+        "output": "Based on your request, I'm routing you to: **BENEFITS**\n\nYour change in living situation and household composition directly affects your eligibility and payment amounts for support programs. The benefits department handles:\n\n- Updates to household information\n- Changes in dependents/custody arrangements\n- Recalculation of support payments based on new circumstances\n- Programs like child support, housing assistance, or other household-based benefits\n\n**Next steps:**\n- Contact your local benefits office or social services department\n- Bring documentation of the custody change\n- Be prepared to provide updated household composition details\n\nThis is the right department to ensure your support payments are adjusted appropriately for your new situation.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9675,
+          "rationale": "The agent correctly routed to 'benefits' matching the reference answer, provided sound reasoning about why this department handles custody and support payment changes, maintained proper format, and ad"
+        }
+      },
+      {
+        "query": "I'm calling about the bridge on County Road 12 that crosses Miller Creek. The guardrail is damaged and there are visible cracks in the concrete surface. This needs inspection and repair.",
+        "gold": "infrastructure",
+        "output": "**Route: Infrastructure**\n\nYour concern about the damaged guardrail and cracked concrete on the County Road 12 bridge should be directed to your local **Department of Transportation** or **Public Works Department**.\n\n**Recommended next steps:**\n- Contact your county or municipal Public Works/Transportation office\n- Provide the specific location (County Road 12, Miller Creek crossing)\n- Document the damage with photos if possible\n- Request a safety inspection and repair assessment\n\nThis is a public safety matter, so prioritize getting it reported promptly. Most jurisdictions have emergency reporting lines for critical infrastructure issues.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.75,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 0.7,
+          "output_integrity": 0.85,
+          "aggregate": 0.7999999999999999,
+          "rationale": "The agent correctly identified 'infrastructure' as the routing destination and provided sound reasoning, but added extensive unsolicited guidance beyond the simple routing task, and the format differs"
+        }
+      },
+      {
+        "query": "I'm researching my family history and would like to access historical birth and death records for my grandfather who lived in this area between 1940 and 1985.",
+        "gold": "records",
+        "output": "**Classification: Records**\n\nYour request should be routed to the **Vital Records Department** (or equivalent Records/Registry office in your jurisdiction).\n\nThey handle:\n- Birth certificates\n- Death certificates\n- Marriage records\n- Historical vital records archives\n\n**Next steps:**\n1. Contact your local Vital Records office or state/provincial registry\n2. Have ready: Your grandfather's full name, approximate dates, and location\n3. You may need to provide proof of relationship\n4. Some records may be available online; others require in-person requests or mail applications\n5. There may be a small processing fee\n\nIf you're unsure of the exact office, your local government's main website should have a link to vital records services.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.98,
+          "output_integrity": 0.98,
+          "aggregate": 0.9575,
+          "rationale": "The agent correctly identified 'records' as the department, provided sound reasoning about vital records handling birth/death certificates, executed the routing task properly, and delivered accurate i"
+        }
+      },
+      {
+        "query": "Nobody seems to know what they're doing. I've spoken to five different people and gotten five different answers. There's clearly a lack of training and communication within your organization.",
+        "gold": "complaint",
+        "output": "I appreciate you sharing your frustration. However, I should clarify that I'm an AI assistant designed to help route requests—I'm not part of the government organization you've been dealing with.\n\nTo help you effectively, I need to understand **what specific issue you're trying to resolve**. Could you tell me:\n\n- What is the main problem or request you're trying to address?\n- Which department(s) have you already contacted?\n\nOnce I understand your actual need, I can route you to the correct department. Common categories include:\n\n- **Taxation** - tax questions, returns, disputes\n- **Licensing** - permits, certifications, renewals\n- **Benefits** - welfare, assistance programs, eligibility\n- **Infrastructure** - roads, utilities, public services\n- **Records** - birth certificates, licenses, official documents\n- **Complaint** - service issues, feedback about government operations\n\nIf your frustration itself is the main issue—about poor service coordination—that would fall under **complaint**, and I can route you there.\n\nWhat's the core issue you're trying to resolve?",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.25,
+          "reasoning_soundness": 0.6,
+          "execution_accuracy": 0.15,
+          "output_integrity": 0.2,
+          "aggregate": 0.3,
+          "rationale": "The agent failed to execute the routing task by requesting more information instead of recognizing the input as a complaint and routing accordingly, despite the reference answer clearly being 'complai"
+        }
+      },
+      {
+        "query": "I need help understanding why my refund from last year hasn't arrived yet. I filed electronically in March and was told it would take 6-8 weeks, but it's been almost four months now and I haven't received anything.",
+        "gold": "taxation",
+        "output": "**Category: Taxation**\n\nYour request should be routed to the **Tax Authority/Revenue Department**.\n\nThey handle:\n- Tax refund status inquiries\n- Delayed refund investigations\n- Electronic filing issues\n- Refund processing timelines\n\n**Recommended next steps:**\n1. Contact your tax authority's refund hotline or online portal\n2. Have your filing confirmation number and Social Security number ready\n3. Request a refund status check - four months is beyond the standard 6-8 week window\n4. Ask about filing a refund inquiry if the delay is unexplained",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified 'Taxation' as the department, provided sound reasoning about tax refund handling, followed proper routing format, and the core answer perfectly matches the reference."
+        }
+      },
+      {
+        "query": "My driver's credential expired last week and I need to get it renewed as soon as possible. What are my options for getting this done quickly?",
+        "gold": "licensing",
+        "output": "# Routing: **Licensing**\n\nYour request should be directed to your **Department of Motor Vehicles (DMV)** or equivalent licensing authority in your jurisdiction.\n\n## Quick renewal options typically include:\n\n- **Online renewal** (if eligible) - often the fastest option\n- **In-person appointment** - book ahead to minimize wait times\n- **Mail-in renewal** - slower but convenient\n- **Express/expedited service** - available in many locations for an additional fee\n\n## Next steps:\n1. Visit your local DMV website to check eligibility for online renewal\n2. If you need to go in person, schedule an appointment to avoid long waits\n3. Gather required documents (expired license, proof of residency, etc.)\n4. Ask about expedited processing options if you need it urgently\n\nSince your license is already expired, verify whether there are any restrictions on driving while you process the renewal in your area.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.88,
+          "output_integrity": 0.98,
+          "aggregate": 0.9325,
+          "rationale": "The agent correctly routed to 'licensing' and provided helpful context, though the task only required routing; the core answer is accurate and complete with no fabrication."
+        }
+      },
+      {
+        "query": "My elderly mother lives alone on a very small pension and struggles to pay for heating in winter. Are there any supplementary assistance programs that could help her with utility bills?",
+        "gold": "benefits",
+        "output": "# Benefits\n\nThis request should be routed to the **Benefits** department.\n\nYour mother may be eligible for several assistance programs, which typically include:\n\n- **Utility assistance programs** - Direct help with heating/cooling bills\n- **Low-income energy assistance** - Often available seasonally for winter heating\n- **Supplementary pension programs** - Additional income support for elderly citizens\n- **Fuel allowance schemes** - Specific winter heating support\n\nThe Benefits department can:\n- Assess her eligibility based on income and circumstances\n- Help with applications for relevant programs\n- Provide information on one-time emergency assistance if needed\n- Connect her with additional support services\n\n**Recommendation:** Contact your local Benefits office with details about her pension income and current utility costs. Many programs have simplified application processes for elderly applicants, and some offer expedited processing during winter months.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.75,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 0.85,
+          "output_integrity": 0.95,
+          "aggregate": 0.8625,
+          "rationale": "The agent correctly routed to 'Benefits' and provided sound reasoning, but the task asked only to route the request, not to provide extensive additional information about programs and recommendations."
+        }
+      }
+    ]
+  },
+  "final_test": {
+    "objective_runs": [
+      1.0
+    ],
+    "gpa_runs": [
+      0.9812499999999998
+    ],
+    "objective_mean": 1.0,
+    "gpa_mean": 0.9812499999999998,
+    "gpa_dims": {
+      "target_alignment": 0.9666666666666663,
+      "reasoning_soundness": 0.9583333333333331,
+      "execution_accuracy": 1.0,
+      "output_integrity": 1.0
+    },
+    "examples": [
+      {
+        "query": "The sidewalk in front of 342 Elm Street is completely cracked and uneven, creating a tripping hazard. My elderly neighbor fell there last week. When can the city fix this?",
+        "gold": "infrastructure",
+        "output": "infrastructure",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly routed a sidewalk repair request to 'infrastructure', matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "I need a certified copy of my daughter's birth certificate for her passport application. She was born in this county three years ago and I've lost the original document.",
+        "gold": "records",
+        "output": "records",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly routed the birth certificate request to 'records' department, matching the reference answer exactly with proper understanding of vital records management."
+        }
+      },
+      {
+        "query": "I've been trying to reach someone in your office for three weeks now and nobody ever picks up the phone. This is absolutely unacceptable service for taxpayers who fund your salaries. The voicemail box is always full and emails go unanswered.",
+        "gold": "complaint",
+        "output": "complaint",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified the input as a complaint about service quality and routed it appropriately, matching the reference answer exactly with proper format."
+        }
+      },
+      {
+        "query": "My small business needs to set up payroll withholding for two new employees. What forms do I need to submit and what are the deadlines for remitting the withheld amounts?",
+        "gold": "taxation",
+        "output": "taxation",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly routed a payroll withholding tax question to the taxation department, matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "We're planning to hold a large community festival in the park with vendors and live music. What kind of authorization do we need from the city to host this event?",
+        "gold": "licensing",
+        "output": "licensing",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly identified 'licensing' as the appropriate department for event permits involving vendors and public space usage, matching the reference answer exactly with proper format."
+        }
+      },
+      {
+        "query": "I'm currently receiving some form of monthly support but I'm not sure if the amount is correct based on my family size. Who can I contact to review my case and check if I should be getting more?",
+        "gold": "benefits",
+        "output": "benefits",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly routed the benefits eligibility inquiry to the 'benefits' department, matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "There's a huge pothole on Maple Street near the intersection with Oak Avenue that's been getting worse over the past month. It's causing damage to vehicles and is becoming a safety hazard for drivers in our neighborhood.",
+        "gold": "infrastructure",
+        "output": "infrastructure",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly routed a pothole/road maintenance request to the infrastructure department, matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "I need to request a certificate showing when and where my parents were married. They got married in this jurisdiction in 1992 and I need it for immigration purposes.",
+        "gold": "records",
+        "output": "records",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly routed the marriage certificate request to 'records' department, matching the reference answer exactly and appropriately handling a vital records request."
+        }
+      },
+      {
+        "query": "I'm very disappointed with how my case was handled. The information I was given over the phone contradicted what was written on your website, and now I've wasted time and money following incorrect guidance.",
+        "gold": "complaint",
+        "output": "complaint",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified the citizen's dissatisfaction and frustration as a complaint, matching the reference answer exactly with proper routing classification."
+        }
+      },
+      {
+        "query": "I'm a freelance graphic designer and this is my first year working for myself. Can someone explain what quarterly estimated payments are and how I'm supposed to calculate them?",
+        "gold": "taxation",
+        "output": "taxation",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly routed a question about quarterly estimated tax payments to the taxation department, matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "I need to renew my food handler's certificate before it expires next month. Can you tell me what documents I need and where to submit the application?",
+        "gold": "licensing",
+        "output": "licensing",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly routed the food handler's certificate renewal request to 'licensing', matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "I need to update my information because my living situation has changed - I now have custody of my nephew and I think this might affect the support payments I receive for my household.",
+        "gold": "benefits",
+        "output": "benefits",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly routed a custody and support payment inquiry to 'benefits', matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "I'm calling about the bridge on County Road 12 that crosses Miller Creek. The guardrail is damaged and there are visible cracks in the concrete surface. This needs inspection and repair.",
+        "gold": "infrastructure",
+        "output": "infrastructure",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly routed a bridge damage report to 'infrastructure', matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "I'm researching my family history and would like to access historical birth and death records for my grandfather who lived in this area between 1940 and 1985.",
+        "gold": "records",
+        "output": "records",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly routed the request for historical birth and death records to the 'records' department, exactly matching the reference answer with appropriate reasoning for genealogical research."
+        }
+      },
+      {
+        "query": "Nobody seems to know what they're doing. I've spoken to five different people and gotten five different answers. There's clearly a lack of training and communication within your organization.",
+        "gold": "complaint",
+        "output": "complaint",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified the input as a complaint and routed it appropriately, matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "I need help understanding why my refund from last year hasn't arrived yet. I filed electronically in March and was told it would take 6-8 weeks, but it's been almost four months now and I haven't received anything.",
+        "gold": "taxation",
+        "output": "taxation",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly routed a tax refund inquiry to the taxation department with proper format and perfect match to the reference answer."
+        }
+      },
+      {
+        "query": "My driver's credential expired last week and I need to get it renewed as soon as possible. What are my options for getting this done quickly?",
+        "gold": "licensing",
+        "output": "licensing",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly routed the driver's credential renewal request to 'licensing', matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "My elderly mother lives alone on a very small pension and struggles to pay for heating in winter. Are there any supplementary assistance programs that could help her with utility bills?",
+        "gold": "benefits",
+        "output": "benefits",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly routed the request about supplementary assistance for utility bills to 'benefits', matching the reference answer exactly with proper format and no extraneous content."
+        }
+      }
+    ]
+  },
+  "delta_objective": 0.05555555555555558,
+  "delta_gpa": 0.12388888888888883,
+  "optimization": {
+    "front": [
+      {
+        "obj": 1.0,
+        "gpa": 0.97625,
+        "iter": 4,
+        "strategy": "mutation"
+      }
+    ],
+    "history": [
+      {
+        "iter": 0,
+        "obj": 0.7,
+        "gpa": 0.95025,
+        "composite": 0.825125,
+        "strategy": "baseline"
+      },
+      {
+        "iter": 1,
+        "obj": 1.0,
+        "gpa": 0.975,
+        "composite": 0.9875,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 2,
+        "obj": 1.0,
+        "gpa": 0.975,
+        "composite": 0.9875,
+        "strategy": "mutation",
+        "front_size": 2
+      },
+      {
+        "iter": 3,
+        "obj": 1.0,
+        "gpa": 0.97375,
+        "composite": 0.986875,
+        "strategy": "mutation",
+        "front_size": 2
+      },
+      {
+        "iter": 4,
+        "obj": 1.0,
+        "gpa": 0.97625,
+        "composite": 0.9881249999999999,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 5,
+        "obj": 1.0,
+        "gpa": 0.97375,
+        "composite": 0.986875,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 6,
+        "obj": 1.0,
+        "gpa": 0.975,
+        "composite": 0.9875,
+        "strategy": "mutation",
+        "front_size": 1
+      }
+    ],
+    "baseline_train_obj": 0.7,
+    "best_train_obj": 1.0
+  },
+  "duration_s": 102.6
+}

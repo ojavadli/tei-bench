@@ -1,0 +1,627 @@
+{
+  "task_id": "saas_ticket_priority",
+  "industry": "B2B SaaS",
+  "metric": "classification",
+  "n_train": 15,
+  "n_test": 18,
+  "source": "Authored for TEI-Bench (Sonnet-generated, Sonnet-validated; kept only label-agreed examples).",
+  "agent_model": "claude-haiku-4-5",
+  "judge_model": "claude-sonnet-4-5",
+  "optimizer_model": "claude-sonnet-4-5",
+  "seed": 0,
+  "eval_repeats": 1,
+  "baseline_prompt": "You are a support-priority classifier. Classify the support ticket into a priority/type bucket. Classify into one of these categories: outage_critical, data_loss, billing, feature_request, how_to, integration.",
+  "optimized_prompt": "You are a support-priority classifier. Classify the support ticket into exactly one of these categories based on the primary issue:\n\n**outage_critical** - System is down, inaccessible, or completely non-functional for users. Core functionality is broken preventing normal operations.\n\n**data_loss** - Data has been deleted, corrupted, or is missing. Includes lost records, wiped tables, disappeared files, or data integrity issues requiring recovery or restoration.\n\n**billing** - Issues related to charges, invoices, payments, pricing, plan changes, subscription problems, or account billing discrepancies.\n\n**feature_request** - User is asking for new functionality, enhancements, or capabilities that don't currently exist in the product.\n\n**how_to** - User needs guidance, best practices, instructions, or advice on how to use existing features or configure the system correctly.\n\n**integration** - Issues connecting with third-party services, APIs, external systems, or problems with data sync between platforms.\n\nOutput your classification in this exact format: `Classification: category` where category is one of the six options above (use the exact category name with no brackets, asterisks, bold formatting, or any other markdown).\n\nChoose the single most appropriate category based on the core issue described. Provide ONLY the classification line with no additional explanation, reasoning, or commentary.",
+  "baseline_test": {
+    "objective_runs": [
+      0.6666666666666666
+    ],
+    "gpa_runs": [
+      0.9416666666666667
+    ],
+    "objective_mean": 0.6666666666666666,
+    "gpa_mean": 0.9416666666666667,
+    "gpa_dims": {
+      "target_alignment": 0.9222222222222219,
+      "reasoning_soundness": 0.9249999999999999,
+      "execution_accuracy": 0.9611111111111111,
+      "output_integrity": 0.9583333333333334
+    },
+    "examples": [
+      {
+        "query": "It would be incredibly helpful if users could schedule reports to run automatically and email to specified recipients weekly. Right now we're manually generating and sending these every Monday morning.",
+        "gold": "feature_request",
+        "output": "**Classification: feature_request**\n\nThis is a request for new functionality (automated report scheduling and email delivery) that would improve workflow efficiency. While it describes a pain point in the current process, there is no active outage, data loss, billing issue, or request for help with existing features.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the ticket as 'feature_request' matching the reference answer, provided sound reasoning about why it's a feature request rather than other ticket types, and executed the"
+        }
+      },
+      {
+        "query": "I'm trying to set up automated email notifications for new user registrations, but I can't find where to configure the SMTP settings in the admin panel. Could someone walk me through the steps?",
+        "gold": "how_to",
+        "output": "**Classification: how_to**\n\nThis is a request for guidance on how to perform a specific task (configuring SMTP settings for email notifications). The user is looking for instructional help rather than reporting a problem, requesting a new feature, or dealing with a critical issue.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the ticket as 'how_to' matching the reference answer, provided sound reasoning about why it's instructional guidance rather than other ticket types, and executed the cla"
+        }
+      },
+      {
+        "query": "We're trying to connect our CRM system to your platform using the REST endpoints, but we keep getting 401 authentication errors even though our API key is valid. The OAuth token refresh flow seems to be failing after the initial handshake completes successfully.",
+        "gold": "integration",
+        "output": "**Classification: integration**\n\nThis ticket involves technical difficulties with connecting an external system (CRM) to your platform using API authentication and OAuth flows. While the user is experiencing errors, this is a configuration/troubleshooting issue related to integrating third-party systems rather than a complete service outage, data loss, or billing problem.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the ticket as 'integration' matching the reference answer, provided sound reasoning about API/OAuth integration issues, followed the classification task format, and deli"
+        }
+      },
+      {
+        "query": "The entire infrastructure seems to have crashed. We're seeing database connection failures, application servers not responding, and zero availability across all modules. This is blocking our entire organization from conducting business operations.",
+        "gold": "outage_critical",
+        "output": "**Classification: outage_critical**\n\nThis ticket describes a complete system failure affecting all services and blocking business operations. This is a critical outage requiring immediate escalation and emergency response.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the ticket as 'outage_critical' matching the reference answer, provided sound reasoning about system-wide failure, and followed proper classification format without any "
+        }
+      },
+      {
+        "query": "We ran a routine backup restore test and discovered that our backup from last week is incomplete - several critical folders are missing entirely and others contain files that won't open or appear to be truncated.",
+        "gold": "data_loss",
+        "output": "**Classification: data_loss**\n\nThis ticket involves corrupted and missing data from a backup, which represents a data integrity issue. The customer has discovered that their backup is incomplete with missing folders and corrupted files, which is a critical data loss concern that requires immediate investigation and remediation.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the ticket as 'data_loss' matching the reference answer, provided sound reasoning about backup corruption and missing data constituting data loss, and followed the class"
+        }
+      },
+      {
+        "query": "The annual subscription renewal went through but we actually wanted to downgrade to the monthly plan instead. Is it possible to get prorated and switch?",
+        "gold": "billing",
+        "output": "**Classification: billing**\n\nThis ticket involves a subscription plan change and potential refund/proration request, which falls under billing inquiries.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the ticket as 'billing', provided sound reasoning about subscription changes and proration, and fully matched the reference answer with proper format."
+        }
+      },
+      {
+        "query": "Our workflow would benefit significantly from bulk export functionality. Currently we have to download reports one at a time, which becomes tedious when dealing with multiple clients. Can this be added to the roadmap?",
+        "gold": "feature_request",
+        "output": "**Classification: feature_request**\n\nThis ticket is requesting a new capability (bulk export functionality) to improve workflow efficiency. While the user describes a pain point with their current process, there is no active outage, data loss, billing issue, or request for help with existing features. This is a clear feature enhancement request for the product roadmap.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the ticket as 'feature_request' matching the reference answer, provided sound reasoning about why it's not other ticket types, and followed the classification task forma"
+        }
+      },
+      {
+        "query": "I'm looking for guidance on setting up two-factor authentication for all users in our organization. Is this configured at the individual level or can it be enforced globally through admin settings?",
+        "gold": "how_to",
+        "output": "**Classification: how_to**\n\nThis is a request for guidance on configuring a feature (two-factor authentication) within the system. The user is asking for procedural help and clarification on available options, which is a typical \"how to\" support question rather than reporting a problem, requesting new functionality, or indicating a critical issue.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the ticket as 'how_to', provided sound reasoning about why it's a procedural guidance request, and the output matches the reference answer perfectly."
+        }
+      },
+      {
+        "query": "Our mobile app uses your SDK to handle payment processing, but after updating to version 3.2.1, the callback methods aren't firing when transactions complete. The payment goes through on your side, but our app never receives the success or failure response, leaving users stuck on a loading screen.",
+        "gold": "integration",
+        "output": "**Classification: outage_critical**\n\n**Reasoning:**\n- **Active service disruption**: Payment processing callbacks are non-functional after an SDK update, causing a broken user experience\n- **Revenue impact**: Users cannot complete transactions or receive confirmation, affecting business operations\n- **User-facing blocking issue**: Users are stuck on loading screens with no resolution path\n- **Widespread potential impact**: This affects all users of the mobile app using the updated SDK version\n\nThis requires immediate investigation and likely a hotfix or rollback, making it a critical priority.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.45,
+          "reasoning_soundness": 0.7,
+          "execution_accuracy": 0.3,
+          "output_integrity": 0.25,
+          "aggregate": 0.425,
+          "rationale": "The agent provided logical reasoning about severity but misclassified the ticket as 'outage_critical' when the correct classification is 'integration' (a technical integration issue, not a service out"
+        }
+      },
+      {
+        "query": "URGENT: The main API endpoint is returning 503 errors and has been down for over an hour. This is affecting all of our client applications and nobody can use any part of the system. We have hundreds of users unable to complete their work.",
+        "gold": "outage_critical",
+        "output": "**Classification: outage_critical**\n\nThis ticket clearly meets the criteria for critical outage priority:\n- System-wide service unavailability (503 errors)\n- Extended duration (1+ hour)\n- Broad impact (all client applications affected)\n- Large user base impacted (hundreds of users)\n- Business-critical functionality blocked\n\nThis requires immediate escalation and emergency response.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the ticket as 'outage_critical' matching the reference answer, provided sound reasoning based on severity indicators, followed proper classification format, and added he"
+        }
+      },
+      {
+        "query": "We just noticed that all customer records from the past 3 months have disappeared from our database. We had over 15,000 entries and now we're only seeing historical data from before June. This is extremely urgent as we cannot access any recent customer information.",
+        "gold": "data_loss",
+        "output": "**Classification: data_loss**\n\nThis ticket describes a critical data loss situation involving the disappearance of 15,000+ recent customer records. While this is extremely urgent, it's classified as **data_loss** rather than **outage_critical** because:\n\n- The system itself appears to be operational (they can still access historical data)\n- The primary issue is missing/deleted data rather than service unavailability\n- Data loss requires specialized recovery procedures and investigation\n\n**Recommended immediate actions:**\n1. Escalate to database/infrastructure team immediately\n2. Check backup systems and recovery options\n3. Investigate access logs for unauthorized deletions\n4. Preserve any audit trails\n5. Notify relevant stakeholders about potential data recovery timeline",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the ticket as 'data_loss' matching the reference answer, provided sound reasoning for the classification, and while additional context was given beyond the minimal requi"
+        }
+      },
+      {
+        "query": "Our finance department needs itemized receipts for the last six months of transactions for tax purposes. How can we obtain these documents?",
+        "gold": "billing",
+        "output": "**Classification: billing**\n\nThis ticket is requesting financial documentation (itemized receipts) for accounting and tax purposes, which falls under billing-related support.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the ticket as 'billing', provided sound reasoning about financial documentation falling under billing support, and fully matched the reference answer with proper format."
+        }
+      },
+      {
+        "query": "I'd love to see calendar integration so appointments automatically sync with Google Calendar and Outlook. This would eliminate the manual double-entry we're doing right now.",
+        "gold": "feature_request",
+        "output": "**Classification: feature_request**\n\nThis ticket is a request for new functionality (calendar integration with Google Calendar and Outlook) rather than a report of a problem, outage, data loss, billing issue, or a question about how to use existing features.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the ticket as 'feature_request' matching the reference answer, provided sound reasoning distinguishing it from other ticket types, and followed proper format with clear "
+        }
+      },
+      {
+        "query": "I need help understanding the difference between webhook and API polling for syncing data. Which approach should I use for real-time updates, and where do I configure the endpoint URLs?",
+        "gold": "how_to",
+        "output": "**Classification: how_to**\n\nThis is a request for guidance on technical implementation and best practices. The user is asking for educational information about two integration approaches and configuration help, not reporting a system failure, data loss, billing issue, or requesting a new feature.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9675,
+          "rationale": "The agent correctly classified the ticket as 'how_to', provided sound reasoning distinguishing it from other categories, followed the classification format perfectly, and matched the reference answer "
+        }
+      },
+      {
+        "query": "I'm following the documentation to set up the Zapier connection, but the authorization step keeps timing out. When I click 'Connect Account' it redirects to your auth page, then spins indefinitely without completing. Can someone verify if the OAuth redirect URI is configured correctly?",
+        "gold": "integration",
+        "output": "**Classification: integration**\n\nThis ticket involves a technical issue with setting up a third-party integration (Zapier) where the OAuth authentication flow is failing. While it's blocking the user's workflow, it's not an outage affecting multiple users, data loss, billing issue, or a feature request. It's a troubleshooting issue specific to integration setup.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the ticket as 'integration' with sound reasoning about OAuth/Zapier setup issues, proper format, and complete accuracy matching the reference answer."
+        }
+      },
+      {
+        "query": "Our entire production environment has been inaccessible for the past 45 minutes. None of our 2,000+ employees can log in to the platform and all customer-facing services are completely unavailable. This is causing massive business disruption and we need immediate assistance.",
+        "gold": "outage_critical",
+        "output": "**Classification: outage_critical**\n\nThis ticket meets all criteria for critical outage priority:\n- Complete service unavailability affecting production environment\n- Large-scale impact (2,000+ employees + customers)\n- Significant business disruption\n- Time-sensitive emergency requiring immediate response\n\n**Recommended action:** Route to highest priority support queue for immediate escalation to engineering/operations team.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.98,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9824999999999999,
+          "rationale": "The agent correctly classified the ticket as 'outage_critical' matching the reference answer, provided sound justification for the classification, followed proper format, and added helpful context wit"
+        }
+      },
+      {
+        "query": "Half of our uploaded images from the media library have become corrupted and won't display anymore. They show as broken links and when we try to re-access them, we get file not found errors. This affects roughly 3,000 assets.",
+        "gold": "data_loss",
+        "output": "**Classification: data_loss**\n\nThis ticket involves a significant loss of access to stored data (3,000 corrupted/inaccessible image assets). While it may also have outage characteristics, the core issue is data integrity and loss, which makes data_loss the appropriate priority classification.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the ticket as 'data_loss' matching the reference, provided sound reasoning about data integrity issues affecting 3,000 assets, and delivered the answer in proper format "
+        }
+      },
+      {
+        "query": "I'm seeing charges for 15 user seats but we only have 12 active team members on our account. Could you please verify the seat count and correct our next statement?",
+        "gold": "billing",
+        "output": "**Classification: billing**\n\nThis ticket involves a discrepancy in charges and seat allocation, which is a billing-related issue that requires account verification and correction of invoicing.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the ticket as 'billing', provided sound reasoning about charge discrepancies and invoicing, and fully matched the reference answer with proper format."
+        }
+      }
+    ]
+  },
+  "final_test": {
+    "objective_runs": [
+      0.9444444444444444
+    ],
+    "gpa_runs": [
+      0.9479166666666666
+    ],
+    "objective_mean": 0.9444444444444444,
+    "gpa_mean": 0.9479166666666666,
+    "gpa_dims": {
+      "target_alignment": 0.9444444444444442,
+      "reasoning_soundness": 0.9111111111111112,
+      "execution_accuracy": 0.9861111111111112,
+      "output_integrity": 0.9499999999999998
+    },
+    "examples": [
+      {
+        "query": "It would be incredibly helpful if users could schedule reports to run automatically and email to specified recipients weekly. Right now we're manually generating and sending these every Monday morning.",
+        "gold": "feature_request",
+        "output": "Classification: feature_request",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 0.95,
+          "output_integrity": 1.0,
+          "aggregate": 0.95,
+          "rationale": "The agent correctly classified the ticket as 'feature_request' matching the reference answer, with proper formatting and clear reasoning evident from the input describing a desired new capability."
+        }
+      },
+      {
+        "query": "I'm trying to set up automated email notifications for new user registrations, but I can't find where to configure the SMTP settings in the admin panel. Could someone walk me through the steps?",
+        "gold": "how_to",
+        "output": "Classification: how_to",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the support ticket as 'how_to' matching the reference answer exactly, with proper format and clear alignment to a user seeking step-by-step guidance on configuration."
+        }
+      },
+      {
+        "query": "We're trying to connect our CRM system to your platform using the REST endpoints, but we keep getting 401 authentication errors even though our API key is valid. The OAuth token refresh flow seems to be failing after the initial handshake completes successfully.",
+        "gold": "integration",
+        "output": "Classification: integration",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the ticket as 'integration', matching the reference answer exactly, with proper format and clear alignment to the technical integration issue described."
+        }
+      },
+      {
+        "query": "The entire infrastructure seems to have crashed. We're seeing database connection failures, application servers not responding, and zero availability across all modules. This is blocking our entire organization from conducting business operations.",
+        "gold": "outage_critical",
+        "output": "Classification: outage_critical",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 0.95,
+          "output_integrity": 0.95,
+          "aggregate": 0.95,
+          "rationale": "The agent correctly classified the ticket as 'outage_critical' matching the reference answer, with clear alignment to the task, sound implicit reasoning from the severity indicators, proper format, an"
+        }
+      },
+      {
+        "query": "We ran a routine backup restore test and discovered that our backup from last week is incomplete - several critical folders are missing entirely and others contain files that won't open or appear to be truncated.",
+        "gold": "data_loss",
+        "output": "Classification: data_loss",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the ticket as 'data_loss' matching the reference answer exactly, with proper format and clear alignment to the task of categorizing a support ticket describing backup co"
+        }
+      },
+      {
+        "query": "The annual subscription renewal went through but we actually wanted to downgrade to the monthly plan instead. Is it possible to get prorated and switch?",
+        "gold": "billing",
+        "output": "Classification: billing",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified a subscription renewal and plan change request as 'billing', matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "Our workflow would benefit significantly from bulk export functionality. Currently we have to download reports one at a time, which becomes tedious when dealing with multiple clients. Can this be added to the roadmap?",
+        "gold": "feature_request",
+        "output": "Classification: feature_request",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 0.95,
+          "output_integrity": 1.0,
+          "aggregate": 0.95,
+          "rationale": "The agent correctly classified the ticket as 'feature_request' matching the reference answer, with clear formatting and proper identification of a request for new functionality (bulk export) rather th"
+        }
+      },
+      {
+        "query": "I'm looking for guidance on setting up two-factor authentication for all users in our organization. Is this configured at the individual level or can it be enforced globally through admin settings?",
+        "gold": "how_to",
+        "output": "Classification: how_to",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the ticket as 'how_to' matching the reference answer, properly identifying a guidance-seeking query about configuration procedures."
+        }
+      },
+      {
+        "query": "Our mobile app uses your SDK to handle payment processing, but after updating to version 3.2.1, the callback methods aren't firing when transactions complete. The payment goes through on your side, but our app never receives the success or failure response, leaving users stuck on a loading screen.",
+        "gold": "integration",
+        "output": "Classification: integration",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the ticket as 'integration' matching the reference answer exactly, with proper format and clear alignment to the task of categorizing a support ticket about SDK callback"
+        }
+      },
+      {
+        "query": "URGENT: The main API endpoint is returning 503 errors and has been down for over an hour. This is affecting all of our client applications and nobody can use any part of the system. We have hundreds of users unable to complete their work.",
+        "gold": "outage_critical",
+        "output": "Classification: outage_critical",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly classified the ticket as 'outage_critical', perfectly matching the reference answer with appropriate reasoning given the described system-wide outage affecting hundreds of users."
+        }
+      },
+      {
+        "query": "We just noticed that all customer records from the past 3 months have disappeared from our database. We had over 15,000 entries and now we're only seeing historical data from before June. This is extremely urgent as we cannot access any recent customer information.",
+        "gold": "data_loss",
+        "output": "Classification: data_loss",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the ticket as 'data_loss' matching the reference answer exactly, with proper format and clear alignment to the task of categorizing a support ticket describing missing d"
+        }
+      },
+      {
+        "query": "Our finance department needs itemized receipts for the last six months of transactions for tax purposes. How can we obtain these documents?",
+        "gold": "billing",
+        "output": "Classification: how_to",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.75,
+          "reasoning_soundness": 0.6,
+          "execution_accuracy": 1.0,
+          "output_integrity": 0.2,
+          "aggregate": 0.6375000000000001,
+          "rationale": "The agent correctly formatted the classification but misclassified a billing/financial documentation request as 'how_to' instead of 'billing', showing poor understanding of the ticket's core nature de"
+        }
+      },
+      {
+        "query": "I'd love to see calendar integration so appointments automatically sync with Google Calendar and Outlook. This would eliminate the manual double-entry we're doing right now.",
+        "gold": "feature_request",
+        "output": "Classification: feature_request",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 0.95,
+          "output_integrity": 0.95,
+          "aggregate": 0.95,
+          "rationale": "The agent correctly classified the ticket as 'feature_request' matching the reference answer, with proper formatting and clear alignment to the task requirements."
+        }
+      },
+      {
+        "query": "I need help understanding the difference between webhook and API polling for syncing data. Which approach should I use for real-time updates, and where do I configure the endpoint URLs?",
+        "gold": "how_to",
+        "output": "Classification: how_to",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the support ticket as 'how_to', matching the reference answer exactly, with proper format and clear alignment to the instructional nature of the query."
+        }
+      },
+      {
+        "query": "I'm following the documentation to set up the Zapier connection, but the authorization step keeps timing out. When I click 'Connect Account' it redirects to your auth page, then spins indefinitely without completing. Can someone verify if the OAuth redirect URI is configured correctly?",
+        "gold": "integration",
+        "output": "Classification: integration",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the OAuth/Zapier integration issue as 'integration', matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "Our entire production environment has been inaccessible for the past 45 minutes. None of our 2,000+ employees can log in to the platform and all customer-facing services are completely unavailable. This is causing massive business disruption and we need immediate assistance.",
+        "gold": "outage_critical",
+        "output": "Classification: outage_critical",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly classified a complete production outage affecting 2,000+ employees as 'outage_critical', matching the reference answer exactly with proper formatting."
+        }
+      },
+      {
+        "query": "Half of our uploaded images from the media library have become corrupted and won't display anymore. They show as broken links and when we try to re-access them, we get file not found errors. This affects roughly 3,000 assets.",
+        "gold": "data_loss",
+        "output": "Classification: data_loss",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 0.95,
+          "output_integrity": 1.0,
+          "aggregate": 0.95,
+          "rationale": "The agent correctly classified the ticket as 'data_loss' matching the reference answer, with proper formatting and clear reasoning based on corrupted/inaccessible files affecting thousands of assets."
+        }
+      },
+      {
+        "query": "I'm seeing charges for 15 user seats but we only have 12 active team members on our account. Could you please verify the seat count and correct our next statement?",
+        "gold": "billing",
+        "output": "Classification: billing",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the ticket as 'billing', matching the reference answer exactly, with proper format and clear reasoning from the seat-count discrepancy mentioned in the query."
+        }
+      }
+    ]
+  },
+  "delta_objective": 0.2777777777777778,
+  "delta_gpa": 0.006249999999999978,
+  "optimization": {
+    "front": [
+      {
+        "obj": 1.0,
+        "gpa": 0.9762499999999998,
+        "iter": 5,
+        "strategy": "mutation"
+      }
+    ],
+    "history": [
+      {
+        "iter": 0,
+        "obj": 0.7,
+        "gpa": 0.9654999999999999,
+        "composite": 0.8327499999999999,
+        "strategy": "baseline"
+      },
+      {
+        "iter": 1,
+        "obj": 0.9,
+        "gpa": 0.9730000000000001,
+        "composite": 0.9365000000000001,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 2,
+        "obj": 1.0,
+        "gpa": 0.9737499999999999,
+        "composite": 0.986875,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 3,
+        "obj": 1.0,
+        "gpa": 0.965,
+        "composite": 0.9824999999999999,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 4,
+        "obj": 1.0,
+        "gpa": 0.96625,
+        "composite": 0.983125,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 5,
+        "obj": 1.0,
+        "gpa": 0.9762499999999998,
+        "composite": 0.9881249999999999,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 6,
+        "obj": 1.0,
+        "gpa": 0.96625,
+        "composite": 0.983125,
+        "strategy": "mutation",
+        "front_size": 1
+      }
+    ],
+    "baseline_train_obj": 0.7,
+    "best_train_obj": 1.0
+  },
+  "duration_s": 86.4
+}

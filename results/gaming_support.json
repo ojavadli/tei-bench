@@ -1,0 +1,627 @@
+{
+  "task_id": "gaming_support",
+  "industry": "Gaming",
+  "metric": "classification",
+  "n_train": 15,
+  "n_test": 18,
+  "source": "Authored for TEI-Bench (Sonnet-generated, Sonnet-validated; kept only label-agreed examples).",
+  "agent_model": "claude-haiku-4-5",
+  "judge_model": "claude-sonnet-4-5",
+  "optimizer_model": "claude-sonnet-4-5",
+  "seed": 0,
+  "eval_repeats": 1,
+  "baseline_prompt": "You are a game player-support assistant. Classify the player's support ticket into a category. Classify into one of these categories: billing, bug, account, gameplay, toxicity_report, connectivity.",
+  "optimized_prompt": "You are a game player-support assistant. Classify the player's support ticket into exactly one of these categories:\n\n- **billing**: Payment issues, refunds, subscription problems, purchase errors, pricing questions, charged amounts, transaction failures, unauthorized purchases, chargebacks\n- **bug**: Technical malfunctions, glitches, crashes, errors, data loss, performance issues, audio/video problems, freezing, game breaking issues, progress not saving\n- **account**: Login problems, password/email issues, account access, profile settings, account recovery, authentication failures, security concerns (unauthorized access, two-factor authentication, compromised accounts)\n- **gameplay**: Game mechanics questions, how features work, strategy questions, difficulty concerns, feature requests, game rules clarification, progression questions, ability/skill explanations, map navigation, fast travel, game systems\n- **toxicity_report**: Player behavior reports, harassment, abuse, cheating accusations, inappropriate conduct by other users, verbal abuse, offensive language\n- **connectivity**: Network issues, server connection problems, lag, disconnections, rubber-banding, high latency, ping issues, matchmaking connection failures\n\nCarefully read the entire ticket to understand the core issue. Look for keywords and context:\n- Technical failures, crashes, or things \"not working as intended\" → bug\n- Questions about \"how to\", \"can I\", \"is there a way\", or seeking clarification on game mechanics → gameplay\n- Network performance, lag, latency, ping, rubber-banding, or connection quality → connectivity\n- Payment, charges, money-related, unauthorized purchases, or chargebacks → billing\n- Login, password, access to account, security settings, unauthorized access, two-factor authentication → account\n- Reporting another player's behavior, harassment, abuse, or inappropriate language → toxicity_report\n\nReturn ONLY the category name in lowercase, without formatting, explanation, or additional text.",
+  "baseline_test": {
+    "objective_runs": [
+      0.6111111111111112
+    ],
+    "gpa_runs": [
+      0.9609722222222221
+    ],
+    "objective_mean": 0.6111111111111112,
+    "gpa_mean": 0.9609722222222221,
+    "gpa_dims": {
+      "target_alignment": 0.9388888888888887,
+      "reasoning_soundness": 0.9283333333333332,
+      "execution_accuracy": 0.9822222222222222,
+      "output_integrity": 0.9944444444444444
+    },
+    "examples": [
+      {
+        "query": "How does the reputation system affect merchant prices? I noticed some shopkeepers charge me way more than my friend pays, and we're both at the same level.",
+        "gold": "gameplay",
+        "output": "I'd classify this as a **gameplay** support ticket.\n\nThe player is asking about game mechanics (how the reputation system affects merchant pricing), which falls under gameplay questions rather than technical issues, account problems, or billing concerns.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the ticket as 'gameplay' and provided sound reasoning about game mechanics, matching the reference answer perfectly with appropriate supporting explanation."
+        }
+      },
+      {
+        "query": "I was just in a match with username xXDarkLord99Xx who spent the entire game sending hateful slurs in chat and telling other players to harm themselves. This kind of harassment needs to be addressed immediately as it made the experience completely unpleasant for everyone.",
+        "gold": "toxicity_report",
+        "output": "**Category: toxicity_report**\n\nThis ticket describes in-game harassment and toxic behavior from another player, including use of slurs and harmful language directed at other players. This falls clearly under toxicity reporting.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the ticket as 'toxicity_report' matching the reference answer, provided sound reasoning identifying harassment and toxic behavior, and executed the classification task a"
+        }
+      },
+      {
+        "query": "I keep getting kicked out of matches every few minutes and it's making the game completely unplayable. My internet connection is fine with other games and apps, but this one just won't stay connected. This has been happening for the past three days.",
+        "gold": "connectivity",
+        "output": "**Category: connectivity**\n\nThis ticket describes repeated disconnections from matches that are specific to this game, despite a stable internet connection elsewhere. This is a connectivity issue that should be escalated to the technical support team to investigate potential server-side problems or game-specific network configuration issues.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9675,
+          "rationale": "The agent correctly classified the ticket as 'connectivity' matching the reference answer, provided sound reasoning about disconnections and network issues, followed proper format, and added helpful c"
+        }
+      },
+      {
+        "query": "Can I get a refund for the Season Pass? I purchased it thinking it would give me access to all future content but it only covers this season. I feel misled by the description.",
+        "gold": "billing",
+        "output": "**Category: Billing**\n\nThis ticket involves a purchase refund request related to the Season Pass, which is a financial/payment matter.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the ticket as 'billing', provided sound reasoning about the refund/financial nature, and fully matched the reference answer with proper formatting."
+        }
+      },
+      {
+        "query": "The game suddenly started running at about 2 frames per second after the latest update, even though my system exceeds the recommended requirements. Before the patch everything was running smoothly at 60fps.",
+        "gold": "bug",
+        "output": "**Category: bug**\n\nThis ticket describes a technical issue where the game's performance degraded significantly after a recent update, despite the system meeting the recommended specifications. This is a bug report, as it indicates an unexpected malfunction in the game's performance that occurred following a patch.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the ticket as 'bug' matching the reference answer, provided sound reasoning about performance degradation post-update, and followed proper formatting with clear explanat"
+        }
+      },
+      {
+        "query": "I'm locked out after too many failed login attempts, but it wasn't me trying to get in. I was asleep during that time. This looks like someone was trying to break into my profile. Can you unlock it and help me secure it better?",
+        "gold": "account",
+        "output": "I would classify this support ticket as: **account**\n\nThis ticket involves account security concerns (unauthorized login attempts, account lockout, and account access issues), which falls under the account category rather than other options like billing, bug, connectivity, or gameplay.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the ticket as 'account', provided sound reasoning about security and access issues, and the output matches the reference answer perfectly."
+        }
+      },
+      {
+        "query": "Can someone explain how the crafting system works? I have all these materials in my inventory but when I go to the workbench, half of the recipes are grayed out even though I meet the requirements.",
+        "gold": "gameplay",
+        "output": "**Category: gameplay**\n\nThis ticket should be classified as **gameplay** because the player is asking for help understanding game mechanics (the crafting system) and experiencing an issue with how those mechanics function (grayed-out recipes despite meeting requirements).",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the ticket as 'gameplay' with sound reasoning about game mechanics and crafting system issues, matching the reference answer perfectly."
+        }
+      },
+      {
+        "query": "The player NightShade47 was cheating and when called out, started attacking other players with homophobic slurs and personal insults. I've never experienced such aggressive behavior in this game before and I think their account should be reviewed.",
+        "gold": "toxicity_report",
+        "output": "**Category: toxicity_report**\n\nThis ticket should be classified as a toxicity report. The primary concern is the player's abusive behavior—specifically the use of homophobic slurs and personal insults directed at other players. While cheating was mentioned as context, the main issue being reported is the toxic and harassing conduct that occurred during gameplay.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the ticket as 'toxicity_report' matching the reference answer, provided sound reasoning distinguishing the primary concern (toxic behavior) from secondary context (cheat"
+        }
+      },
+      {
+        "query": "Every time I try to join a game session, I sit in queue forever and then get a timeout error. My friends are all playing fine on the same region but I literally cannot connect to any match at all.",
+        "gold": "connectivity",
+        "output": "**Category: connectivity**\n\nThis ticket describes network/connection issues preventing the player from joining game sessions, despite others in the same region having no problems. The timeout errors and inability to connect to matches are classic connectivity problems rather than bugs, gameplay mechanics, billing, account access, or toxicity concerns.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the ticket as 'connectivity' matching the reference answer, provided sound reasoning about timeout errors and connection failures, followed the classification task forma"
+        }
+      },
+      {
+        "query": "I accidentally purchased the Legendary Skin Bundle instead of the Standard one. Is it possible to reverse this transaction? I haven't used any of the items yet.",
+        "gold": "billing",
+        "output": "**Category: Billing**\n\nThis ticket involves a purchase issue and request for a transaction reversal, which falls under billing support.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the ticket as 'billing', provided sound reasoning about the purchase/transaction nature, and fully matched the reference answer with appropriate justification."
+        }
+      },
+      {
+        "query": "Every time I try to enter the dungeon on the northern map, my screen freezes for about 5 seconds and then the entire application closes itself. This has happened three times in a row now and I can't progress in the campaign.",
+        "gold": "bug",
+        "output": "**Category: bug**\n\nThis ticket describes a technical issue where the application crashes when attempting to access a specific in-game location. The player is experiencing a repeatable crash/freeze followed by application closure, which is a software defect rather than a gameplay balance issue, connectivity problem, or account-related concern.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the ticket as 'bug' matching the reference answer, provided sound reasoning about why it's a technical defect, and followed proper classification format without any fabr"
+        }
+      },
+      {
+        "query": "I need to update the email address associated with my profile because I no longer have access to my old university email that's about to be deactivated. How do I change it without losing access to everything I've purchased and earned?",
+        "gold": "account",
+        "output": "**Category: account**\n\nThis ticket involves updating account credentials (email address) and concerns about maintaining access to account-associated purchases and progress, which falls under account management issues.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the ticket as 'account', provided sound reasoning about email updates and account management, followed the classification format perfectly, and matched the reference ans"
+        }
+      },
+      {
+        "query": "What's the best strategy for defeating the fire dragon boss? I've tried attacking from range but my arrows barely do any damage, and when I get close it one-shots me with its breath attack.",
+        "gold": "gameplay",
+        "output": "I appreciate the question, but this is actually **gameplay advice** rather than a support ticket that needs classification.\n\nHowever, if you're submitting this as a **support ticket**, I would classify it as:\n\n**Category: gameplay**\n\nThis falls under gameplay because you're asking for help with game mechanics and boss strategy. \n\nIf you're experiencing an actual issue (like the boss being unbeatable due to a bug, or damage calculations being broken), that might be **bug** instead. But based on your message, it sounds like a legitimate gameplay challenge rather than a technical problem.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.75,
+          "reasoning_soundness": 0.85,
+          "execution_accuracy": 0.7,
+          "output_integrity": 0.9,
+          "aggregate": 0.7999999999999999,
+          "rationale": "The agent correctly identified 'gameplay' as the category and provided sound reasoning, but added unnecessary explanatory content beyond the classification task and hedged with meta-commentary about w"
+        }
+      },
+      {
+        "query": "I need to report inappropriate conduct from a user called PhoenixRising. They were intentionally throwing the game while verbally abusing the rest of the team with sexist comments. Multiple people on our team asked them to stop but it continued throughout the entire session.",
+        "gold": "toxicity_report",
+        "output": "**Category: toxicity_report**\n\nThis ticket should be classified as a toxicity report. The player is reporting another user's inappropriate behavior, including:\n- Intentional griefing/throwing\n- Verbal abuse\n- Sexist comments\n- Disruptive conduct despite being asked to stop\n\nThis falls under player conduct violations and should be directed to your moderation/player conduct team for investigation.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.98,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the ticket as 'toxicity_report' matching the reference answer, provided sound reasoning for the classification based on the reported behaviors, and maintained proper for"
+        }
+      },
+      {
+        "query": "My character keeps freezing in place for several seconds at a time, then suddenly teleports forward. Other players seem to be experiencing the same issue based on their movement patterns. Is there something wrong with the server performance right now?",
+        "gold": "connectivity",
+        "output": "**Category: connectivity**\n\nThis ticket describes network/synchronization issues (freezing and teleporting) that affect gameplay experience. While it could tangentially relate to \"bug,\" the symptoms described—lag, rubber-banding, and server performance concerns—are characteristic of connectivity problems rather than a game mechanic or feature bug.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the ticket as 'connectivity', provided sound reasoning about lag/rubber-banding symptoms, properly formatted the response, and the answer matches the reference perfectly"
+        }
+      },
+      {
+        "query": "I was charged twice for the same premium currency pack yesterday. My bank statement shows two transactions of $49.99 but I only received 5000 gems once. Can you help me get my money back?",
+        "gold": "billing",
+        "output": "I'd classify this ticket as: **billing**\n\nThis is a billing issue involving duplicate charges and missing premium currency. The player needs assistance with:\n- A duplicate transaction on their account\n- A refund for the erroneous charge\n- Verification of their gem balance\n\nThe support team should investigate the transaction records and process an appropriate refund or credit to the player's account.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the ticket as 'billing' matching the reference answer, provided sound reasoning about why it's a billing issue, and added helpful context without deviating from the core"
+        }
+      },
+      {
+        "query": "My character model is stuck in a falling animation even when standing on solid ground. I can still move around but the animation won't change and it's making the game really difficult to play. Reloading my save didn't fix it.",
+        "gold": "bug",
+        "output": "**Category: bug**\n\nThis is a technical issue with the game's animation system where your character model is stuck in an incorrect state despite being on solid ground. It's a gameplay-affecting glitch that persists even after troubleshooting (reloading), which clearly falls under the bug category.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9675,
+          "rationale": "The agent correctly classified the ticket as 'bug' matching the reference answer, provided sound reasoning about why it's a bug (animation system malfunction, persistence after troubleshooting), and f"
+        }
+      },
+      {
+        "query": "The authentication code from my authenticator app isn't working anymore. I got a new phone last week and forgot to transfer the settings before wiping my old device. Now I can't access anything. Is there a way to verify my identity another way?",
+        "gold": "account",
+        "output": "**Category: account**\n\nThis ticket involves account access and identity verification issues, which falls under account management support.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the ticket as 'account', provided sound reasoning about authentication and identity verification being account management issues, and the output matches the reference an"
+        }
+      }
+    ]
+  },
+  "final_test": {
+    "objective_runs": [
+      1.0
+    ],
+    "gpa_runs": [
+      0.9944444444444444
+    ],
+    "objective_mean": 1.0,
+    "gpa_mean": 0.9944444444444444,
+    "gpa_dims": {
+      "target_alignment": 0.9888888888888887,
+      "reasoning_soundness": 0.9888888888888887,
+      "execution_accuracy": 1.0,
+      "output_integrity": 1.0
+    },
+    "examples": [
+      {
+        "query": "How does the reputation system affect merchant prices? I noticed some shopkeepers charge me way more than my friend pays, and we're both at the same level.",
+        "gold": "gameplay",
+        "output": "gameplay",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly classified a question about game mechanics (reputation system affecting prices) as 'gameplay', matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "I was just in a match with username xXDarkLord99Xx who spent the entire game sending hateful slurs in chat and telling other players to harm themselves. This kind of harassment needs to be addressed immediately as it made the experience completely unpleasant for everyone.",
+        "gold": "toxicity_report",
+        "output": "toxicity_report",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly classified the support ticket describing hateful slurs and harassment as 'toxicity_report', matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "I keep getting kicked out of matches every few minutes and it's making the game completely unplayable. My internet connection is fine with other games and apps, but this one just won't stay connected. This has been happening for the past three days.",
+        "gold": "connectivity",
+        "output": "connectivity",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly classified the ticket as 'connectivity', matching the reference answer exactly and appropriately addressing the task of categorizing a support ticket describing connection issues."
+        }
+      },
+      {
+        "query": "Can I get a refund for the Season Pass? I purchased it thinking it would give me access to all future content but it only covers this season. I feel misled by the description.",
+        "gold": "billing",
+        "output": "billing",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly classified a refund request regarding a Season Pass purchase as 'billing', perfectly matching the reference answer with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "The game suddenly started running at about 2 frames per second after the latest update, even though my system exceeds the recommended requirements. Before the patch everything was running smoothly at 60fps.",
+        "gold": "bug",
+        "output": "bug",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified a performance degradation issue after an update as a 'bug', matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "I'm locked out after too many failed login attempts, but it wasn't me trying to get in. I was asleep during that time. This looks like someone was trying to break into my profile. Can you unlock it and help me secure it better?",
+        "gold": "account",
+        "output": "account",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly classified the support ticket as 'account', matching the reference answer exactly and appropriately categorizing a ticket about account lockout and security concerns."
+        }
+      },
+      {
+        "query": "Can someone explain how the crafting system works? I have all these materials in my inventory but when I go to the workbench, half of the recipes are grayed out even though I meet the requirements.",
+        "gold": "gameplay",
+        "output": "gameplay",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly classified the support ticket as 'gameplay', matching the reference answer exactly and appropriately categorizing a question about game mechanics."
+        }
+      },
+      {
+        "query": "The player NightShade47 was cheating and when called out, started attacking other players with homophobic slurs and personal insults. I've never experienced such aggressive behavior in this game before and I think their account should be reviewed.",
+        "gold": "toxicity_report",
+        "output": "toxicity_report",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the ticket as 'toxicity_report', matching the reference answer exactly, with proper format and clear alignment to the task of categorizing a report about homophobic slur"
+        }
+      },
+      {
+        "query": "Every time I try to join a game session, I sit in queue forever and then get a timeout error. My friends are all playing fine on the same region but I literally cannot connect to any match at all.",
+        "gold": "connectivity",
+        "output": "connectivity",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly classified the ticket as 'connectivity', matching the reference answer exactly, with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "I accidentally purchased the Legendary Skin Bundle instead of the Standard one. Is it possible to reverse this transaction? I haven't used any of the items yet.",
+        "gold": "billing",
+        "output": "billing",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly classified the accidental purchase and transaction reversal request as a billing issue, matching the reference answer exactly with proper format."
+        }
+      },
+      {
+        "query": "Every time I try to enter the dungeon on the northern map, my screen freezes for about 5 seconds and then the entire application closes itself. This has happened three times in a row now and I can't progress in the campaign.",
+        "gold": "bug",
+        "output": "bug",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified a clear technical malfunction (screen freeze and application crash) as a 'bug', matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "I need to update the email address associated with my profile because I no longer have access to my old university email that's about to be deactivated. How do I change it without losing access to everything I've purchased and earned?",
+        "gold": "account",
+        "output": "account",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly classified the support ticket as 'account', matching the reference answer exactly and appropriately categorizing an email update request."
+        }
+      },
+      {
+        "query": "What's the best strategy for defeating the fire dragon boss? I've tried attacking from range but my arrows barely do any damage, and when I get close it one-shots me with its breath attack.",
+        "gold": "gameplay",
+        "output": "gameplay",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly classified a question about boss strategy and combat mechanics as 'gameplay', perfectly matching the reference answer with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "I need to report inappropriate conduct from a user called PhoenixRising. They were intentionally throwing the game while verbally abusing the rest of the team with sexist comments. Multiple people on our team asked them to stop but it continued throughout the entire session.",
+        "gold": "toxicity_report",
+        "output": "toxicity_report",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly classified the support ticket as 'toxicity_report', perfectly matching the reference answer with appropriate categorization of the described inappropriate conduct and verbal abuse."
+        }
+      },
+      {
+        "query": "My character keeps freezing in place for several seconds at a time, then suddenly teleports forward. Other players seem to be experiencing the same issue based on their movement patterns. Is there something wrong with the server performance right now?",
+        "gold": "connectivity",
+        "output": "connectivity",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the ticket as 'connectivity' matching the reference answer exactly, addressing a clear network/server performance issue with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "I was charged twice for the same premium currency pack yesterday. My bank statement shows two transactions of $49.99 but I only received 5000 gems once. Can you help me get my money back?",
+        "gold": "billing",
+        "output": "billing",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly classified a double-charge complaint as 'billing', matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "My character model is stuck in a falling animation even when standing on solid ground. I can still move around but the animation won't change and it's making the game really difficult to play. Reloading my save didn't fix it.",
+        "gold": "bug",
+        "output": "bug",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly classified the support ticket as 'bug', matching the reference answer exactly and appropriately categorizing a technical issue with character animation behavior."
+        }
+      },
+      {
+        "query": "The authentication code from my authenticator app isn't working anymore. I got a new phone last week and forgot to transfer the settings before wiping my old device. Now I can't access anything. Is there a way to verify my identity another way?",
+        "gold": "account",
+        "output": "account",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly classified the authentication/identity verification issue as 'account', matching the reference answer exactly with proper format and no extraneous content."
+        }
+      }
+    ]
+  },
+  "delta_objective": 0.38888888888888884,
+  "delta_gpa": 0.03347222222222224,
+  "optimization": {
+    "front": [
+      {
+        "obj": 1.0,
+        "gpa": 0.995,
+        "iter": 3,
+        "strategy": "mutation"
+      }
+    ],
+    "history": [
+      {
+        "iter": 0,
+        "obj": 0.7,
+        "gpa": 0.975,
+        "composite": 0.8374999999999999,
+        "strategy": "baseline"
+      },
+      {
+        "iter": 1,
+        "obj": 1.0,
+        "gpa": 0.9924999999999999,
+        "composite": 0.99625,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 2,
+        "obj": 1.0,
+        "gpa": 0.9949999999999999,
+        "composite": 0.9974999999999999,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 3,
+        "obj": 1.0,
+        "gpa": 0.995,
+        "composite": 0.9975,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 4,
+        "obj": 1.0,
+        "gpa": 0.9924999999999999,
+        "composite": 0.99625,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 5,
+        "obj": 1.0,
+        "gpa": 0.9925,
+        "composite": 0.9962500000000001,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 6,
+        "obj": 1.0,
+        "gpa": 0.9924999999999999,
+        "composite": 0.99625,
+        "strategy": "mutation",
+        "front_size": 1
+      }
+    ],
+    "baseline_train_obj": 0.7,
+    "best_train_obj": 1.0
+  },
+  "duration_s": 90.7
+}

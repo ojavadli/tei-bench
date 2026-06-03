@@ -1,0 +1,683 @@
+{
+  "task_id": "consumer_sentiment_5",
+  "industry": "Consumer Insights",
+  "metric": "classification",
+  "n_train": 15,
+  "n_test": 20,
+  "source": "SetFit/sst5 via HuggingFace (see dataset card for license).",
+  "agent_model": "claude-haiku-4-5",
+  "judge_model": "claude-sonnet-4-5",
+  "optimizer_model": "claude-sonnet-4-5",
+  "seed": 0,
+  "eval_repeats": 1,
+  "baseline_prompt": "You are a fine-grained sentiment assistant. Classify the fine-grained sentiment of the statement. Classify into one of these categories: negative, neutral, positive, very negative, very positive.",
+  "optimized_prompt": "You are a fine-grained sentiment classifier. Analyze the statement and classify its sentiment into exactly one of these five categories: very negative, negative, neutral, positive, very positive.\n\n**Category Definitions:**\n\n- **Very Negative**: Extreme dissatisfaction, harsh criticism, disgust, or strong rejection. Includes expressions of contempt, mockery, extreme boredom (e.g., \"zzzzz\"), being utterly repelled, or sarcasm expressing disdain.\n\n- **Negative**: Clear dissatisfaction or criticism without extreme intensity. Mild complaints, disappointment, unfavorable assessments, or moderate disapproval.\n\n- **Neutral**: Balanced mix of positive and negative elements that cancel each other out, purely factual statements without emotional valence, backhanded compliments where criticism undermines praise equally, or comparative statements that don't express clear overall favorability.\n\n- **Positive**: Clear approval or favorable assessment without reaching exceptional enthusiasm. Measured praise, satisfaction, good-but-not-exceptional reactions, or statements expressing general approval.\n\n- **Very Positive**: Strong enthusiasm, exceptional praise, superlatives, or unqualified admiration. Includes intensifiers like \"biggest,\" \"impressive,\" \"extraordinary,\" \"delighted,\" or strong objective praise indicating being highly impressed.\n\n**Classification Rules:**\n\n1. Prioritize intensity: Extreme expressions (like \"zzzzz\" for boredom) warrant \"very negative,\" not just \"negative\"\n2. Superlatives and strong positive language (\"biggest names,\" \"impressive results\") indicate \"very positive,\" even with measured tone\n3. Don't downgrade very positive statements to positive merely for lacking hyperbole—strong objective praise qualifies as very positive\n4. Equal measures of praise and criticism result in \"neutral\" (e.g., backhanded compliments like \"tawdry kicks\")\n5. Mixed statements praising one aspect while criticizing another may be neutral if sentiment is balanced rather than clearly favorable overall\n\nOutput only the category name in lowercase.",
+  "baseline_test": {
+    "objective_runs": [
+      0.35
+    ],
+    "gpa_runs": [
+      0.7834999999999999
+    ],
+    "objective_mean": 0.35,
+    "gpa_mean": 0.7834999999999999,
+    "gpa_dims": {
+      "target_alignment": 0.8749999999999998,
+      "reasoning_soundness": 0.8404999999999999,
+      "execution_accuracy": 0.7545000000000001,
+      "output_integrity": 0.6639999999999999
+    },
+    "examples": [
+      {
+        "query": "celebrated at sundance , this slight comedy of manners has winning performances and a glossy , glib charm that 's hard to beat .",
+        "gold": "very positive",
+        "output": "**very positive**\n\nThis statement contains multiple strong positive indicators:\n- \"celebrated at Sundance\" - prestige and acclaim\n- \"winning performances\" - praise for the actors\n- \"glossy, glib charm\" - positive descriptors\n- \"hard to beat\" - emphatic endorsement\n\nThe overall tone is enthusiastically favorable about the film, placing it in the \"very positive\" category rather than just \"positive.\"",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9875,
+          "rationale": "The agent correctly classified the sentiment as 'very positive' matching the reference, provided sound textual evidence for the classification, followed the task format precisely, and delivered an acc"
+        }
+      },
+      {
+        "query": "what 's at stake in this film is nothing more than an obsolete , if irritating , notion of class .",
+        "gold": "very negative",
+        "output": "**Negative**\n\nThis statement expresses a critical view of the film's central concern. The phrase \"nothing more than\" is dismissive, and the characterization of the notion as \"obsolete\" and \"irritating\" conveys disapproval. However, it's not intensely negative—it's a measured critique rather than a strongly emotional condemnation, which places it in the \"negative\" rather than \"very negative\" category.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.85,
+          "execution_accuracy": 0.4,
+          "output_integrity": 0.4,
+          "aggregate": 0.6499999999999999,
+          "rationale": "The agent correctly identified negative sentiment and provided sound reasoning about dismissive language, but failed execution by outputting 'Negative' instead of the required fine-grained label 'very"
+        }
+      },
+      {
+        "query": "if myers decides to make another austin powers movie , maybe he should just stick with austin and dr evil .",
+        "gold": "negative",
+        "output": "**Neutral**\n\nThis statement expresses a conditional suggestion rather than a strong emotional judgment. The speaker is offering constructive advice about what Myers should do if he makes another Austin Powers film, but the tone is measured and matter-of-fact. There's no clear positive enthusiasm or negative criticism—just a practical recommendation about character focus.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.4,
+          "execution_accuracy": 0.0,
+          "output_integrity": 0.0,
+          "aggregate": 0.3375,
+          "rationale": "The agent addressed the sentiment classification task correctly but misclassified the sentiment as 'Neutral' when the reference answer is 'negative'—the implication that Myers should limit himself to "
+        }
+      },
+      {
+        "query": "in its ragged , cheap and unassuming way , the movie works .",
+        "gold": "positive",
+        "output": "**positive**\n\nThe statement expresses approval of the movie despite its humble qualities. The phrase \"the movie works\" is a clear positive assessment. While \"ragged,\" \"cheap,\" and \"unassuming\" are descriptors that might seem negative on their surface, they are presented as characteristics the movie overcomes or transcends. The overall tone suggests the reviewer appreciates the film's effectiveness despite—or perhaps because of—its unpretentious nature.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.98,
+          "output_integrity": 0.98,
+          "aggregate": 0.9575,
+          "rationale": "The agent correctly classified the sentiment as positive, provided sound reasoning about how seemingly negative descriptors are overcome by the positive conclusion, executed the task properly with cle"
+        }
+      },
+      {
+        "query": "you wo n't believe much of it , but you will laugh at the audacity , at the who 's who casting and the sheer insanity of it all .",
+        "gold": "neutral",
+        "output": "**positive**\n\nThe statement expresses a favorable sentiment toward the subject matter. While the speaker acknowledges skepticism (\"you won't believe much of it\"), they highlight entertaining and appealing qualities: laughing at the audacity, appreciating the casting choices (\"who's who\"), and enjoying the \"sheer insanity.\" These are presented as positive attributes that will engage and entertain the audience, making this an overall positive recommendation.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.85,
+          "reasoning_soundness": 0.75,
+          "execution_accuracy": 0.85,
+          "output_integrity": 0.3,
+          "aggregate": 0.6875,
+          "rationale": "The agent correctly identified the task and provided structured reasoning, but misclassified the sentiment as positive when the reference indicates neutral, despite the statement containing both skept"
+        }
+      },
+      {
+        "query": "a charming yet poignant tale of the irrevocable ties that bind .",
+        "gold": "very positive",
+        "output": "**very positive**\n\nThis statement expresses a highly favorable sentiment. The word \"charming\" is a clear positive descriptor, and \"poignant\" conveys emotional depth and meaningful impact in a positive way. The phrase \"irrevocable ties that bind\" suggests something profound and enduring, which adds to the overall appreciative and admiring tone. The combination of these elements indicates a strong positive evaluation of the work being described.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the sentiment as 'very positive' matching the reference answer, provided sound reasoning about the positive connotations of 'charming' and 'poignant', followed proper fo"
+        }
+      },
+      {
+        "query": "the film seems a dead weight .",
+        "gold": "very negative",
+        "output": "**very negative**\n\nThe phrase \"dead weight\" is a strong negative idiom meaning something that is burdensome, useless, or drags down the overall quality. Applied to a film, it indicates the speaker finds it significantly problematic and detrimental, warranting a \"very negative\" classification rather than just \"negative.\"",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the sentiment as 'very negative' matching the reference, provided sound reasoning about the idiom 'dead weight,' followed proper format, and delivered an accurate, compl"
+        }
+      },
+      {
+        "query": "a very average science fiction film .",
+        "gold": "negative",
+        "output": "**Neutral**\n\nThe statement describes the film as \"very average,\" which indicates it is neither particularly good nor bad. The word \"average\" is a neutral descriptor that suggests the film is ordinary or mediocre, without strong positive or negative emotional language.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.85,
+          "reasoning_soundness": 0.7,
+          "execution_accuracy": 0.85,
+          "output_integrity": 0.3,
+          "aggregate": 0.6749999999999999,
+          "rationale": "The agent correctly performed sentiment classification with proper format, but misclassified 'very average' as neutral when the reference indicates negative, though the reasoning about 'average' being"
+        }
+      },
+      {
+        "query": "watching scarlet diva , one is poised for titillation , raw insight or both .",
+        "gold": "positive",
+        "output": "**Positive**\n\nThis statement expresses an anticipatory and appreciative tone toward \"Scarlet Diva.\" The speaker suggests the film offers compelling content—whether through provocative elements (\"titillation\") or substantive analysis (\"raw insight\")—and indicates they are prepared to engage with it meaningfully. The phrase \"one is poised for\" conveys readiness and expectation of a worthwhile viewing experience, reflecting a favorable disposition toward the film.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 0.95,
+          "output_integrity": 0.95,
+          "aggregate": 0.9375,
+          "rationale": "The agent correctly classified the sentiment as positive and provided sound reasoning about anticipatory tone and favorable disposition, though the task only required classification without explanatio"
+        }
+      },
+      {
+        "query": "has all the poignancy of a hallmark card and all the comedy of a gallagher stand-up act .",
+        "gold": "neutral",
+        "output": "**very negative**\n\nThis statement is highly critical, using sarcasm to disparage both the emotional depth and humor of something. By comparing it to a Hallmark card (implying shallow sentimentality) and Gallagher's stand-up (known for crude, unsophisticated comedy), the speaker is expressing strong disapproval of the work's quality on both emotional and comedic dimensions.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.85,
+          "execution_accuracy": 0.9,
+          "output_integrity": 0.15,
+          "aggregate": 0.7124999999999999,
+          "rationale": "The agent correctly identified the task and provided coherent reasoning about the sarcastic tone, but the classification as 'very negative' contradicts the gold answer of 'neutral', indicating a funda"
+        }
+      },
+      {
+        "query": "offers enough playful fun to entertain the preschool set while embracing a wholesome attitude .",
+        "gold": "very positive",
+        "output": "**positive**\n\nThis statement expresses approval of the content's ability to entertain its target audience (preschoolers) while maintaining wholesome values. The phrases \"enough playful fun\" and \"embracing a wholesome attitude\" are both favorable descriptors, indicating a positive assessment of the work.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.75,
+          "reasoning_soundness": 0.85,
+          "execution_accuracy": 0.6,
+          "output_integrity": 0.6,
+          "aggregate": 0.7000000000000001,
+          "rationale": "The agent correctly identified positive sentiment with sound reasoning, but the reference answer specifies 'very positive' rather than just 'positive', indicating the agent underestimated the sentimen"
+        }
+      },
+      {
+        "query": "now it 's a bad , embarrassing movie .",
+        "gold": "very negative",
+        "output": "**very negative**\n\nThe statement uses strong negative language (\"bad,\" \"embarrassing\") to describe the movie, indicating a very negative sentiment rather than just mildly negative.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.98,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the sentiment as 'very negative' matching the reference, provided sound reasoning about the strong negative language, and followed the task format appropriately."
+        }
+      },
+      {
+        "query": "the sad thing about knockaround guys is its lame aspiration for grasping the coolness vibes when in fact the film is n't as flippant or slick as it thinks it is .",
+        "gold": "negative",
+        "output": "**Negative**\n\nThis statement criticizes the film \"Knockaround Guys\" for failing to achieve its apparent goals. The reviewer identifies a gap between what the film aspires to be (cool and slick) and what it actually is (lame and not as flippant or slick as intended). Words like \"sad thing,\" \"lame,\" and the dismissive tone indicate a negative sentiment, though it's not extremely harsh, making it \"negative\" rather than \"very negative.\"",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the sentiment as negative, provided sound reasoning identifying key negative indicators (\"sad thing,\" \"lame,\" gap between aspiration and reality), followed the required "
+        }
+      },
+      {
+        "query": "now trimmed by about 20 minutes , this lavish three-year-old production has enough grandeur and scale to satisfy as grown-up escapism .",
+        "gold": "positive",
+        "output": "**positive**\n\nThe statement expresses a favorable sentiment about the production. Key positive indicators include:\n- \"lavish\" - complimentary descriptor\n- \"enough grandeur and scale\" - appreciation for the production's qualities\n- \"satisfy as grown-up escapism\" - indicates it successfully fulfills its purpose\n\nWhile the mention of trimming by 20 minutes could be slightly neutral/negative, the overall tone is clearly approving of the final product.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the sentiment as positive, provided sound reasoning identifying key positive indicators (lavish, grandeur, satisfy), acknowledged the neutral trimming detail appropriate"
+        }
+      },
+      {
+        "query": "it 's often infuriatingly glib and posturing , and yet it has been made with great evident care and manages to deliver up the man in a way to arouse further curiosity in even the most unknowing viewer .",
+        "gold": "neutral",
+        "output": "**Positive**\n\nThis statement contains mixed elements but ultimately leans positive. While it begins with criticism (\"infuriatingly glib and posturing\"), the \"and yet\" signals a shift to praise. The phrases \"made with great evident care\" and \"manages to deliver up the man in a way to arouse further curiosity\" are clearly positive assessments. The overall tone suggests the work has flaws but succeeds in its purpose and merits appreciation, making it a positive evaluation despite the initial complaints.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.3,
+          "reasoning_soundness": 0.7,
+          "execution_accuracy": 0.2,
+          "output_integrity": 0.15,
+          "aggregate": 0.33749999999999997,
+          "rationale": "The agent provided a well-reasoned analysis but misclassified a neutral sentiment as positive, failing to recognize that balanced criticism and praise typically indicate neutrality rather than an over"
+        }
+      },
+      {
+        "query": "the movie is full of fine performances , led by josef bierbichler as brecht and monica bleibtreu as helene weigel , his wife .",
+        "gold": "very positive",
+        "output": "**positive**\n\nThe statement praises the movie's performances, specifically highlighting the lead actors (Josef Bierbichler and Monica Bleibtreu) with the descriptor \"fine performances.\" This is a complimentary assessment that expresses approval without being extremely enthusiastic, making it a positive sentiment rather than very positive.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.75,
+          "reasoning_soundness": 0.85,
+          "execution_accuracy": 0.7,
+          "output_integrity": 0.6,
+          "aggregate": 0.725,
+          "rationale": "The agent correctly identified positive sentiment with sound reasoning about 'fine performances,' but misclassified the fine-grained level as 'positive' instead of 'very positive,' which is a substant"
+        }
+      },
+      {
+        "query": "a film so tedious that it is impossible to care whether that boast is true or not .",
+        "gold": "very negative",
+        "output": "**very negative**\n\nThis statement expresses strong disapproval of the film. The word \"tedious\" combined with \"impossible to care\" conveys significant frustration and disengagement. The dismissive tone suggests the film is so boring that the reviewer cannot even muster interest in its claims or content. This goes beyond mild criticism to express considerable dissatisfaction.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.98,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the sentiment as 'very negative' matching the reference exactly, provided sound reasoning about word choice and tone, followed proper format, and added no fabricated con"
+        }
+      },
+      {
+        "query": "audiences will find no mention of political prisoners or persecutions that might paint the castro regime in less than saintly tones .",
+        "gold": "negative",
+        "output": "**very negative**\n\nThis statement is expressing strong criticism of censorship and bias in media coverage. The phrase \"no mention of political prisoners or persecutions\" combined with the sarcastic reference to \"saintly tones\" conveys a very negative sentiment about the Castro regime and the selective, propagandistic nature of the coverage being described. The tone is clearly disapproving and critical.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.75,
+          "reasoning_soundness": 0.85,
+          "execution_accuracy": 0.4,
+          "output_integrity": 0.6,
+          "aggregate": 0.65,
+          "rationale": "The agent correctly identified negative sentiment and provided sound reasoning, but failed execution by outputting 'very negative' instead of the standard label 'negative' and added unnecessary explan"
+        }
+      },
+      {
+        "query": "watching beanie and his gang put together his slasher video from spare parts and borrowed materials is as much fun as it must have been for them to make it .",
+        "gold": "positive",
+        "output": "**positive**\n\nThe statement expresses enjoyment and appreciation for watching Beanie and his group create a slasher video using improvised materials. The comparison (\"as much fun as it must have been for them to make it\") indicates the speaker found the experience genuinely entertaining and engaging, suggesting a favorable sentiment toward the creative process and final product.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the sentiment as positive, provided sound reasoning about the enjoyment expressed in the statement, followed proper format, and matched the reference answer perfectly."
+        }
+      },
+      {
+        "query": "occasionally amateurishly made but a winsome cast and nice dialogue keeps it going .",
+        "gold": "neutral",
+        "output": "**Positive**\n\nThis statement contains both criticisms (\"occasionally amateurishly made\") and praise (\"winsome cast and nice dialogue keeps it going\"). The overall tone is favorable—the positive elements (charming cast and good dialogue) are presented as compensating for the technical shortcomings, suggesting the speaker ultimately enjoyed the work despite its flaws. This balanced but ultimately approving assessment warrants a \"positive\" classification rather than \"neutral.\"",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.85,
+          "reasoning_soundness": 0.75,
+          "execution_accuracy": 0.3,
+          "output_integrity": 0.25,
+          "aggregate": 0.5375000000000001,
+          "rationale": "The agent addressed the sentiment classification task and provided coherent reasoning about mixed elements, but incorrectly classified a neutral statement as positive when the reference answer is neut"
+        }
+      }
+    ]
+  },
+  "final_test": {
+    "objective_runs": [
+      0.3
+    ],
+    "gpa_runs": [
+      0.8168749999999999
+    ],
+    "objective_mean": 0.3,
+    "gpa_mean": 0.8168749999999999,
+    "gpa_dims": {
+      "target_alignment": 0.9424999999999997,
+      "reasoning_soundness": 0.8175000000000001,
+      "execution_accuracy": 0.8574999999999999,
+      "output_integrity": 0.65
+    },
+    "examples": [
+      {
+        "query": "celebrated at sundance , this slight comedy of manners has winning performances and a glossy , glib charm that 's hard to beat .",
+        "gold": "very positive",
+        "output": "very positive",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified the fine-grained sentiment as 'very positive', matching the reference answer exactly, with clear evidence from phrases like 'winning performances' and 'hard to beat' sup"
+        }
+      },
+      {
+        "query": "what 's at stake in this film is nothing more than an obsolete , if irritating , notion of class .",
+        "gold": "very negative",
+        "output": "negative",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 0.85,
+          "output_integrity": 0.7,
+          "aggregate": 0.8500000000000001,
+          "rationale": "The agent correctly identified negative sentiment but missed the fine-grained intensity ('very negative' vs 'negative'), which is a partial accuracy issue given the task explicitly requests fine-grain"
+        }
+      },
+      {
+        "query": "if myers decides to make another austin powers movie , maybe he should just stick with austin and dr evil .",
+        "gold": "negative",
+        "output": "neutral\n\nThe statement contains both a mild suggestion (which could be seen as constructive) and an implicit criticism (that other characters shouldn't be included). These elements balance each other out without expressing a clear overall favorable or unfavorable sentiment about the potential movie.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.85,
+          "reasoning_soundness": 0.45,
+          "execution_accuracy": 0.0,
+          "output_integrity": 0.15,
+          "aggregate": 0.3625,
+          "rationale": "The agent addressed the sentiment classification task but misread the negative implication ('maybe he should just stick with') as neutral, producing an incorrect label that contradicts the reference a"
+        }
+      },
+      {
+        "query": "in its ragged , cheap and unassuming way , the movie works .",
+        "gold": "positive",
+        "output": "neutral\n\nThe statement contains both criticism (\"ragged, cheap and unassuming\") and praise (\"the movie works\"), which balance each other out. The negative descriptors undermine the positive assessment, creating a backhanded compliment where the criticism and approval are roughly equal in weight.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.85,
+          "reasoning_soundness": 0.45,
+          "execution_accuracy": 0.0,
+          "output_integrity": 0.15,
+          "aggregate": 0.3625,
+          "rationale": "The agent addressed the sentiment classification task but misinterpreted the statement's overall positive sentiment (despite acknowledging flaws, \"the movie works\" is the ultimate verdict), produced t"
+        }
+      },
+      {
+        "query": "you wo n't believe much of it , but you will laugh at the audacity , at the who 's who casting and the sheer insanity of it all .",
+        "gold": "neutral",
+        "output": "positive",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.7,
+          "execution_accuracy": 0.95,
+          "output_integrity": 0.3,
+          "aggregate": 0.7249999999999999,
+          "rationale": "The agent correctly performed sentiment classification but misclassified a neutral statement as positive, likely misinterpreting laughter and audacity as purely positive when the disbelief and insanit"
+        }
+      },
+      {
+        "query": "a charming yet poignant tale of the irrevocable ties that bind .",
+        "gold": "very positive",
+        "output": "very positive",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the sentiment as 'very positive', matching the reference answer exactly, with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "the film seems a dead weight .",
+        "gold": "very negative",
+        "output": "negative",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 0.85,
+          "output_integrity": 0.7,
+          "aggregate": 0.8500000000000001,
+          "rationale": "The agent correctly identified negative sentiment but missed the fine-grained intensity ('very negative' vs 'negative'), which matters for the specific task of fine-grained classification."
+        }
+      },
+      {
+        "query": "a very average science fiction film .",
+        "gold": "negative",
+        "output": "neutral",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.7,
+          "execution_accuracy": 1.0,
+          "output_integrity": 0.3,
+          "aggregate": 0.7374999999999999,
+          "rationale": "The agent correctly performed sentiment classification with proper format, but misclassified 'very average' as neutral when the reference indicates negative, showing reasonable but flawed interpretati"
+        }
+      },
+      {
+        "query": "watching scarlet diva , one is poised for titillation , raw insight or both .",
+        "gold": "positive",
+        "output": "neutral\n\nThe statement presents a balanced setup describing what one might expect from the film—titillation, raw insight, or both—without expressing clear approval or disapproval. It's a descriptive observation about the film's potential content rather than an evaluative judgment. The tone is measured and contemplative rather than expressing satisfaction or dissatisfaction.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.7,
+          "execution_accuracy": 1.0,
+          "output_integrity": 0.25,
+          "aggregate": 0.725,
+          "rationale": "The agent correctly performed sentiment classification with proper format, but misclassified a positive statement (being 'poised for' desirable outcomes like titillation and insight indicates anticipa"
+        }
+      },
+      {
+        "query": "has all the poignancy of a hallmark card and all the comedy of a gallagher stand-up act .",
+        "gold": "neutral",
+        "output": "negative",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.7,
+          "execution_accuracy": 1.0,
+          "output_integrity": 0.0,
+          "aggregate": 0.6625,
+          "rationale": "The agent correctly performed sentiment classification with proper format, but classified as 'negative' a statement the reference marks as 'neutral', indicating a fundamental misinterpretation of the "
+        }
+      },
+      {
+        "query": "offers enough playful fun to entertain the preschool set while embracing a wholesome attitude .",
+        "gold": "very positive",
+        "output": "positive",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 0.85,
+          "output_integrity": 0.7,
+          "aggregate": 0.8500000000000001,
+          "rationale": "The agent correctly identified positive sentiment but missed the fine-grained distinction of 'very positive' indicated by strong language like 'playful fun,' 'entertain,' and 'wholesome,' resulting in"
+        }
+      },
+      {
+        "query": "now it 's a bad , embarrassing movie .",
+        "gold": "very negative",
+        "output": "negative",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 0.85,
+          "output_integrity": 0.7,
+          "aggregate": 0.8500000000000001,
+          "rationale": "The agent correctly identified negative sentiment but missed the fine-grained intensity ('very negative' vs 'negative'), which matters for a task explicitly requesting fine-grained classification."
+        }
+      },
+      {
+        "query": "the sad thing about knockaround guys is its lame aspiration for grasping the coolness vibes when in fact the film is n't as flippant or slick as it thinks it is .",
+        "gold": "negative",
+        "output": "negative",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the sentiment as negative, matching the reference answer exactly, with proper format and clear alignment to the task of fine-grained sentiment classification."
+        }
+      },
+      {
+        "query": "now trimmed by about 20 minutes , this lavish three-year-old production has enough grandeur and scale to satisfy as grown-up escapism .",
+        "gold": "positive",
+        "output": "positive",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the sentiment as positive, matching the reference answer exactly, with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "it 's often infuriatingly glib and posturing , and yet it has been made with great evident care and manages to deliver up the man in a way to arouse further curiosity in even the most unknowing viewer .",
+        "gold": "neutral",
+        "output": "neutral\n\nThe statement contains balanced positive and negative elements that cancel each other out. The criticism (\"infuriatingly glib and posturing\") is substantial and clearly negative, while the praise (\"made with great evident care,\" \"manages to deliver,\" \"arouse further curiosity\") is also present. These opposing sentiments are roughly equivalent in weight, making the overall assessment neutral rather than clearly favorable or unfavorable.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the sentiment as neutral and provided sound reasoning identifying the balanced positive/negative elements, matching the reference answer perfectly with proper justificat"
+        }
+      },
+      {
+        "query": "the movie is full of fine performances , led by josef bierbichler as brecht and monica bleibtreu as helene weigel , his wife .",
+        "gold": "very positive",
+        "output": "positive",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 0.85,
+          "output_integrity": 0.75,
+          "aggregate": 0.8625,
+          "rationale": "The agent correctly identified positive sentiment but missed the fine-grained distinction of 'very positive' indicated by strong praise ('full of fine performances', 'led by'), resulting in a less pre"
+        }
+      },
+      {
+        "query": "a film so tedious that it is impossible to care whether that boast is true or not .",
+        "gold": "very negative",
+        "output": "very negative",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly classified the sentiment as 'very negative', matching the reference answer exactly, with clear alignment to the task of fine-grained sentiment classification and proper execution o"
+        }
+      },
+      {
+        "query": "audiences will find no mention of political prisoners or persecutions that might paint the castro regime in less than saintly tones .",
+        "gold": "negative",
+        "output": "negative",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the sentiment as negative, matching the reference answer exactly, with proper format and clear alignment to the task of fine-grained sentiment classification."
+        }
+      },
+      {
+        "query": "watching beanie and his gang put together his slasher video from spare parts and borrowed materials is as much fun as it must have been for them to make it .",
+        "gold": "positive",
+        "output": "positive",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the sentiment as positive, matching the reference answer exactly, with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "occasionally amateurishly made but a winsome cast and nice dialogue keeps it going .",
+        "gold": "neutral",
+        "output": "positive",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.7,
+          "execution_accuracy": 0.95,
+          "output_integrity": 0.3,
+          "aggregate": 0.7249999999999999,
+          "rationale": "The agent correctly performed sentiment classification but chose 'positive' when the reference answer is 'neutral', missing the balanced nature of criticism ('amateurishly made') versus praise ('winso"
+        }
+      }
+    ]
+  },
+  "delta_objective": -0.04999999999999999,
+  "delta_gpa": 0.033375000000000044,
+  "optimization": {
+    "front": [
+      {
+        "obj": 0.6,
+        "gpa": 0.96625,
+        "iter": 4,
+        "strategy": "merge"
+      }
+    ],
+    "history": [
+      {
+        "iter": 0,
+        "obj": 0.5,
+        "gpa": 0.83425,
+        "composite": 0.667125,
+        "strategy": "baseline"
+      },
+      {
+        "iter": 1,
+        "obj": 0.4,
+        "gpa": 0.8825000000000001,
+        "composite": 0.6412500000000001,
+        "strategy": "mutation",
+        "front_size": 2
+      },
+      {
+        "iter": 2,
+        "obj": 0.2,
+        "gpa": 0.6725,
+        "composite": 0.43625,
+        "strategy": "mutation",
+        "front_size": 2
+      },
+      {
+        "iter": 3,
+        "obj": 0.4,
+        "gpa": 0.9105,
+        "composite": 0.65525,
+        "strategy": "mutation",
+        "front_size": 2
+      },
+      {
+        "iter": 4,
+        "obj": 0.6,
+        "gpa": 0.96625,
+        "composite": 0.7831250000000001,
+        "strategy": "merge",
+        "front_size": 1
+      },
+      {
+        "iter": 5,
+        "obj": 0.4,
+        "gpa": 0.88625,
+        "composite": 0.643125,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 6,
+        "obj": 0.6,
+        "gpa": 0.9500000000000001,
+        "composite": 0.775,
+        "strategy": "mutation",
+        "front_size": 1
+      }
+    ],
+    "baseline_train_obj": 0.5,
+    "best_train_obj": 0.6
+  },
+  "duration_s": 124.1
+}

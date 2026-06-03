@@ -1,0 +1,627 @@
+{
+  "task_id": "realestate_attribute",
+  "industry": "Real Estate / PropTech",
+  "metric": "classification",
+  "n_train": 15,
+  "n_test": 18,
+  "source": "Authored for TEI-Bench (Sonnet-generated, Sonnet-validated; kept only label-agreed examples).",
+  "agent_model": "claude-haiku-4-5",
+  "judge_model": "claude-sonnet-4-5",
+  "optimizer_model": "claude-sonnet-4-5",
+  "seed": 0,
+  "eval_repeats": 1,
+  "baseline_prompt": "You are a real-estate listing analyst. Identify the primary attribute the prospective buyer is asking about. Classify into one of these categories: price, location, size, condition, financing, availability.",
+  "optimized_prompt": "You are a real-estate listing analyst. Your task is to identify the primary attribute the prospective buyer is asking about in their query.\n\nClassify the query into exactly ONE of these categories:\n\n- **price**: Questions about listing price, cost, affordability, pricing trends, value, or budget considerations\n- **location**: Questions about neighborhood, area, community characteristics, proximity to amenities, schools, commute, parks, geographic features, or surrounding environment\n- **size**: Questions about square footage, number of rooms, bedrooms, bathrooms, lot size, space dimensions, or physical capacity\n- **condition**: Questions about property state, age, renovations, updates, repairs needed, maintenance history, quality, wear and tear, modernization, or the status of specific systems (roof, HVAC, plumbing, electrical, floors, appliances, etc.)\n- **financing**: Questions about mortgages, loans, down payments, payment plans, interest rates, closing costs, financial arrangements, or connecting with lenders/brokers\n- **availability**: Questions about whether the property is still on the market, showing times, move-in dates, offer status, contingencies, or when the property can be purchased or viewed\n\nKey decision rules:\n- Questions about community character, family-friendliness, or nearby parks are **location** queries\n- Questions about whether a home is \"still available,\" \"taken off the market,\" or \"up for grabs\" are **availability** queries\n- Questions about property age, updates since construction, system replacements, wear on features, need for refurbishment, or modernization are **condition** queries\n- Questions mentioning \"refurbishment costs\" are about **condition** (the need for repairs), NOT price (the listing cost)\n- Focus on the PRIMARY concern in the query; if multiple attributes are mentioned, identify which one drives the question\n- When a buyer asks about what work is needed or what has been updated, this is fundamentally a **condition** question, even if cost implications are mentioned secondarily\n\nOutput format: Return ONLY the category name in lowercase, with no additional text, explanation, formatting, or punctuation. Just the single word.",
+  "baseline_test": {
+    "objective_runs": [
+      0.9444444444444444
+    ],
+    "gpa_runs": [
+      0.9611111111111108
+    ],
+    "objective_mean": 0.9444444444444444,
+    "gpa_mean": 0.9611111111111108,
+    "gpa_dims": {
+      "target_alignment": 0.9499999999999997,
+      "reasoning_soundness": 0.9444444444444442,
+      "execution_accuracy": 0.9638888888888888,
+      "output_integrity": 0.9861111111111109
+    },
+    "examples": [
+      {
+        "query": "The bathroom tiles and fixtures look original to the house. Before making an offer, I'd like to know if any significant updates or remodeling work has been done throughout the home.",
+        "gold": "condition",
+        "output": "**Primary Attribute: Condition**\n\nThe prospective buyer is asking about the overall condition and update history of the home, specifically regarding renovations and remodeling work that has been completed.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 0.95,
+          "output_integrity": 0.95,
+          "aggregate": 0.9375,
+          "rationale": "The agent correctly identified 'condition' as the primary attribute and provided relevant supporting explanation, matching the reference answer with appropriate context about renovations and updates."
+        }
+      },
+      {
+        "query": "Are there any first-time buyer programs that apply to this listing? I'm hoping to minimize what I need to bring to the table initially.",
+        "gold": "financing",
+        "output": "**Primary Attribute: Financing**\n\nThe prospective buyer is asking about first-time buyer programs and down payment requirements, which relates to the financial terms and lending options available for purchasing the property.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 0.9,
+          "output_integrity": 1.0,
+          "aggregate": 0.95,
+          "rationale": "The agent correctly identified 'financing' as the primary attribute, provided sound reasoning about first-time buyer programs and down payments relating to financial terms, though added slightly more "
+        }
+      },
+      {
+        "query": "Hi, I'm interested in the condo on Maple Street. Is it still on the market or has it already been sold?",
+        "gold": "availability",
+        "output": "The primary attribute the prospective buyer is asking about is: **availability**\n\nThey want to know the current status of the property (whether it's still available for purchase or has already been sold).",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified 'availability' as the primary attribute and provided accurate supporting explanation matching the reference answer perfectly."
+        }
+      },
+      {
+        "query": "What schools are nearby? We have two kids in elementary and want them to be able to walk or take a short bus ride.",
+        "gold": "location",
+        "output": "**Classification: Location**\n\nThe prospective buyer is asking about proximity to schools and accessibility for their children, which is a location-based attribute of the property.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 0.95,
+          "output_integrity": 0.95,
+          "aggregate": 0.95,
+          "rationale": "The agent correctly identified 'location' as the primary attribute, provided sound reasoning about proximity and accessibility, and matched the reference answer with proper formatting."
+        }
+      },
+      {
+        "query": "Hi, I'm interested in the property on Maple Street. Could you tell me how many bedrooms and bathrooms it has? Also, what's the total living area?",
+        "gold": "size",
+        "output": "The primary attribute the prospective buyer is asking about is: **size**\n\nThey are inquiring about the number of bedrooms, bathrooms, and total living area—all measurements related to the property's size.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 0.95,
+          "output_integrity": 1.0,
+          "aggregate": 0.95,
+          "rationale": "The agent correctly identified 'size' as the primary attribute and provided sound reasoning linking bedrooms, bathrooms, and living area to size, matching the reference answer perfectly."
+        }
+      },
+      {
+        "query": "I see some water stains on the ceiling in one of the bedroom photos. Has there been any damage from leaks, and if so, has everything been properly fixed and restored?",
+        "gold": "condition",
+        "output": "**Primary Attribute: Condition**\n\nThe prospective buyer is asking about the structural and maintenance condition of the property, specifically regarding water damage, leaks, and repairs.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 0.9,
+          "output_integrity": 1.0,
+          "aggregate": 0.95,
+          "rationale": "The agent correctly identified 'condition' as the primary attribute, provided sound reasoning about water damage and repairs relating to property condition, though added explanatory text beyond the mi"
+        }
+      },
+      {
+        "query": "What are the current interest rates you're seeing for a 30-year fixed on a property in this price range? I'm trying to understand my monthly obligations.",
+        "gold": "financing",
+        "output": "**Primary Attribute: Financing**\n\nThe prospective buyer is asking about interest rates and monthly payment obligations, which falls under financing considerations rather than the property itself.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified 'financing' as the primary attribute, provided sound reasoning linking interest rates and monthly obligations to financing, and delivered a properly formatted response t"
+        }
+      },
+      {
+        "query": "We need to close quickly due to job relocation. How soon could we potentially move into this house?",
+        "gold": "availability",
+        "output": "**Primary Attribute: Availability**\n\nThe prospective buyer is asking about the timeline for occupancy/move-in date, which falls under the **availability** category. Their concern is driven by an external deadline (job relocation), but the core question is about when the property can be accessed.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 0.9,
+          "output_integrity": 1.0,
+          "aggregate": 0.95,
+          "rationale": "The agent correctly identified 'availability' as the primary attribute, provided sound reasoning linking timeline/move-in date to availability, though added slightly more explanation than strictly nec"
+        }
+      },
+      {
+        "query": "I'm interested in the condo on Maple Street, but I work downtown and need to know how long the morning commute would typically take during rush hour.",
+        "gold": "location",
+        "output": "**Primary Attribute: Location**\n\nThe prospective buyer is asking about commute time to their workplace downtown during rush hour, which is a location-related concern about the property's proximity to their work and accessibility.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified 'location' as the primary attribute, provided sound reasoning linking commute time to location concerns, and matched the reference answer perfectly."
+        }
+      },
+      {
+        "query": "My main concern is whether this house is spacious enough for entertaining. Can you share the square footage of the main living areas and how many people the dining room can accommodate?",
+        "gold": "size",
+        "output": "The primary attribute the prospective buyer is asking about is: **size**\n\nThey are specifically inquiring about square footage of living areas and dining room capacity, both of which relate to the overall spaciousness and functional size of the property for their entertaining needs.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified 'size' as the primary attribute, provided sound reasoning linking square footage and capacity to size/spaciousness, followed the required format, and matched the referen"
+        }
+      },
+      {
+        "query": "I'm interested but concerned about the kitchen appliances shown in the pictures - they appear quite dated. Have there been any major renovations to the interior in the last decade?",
+        "gold": "condition",
+        "output": "**Primary Attribute: Condition**\n\nThe prospective buyer is asking about the interior condition and renovation history of the property, specifically regarding the kitchen appliances and overall updates to the home.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 0.9,
+          "output_integrity": 0.95,
+          "aggregate": 0.9375,
+          "rationale": "The agent correctly identified 'condition' as the primary attribute, provided sound reasoning about renovation history and appliance state, though added minor explanatory text beyond the minimal requi"
+        }
+      },
+      {
+        "query": "Does the seller offer any assistance with closing costs or carry-back options? My lender is still finalizing my pre-approval.",
+        "gold": "financing",
+        "output": "**Primary Attribute: Financing**\n\nThe prospective buyer is asking about seller concessions (closing cost assistance and carry-back financing) and mentions their lender's pre-approval status. Both elements relate to the financial terms and lending aspects of the transaction.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified 'financing' as the primary attribute, provided sound reasoning connecting closing costs and carry-back options to financial terms, and delivered a complete, accurate res"
+        }
+      },
+      {
+        "query": "My lease ends on July 15th and I need a place immediately after that. What's the earliest possible occupancy date for this townhouse?",
+        "gold": "availability",
+        "output": "**Primary Attribute: Availability**\n\nThe prospective buyer is asking about the earliest move-in date/occupancy timeline for the property.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 0.95,
+          "output_integrity": 0.95,
+          "aggregate": 0.95,
+          "rationale": "The agent correctly identified 'availability' as the primary attribute and provided appropriate supporting context that aligns with the reference answer, with only minor formatting differences from th"
+        }
+      },
+      {
+        "query": "We're relocating from out of state and don't know the area well. What are the main attractions or amenities within a 10-minute drive?",
+        "gold": "location",
+        "output": "**Primary Attribute: Location**\n\nThe prospective buyer is asking about the neighborhood characteristics, nearby attractions, and amenities accessible from the property. This is fundamentally a question about **location** — understanding what the surrounding area offers and what's conveniently accessible.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified 'location' as the primary attribute, provided sound reasoning about neighborhood characteristics and accessibility, and fully matched the reference answer with proper fo"
+        }
+      },
+      {
+        "query": "I noticed the listing mentions it's a 2-bed apartment, but I'm wondering about the actual dimensions. Is the master bedroom large enough for a king-sized bed and furniture?",
+        "gold": "size",
+        "output": "**Primary Attribute: Size**\n\nThe prospective buyer is asking about the specific dimensions and usable space within the property, particularly regarding whether the master bedroom can accommodate a king-sized bed plus additional furniture. This is a size-related inquiry.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified 'size' as the primary attribute, provided sound reasoning about dimensions and space accommodation, and matched the reference answer perfectly despite adding explanatory"
+        }
+      },
+      {
+        "query": "This property has been on the market for a while. Is it move-in ready or are there maintenance issues that need addressing? The HVAC system age would be particularly helpful to know.",
+        "gold": "condition",
+        "output": "**Primary Attribute: Condition**\n\nThe prospective buyer is asking about the property's physical condition and state of repair, specifically inquiring about:\n- Move-in readiness\n- Maintenance issues\n- HVAC system age/functionality\n\nThis is clearly a condition-focused question, as they're evaluating what work or repairs may be needed before occupancy.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified 'condition' as the primary attribute, provided sound reasoning linking move-in readiness and maintenance issues to condition, used proper format, and matched the referen"
+        }
+      },
+      {
+        "query": "I'm interested in this property but would need to put less than 10% upfront. Can you tell me what programs might be available to help with the initial payment?",
+        "gold": "financing",
+        "output": "**Primary Attribute: Financing**\n\nThe prospective buyer is asking about down payment assistance programs and financing options to cover the initial payment with less than 10% down. This is clearly a financing-related question.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified 'financing' as the primary attribute, provided sound reasoning about down payment assistance and financing options, and the answer perfectly matches the reference with a"
+        }
+      },
+      {
+        "query": "I saw this listing was posted three weeks ago. Just wanted to check if it's still available before scheduling a viewing.",
+        "gold": "availability",
+        "output": "**Primary Attribute: Availability**\n\nThe prospective buyer is asking about whether the property is still available for viewing, which falls under the availability category.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 0.95,
+          "output_integrity": 0.95,
+          "aggregate": 0.95,
+          "rationale": "The agent correctly identified 'availability' as the primary attribute, provided sound reasoning about the buyer's intent, and matched the reference answer with appropriate explanation."
+        }
+      }
+    ]
+  },
+  "final_test": {
+    "objective_runs": [
+      1.0
+    ],
+    "gpa_runs": [
+      0.9868055555555555
+    ],
+    "objective_mean": 1.0,
+    "gpa_mean": 0.9868055555555555,
+    "gpa_dims": {
+      "target_alignment": 0.9777777777777776,
+      "reasoning_soundness": 0.9722222222222222,
+      "execution_accuracy": 1.0,
+      "output_integrity": 0.9972222222222222
+    },
+    "examples": [
+      {
+        "query": "The bathroom tiles and fixtures look original to the house. Before making an offer, I'd like to know if any significant updates or remodeling work has been done throughout the home.",
+        "gold": "condition",
+        "output": "condition",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly identified 'condition' as the primary attribute, matching the reference answer exactly, with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "Are there any first-time buyer programs that apply to this listing? I'm hoping to minimize what I need to bring to the table initially.",
+        "gold": "financing",
+        "output": "financing",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified 'financing' as the primary attribute, matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "Hi, I'm interested in the condo on Maple Street. Is it still on the market or has it already been sold?",
+        "gold": "availability",
+        "output": "availability",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly identified 'availability' as the primary attribute being asked about, matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "What schools are nearby? We have two kids in elementary and want them to be able to walk or take a short bus ride.",
+        "gold": "location",
+        "output": "location",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly identified 'location' as the primary attribute being asked about in a query concerning nearby schools, matching the reference answer exactly with proper format and no extraneous co"
+        }
+      },
+      {
+        "query": "Hi, I'm interested in the property on Maple Street. Could you tell me how many bedrooms and bathrooms it has? Also, what's the total living area?",
+        "gold": "size",
+        "output": "size",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 0.95,
+          "aggregate": 0.95,
+          "rationale": "The agent correctly identified 'size' as the primary attribute when the buyer asked about bedrooms, bathrooms, and total living area—all size-related metrics—matching the reference answer exactly with"
+        }
+      },
+      {
+        "query": "I see some water stains on the ceiling in one of the bedroom photos. Has there been any damage from leaks, and if so, has everything been properly fixed and restored?",
+        "gold": "condition",
+        "output": "condition",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified 'condition' as the primary attribute, matching the reference answer exactly and addressing the task without deviation."
+        }
+      },
+      {
+        "query": "What are the current interest rates you're seeing for a 30-year fixed on a property in this price range? I'm trying to understand my monthly obligations.",
+        "gold": "financing",
+        "output": "financing",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly identified 'financing' as the primary attribute from a query explicitly about interest rates and monthly payment obligations, matching the reference answer perfectly."
+        }
+      },
+      {
+        "query": "We need to close quickly due to job relocation. How soon could we potentially move into this house?",
+        "gold": "availability",
+        "output": "availability",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly identified 'availability' as the primary attribute being asked about, matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "I'm interested in the condo on Maple Street, but I work downtown and need to know how long the morning commute would typically take during rush hour.",
+        "gold": "location",
+        "output": "location",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified 'location' as the primary attribute, matching the reference answer exactly, with proper format and sound implicit reasoning about commute being a location-related concer"
+        }
+      },
+      {
+        "query": "My main concern is whether this house is spacious enough for entertaining. Can you share the square footage of the main living areas and how many people the dining room can accommodate?",
+        "gold": "size",
+        "output": "size",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly identified 'size' as the primary attribute when the buyer asked about square footage and accommodation capacity, perfectly matching the reference answer."
+        }
+      },
+      {
+        "query": "I'm interested but concerned about the kitchen appliances shown in the pictures - they appear quite dated. Have there been any major renovations to the interior in the last decade?",
+        "gold": "condition",
+        "output": "condition",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified 'condition' as the primary attribute being queried, matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "Does the seller offer any assistance with closing costs or carry-back options? My lender is still finalizing my pre-approval.",
+        "gold": "financing",
+        "output": "financing",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly identified 'financing' as the primary attribute, matching the reference answer exactly and addressing the task without deviation."
+        }
+      },
+      {
+        "query": "My lease ends on July 15th and I need a place immediately after that. What's the earliest possible occupancy date for this townhouse?",
+        "gold": "availability",
+        "output": "availability",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly identified 'availability' as the primary attribute being asked about, matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "We're relocating from out of state and don't know the area well. What are the main attractions or amenities within a 10-minute drive?",
+        "gold": "location",
+        "output": "location",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified 'location' as the primary attribute being asked about, matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "I noticed the listing mentions it's a 2-bed apartment, but I'm wondering about the actual dimensions. Is the master bedroom large enough for a king-sized bed and furniture?",
+        "gold": "size",
+        "output": "size",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly identified 'size' as the primary attribute being asked about, matching the reference answer exactly and addressing the task precisely."
+        }
+      },
+      {
+        "query": "This property has been on the market for a while. Is it move-in ready or are there maintenance issues that need addressing? The HVAC system age would be particularly helpful to know.",
+        "gold": "condition",
+        "output": "condition",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified 'condition' as the primary attribute being queried, matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "I'm interested in this property but would need to put less than 10% upfront. Can you tell me what programs might be available to help with the initial payment?",
+        "gold": "financing",
+        "output": "financing",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly identified 'financing' as the primary attribute, matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "I saw this listing was posted three weeks ago. Just wanted to check if it's still available before scheduling a viewing.",
+        "gold": "availability",
+        "output": "availability",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly identified 'availability' as the primary attribute being asked about, matching the reference answer exactly with proper format and no extraneous content."
+        }
+      }
+    ]
+  },
+  "delta_objective": 0.05555555555555558,
+  "delta_gpa": 0.025694444444444686,
+  "optimization": {
+    "front": [
+      {
+        "obj": 1.0,
+        "gpa": 0.99,
+        "iter": 5,
+        "strategy": "mutation"
+      }
+    ],
+    "history": [
+      {
+        "iter": 0,
+        "obj": 0.9,
+        "gpa": 0.96125,
+        "composite": 0.930625,
+        "strategy": "baseline"
+      },
+      {
+        "iter": 1,
+        "obj": 1.0,
+        "gpa": 0.98625,
+        "composite": 0.993125,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 2,
+        "obj": 1.0,
+        "gpa": 0.9862500000000001,
+        "composite": 0.993125,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 3,
+        "obj": 1.0,
+        "gpa": 0.98125,
+        "composite": 0.990625,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 4,
+        "obj": 1.0,
+        "gpa": 0.985,
+        "composite": 0.9924999999999999,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 5,
+        "obj": 1.0,
+        "gpa": 0.99,
+        "composite": 0.995,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 6,
+        "obj": 1.0,
+        "gpa": 0.9837500000000001,
+        "composite": 0.9918750000000001,
+        "strategy": "mutation",
+        "front_size": 1
+      }
+    ],
+    "baseline_train_obj": 0.9,
+    "best_train_obj": 1.0
+  },
+  "duration_s": 94.9
+}

@@ -1,0 +1,627 @@
+{
+  "task_id": "agri_crop_issue",
+  "industry": "Agriculture / AgriTech",
+  "metric": "classification",
+  "n_train": 15,
+  "n_test": 18,
+  "source": "Authored for TEI-Bench (Sonnet-generated, Sonnet-validated; kept only label-agreed examples).",
+  "agent_model": "claude-haiku-4-5",
+  "judge_model": "claude-sonnet-4-5",
+  "optimizer_model": "claude-sonnet-4-5",
+  "seed": 0,
+  "eval_repeats": 1,
+  "baseline_prompt": "You are a crop-advisory assistant. Classify the farmer's described crop problem into a cause category. Classify into one of these categories: pest, disease, nutrient, water_stress, weather_damage, weed.",
+  "optimized_prompt": "You are a crop-advisory assistant. Classify the farmer's described crop problem into exactly ONE of these categories: pest, disease, nutrient, water_stress, weather_damage, weed.\n\nYour response must follow this exact format:\n- Output ONLY the category name as a single word (pest, disease, nutrient, water_stress, weather_damage, or weed)\n- No additional text, punctuation, formatting, asterisks, labels, explanations, or reasoning\n- The output should be the bare category name only, nothing before or after it\n\nClassification criteria:\n\n**pest**: Insects, borers, larvae, caterpillars, aphids, mites, or other animals physically damaging crops through feeding, boring, or infestation. Look for: holes in leaves/fruit, chewing damage, tunneling/boring, visible insects or larvae, frass (insect droppings), stippling, honeydew, webbing.\n\n**disease**: Fungal, bacterial, or viral infections causing pathogenic illness as the PRIMARY problem. Look for: spots, lesions, blights, cankers, mildews (powdery/downy), molds, rusts, wilts caused by pathogens, specific disease names (e.g., late blight, fusarium), fungal fruiting bodies, fuzzy/moldy growth on plant surfaces, powdery coatings, rust-colored pustules. Pathogenic diseases affect plant tissue through infection and spread, causing characteristic symptoms like leaf spots that progress, fungal growth, or systemic wilting from vascular infection. Do NOT classify here if symptoms are secondary to environmental water stress.\n\n**nutrient**: Deficiency or excess of specific nutrients (nitrogen, phosphorus, potassium, micronutrients). Look for: characteristic discoloration patterns (interveinal chlorosis, purple/red tints on leaves/stems, general pale/yellow appearance across the plant), stunted growth, poor tillering, weak plants, abnormal development, mentions of no fertilization, lack of soil testing, crop rotation without amendment, or specific nutrient deficiency symptoms. Nutrient problems typically show uniform or pattern-based symptoms across foliage rather than localized lesions or spots.\n\n**water_stress**: Problems where water availability (too much or too little) is the PRIMARY cause. \n- Drought/underwatering: wilting with dry soil, lack of irrigation, drought conditions\n- Overwatering/waterlogging: wilting or yellowing WITH constantly wet/saturated soil, waterlogging, flooding, standing water, poor drainage, oversaturation. Even if secondary symptoms like root rot, mushy/dark roots, or yellowing appear, classify as water_stress when excess water is the underlying cause.\n\n**weather_damage**: Physical damage from weather events. Look for: hail (dents, bruises, holes punched in leaves/fruit), frost/freeze damage, wind damage (broken branches, lodging), extreme heat scorch, cold injury, storm damage. Specific weather events causing mechanical injury to plants.\n\n**weed**: Competition from unwanted plants growing in the field. Look for: mentions of other plants/weeds competing with crops, specific weed names (Bermuda grass, crabgrass, pigweed, etc.), weeds blocking sunlight, interfering with growth or harvest, invading/spreading into crop areas, creating mats or thick growth that competes with or suffocates crops, need for weed control.\n\nCritical decision rules:\n- When symptoms like root rot, yellowing, or mushy roots occur WITH waterlogging, flooding, or constantly wet soil, classify as **water_stress** (the environmental cause), not disease\n- Only use **disease** when a pathogen is the primary agent, not when symptoms result from environmental stress\n- Fungal growth on plant surfaces (powdery coatings, fuzzy mold, grayish growth on fruit) indicates **disease**\n- General paleness, poor vigor, and weak growth after crop rotation without soil amendment indicates **nutrient** deficiency\n- Named weeds invading and competing with crops are classified as **weed** problems\n- Choose the category that represents the ROOT CAUSE, not secondary symptoms\n\nOutput only the single category name.",
+  "baseline_test": {
+    "objective_runs": [
+      0.5555555555555556
+    ],
+    "gpa_runs": [
+      0.9740277777777778
+    ],
+    "objective_mean": 0.5555555555555556,
+    "gpa_mean": 0.9740277777777778,
+    "gpa_dims": {
+      "target_alignment": 0.9611111111111108,
+      "reasoning_soundness": 0.9477777777777779,
+      "execution_accuracy": 0.9944444444444444,
+      "output_integrity": 0.9927777777777779
+    },
+    "examples": [
+      {
+        "query": "My pepper plants have brown, crispy leaf edges and the fruits are smaller than normal. The ground has been bone dry and cracked for the past month due to the heat wave and our well water is running low.",
+        "gold": "water_stress",
+        "output": "**Classification: water_stress**\n\n**Reasoning:**\nThe symptoms you're describing are classic indicators of water stress:\n- **Brown, crispy leaf edges** (marginal leaf scorch) - occurs when plants cannot transport enough water to leaf margins\n- **Smaller fruits** - reduced water availability limits fruit development and size\n- **Environmental context** - bone dry, cracked soil and prolonged heat wave with depleted well water\n\nThese symptoms align with drought stress rather than disease, pest damage, nutrient deficiency, or weather damage. The direct correlation between the month-long dry conditions and the plant symptoms confirms water stress as the primary cause.\n\n**Recommendation:** Prioritize irrigation to restore soil moisture, mulch around plants to retain water, and consider drip irrigation for more efficient water use during this heat wave.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.98,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9824999999999999,
+          "rationale": "The agent correctly classified the problem as water_stress with sound reasoning linking symptoms to cause, proper format, and accurate diagnosis matching the reference answer, though the added recomme"
+        }
+      },
+      {
+        "query": "The strong winds we've been having all week have caused major problems in my pepper field. Plants are leaning heavily to one side, some have been uprooted entirely, and I'm seeing lots of blossom drop where flowers were torn off before they could set fruit.",
+        "gold": "weather_damage",
+        "output": "**Classification: weather_damage**\n\nThe symptoms you're describing—plant lodging (leaning), uprooting, and blossom drop caused by mechanical tearing—are all direct results of strong wind stress. This is a clear weather-related damage issue rather than a pest, disease, nutrient deficiency, or water problem.\n\n**Recommended actions:**\n- Stake or support remaining plants to prevent further damage\n- Remove severely damaged plants to redirect resources\n- Monitor for secondary issues (disease entry points from torn tissues)\n- Consider windbreaks for future seasons if this is a recurring problem",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly classified the problem as weather_damage with sound reasoning linking wind symptoms to the category, proper format, and accurate answer matching the reference."
+        }
+      },
+      {
+        "query": "My wheat field has been overtaken by wild grasses that are growing faster than my crop. They're competing for space and I'm worried my yield will suffer significantly if I don't address this soon.",
+        "gold": "weed",
+        "output": "**Classification: WEED**\n\nThe wild grasses competing with your wheat crop are classified as weeds. They're outcompeting your crop for resources (space, nutrients, water, and light), which is the defining characteristic of a weed problem.\n\n**Recommended actions:**\n- Consider herbicide application (selective herbicides for grass weeds in wheat)\n- Mechanical removal if infestation is localized\n- Adjust planting density for future seasons to improve crop competitiveness\n- Implement crop rotation to reduce weed pressure\n- Act quickly to prevent seed set and further spread",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.98,
+          "output_integrity": 0.98,
+          "aggregate": 0.9575,
+          "rationale": "The agent correctly classified the problem as 'WEED' matching the reference answer, provided sound reasoning about resource competition, and added helpful but non-required recommendations that slightl"
+        }
+      },
+      {
+        "query": "Large sections of my cabbage heads are being eaten, leaving just the outer leaves with big irregular chunks missing. I spotted several green worms that match the color of the leaves perfectly hiding inside the heads.",
+        "gold": "pest",
+        "output": "**Classification: Pest**\n\nThe green worms you've identified are the cause of the damage. Based on your description, these are likely **cabbage loopers** or **cabbage worms** (possibly imported cabbageworms or diamondback moth larvae), which are common cabbage pests that:\n\n- Feed inside and between leaves, creating irregular holes and chunks of missing tissue\n- Are green and well-camouflaged among the foliage\n- Cause significant damage to cabbage heads\n\n**Recommended actions:**\n- Hand-pick visible worms\n- Consider organic controls like Bt (Bacillus thuringiensis) spray\n- Use row covers on young plants to prevent adult moths from laying eggs\n- Monitor regularly for early detection",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.98,
+          "output_integrity": 0.95,
+          "aggregate": 0.95,
+          "rationale": "The agent correctly classified the problem as 'pest' matching the reference answer, provided sound reasoning linking green worms to the damage, executed the classification task properly, and added hel"
+        }
+      },
+      {
+        "query": "My tomato plants have developed dark brown spots with yellow halos on the lower leaves, and the affected foliage is starting to curl and drop off. The spots seem to be spreading upward through the canopy over the past week.",
+        "gold": "disease",
+        "output": "# Classification: **Disease**\n\n## Reasoning:\nThe symptoms you're describing are characteristic of a **fungal or bacterial leaf disease**, most likely:\n\n- **Early Blight** (*Alternaria solani*) - the most common tomato disease matching your description\n- **Septoria Leaf Spot** (*Septoria lycopersici*)\n\n**Key diagnostic indicators:**\n- Dark brown spots with yellow halos (classic concentric ring pattern in Early Blight)\n- Progressive spread from lower to upper canopy\n- Leaf curling and defoliation\n- Week-long progression pattern\n\n**Recommended actions:**\n1. Remove affected lower leaves immediately\n2. Improve air circulation around plants\n3. Avoid overhead watering\n4. Apply fungicide (copper or chlorothalonil) if disease continues\n5. Mulch to prevent soil splash\n\nThis is a disease classification rather than pest, nutrient deficiency, or environmental stress based on the specific symptom pattern and progression rate.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9875,
+          "rationale": "The agent correctly classified the problem as 'disease' matching the reference answer, provided sound diagnostic reasoning with specific disease candidates, and delivered a well-structured response th"
+        }
+      },
+      {
+        "query": "My wheat plants are showing yellowing on the older leaves that's spreading upward, and the growth seems stunted compared to last season. The soil hasn't been amended in three years and I haven't applied any fertilizer this cycle.",
+        "gold": "nutrient",
+        "output": "**Classification: NUTRIENT**\n\n**Reasoning:**\nThe key indicators pointing to a nutrient deficiency are:\n\n1. **Yellowing pattern** - Starting on older leaves and progressing upward is classic for mobile nutrient deficiencies (nitrogen, potassium, magnesium)\n2. **Stunted growth** - Indicates insufficient resources for plant development\n3. **No soil amendment for 3 years** - Suggests nutrient depletion in the soil\n4. **No fertilizer applied this cycle** - Confirms lack of nutrient input\n\nThis symptom profile is most consistent with **nitrogen deficiency**, which is the most common nutrient problem in wheat and causes exactly this pattern of yellowing from lower to upper leaves.\n\n**Recommendation:** Consider a soil test to confirm which nutrient(s) are limiting, then apply appropriate fertilizer (likely nitrogen) to address the deficiency.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.98,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9824999999999999,
+          "rationale": "The agent correctly classified the problem as 'nutrient' matching the reference, provided sound reasoning linking symptoms to nutrient deficiency with proper botanical knowledge, followed the classifi"
+        }
+      },
+      {
+        "query": "The wheat crop is showing signs of early senescence with premature yellowing. Soil moisture readings have been consistently below 20% for three weeks now and the plants are shorter than they should be at this growth stage.",
+        "gold": "water_stress",
+        "output": "**Classification: water_stress**\n\n**Reasoning:**\nThe symptoms described are consistent with water stress:\n- **Premature yellowing/early senescence** - occurs when plants cannot maintain turgor and mobilize nutrients due to insufficient water\n- **Soil moisture below 20% for three weeks** - direct evidence of prolonged drought conditions\n- **Stunted growth (shorter plants)** - a classic indicator of water deficit limiting cell expansion and development\n\nThese symptoms collectively point to drought/water stress rather than other categories. While nutrient deficiency can cause yellowing, the sustained low soil moisture reading is the primary diagnostic indicator here.\n\n**Recommendation:** Implement irrigation if available, or monitor for potential yield loss if rainfall doesn't occur soon.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.98,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the problem as water_stress with sound reasoning linking symptoms to drought conditions, proper format, and complete accuracy matching the reference answer."
+        }
+      },
+      {
+        "query": "After yesterday's storm, my corn field looks like it's been beaten down. Stalks are broken and bent at weird angles, many are completely flattened. Some of the ears were knocked right off the plants and are lying in the mud.",
+        "gold": "weather_damage",
+        "output": "**Classification: weather_damage**\n\nYour corn field has sustained physical damage from the storm—broken stalks, bent plants, and lodging (flattening) are all direct results of severe wind or hail impact. The knocked-off ears lying in the mud further confirm acute weather-related mechanical damage rather than a pest, disease, nutrient deficiency, or other cause.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the problem as weather_damage with sound reasoning linking storm effects to physical damage, proper format, and complete accuracy matching the reference answer."
+        }
+      },
+      {
+        "query": "Wild amaranth has emerged densely throughout my cotton field after the recent rains. The competition is severe and my cotton plants are not developing properly because these other plants are taking all the resources.",
+        "gold": "weed",
+        "output": "**Classification: WEED**\n\nWild amaranth is a competitive weed species that thrives in cotton fields, especially after rainfall when conditions favor germination and growth. The dense emergence and resource competition you're describing—where the weeds are outcompeting your cotton for water, nutrients, and light—is a classic weed management issue.\n\n**Recommended actions:**\n- Early intervention is critical given the severity\n- Consider mechanical removal, herbicide application, or cultivation depending on your cotton growth stage\n- Implement integrated weed management strategies for future seasons\n- Timely post-emergence herbicide application would be most effective at this stage",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9875,
+          "rationale": "The agent correctly classified the problem as 'WEED' matching the reference answer, provided sound reasoning about wild amaranth as a competitive weed species, and added helpful but non-required conte"
+        }
+      },
+      {
+        "query": "There are tiny white flies swarming up whenever I touch my bean plants. The leaves are turning yellow and have a sticky residue on them. I'm worried this is getting out of control.",
+        "gold": "pest",
+        "output": "# Classification: **Pest**\n\n## Explanation:\nThe tiny white flies you're describing are almost certainly **whiteflies**, a common agricultural pest. The key indicators are:\n\n- **Visible tiny white insects** that swarm when disturbed\n- **Sticky residue on leaves** (honeydew excretion from the insects)\n- **Yellowing leaves** (caused by whitefly feeding damage)\n\n## Recommended Actions:\n1. **Inspect leaf undersides** where whiteflies typically congregate\n2. **Consider treatment options:**\n   - Insecticidal soap or neem oil spray\n   - Yellow sticky traps to monitor/reduce population\n   - Strong water spray to dislodge insects\n3. **Act quickly** - whitefly populations can explode rapidly\n\nThis is a pest management issue, not a disease, nutrient deficiency, or environmental stress problem.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.98,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9824999999999999,
+          "rationale": "The agent correctly classified the problem as 'pest' matching the reference answer, provided sound reasoning identifying whiteflies with accurate symptom analysis, followed proper classification forma"
+        }
+      },
+      {
+        "query": "My soybean plants have yellowing starting from the leaf tips and margins on older foliage, and overall the canopy looks lighter than it should. Growth rate has slowed noticeably in the past few weeks despite good weather conditions.",
+        "gold": "nutrient",
+        "output": "# Classification: **NUTRIENT**\n\n## Reasoning:\n\nThe symptoms you're describing are classic indicators of nutrient deficiency:\n\n- **Yellowing from leaf tips and margins on older leaves** → typical pattern of mobile nutrient deficiency (potassium, magnesium, or nitrogen moving from older to younger leaves)\n- **Lighter overall canopy color** → suggests insufficient chlorophyll production, common in nitrogen or magnesium deficiency\n- **Slowed growth despite favorable weather** → rules out weather damage and indicates an internal plant limitation (nutrient availability)\n\n## Most Likely Culprits:\n1. **Potassium (K) deficiency** - very common in soybeans; causes marginal leaf scorch\n2. **Nitrogen (N) deficiency** - causes general yellowing and reduced vigor\n3. **Magnesium (Mg) deficiency** - causes interveinal yellowing on older leaves\n\n## Recommended Next Steps:\n- Conduct a soil test to confirm nutrient levels\n- Consider foliar feeding if deficiency is confirmed\n- Check soil pH (affects nutrient availability)\n- Review recent rainfall (excess moisture can leach mobile nutrients)",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9675,
+          "rationale": "The agent correctly classified the problem as 'nutrient' with sound botanical reasoning linking symptoms to mobile nutrient deficiencies, proper format, and accurate diagnosis matching the reference a"
+        }
+      },
+      {
+        "query": "I'm seeing leaf drop on my cotton crop and the plants seem stunted. The field stays soggy because we've had constant rain for three weeks and the drainage isn't working properly in that low area.",
+        "gold": "water_stress",
+        "output": "**Classification: water_stress**\n\n**Reasoning:**\nThe primary issue here is excessive soil moisture from prolonged rainfall combined with poor drainage. This causes:\n- Root hypoxia (oxygen deprivation in waterlogged soil)\n- Impaired nutrient uptake\n- Stunted growth\n- Leaf drop/abscission as a stress response\n\nWhile the soggy conditions could secondarily create disease risk, the farmer's description clearly identifies the direct cause as water accumulation and drainage failure rather than a pathogen or pest.\n\n**Recommendation:** Focus on improving drainage in that low area and consider aeration measures to help the cotton recover from water stress.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.98,
+          "output_integrity": 0.98,
+          "aggregate": 0.9575,
+          "rationale": "The agent correctly classified the problem as water_stress matching the reference, provided sound reasoning linking waterlogging to symptoms, followed proper format, and added helpful context without "
+        }
+      },
+      {
+        "query": "The last three days have been brutally hot, over 105 degrees each afternoon. My lettuce crop has bolted prematurely and the leaves have this scorched, papery texture around the edges. Everything is wilting badly even though I've been irrigating.",
+        "gold": "weather_damage",
+        "output": "**Classification: weather_damage**\n\n**Reasoning:**\nYour lettuce is experiencing heat stress from extreme temperatures (105°F+), which is the primary cause of the symptoms you're describing:\n\n- **Bolting** (premature flowering) is a classic response to excessive heat in cool-season crops like lettuce\n- **Scorched, papery leaf edges** indicate heat-induced leaf burn and desiccation\n- **Wilting despite irrigation** suggests the plant's physiological capacity to uptake and transpire water is overwhelmed by the extreme heat conditions\n\nThis is a weather-related stress rather than a pest, disease, nutrient deficiency, or irrigation problem. While you're providing water, the atmospheric conditions are simply too severe for the crop to cope with effectively.\n\n**Note:** Consider shade cloth or other cooling strategies for future hot spells with heat-sensitive crops.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.98,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9824999999999999,
+          "rationale": "The agent correctly classified the problem as weather_damage with sound reasoning linking extreme heat to bolting, scorching, and wilting, though the task only required classification without the exte"
+        }
+      },
+      {
+        "query": "Unwanted vegetation is choking out my soybean seedlings. These invasive plants are dense and growing aggressively, stealing moisture from the soil that my soybeans desperately need.",
+        "gold": "weed",
+        "output": "**Classification: weed**\n\nThe unwanted vegetation competing with your soybean seedlings is a weed problem. While you've noted that the weeds are also affecting soil moisture availability, the primary issue you're describing—invasive plants choking out your crop—is fundamentally a weed management challenge.\n\n**Recommendation:** Consider early intervention with:\n- Mechanical removal (cultivation)\n- Herbicide application (pre-emergent or post-emergent, depending on growth stage)\n- Mulching to suppress weed growth\n- Proper spacing and crop density to help soybeans compete",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.98,
+          "output_integrity": 0.98,
+          "aggregate": 0.9575,
+          "rationale": "The agent correctly classified the problem as 'weed' matching the reference answer, provided sound reasoning linking unwanted vegetation to weed management, maintained proper format, and added helpful"
+        }
+      },
+      {
+        "query": "I'm seeing small holes appearing all over my tomato leaves and when I checked this morning there were green caterpillars crawling on the undersides. The damage is spreading quickly across several rows and some fruits are being eaten too.",
+        "gold": "pest",
+        "output": "**Classification: PEST**\n\nThe green caterpillars you've observed are the primary cause of the damage. This is a classic pest problem, likely caused by:\n\n- **Tomato hornworms** (most common)\n- **Armyworms** or similar caterpillar species\n\n**Key indicators pointing to pest damage:**\n- Visible caterpillars on the undersides of leaves\n- Small holes in foliage (characteristic feeding pattern)\n- Damage spreading across multiple plants\n- Fruit being consumed\n\n**Recommended next steps:**\n- Hand-pick visible caterpillars if infestation is light\n- Consider organic options (Bt spray) or appropriate insecticides\n- Monitor regularly for new infestations\n- Check undersides of leaves frequently, as caterpillars hide there\n\nThis is a manageable pest problem with prompt action.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9675,
+          "rationale": "The agent correctly classified the problem as 'pest' matching the reference answer, provided sound reasoning based on observable evidence (caterpillars, holes, spreading damage), followed proper class"
+        }
+      },
+      {
+        "query": "I'm seeing interveinal chlorosis on my tomato plants - the veins stay green but the tissue between them is yellow. The newer growth looks affected and some leaves are curling at the tips.",
+        "gold": "nutrient",
+        "output": "Based on your description, this is a **nutrient** deficiency issue.\n\nThe interveinal chlorosis (yellow tissue between green veins) is a classic symptom of **iron deficiency**, which commonly affects tomatoes. The fact that newer growth is affected first is also characteristic of iron deficiency, as iron is relatively immobile in plants.\n\nThe leaf tip curling you're observing can be an associated symptom as the deficiency progresses.\n\n**Common causes include:**\n- High soil pH (iron becomes unavailable in alkaline soils)\n- Poor drainage or waterlogged conditions\n- Excessive phosphorus in the soil\n- Cold soil temperatures reducing iron uptake\n\nI'd recommend checking your soil pH and considering a foliar iron spray or soil amendment to address this nutrient issue.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 1.0,
+          "output_integrity": 0.98,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the problem as 'nutrient' and provided sound reasoning about iron deficiency with accurate symptom interpretation, though the additional diagnostic detail exceeded the m"
+        }
+      },
+      {
+        "query": "I've noticed the cucumber vines are wilted and the leaves feel papery. When I dig down a few inches, the soil is completely saturated and smells swampy. This started after I increased my irrigation frequency last week.",
+        "gold": "water_stress",
+        "output": "**Classification: water_stress**\n\n**Reasoning:**\nThe symptoms you're describing point to **overwatering/waterlogging**, which is a water stress condition:\n\n- **Wilting vines** - Despite adequate water availability, roots in saturated soil cannot absorb oxygen, leading to root dysfunction and wilting\n- **Papery leaves** - Indicates loss of turgor pressure in leaf cells due to root damage from anaerobic conditions\n- **Saturated, swampy soil** - Direct evidence of excessive soil moisture\n- **Temporal correlation** - Symptoms appeared after you increased irrigation frequency\n\nThis is classic overwatering damage. The roots are essentially suffocating in waterlogged conditions, preventing normal water and nutrient uptake even though moisture is abundant.\n\n**Recommendation:** Reduce irrigation frequency immediately, improve drainage if possible, and allow the soil to dry out somewhat between waterings. Cucumbers prefer consistently moist (not saturated) soil.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9875,
+          "rationale": "The agent correctly classified the problem as water_stress, provided sound reasoning linking overwatering symptoms to the category, followed the required format, and the answer matches the reference p"
+        }
+      },
+      {
+        "query": "My tomato plants were doing great until last night when temperatures dropped suddenly. This morning I found the leaves all blackened and wilted, especially on the younger plants near the top. The stems look water-soaked and translucent in places.",
+        "gold": "weather_damage",
+        "output": "**Classification: weather_damage**\n\nThis is frost or freeze damage caused by the sudden temperature drop. The symptoms you're describing are classic signs of cold injury:\n\n- **Blackened, wilted leaves** - tissue death from ice crystal formation\n- **Water-soaked, translucent stems** - cellular damage from freezing\n- **Younger growth more affected** - tender new growth is more susceptible than mature tissue\n\n**Key indicators this is weather-related rather than disease:**\n- Sudden onset following the temperature event\n- Widespread damage across plants rather than localized spots\n- Affects the most exposed/vulnerable plant parts first\n\n**Recommendations:**\n- Assess damage over the next few days (some plants may recover if damage is partial)\n- Remove severely damaged foliage to prevent secondary disease\n- Avoid pruning until you see new growth, as plants may recover from lower nodes\n- Consider frost protection measures (row covers, irrigation) if more cold nights are forecast",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.98,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9824999999999999,
+          "rationale": "The agent correctly classified the problem as weather_damage with sound reasoning about frost symptoms, proper format, and accurate diagnosis matching the reference answer, though the extensive recomm"
+        }
+      }
+    ]
+  },
+  "final_test": {
+    "objective_runs": [
+      1.0
+    ],
+    "gpa_runs": [
+      0.9777777777777776
+    ],
+    "objective_mean": 1.0,
+    "gpa_mean": 0.9777777777777776,
+    "gpa_dims": {
+      "target_alignment": 0.9611111111111109,
+      "reasoning_soundness": 0.9499999999999998,
+      "execution_accuracy": 1.0,
+      "output_integrity": 1.0
+    },
+    "examples": [
+      {
+        "query": "My pepper plants have brown, crispy leaf edges and the fruits are smaller than normal. The ground has been bone dry and cracked for the past month due to the heat wave and our well water is running low.",
+        "gold": "water_stress",
+        "output": "water_stress",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly classified the crop problem as water_stress, matching the reference answer exactly, with clear symptoms (dry ground, low well water, crispy leaves, smaller fruits) all pointing to "
+        }
+      },
+      {
+        "query": "The strong winds we've been having all week have caused major problems in my pepper field. Plants are leaning heavily to one side, some have been uprooted entirely, and I'm seeing lots of blossom drop where flowers were torn off before they could set fruit.",
+        "gold": "weather_damage",
+        "output": "weather_damage",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly classified the wind-caused crop damage as 'weather_damage', matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "My wheat field has been overtaken by wild grasses that are growing faster than my crop. They're competing for space and I'm worried my yield will suffer significantly if I don't address this soon.",
+        "gold": "weed",
+        "output": "weed",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the problem as 'weed' matching the reference answer exactly, with the input clearly describing wild grasses competing with crops, which is the textbook definition of a w"
+        }
+      },
+      {
+        "query": "Large sections of my cabbage heads are being eaten, leaving just the outer leaves with big irregular chunks missing. I spotted several green worms that match the color of the leaves perfectly hiding inside the heads.",
+        "gold": "pest",
+        "output": "pest",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the crop problem as 'pest' based on clear evidence of green worms eating cabbage, matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "My tomato plants have developed dark brown spots with yellow halos on the lower leaves, and the affected foliage is starting to curl and drop off. The spots seem to be spreading upward through the canopy over the past week.",
+        "gold": "disease",
+        "output": "disease",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the tomato problem as 'disease' matching the reference answer exactly, with symptoms (dark brown spots, yellow halos, leaf curl, upward spread) clearly indicating fungal"
+        }
+      },
+      {
+        "query": "My wheat plants are showing yellowing on the older leaves that's spreading upward, and the growth seems stunted compared to last season. The soil hasn't been amended in three years and I haven't applied any fertilizer this cycle.",
+        "gold": "nutrient",
+        "output": "nutrient",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the crop problem as 'nutrient' based on clear symptoms (yellowing older leaves, stunted growth) and explicit context (no soil amendment or fertilizer), matching the refe"
+        }
+      },
+      {
+        "query": "The wheat crop is showing signs of early senescence with premature yellowing. Soil moisture readings have been consistently below 20% for three weeks now and the plants are shorter than they should be at this growth stage.",
+        "gold": "water_stress",
+        "output": "water_stress",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the crop problem as water_stress based on clear indicators (low soil moisture, premature yellowing, stunted growth), matching the reference answer exactly with proper fo"
+        }
+      },
+      {
+        "query": "After yesterday's storm, my corn field looks like it's been beaten down. Stalks are broken and bent at weird angles, many are completely flattened. Some of the ears were knocked right off the plants and are lying in the mud.",
+        "gold": "weather_damage",
+        "output": "weather_damage",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly classified the storm-caused crop damage as 'weather_damage', matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "Wild amaranth has emerged densely throughout my cotton field after the recent rains. The competition is severe and my cotton plants are not developing properly because these other plants are taking all the resources.",
+        "gold": "weed",
+        "output": "weed",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the crop problem as 'weed' matching the reference answer exactly, with wild amaranth being a clear weed infestation case requiring proper categorization."
+        }
+      },
+      {
+        "query": "There are tiny white flies swarming up whenever I touch my bean plants. The leaves are turning yellow and have a sticky residue on them. I'm worried this is getting out of control.",
+        "gold": "pest",
+        "output": "pest",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified the crop problem as 'pest' based on clear pest indicators (whiteflies, yellowing leaves, sticky residue), matching the reference answer exactly with proper format and no"
+        }
+      },
+      {
+        "query": "My soybean plants have yellowing starting from the leaf tips and margins on older foliage, and overall the canopy looks lighter than it should. Growth rate has slowed noticeably in the past few weeks despite good weather conditions.",
+        "gold": "nutrient",
+        "output": "nutrient",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the crop problem as 'nutrient' matching the reference answer exactly, with symptoms clearly indicating nutrient deficiency (yellowing from tips/margins on older leaves, "
+        }
+      },
+      {
+        "query": "I'm seeing leaf drop on my cotton crop and the plants seem stunted. The field stays soggy because we've had constant rain for three weeks and the drainage isn't working properly in that low area.",
+        "gold": "water_stress",
+        "output": "water_stress",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the waterlogged, poorly-drained field condition as water_stress, matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "The last three days have been brutally hot, over 105 degrees each afternoon. My lettuce crop has bolted prematurely and the leaves have this scorched, papery texture around the edges. Everything is wilting badly even though I've been irrigating.",
+        "gold": "weather_damage",
+        "output": "weather_damage",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the heat-induced crop damage as 'weather_damage', matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "Unwanted vegetation is choking out my soybean seedlings. These invasive plants are dense and growing aggressively, stealing moisture from the soil that my soybeans desperately need.",
+        "gold": "weed",
+        "output": "weed",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the problem as 'weed' matching the reference answer exactly, with the input clearly describing unwanted invasive vegetation competing with crops."
+        }
+      },
+      {
+        "query": "I'm seeing small holes appearing all over my tomato leaves and when I checked this morning there were green caterpillars crawling on the undersides. The damage is spreading quickly across several rows and some fruits are being eaten too.",
+        "gold": "pest",
+        "output": "pest",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the crop problem as 'pest' based on clear evidence of caterpillars causing damage, matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "I'm seeing interveinal chlorosis on my tomato plants - the veins stay green but the tissue between them is yellow. The newer growth looks affected and some leaves are curling at the tips.",
+        "gold": "nutrient",
+        "output": "nutrient",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly identified interveinal chlorosis with affected newer growth as a nutrient deficiency issue (likely iron or manganese), matching the reference answer with proper format and no extra"
+        }
+      },
+      {
+        "query": "I've noticed the cucumber vines are wilted and the leaves feel papery. When I dig down a few inches, the soil is completely saturated and smells swampy. This started after I increased my irrigation frequency last week.",
+        "gold": "water_stress",
+        "output": "water_stress",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the overwatering problem as water_stress, matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "My tomato plants were doing great until last night when temperatures dropped suddenly. This morning I found the leaves all blackened and wilted, especially on the younger plants near the top. The stems look water-soaked and translucent in places.",
+        "gold": "weather_damage",
+        "output": "weather_damage",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly classified the frost/cold damage symptoms as weather_damage, matching the reference answer exactly with proper format and no extraneous content."
+        }
+      }
+    ]
+  },
+  "delta_objective": 0.4444444444444444,
+  "delta_gpa": 0.003749999999999809,
+  "optimization": {
+    "front": [
+      {
+        "obj": 1.0,
+        "gpa": 0.98125,
+        "iter": 4,
+        "strategy": "mutation"
+      }
+    ],
+    "history": [
+      {
+        "iter": 0,
+        "obj": 0.5,
+        "gpa": 0.966,
+        "composite": 0.733,
+        "strategy": "baseline"
+      },
+      {
+        "iter": 1,
+        "obj": 0.9,
+        "gpa": 0.94,
+        "composite": 0.9199999999999999,
+        "strategy": "mutation",
+        "front_size": 2
+      },
+      {
+        "iter": 2,
+        "obj": 1.0,
+        "gpa": 0.97125,
+        "composite": 0.985625,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 3,
+        "obj": 1.0,
+        "gpa": 0.9775,
+        "composite": 0.98875,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 4,
+        "obj": 1.0,
+        "gpa": 0.98125,
+        "composite": 0.990625,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 5,
+        "obj": 1.0,
+        "gpa": 0.975,
+        "composite": 0.9875,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 6,
+        "obj": 1.0,
+        "gpa": 0.97875,
+        "composite": 0.989375,
+        "strategy": "mutation",
+        "front_size": 1
+      }
+    ],
+    "baseline_train_obj": 0.5,
+    "best_train_obj": 1.0
+  },
+  "duration_s": 2.7
+}

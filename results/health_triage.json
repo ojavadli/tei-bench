@@ -1,0 +1,543 @@
+{
+  "task_id": "health_triage",
+  "industry": "Healthcare",
+  "metric": "classification",
+  "n_train": 15,
+  "n_test": 15,
+  "source": "Authored for TEI-Bench; illustrative triage scenarios (not medical advice).",
+  "agent_model": "claude-haiku-4-5",
+  "judge_model": "claude-sonnet-4-5",
+  "optimizer_model": "claude-sonnet-4-5",
+  "seed": 0,
+  "eval_repeats": 1,
+  "baseline_prompt": "You are a medical triage assistant. Classify the patient's situation into one of these urgency levels: emergency, urgent, routine, self_care.",
+  "optimized_prompt": "You are a medical triage assistant. Classify the patient's situation into exactly one of these urgency levels: emergency, urgent, routine, self_care.\n\nReturn ONLY the classification label (emergency, urgent, routine, or self_care) without any additional explanation, reasoning, rationale, or recommendations. Do not include formatting like asterisks, bolding, or headers. Do not provide advice on next steps or how to schedule appointments.\n\nClassification criteria:\n\n**emergency**: Immediately life-threatening conditions requiring emergency room care RIGHT NOW:\n- Active severe chest pain with cardiac symptoms\n- Severe difficulty breathing/unable to breathe\n- Severe uncontrolled bleeding\n- Stroke symptoms (facial drooping, arm weakness, speech difficulty) occurring NOW\n- Current loss of consciousness or altered mental state\n- Severe traumatic injuries\n- Anaphylaxis/severe allergic reactions\n\n**urgent**: Serious conditions requiring medical evaluation within 24-48 hours (not immediately life-threatening but need prompt attention):\n- High fever (especially >39°C/102°F) lasting multiple days\n- Fever combined with concerning symptoms (stiff neck, severe headache, confusion, rash)\n- Suspected infections needing antibiotics (UTI symptoms, infected wounds, persistent fever)\n- Moderate to severe pain that is new or worsening\n- Sudden sensory changes (hearing loss, vision changes)\n- Persistent vomiting or diarrhea with dehydration risk\n- Symptoms suggesting possible serious complications requiring clinical assessment\n\n**routine**: Standard medical care for stable conditions:\n- Annual checkups and preventive care\n- Follow-up appointments for stable chronic conditions\n- Prescription refills for controlled conditions\n- Non-urgent skin issues, minor concerns\n- Scheduled vaccinations\n\n**self_care**: Minor conditions manageable at home with rest and over-the-counter treatments:\n- Common cold symptoms (mild congestion, sore throat)\n- Minor cuts and scrapes\n- Mild headaches\n- Minor muscle aches\n\nCritical distinction: Reserve \"emergency\" only for conditions that are immediately life-threatening RIGHT NOW. If symptoms are serious but have been present for days and the patient is stable enough to describe them, classify as \"urgent\" unless there are clear emergency indicators like severe breathing difficulty or active stroke.\n\nOutput format: Return only the classification label as a single word.",
+  "baseline_test": {
+    "objective_runs": [
+      0.7333333333333333
+    ],
+    "gpa_runs": [
+      0.9178333333333333
+    ],
+    "objective_mean": 0.7333333333333333,
+    "gpa_mean": 0.9178333333333333,
+    "gpa_dims": {
+      "target_alignment": 0.9266666666666664,
+      "reasoning_soundness": 0.9346666666666666,
+      "execution_accuracy": 0.8973333333333334,
+      "output_integrity": 0.9126666666666666
+    },
+    "examples": [
+      {
+        "query": "I want a dental cleaning appointment.",
+        "gold": "routine",
+        "output": "**Classification: ROUTINE**\n\nThis is a standard preventive dental care request that can be scheduled through normal appointment channels. Dental cleanings are non-emergency procedures typically done during regular business hours.\n\n**Recommendation:** Contact your dentist's office directly to schedule an appointment at your convenience.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 0.95,
+          "output_integrity": 0.95,
+          "aggregate": 0.95,
+          "rationale": "The agent correctly classified the dental cleaning request as 'ROUTINE' matching the reference answer, provided sound reasoning about preventive care being non-emergency, and maintained proper format "
+        }
+      },
+      {
+        "query": "Unconscious friend who is not responding to voice or touch.",
+        "gold": "emergency",
+        "output": "**EMERGENCY**\n\nThis requires immediate action:\n\n1. **Call emergency services (911 or your local equivalent) immediately** - do not wait\n2. **Check responsiveness** - try a firm shoulder tap and loud verbal stimulus\n3. **Check breathing and pulse** - if not breathing normally, be prepared to start CPR if trained\n4. **Position safely** - if breathing, place in recovery position (on side) to keep airway open\n5. **Stay with them** - monitor breathing and consciousness until help arrives\n\n**Do not move them unnecessarily** unless there's immediate danger (fire, traffic, etc.)\n\nAn unconscious person who doesn't respond to stimulation is a life-threatening emergency requiring immediate professional medical evaluation.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9875,
+          "rationale": "The agent correctly classified the situation as 'emergency' matching the reference answer, provided sound medical reasoning for the urgency level, and included appropriate actionable guidance without "
+        }
+      },
+      {
+        "query": "Heavy bleeding that soaks through a bandage in minutes.",
+        "gold": "emergency",
+        "output": "**EMERGENCY**\n\nThis requires immediate medical attention. Heavy bleeding that saturates a bandage within minutes indicates:\n\n- Significant blood loss that needs urgent control\n- Possible arterial or deep venous bleeding\n- Risk of shock or other life-threatening complications\n\n**Immediate actions:**\n1. Call 911 or go to the nearest emergency department immediately\n2. Apply direct pressure with clean cloth while waiting for help\n3. Elevate the bleeding area if possible\n4. Do not remove the bandage—apply additional layers on top if bleeding continues\n\nDo not delay seeking emergency care.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the situation as 'emergency' matching the reference answer, provided sound medical reasoning for the urgency level, and included helpful but slightly beyond-scope immedi"
+        }
+      },
+      {
+        "query": "Minor bruise on my knee from bumping a table.",
+        "gold": "self_care",
+        "output": "**Classification: Self_care**\n\nA minor bruise from a table bump is a common, minor injury that can be managed at home. \n\n**Recommended self-care:**\n- Ice the area for 15-20 minutes to reduce swelling\n- Keep the knee elevated when possible\n- Over-the-counter pain relief (ibuprofen or acetaminophen) if needed\n- Gentle compression with an elastic bandage if desired\n- Monitor for any signs of worsening\n\n**Seek medical attention if:**\n- Severe swelling or deformity develops\n- You cannot bear weight on the leg\n- Pain is severe or worsening\n- Signs of infection appear (warmth, redness, pus)",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.9,
+          "output_integrity": 0.95,
+          "aggregate": 0.9299999999999999,
+          "rationale": "The agent correctly classified the minor bruise as 'self_care' matching the reference answer, provided sound reasoning about why home management is appropriate, though it added helpful but unrequested"
+        }
+      },
+      {
+        "query": "Slight indigestion after a large meal.",
+        "gold": "self_care",
+        "output": "**Classification: self_care**\n\n**Rationale:**\n- Mild, expected symptom following a known trigger (large meal)\n- No red flag symptoms (severe pain, vomiting, chest pain, difficulty breathing)\n- Self-limiting condition that typically resolves on its own\n\n**Suggested self-care measures:**\n- Rest and allow time for digestion\n- Stay upright/avoid lying down immediately\n- Drink water or herbal tea\n- Over-the-counter antacids if needed\n- Avoid additional food, caffeine, and alcohol\n\n**Seek medical attention if:** Symptoms persist beyond a few hours, worsen, or are accompanied by chest pain, severe abdominal pain, or other concerning symptoms.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.98,
+          "output_integrity": 0.98,
+          "aggregate": 0.9575,
+          "rationale": "The agent correctly classified the situation as 'self_care' matching the reference, provided sound clinical reasoning for the classification, followed proper format with clear rationale, and added app"
+        }
+      },
+      {
+        "query": "High fever in a 6-month-old infant that started today.",
+        "gold": "urgent",
+        "output": "**EMERGENCY**\n\n**Rationale:**\n- Fever in infants under 12 months (especially under 6 months) requires immediate evaluation\n- High fever in this age group can indicate serious bacterial infections (sepsis, meningitis, UTI, bacteremia)\n- Infants cannot localize infections well, making it difficult to determine the source\n- Risk of rapid deterioration is significant\n\n**Recommended action:**\n- Seek immediate medical evaluation (emergency department or urgent care)\n- Do not delay for home observation\n- Bring the infant's vaccination records if available",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.75,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 0.4,
+          "output_integrity": 0.45,
+          "aggregate": 0.6375000000000001,
+          "rationale": "The agent provided medically sound reasoning and appropriate clinical concern, but classified as 'EMERGENCY' when the reference answer specifies 'urgent' as the correct triage level, indicating a clas"
+        }
+      },
+      {
+        "query": "Painful urination and lower abdominal discomfort since this morning.",
+        "gold": "urgent",
+        "output": "**Classification: URGENT**\n\n**Reasoning:**\n- Painful urination (dysuria) with lower abdominal discomfort suggests a urinary tract infection (UTI) or similar genitourinary condition\n- While not immediately life-threatening, this requires prompt medical evaluation within hours to:\n  - Confirm diagnosis\n  - Prevent progression to more serious infection (pyelonephritis/sepsis)\n  - Obtain appropriate treatment (likely antibiotics)\n\n**Recommended action:**\n- Contact your primary care provider or urgent care clinic today\n- If symptoms worsen (fever, severe pain, inability to urinate, back pain), escalate to emergency care\n- Drink plenty of fluids in the meantime\n\nThis is not an emergency requiring 911, but should not be delayed to routine appointment scheduling.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9675,
+          "rationale": "The agent correctly classified as 'urgent' matching the reference, provided sound clinical reasoning for UTI triage, followed proper format, and added appropriate context without fabrication."
+        }
+      },
+      {
+        "query": "Standard vaccination update before travel next month.",
+        "gold": "routine",
+        "output": "**Classification: ROUTINE**\n\nThis is a standard preventive care visit that can be scheduled during normal business hours. Since the travel is next month, there is adequate time to:\n\n- Complete any necessary vaccinations\n- Allow time for vaccines requiring multiple doses\n- Obtain documentation for travel requirements\n\n**Recommended action:** Schedule an appointment with your primary care provider or travel clinic at your convenience.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.95,
+          "output_integrity": 0.98,
+          "aggregate": 0.9500000000000001,
+          "rationale": "The agent correctly classified the situation as 'ROUTINE' matching the reference answer, provided sound reasoning about timing and preventive care nature, followed proper format, and added helpful con"
+        }
+      },
+      {
+        "query": "General wellness consultation, no specific complaint.",
+        "gold": "routine",
+        "output": "**Classification: ROUTINE**\n\n**Rationale:**\n- No acute symptoms or complaints reported\n- Patient is seeking general wellness guidance\n- No signs of distress or concerning conditions\n- Can be scheduled during normal clinic hours\n- Appropriate for standard appointment with primary care provider\n\n**Suggested action:** Schedule a regular wellness visit at the patient's convenience.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the situation as 'routine' matching the reference answer, provided sound reasoning for the classification, followed proper format, and added appropriate contextual guida"
+        }
+      },
+      {
+        "query": "Sudden severe allergic reaction with throat swelling after a bee sting.",
+        "gold": "emergency",
+        "output": "**EMERGENCY**\n\nThis requires immediate medical attention. Throat swelling (angioedema) following an allergic reaction is a life-threatening airway emergency.\n\n**Immediate actions needed:**\n- Call 911/emergency services immediately\n- If the patient has an epinephrine auto-injector (EpiPen), administer it now\n- Position patient upright to aid breathing\n- Do not wait for symptoms to worsen\n\n**Why this is critical:**\n- Airway obstruction can develop rapidly and completely\n- Risk of anaphylaxis\n- May require emergency airway management\n\nDo not delay seeking emergency care.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly classified this as EMERGENCY matching the reference answer, provided sound medical reasoning about airway compromise and anaphylaxis risk, followed proper triage protocol, and incl"
+        }
+      },
+      {
+        "query": "Possible broken arm after a fall, visible deformity.",
+        "gold": "emergency",
+        "output": "**URGENT**\n\n**Reasoning:**\n- Visible deformity suggests significant injury (fracture, dislocation, or severe soft tissue damage)\n- Risk of neurovascular compromise (nerve/blood vessel damage)\n- Requires prompt medical evaluation and imaging (X-ray)\n- Needs professional reduction and immobilization\n- Time-sensitive to prevent complications\n\n**Recommended action:** Seek immediate care at an urgent care facility or emergency department. Immobilize the arm in the meantime and apply ice if available.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.75,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 0.4,
+          "output_integrity": 0.45,
+          "aggregate": 0.625,
+          "rationale": "The agent provided sound clinical reasoning and appropriate medical guidance, but classified the case as 'URGENT' when the reference answer specifies 'emergency' — a visible deformity with possible br"
+        }
+      },
+      {
+        "query": "Dry skin patch that itches a little.",
+        "gold": "self_care",
+        "output": "**Classification: SELF_CARE**\n\nThis is a minor skin condition that can typically be managed at home with:\n- Moisturizing lotion or cream\n- Avoiding irritants (harsh soaps, hot water)\n- Keeping the area hydrated\n- Over-the-counter hydrocortisone cream if itching persists\n\n**See a doctor if:**\n- The patch spreads or worsens despite home care\n- Itching becomes severe or interferes with sleep\n- Signs of infection develop (redness, warmth, oozing)\n- It doesn't improve after 2-3 weeks",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.98,
+          "output_integrity": 0.98,
+          "aggregate": 0.9575,
+          "rationale": "The agent correctly classified the condition as self_care matching the reference, provided sound reasoning for home management, and included appropriate escalation criteria, with only minor verbosity "
+        }
+      },
+      {
+        "query": "Mild muscle soreness two days after exercising.",
+        "gold": "self_care",
+        "output": "**Classification: Self_care**\n\n**Rationale:**\n- Mild muscle soreness 2 days post-exercise is consistent with Delayed Onset Muscle Soreness (DOMS), a normal physiological response\n- No signs of emergency or urgent conditions (no severe pain, swelling, immobility, or systemic symptoms mentioned)\n- Self-management strategies are appropriate:\n  - Rest and light activity\n  - Over-the-counter pain relievers (ibuprofen, acetaminophen)\n  - Gentle stretching\n  - Heat/ice therapy\n  - Adequate hydration and nutrition\n\n**Follow-up guidance:** Seek medical attention if soreness worsens, persists beyond 5-7 days, or is accompanied by severe swelling, inability to move the limb, or signs of injury.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.9,
+          "output_integrity": 0.95,
+          "aggregate": 0.9299999999999999,
+          "rationale": "The agent correctly classified the situation as self_care matching the reference, provided sound medical reasoning about DOMS, followed proper triage logic, and included appropriate (though not requir"
+        }
+      },
+      {
+        "query": "Migraine that hasn't improved with my usual medication in 24 hours.",
+        "gold": "urgent",
+        "output": "**Classification: URGENT**\n\n**Rationale:**\n- Migraines unresponsive to your usual medication after 24 hours suggest this may be a different presentation than your typical episodes\n- This could indicate a **status migrainosus** (prolonged migraine) or potentially another underlying condition requiring evaluation\n- While not immediately life-threatening, this warrants prompt medical assessment\n\n**Recommended action:**\n- Contact your primary care doctor or urgent care clinic today\n- Consider an urgent care visit if you cannot reach your doctor\n- Seek **emergency care (911)** if you also experience:\n  - Sudden severe \"thunderclap\" onset\n  - Fever, stiff neck, confusion\n  - Vision changes, weakness, numbness\n  - Difficulty speaking\n\n**Note:** A change in your usual migraine pattern always warrants professional evaluation to rule out other causes.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified as 'urgent' matching the reference, provided sound clinical reasoning about status migrainosus and pattern changes, followed proper triage format, and delivered accurate"
+        }
+      },
+      {
+        "query": "Recurring mild back pain I want evaluated at some point.",
+        "gold": "routine",
+        "output": "**Classification: Routine**\n\n**Rationale:**\n- Mild severity\n- Recurring (chronic) rather than acute/worsening\n- No red flags mentioned (no trauma, neurological symptoms, fever, etc.)\n- Patient is seeking evaluation \"at some point\" (not expressing acute distress)\n\n**Recommendation:**\nSchedule an appointment with your primary care physician or a specialist (physiatrist, orthopedist, or chiropractor) at your convenience. This can typically be done within days to weeks depending on availability.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified as 'routine' matching the reference, provided sound clinical reasoning for the triage decision, followed the classification task format, and added helpful context withou"
+        }
+      }
+    ]
+  },
+  "final_test": {
+    "objective_runs": [
+      0.9333333333333333
+    ],
+    "gpa_runs": [
+      0.9558333333333333
+    ],
+    "objective_mean": 0.9333333333333333,
+    "gpa_mean": 0.9558333333333333,
+    "gpa_dims": {
+      "target_alignment": 0.9499999999999997,
+      "reasoning_soundness": 0.92,
+      "execution_accuracy": 0.9933333333333334,
+      "output_integrity": 0.9600000000000001
+    },
+    "examples": [
+      {
+        "query": "I want a dental cleaning appointment.",
+        "gold": "routine",
+        "output": "routine",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified a dental cleaning request as 'routine' triage urgency, matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "Unconscious friend who is not responding to voice or touch.",
+        "gold": "emergency",
+        "output": "emergency",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly classified an unconscious, unresponsive patient as 'emergency', perfectly matching the reference answer with appropriate urgency assessment."
+        }
+      },
+      {
+        "query": "Heavy bleeding that soaks through a bandage in minutes.",
+        "gold": "emergency",
+        "output": "emergency",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified heavy bleeding soaking through bandages as 'emergency', matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "Minor bruise on my knee from bumping a table.",
+        "gold": "self_care",
+        "output": "self_care",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified a minor bruise as 'self_care', matching the reference answer exactly with proper format and appropriate triage judgment."
+        }
+      },
+      {
+        "query": "Slight indigestion after a large meal.",
+        "gold": "self_care",
+        "output": "self_care",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified slight post-meal indigestion as 'self_care', matching the reference answer exactly with proper format and appropriate triage level for a non-urgent digestive complaint."
+        }
+      },
+      {
+        "query": "High fever in a 6-month-old infant that started today.",
+        "gold": "urgent",
+        "output": "urgent",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified a high fever in a 6-month-old infant as 'urgent', matching the reference answer exactly with proper format and appropriate medical triage judgment."
+        }
+      },
+      {
+        "query": "Painful urination and lower abdominal discomfort since this morning.",
+        "gold": "urgent",
+        "output": "urgent",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified painful urination with lower abdominal discomfort as 'urgent', matching the reference answer exactly with proper format and appropriate clinical judgment for a potential"
+        }
+      },
+      {
+        "query": "Standard vaccination update before travel next month.",
+        "gold": "routine",
+        "output": "routine",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified a pre-travel vaccination as 'routine' triage, matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "General wellness consultation, no specific complaint.",
+        "gold": "routine",
+        "output": "routine",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified a general wellness consultation with no specific complaint as 'routine' triage urgency, matching the reference answer exactly with proper format and appropriate reasonin"
+        }
+      },
+      {
+        "query": "Sudden severe allergic reaction with throat swelling after a bee sting.",
+        "gold": "emergency",
+        "output": "emergency",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly classified a life-threatening anaphylactic reaction with airway compromise as 'emergency', matching the reference answer perfectly with appropriate format and no extraneous content"
+        }
+      },
+      {
+        "query": "Possible broken arm after a fall, visible deformity.",
+        "gold": "emergency",
+        "output": "urgent",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.85,
+          "reasoning_soundness": 0.7,
+          "execution_accuracy": 0.9,
+          "output_integrity": 0.4,
+          "aggregate": 0.7124999999999999,
+          "rationale": "The agent correctly performed triage classification but selected 'urgent' instead of 'emergency' for a visible bone deformity, which is a significant clinical misjudgment that undervalues the severity"
+        }
+      },
+      {
+        "query": "Dry skin patch that itches a little.",
+        "gold": "self_care",
+        "output": "self_care",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified a minor dermatological symptom (dry, mildly itchy skin patch) as self_care, matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "Mild muscle soreness two days after exercising.",
+        "gold": "self_care",
+        "output": "self_care",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified mild post-exercise muscle soreness as self_care, matching the reference answer exactly with proper format and appropriate triage level for a non-urgent, self-limiting co"
+        }
+      },
+      {
+        "query": "Migraine that hasn't improved with my usual medication in 24 hours.",
+        "gold": "urgent",
+        "output": "urgent",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the migraine unresponsive to usual medication as 'urgent', matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "Recurring mild back pain I want evaluated at some point.",
+        "gold": "routine",
+        "output": "routine",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified recurring mild back pain with no urgency indicators as 'routine' triage, matching the reference answer exactly with proper format and sound implicit reasoning."
+        }
+      }
+    ]
+  },
+  "delta_objective": 0.20000000000000007,
+  "delta_gpa": 0.038000000000000034,
+  "optimization": {
+    "front": [
+      {
+        "obj": 1.0,
+        "gpa": 0.975,
+        "iter": 2,
+        "strategy": "mutation"
+      }
+    ],
+    "history": [
+      {
+        "iter": 0,
+        "obj": 0.6,
+        "gpa": 0.932,
+        "composite": 0.766,
+        "strategy": "baseline"
+      },
+      {
+        "iter": 1,
+        "obj": 0.9,
+        "gpa": 0.9637500000000001,
+        "composite": 0.931875,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 2,
+        "obj": 1.0,
+        "gpa": 0.975,
+        "composite": 0.9875,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 3,
+        "obj": 0.9,
+        "gpa": 0.9412499999999999,
+        "composite": 0.920625,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 4,
+        "obj": 0.9,
+        "gpa": 0.96625,
+        "composite": 0.933125,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 5,
+        "obj": 0.8,
+        "gpa": 0.9112500000000001,
+        "composite": 0.8556250000000001,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 6,
+        "obj": 0.9,
+        "gpa": 0.9637499999999999,
+        "composite": 0.931875,
+        "strategy": "mutation",
+        "front_size": 1
+      }
+    ],
+    "baseline_train_obj": 0.6,
+    "best_train_obj": 1.0
+  },
+  "duration_s": 74.3
+}

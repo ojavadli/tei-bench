@@ -1,0 +1,683 @@
+{
+  "task_id": "it_email_spam",
+  "industry": "Corporate IT Security",
+  "metric": "classification",
+  "n_train": 15,
+  "n_test": 20,
+  "source": "SetFit/enron_spam via HuggingFace (see dataset card for license).",
+  "agent_model": "claude-haiku-4-5",
+  "judge_model": "claude-sonnet-4-5",
+  "optimizer_model": "claude-sonnet-4-5",
+  "seed": 0,
+  "eval_repeats": 1,
+  "baseline_prompt": "You are an email security triage assistant. Triage whether the email is spam or legitimate. Classify into one of these categories: ham, spam.",
+  "optimized_prompt": "You are an email security triage assistant. Classify emails as either \"ham\" (legitimate) or \"spam\" (unsolicited/malicious).\n\n**Classification Guidelines:**\n\n**HAM (Legitimate) includes:**\n- Internal business communications between colleagues (forwarded emails, project updates, operational discussions, meeting coordination)\n- Professional correspondence with specific business context (contracts, negotiations, technical discussions, deals, transactions)\n- Emails with identifiable senders and recipients within an organization\n- Messages containing specific business details (project names, deal numbers, technical specifications, meeting references, company names)\n- Professional networking and referrals with clear context\n- Transactional emails related to actual business activities\n- Industry news, reports, or market updates forwarded within business context\n- Re-forwarded messages with business discussion threads\n- Operational emails about system issues, account activations, or business processes\n\n**SPAM includes:**\n- Unsolicited commercial advertisements for products or services\n- Mass marketing messages promoting consumer goods (enhancement products, adult items, general merchandise, software)\n- Phishing attempts requesting credentials or personal information\n- Emails with suspicious unsubscribe links or multiple opt-out mechanisms\n- Lottery/prize notifications, sweepstakes, or polls from unknown sources\n- Get-rich-quick schemes\n- Promotional emails with generic marketing language (\"unleash,\" \"experience a better life,\" \"latest craze\")\n- Emails that mix commercial advertising with unrelated personal content\n- Messages primarily focused on selling products to consumers\n- Emails with legal disclaimers about commercial advertisements or permission-based mailing lists\n- OEM software offers or pirated software advertisements\n- Surveys or polls combined with sweepstakes/commercial disclaimers\n- Any email containing explicit commercial advertisement disclaimers or multiple unsubscribe mechanisms\n\n**Key Decision Rules:**\n1. Business context is primary: Emails discussing specific deals, contracts, projects, or internal operations are \"ham\" regardless of formatting issues or forwarding chains\n2. Commercial intent is disqualifying: Any email whose primary purpose is to advertise or sell consumer products is \"spam\"\n3. Unsubscribe mechanisms indicate spam: Multiple unsubscribe links or commercial advertisement disclaimers are strong spam indicators - even a single clear \"this is a commercial advertisement\" statement makes it spam\n4. Industry information with business context is \"ham\": Market reports, news updates, or industry data shared within professional communications are legitimate\n5. Mixed personal/commercial content is \"spam\": Emails that combine product advertising with unrelated personal narrative are spam\n6. Polls/surveys with commercial disclaimers are spam: Even if the content appears to be a simple question or poll, the presence of sweepstakes rules, commercial advertisement disclaimers, or unsubscribe mechanisms makes it spam\n\n**Output Format:**\nRespond with ONLY the classification label: either \"ham\" or \"spam\" (lowercase, no additional formatting).",
+  "baseline_test": {
+    "objective_runs": [
+      0.55
+    ],
+    "gpa_runs": [
+      0.89375
+    ],
+    "objective_mean": 0.55,
+    "gpa_mean": 0.89375,
+    "gpa_dims": {
+      "target_alignment": 0.9075,
+      "reasoning_soundness": 0.8695,
+      "execution_accuracy": 0.9215,
+      "output_integrity": 0.8765000000000001
+    },
+    "examples": [
+      {
+        "query": "re : park n ride linda , i talked with linda and michelle this week on this issue . what michelle wanted to know was does tw have operators who have pnr agreements . currently , tw does not have any operators with pnr agreements because they have mandatory obas on tw . with our 637 compliance filing tw is requesting that operators move their imbalance to a pnr if it is over a certin volume . also eog does pool on tw so as a shipper we could get them to enter into a pnr . they would need to have a shipper transport it to and from the pnr point . i also told michelle that all points the flow any volumes on tw are required to be an an oba . michelle said that they were able to resolve this issue with eog . thanks ramona",
+        "gold": "ham",
+        "output": "**Classification: HAM**\n\n**Reasoning:**\n\nThis is a legitimate business email. Key indicators:\n\n1. **Internal business discussion** - References specific colleagues (Linda, Michelle, Ramona) and internal communications\n2. **Technical/operational content** - Discusses real business concepts:\n   - PNR (Park and Ride) agreements\n   - OBA (Open Book Agreement)\n   - Compliance filing (637)\n   - Shipper operations\n   - EOG (Energy company)\n\n3. **Professional context** - Addresses specific business issues and resolutions\n4. **No spam characteristics** - No suspicious links, requests for money, urgency tactics, or phishing attempts\n5. **Natural business tone** - Informal but professional internal communication style\n\nThis appears to be an internal email about transportation/logistics operations and regulatory compliance matters.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.95,
+          "output_integrity": 0.95,
+          "aggregate": 0.9425000000000001,
+          "rationale": "The agent correctly classified the email as legitimate (HAM), provided sound reasoning based on business context indicators, followed the classification task format, and reached the correct conclusion"
+        }
+      },
+      {
+        "query": "ourr new great offr how to save on inflate your medlcations over 70 % . phar cabriolet mshop - successfull and proven way to save topfull your mon indicatory ey . whinny v murrain ag litigious al resent lu anglicist l r concrete a talebearer cl i helvetic sva atrabilious l serfdom m andmanyother . fighterpilot best prlces . worldwide brekker shlpplng . easy or engender der form . total confidentiai hutment ity . 250 , 000 satisfied rustless customers . order secateurs today and save !",
+        "gold": "spam",
+        "output": "**Classification: SPAM**\n\n**Reasoning:**\n\n1. **Obfuscated language**: The email contains numerous misspellings, random words, and garbled text (\"phar cabriolet mshop,\" \"topfull your mon indicatory ey,\" \"whinny v murrain\") designed to evade spam filters.\n\n2. **Pharmaceutical spam indicators**: Offers discounted medications (70% savings) without legitimate context - a classic spam tactic.\n\n3. **Suspicious claims**: \"250,000 satisfied customers,\" \"proven way,\" and vague promises are typical spam marketing language.\n\n4. **Red flags**: \n   - Worldwide shipping offers\n   - Emphasis on \"confidentiality\"\n   - Pressure to \"order today\"\n   - Poor grammar and formatting\n\n5. **Intentional obfuscation**: The random insertion of unrelated words (atrabilious, helvetic, serfdom, talebearer) is a known technique to bypass content filters while maintaining enough keywords to attract targets.\n\nThis is clearly a pharmaceutical spam email attempting to sell medications illegally while evading detection systems.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly classified the email as spam, provided comprehensive and logically sound reasoning identifying all key spam indicators (obfuscation, pharmaceutical scam, suspicious claims), and th"
+        }
+      },
+      {
+        "query": "o : \\ research \\ exotica access our records indicate that you are the owners / approvers for the o : \\ research \\ exotica folder . if this is correct , please reply back with your confirmation to information risk management . in an effort to update our files as well as to do some cleanup on the directory membership , we are including the current membership list for the following nt groups . please review the membership list and advise if any deletions are required . group name group description data _ exotica change access to o : \\ reasearch \\ exotica , ohara , scarlet data _ exotica _ ro read - only access to o : \\ reasearch \\ exotica , ohara , scarlet datapwr _ exoticarw change access to m : \\ exotica data _ exotica user id full name adhar amitava dhar / hou / ees btiner brent tiner / corp / enron clandry chad landry / hou / ect cuus charles uus / hou / ect dmaxwel david maxwell / hou / ect dvitrel david vitrella gmasson grant masson / hou / ect jbuss jd buss / hou / ect khopper kevin hopper / hou / ect mlay mark lay / hou / ect mvasque miguel vasquez / hou / ect pkrishn pinnamaneni krishnarao / hou / ect pzadoro pavel zadorozhny / hou / ect sgibner stinson gibner / hou / ect tha",
+        "gold": "ham",
+        "output": "**Classification: HAM**\n\n**Reasoning:**\n\nThis appears to be a **legitimate internal IT/security administrative email**, not spam. Key indicators:\n\n1. **Internal business purpose**: It's a directory access review request from Information Risk Management to folder owners/approvers\n2. **Specific technical details**: References actual file paths (O:\\research\\exotica, M:\\exotica), NT groups, and user credentials in a format consistent with enterprise systems\n3. **Standard IT governance**: This type of access review and group membership cleanup is a normal security practice\n4. **Organizational context**: References Enron employee names and internal directory structure (HOU, CORP, ECT divisions)\n5. **Professional tone and format**: Structured request for confirmation and review\n\n**Note**: While this is legitimate in nature, recipients should still:\n- Verify the sender's identity through known IT channels\n- Confirm this request matches their organization's actual access review procedures\n- Be cautious of similar-looking phishing attempts that mimic this format",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9675,
+          "rationale": "The agent correctly classified the email as HAM (legitimate), provided sound reasoning based on internal business indicators, followed the required format, and matched the reference answer perfectly."
+        }
+      },
+      {
+        "query": "tutored best n @ k . ed lolitas . . . codifying beagles janeiro snack rhythm our site is dedicated to the beauty and enchancement of real lolita girls between the ages of 6 and 17 ! we have some of the most beautiful under . age models in the world . some of our lolita girls are professionals , some are innocent . . . imprinted the collection is updated weekly so there ' s always something new for you to enjoy . worried watch them . . . here : http : / / nonstandart . biz / home / ? = improves thank you , bye brookhaven remedies grumble miracle touch allotments normals mailer amiga",
+        "gold": "spam",
+        "output": "**Classification: SPAM**\n\n**Reason:** This email contains multiple severe red flags:\n\n1. **Illegal content**: References to sexualized images of minors (\"lolita girls between the ages of 6 and 17\")\n2. **Child exploitation**: Describes \"models\" and a collection of inappropriate content involving children\n3. **Obfuscated text**: Uses random words and spacing to evade filters\n4. **Suspicious URL**: Contains a suspicious domain link\n5. **No legitimate purpose**: No coherent business or communication purpose\n\nThis is not merely spam—it describes illegal content involving child sexual abuse material (CSAM). This should be reported to appropriate authorities such as the National Center for Missing & Exploited Children (NCMEC) or local law enforcement.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly classified the email as spam, provided sound reasoning identifying all key red flags (illegal content, obfuscation, suspicious URL), and appropriately flagged the severe nature of "
+        }
+      },
+      {
+        "query": "new email yo bro . this is my new email address . save it . aggie _ chico 2 @ hotmail . com . love you , lacy get your private , free email at http : / / www . hotmail . com",
+        "gold": "ham",
+        "output": "**Classification: SPAM**\n\n**Reasoning:**\n1. **Suspicious formatting**: Spaces inserted in email address and URL (e.g., \"aggie _ chico 2\", \"http : / /\") - common spam obfuscation technique to evade filters\n2. **Generic greeting**: \"yo bro\" and casual tone inconsistent with legitimate personal contact\n3. **Promotional content**: Includes unsolicited advertisement for Hotmail's free email service\n4. **Call-to-action link**: Directs to external URL, typical of spam/phishing campaigns\n5. **Impersonation risk**: Claims to be from \"Lacy\" but uses suspicious tactics that legitimate contacts wouldn't employ\n\nThis appears to be a mass spam email disguised as a personal message, likely designed to distribute the Hotmail promotional link or harvest responses.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.4,
+          "execution_accuracy": 0.95,
+          "output_integrity": 0.15,
+          "aggregate": 0.6124999999999999,
+          "rationale": "The agent correctly performed the triage task with proper format, but misclassified legitimate ham as spam through flawed reasoning (the spacing appears to be preprocessing artifacts, not obfuscation)"
+        }
+      },
+      {
+        "query": "soft viagra at $ 1 . 62 per dose one time discount order for vl @ gra , clal 1 s ! vl @ gra discount order today its only $ 0 . 95 per dose . generic vi @ gra , 24 x 100 mg regular tabs ( 48 dozes ) only $ 46 . 00 new product 1 : generic viagra , 24 x 100 mg soft tabs ( 48 dozes ) what is soft tabs ? only $ 60 . 00 new product 2 : generic clal 1 s , 10 x 20 mg tadalafil what is soft clal 1 s ? only $ 68 . 00 special offer ! these prices are valid until 20 th of july ! vl @ gra discount order remove your email",
+        "gold": "spam",
+        "output": "**Classification: SPAM**\n\n**Reasoning:**\n\n1. **Unsolicited pharmaceutical promotion** - Advertising prescription medications (viagra, cialis, tadalafil) without legitimate medical context\n\n2. **Obfuscated text** - Uses spacing and symbols (vl@gra, clal1s) to evade spam filters, a classic spam tactic\n\n3. **Aggressive pricing/urgency** - Extremely low prices with artificial time pressure (\"valid until 20th of July\")\n\n4. **Suspicious characteristics:**\n   - No legitimate sender information\n   - Generic/mass-market language\n   - Typos (\"dozes\" instead of \"doses\")\n   - Includes \"remove your email\" (typical spam footer)\n\n5. **High-risk content** - Illegal or unregulated sale of prescription medications without proper medical oversight\n\nThis is a clear example of pharmaceutical spam/scam email.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly classified the email as spam with comprehensive, logically sound reasoning covering all key spam indicators (obfuscated text, pharmaceutical promotion, urgency tactics, suspicious "
+        }
+      },
+      {
+        "query": "celebrate responsibly over the last couple of years we have had numerous social events including holiday parties , company - sponsored outings to edgefield , post - quarterly meeting outings , and going away parties . while i hope that people thoroughly enjoy themselves , i ask that you keep in mind that we all have to act professionally and responsibly during and after these events . i have been working with chris calger and amy fitzpatrick to put together some guidelines for company - sponsored social events : the company will provide soft drinks , beer , and wine . you may choose to order other beverages at your expense . functions will run for a specified period of time . if there is an open bar , we will establish a time certain after which enron will not pay for any additional drinks . if you require assisance getting home , please contact a taxi and submit the fare for expense reimbursement with no questions asked . the last thing in the world we want is to have people break the law or put their safety and the safety of others in jeopardy . let me know if you have any questions . thanks for your cooperation .",
+        "gold": "ham",
+        "output": "**Classification: HAM**\n\n**Reasoning:**\n\nThis is a legitimate internal company communication, not spam. Key indicators:\n\n1. **Authentic business purpose**: Establishes clear guidelines for company-sponsored social events\n2. **Named internal contacts**: References specific employees (Chris Calger, Amy Fitzpatrick) in a professional context\n3. **Responsible policy messaging**: Addresses legitimate workplace concerns about professional conduct and safety\n4. **Practical guidelines**: Provides specific details about beverages, event duration, and transportation assistance\n5. **Professional tone**: Written as an internal memo from management\n6. **No spam characteristics**: No promotional content, suspicious links, requests for personal information, or commercial solicitation\n\nThis appears to be a genuine internal policy communication from Enron management regarding employee conduct at company events.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the email as HAM (legitimate) with sound reasoning identifying authentic business characteristics, proper format with clear classification, and complete alignment with t"
+        }
+      },
+      {
+        "query": "hey ! purest darted omitted sainthood lopez scapegoat agatha anchor regardless dectape reliable cycled liquidate voyaged reptiles need help for better [ s ] [ e ] [ x ] ? sabina hounds hobbling adirondack exploit yes | no ohmmeter abdomen patiently nether analyzers crimson designers sewer simulation equips auburn buckskins sommerfeld tanks grooves",
+        "gold": "spam",
+        "output": "**Classification: SPAM**\n\n**Reasoning:**\n- Contains obfuscated sexual content (\"better [ s ] [ e ] [ x ]?\" with spaced letters to evade filters)\n- Random word salad/gibberish mixed throughout (darted, omitted, sainthood, dectape, etc.) - classic spam technique to bypass spam filters\n- Suspicious call-to-action (\"yes | no\") \n- No coherent message or legitimate purpose\n- Uses spacing tricks to hide keywords from automated detection\n- Pattern consistent with unsolicited adult content spam\n\nThis is clearly a spam email attempting to solicit responses for adult services while using obfuscation techniques to evade email security systems.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.5,
+          "reasoning_soundness": 0.5,
+          "execution_accuracy": 0.5,
+          "output_integrity": 0.5,
+          "aggregate": 0.5,
+          "rationale": ""
+        }
+      },
+      {
+        "query": "re : working on may 10 th dinner for scholarship recipients rick and sally , all of the scholarship recipients are available for dinner on may 10 th . as soon as you let me know where you want to meet for dinner , i will let them know . if you don ' t have any place in mind , i can locate a nice casual dining place for you . thanks , karen - - from : karen marshall on 04 / 06 / 2001 09 : 51 am to : richard causey / corp / enron @ enron , sally beck / hou / ect @ ect cc : subject : working on may 10 th dinner for scholarship recipients rick & sally , i have phoned all of the scholarship recipients and left messages for them regarding dinner on may 10 th . i should have an answer by monday . thanks , karen - - - - - forwarded by karen marshall / hou / ect on 04 / 06 / 2001 09 : 48 am - - - - - karen marshall 03 / 28 / 2001 08 : 12 pm to : sally beck / hou / ect @ ect , richard causey / corp / enron @ enron , gene humphrey / enron @ enronxgate , wanda curry / hou / ees @ ees , brent a price / enron @ enronxgate , charlene jackson / corp / enron @ enron , christie patrick / hou / ect @ ect , loftus fitzwater / na / enron @ enron , roger ondreko / enron @ enronxgate , andrea v reed / en",
+        "gold": "ham",
+        "output": "**Classification: HAM**\n\n**Reasoning:**\n\nThis is a legitimate internal business email thread, not spam. Key indicators:\n\n1. **Organizational context**: References to Enron employees, internal email addresses (@enron, @ect), and corporate structure\n2. **Legitimate business purpose**: Organizing a dinner event for scholarship recipients\n3. **Professional communication**: Clear, organized discussion about event planning with specific dates and action items\n4. **Internal correspondence**: Email chain between colleagues (Karen Marshall, Richard Causey, Sally Beck, etc.)\n5. **No spam characteristics**: \n   - No promotional content\n   - No suspicious links or requests\n   - No phishing attempts\n   - No unsolicited offers\n   - No mass mailing indicators\n\nThis appears to be a genuine internal corporate email about coordinating a scholarship dinner event.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the email as HAM (legitimate) with sound reasoning identifying multiple valid indicators of legitimate internal business correspondence, matching the reference answer pe"
+        }
+      },
+      {
+        "query": "hello : $ 00754 dear homeowner , you have been pre - approved for a $ 400 , 000 loan at a low fixed rate . this offer is being extended to you unconditionally and your credit is in no way a factor . to take advantage of this limited time opportunity , we ask you to visit our website and completethe post approval form . http : / / www . 2005 homeloans . com / i / lzevaw 5 kzxgvamvlenkvnmo 3 dhjommto rigoberto richvw logan financial group - - - - - - - - - - - - - - - - - - - - - - 2 : arora amgad gulvin dennie davidovihttp : / / www . 2005 homeloans . com / rem . php . . . not interested",
+        "gold": "spam",
+        "output": "**Classification: SPAM**\n\n**Reasoning:**\n\n1. **Unsolicited loan offer** - Pre-approved loan offers sent via email to unknown recipients are classic spam tactics\n\n2. **Too-good-to-be-true claims** - \"Pre-approved,\" \"credit is in no way a factor,\" and \"low fixed rate\" are common spam lures designed to attract desperate borrowers\n\n3. **Suspicious URL** - The domain \"2005homeloans.com\" with obfuscated path parameters (lzevaw5kzxgvamvlenkvnmo3dhjommto) is a red flag for phishing/scam sites\n\n4. **Pressure tactics** - \"Limited time opportunity\" creates artificial urgency\n\n5. **Poor formatting** - Garbled text, random names (Rigoberto Richvw, Arora Amgad Gulvin), and malformed URLs indicate mass spam distribution\n\n6. **Suspicious sender** - \"Logan Financial Group\" with no verifiable contact information\n\nThis is a classic **predatory lending/phishing spam** email designed to either steal personal information or lead to fraudulent loan schemes.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9875,
+          "rationale": "The agent correctly classified the email as spam with comprehensive, logically sound reasoning that identifies multiple legitimate spam indicators, perfectly matching the reference answer."
+        }
+      },
+      {
+        "query": "visit to enron tom , i am forwarding to you a copy of the message from nick bambos . i shall try to catch you for a few minutes today ( monday ) to close the loop on this effort . vince - - - - - - - - - - - - - - - - - - - - - - forwarded by vince j kaminski / hou / ect on 03 / 13 / 2000 11 : 15 am - - - - - - - - - - - - - - - - - - - - - - - - - - - nick bambos on 03 / 12 / 2000 05 : 32 : 35 pm to : vince . j . kaminski @ enron . com , bambos @ stanford . stanford . edu cc : subject : visit to enron hello vince , it was nice seeing you at stanford and many thanks for the lunch we had together . i really enjoyed our discussions , both at the technical level and otherwise . i promised to send you an e - mail regarding possible dates for a visit to enron . i delayed it for a week till my schedule was clearer . let ' s see if we can get a match with your schedule - mine is rather terrible : friday , 21 st of april looks good . but april 23 rd is easter sunday , so that may make it difficult for some people at enron to be around . let me know if that is the case . i am willing to visit then , because the week after that i am scheduled to be in japan and in the previous weeks i am all",
+        "gold": "ham",
+        "output": "**Classification: HAM**\n\n**Reasoning:**\n\nThis is a legitimate internal business email, not spam. Key indicators:\n\n1. **Internal Communication**: Email is between Enron employees (Vince Kaminski) and an external contact (Nick Bambos from Stanford)\n2. **Professional Context**: Discusses a legitimate business visit arrangement\n3. **Personal Reference**: References a prior meeting at Stanford and lunch, indicating genuine professional relationship\n4. **Specific Details**: Contains concrete scheduling information (April 21st, Easter Sunday consideration, Japan trip)\n5. **No Spam Characteristics**: \n   - No suspicious links or attachments mentioned\n   - No requests for money or sensitive information\n   - No generic greetings or mass-mailing indicators\n   - Proper email threading and forwarding format\n   - Natural, professional tone\n\nThis appears to be a genuine email chain regarding a campus visit or consulting engagement.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9675,
+          "rationale": "The agent correctly classified the email as HAM (legitimate), provided sound reasoning with specific evidence from the text, followed the required format, and matched the reference answer perfectly."
+        }
+      },
+      {
+        "query": "promote your website 100 % free ! duf lmdmz receive unlimited visitors , it cost you not even a penny ! free way to promote your website , 100 % free ! direct results ! joining will take only 30 seconds , click here to learn more . remove sbqoypeulbx d",
+        "gold": "spam",
+        "output": "**Classification: SPAM**\n\n**Reasoning:**\n- **Unrealistic promises**: \"100% free,\" \"unlimited visitors,\" \"direct results\" are classic spam red flags\n- **Urgency/pressure tactics**: \"joining will take only 30 seconds\"\n- **Suspicious elements**: Random character strings (duf lmdmz, sbqoypeulbx d) suggest obfuscation or automated spam generation\n- **Generic call-to-action**: \"click here to learn more\" without specific details\n- **Typical spam pattern**: Promises free promotion/traffic, which is a common website traffic scam\n- **Remove instruction**: The \"remove sbqoypeulbx d\" at the end is characteristic of spam list management or tracking codes\n\nThis is a classic promotional spam email with hallmark characteristics of unsolicited bulk email.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9875,
+          "rationale": "The agent correctly classified the email as spam with comprehensive, logically sound reasoning that identifies all key spam indicators, perfectly matching the reference answer."
+        }
+      },
+      {
+        "query": "delta and northwestern deals louise : by the way , i wanted to bring to your attention the extraordinary efforts of our legal group , specifically kay mann , on these two transactions . kay has done an outstanding job on these difficult transactions , which would likely not have closed without her efforts . regards , ben",
+        "gold": "ham",
+        "output": "**Classification: HAM (Legitimate)**\n\n**Reasoning:**\n\nThis appears to be a legitimate internal business email with the following indicators:\n\n1. **Professional context**: References specific business transactions (Delta and Northwestern deals)\n2. **Internal communication**: Appears to be from one employee (Ben) to another (Louise) about colleagues\n3. **Genuine praise**: Commends a team member (Kay Mann) for legal work on transactions\n4. **Business-appropriate tone**: Professional language and structure consistent with workplace correspondence\n5. **No spam indicators**: \n   - No suspicious links or attachments mentioned\n   - No requests for money or sensitive information\n   - No urgency tactics or pressure\n   - No promotional content\n   - No phishing attempts\n\nThis is a straightforward internal email acknowledging good work on business deals.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9675,
+          "rationale": "The agent correctly classified the email as legitimate (ham), provided sound reasoning with relevant spam/ham indicators, followed the triage task precisely, and matched the reference answer perfectly"
+        }
+      },
+      {
+        "query": "new love tabs shop . visit our llcensed online dragstore for the best inexpensive love drags ! viagra , ciaiis , softtabs and many other love enhancers aii in one ! operative support , fast shipping , secure payment processing and complete confidentiality ! click here to find your verifled by bbb and approved by visa iove pil 1 !",
+        "gold": "spam",
+        "output": "**Classification: SPAM**\n\n**Reasons:**\n1. **Pharmaceutical spam** - Unsolicited promotion of prescription medications (Viagra, Cialis)\n2. **Misspellings and obfuscation** - \"dragstore\" (drugstore), \"drags\" (drugs), \"ciaiis\" (Cialis), \"aii\" (all), \"iove\" (love) - typical spam tactics to evade filters\n3. **Suspicious claims** - False credibility markers (\"verified by BBB,\" \"approved by Visa\") that are unverifiable\n4. **Pressure tactics** - Urgency language (\"click here\") and emphasis on \"inexpensive\"\n5. **Illegal activity** - Selling prescription medications without proper licensing is illegal in most jurisdictions\n6. **Generic spam language** - \"Fast shipping,\" \"secure payment,\" \"complete confidentiality\" are common spam phrases\n\nThis is a classic pharmaceutical spam email attempting to sell controlled substances illegally.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9875,
+          "rationale": "The agent correctly classified the email as spam, provided sound reasoning with specific evidence from the text (misspellings, pharmaceutical content, suspicious claims), matched the reference answer "
+        }
+      },
+      {
+        "query": "good question ( s ) i can answer some of these",
+        "gold": "ham",
+        "output": "I appreciate you reaching out, but I need more context to help you properly.\n\nYou've sent what appears to be a fragment of a message, but I don't see:\n- An actual email to triage\n- The full message content\n- Any questions you're referring to\n\n**To help you, please provide:**\n1. The complete email content (subject line, body, sender info)\n2. Any sender details (email address, domain)\n3. Any links or attachments mentioned\n\nOnce you share the full email, I can classify it as either **ham** (legitimate) or **spam**.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.15,
+          "reasoning_soundness": 0.4,
+          "execution_accuracy": 0.1,
+          "output_integrity": 0.0,
+          "aggregate": 0.1625,
+          "rationale": "The agent failed to classify the provided email text as ham/spam, instead requesting more information when the input was the complete message to be triaged, resulting in no answer when 'ham' was requi"
+        }
+      },
+      {
+        "query": "lockdown your files message loading image not showing ? view message here . stop future announcements . kfdbdw yrlc , sqeirh , abky . vbdguf elfhq arun , bflh , dohf . tgsojv gbxmoe ghuxb , sdpem , hbmosf . lvegs jrwzv gcn , exyjoc , tjyfxr . uci kck uivrd , usjaph , fjizuh . tatne nqhzmd kvn , rfwt , fgb . oaixh xcpbf uoeg , qsn , ggke . gmfkav jtt qveu , jor , wjipy . xey fhpk sfdbaz , ruu , zgdsyz . gqbu ftvk kwt , dwfev , xsum . cpla mij fyua , gcgevk , tsnrpm . jyelpp idyr dro , nwht , cflxx . qnnbwo kfwx bvgv , ajdnh , ijo . xonyea gydnkj kynfh , ijul , eygno . mckk mapn exoshp , pyr , hnkf . knhbkt xgojgf jmwae , pmundt , tgb . qqv arzx njftfq , dqjjfw , ubbq . hrl hgtk sjwhsb , ashdk , oqrumu . dtewef kyq sziau , cuemx , hmg . itufy lutqae sqjuyj , koiqa , hhvphd . biirt kmhqba kwhwm , kwkk , ttzk . evd dwii wszxsi , qpi , ksy . edpxe zjxey bil , fflex , opkytx . ttu jtdlu izm , cuxmb , zgb . wsfvlc eykdhd uyuez , qbcop , somuj . mrfav etdj iryil , jtv , yjbcd . qxb muios unie , qxq , jvke . xcb geq euz , qhgik , ysg . keg pbyt vwuv , zmbfi , xyhdj . fhlm xsdj hjaaey , zdyn , dvi . urf kkmxyj qofxv , ayuav , dtj . wftybk gwnstm qerv , pmeng , kck . mvbt zudc aruvf , lkojod ",
+        "gold": "spam",
+        "output": "**Classification: SPAM**\n\n**Reasoning:**\n\n1. **Obfuscation tactics**: The email contains massive amounts of random character strings and gibberish that serve no legitimate purpose. This is a classic spam obfuscation technique designed to evade filters.\n\n2. **Suspicious subject line**: \"lockdown your files\" combined with \"message loading image not showing\" mimics phishing/malware tactics that create urgency around file security.\n\n3. **Call to action**: \"view message here\" is a typical phishing redirect attempting to get users to click a link.\n\n4. **No legitimate content**: There is no actual message content, only random letter combinations separated by commas.\n\n5. **Unsubscribe attempt**: \"stop future announcements\" is included, which is common in spam emails to appear somewhat legitimate while actually being a spam confirmation.\n\nThis email exhibits multiple hallmarks of malicious spam, likely attempting phishing, malware distribution, or filter evasion.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9875,
+          "rationale": "The agent correctly classified the email as spam with sound reasoning identifying obfuscation tactics, suspicious elements, and lack of legitimate content, perfectly matching the reference answer."
+        }
+      },
+      {
+        "query": "intra / inter gisb keith - would you please forward an intra / inter gisb to enron - dfarmer @ enron . com if they are interested - please have them forward their pertinent information . thanks lynn",
+        "gold": "ham",
+        "output": "**Classification: HAM (Legitimate)**\n\n**Reasoning:**\n- This appears to be an internal business email request\n- Uses professional language and clear business purpose\n- References specific internal processes (\"intra/inter GISB\")\n- Contains a legitimate employee email address (@enron.com)\n- Asks for standard business action (forwarding information)\n- Signed with a name (Lynn)\n- No suspicious links, attachments, or phishing indicators\n- Typical internal corporate communication style\n\nThis is a legitimate internal business email, likely from one Enron employee asking another to forward information to a colleague.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.95,
+          "output_integrity": 0.95,
+          "aggregate": 0.9425000000000001,
+          "rationale": "The agent correctly classified the email as HAM (legitimate) with sound reasoning about internal business communication characteristics, proper format, and accurate identification matching the referen"
+        }
+      },
+      {
+        "query": "innovative and effective design for you ! adqueen is an institute committed to brand planning and designing for enterprises , providing end to end ad services , from plan to design , and finally press . - - - - - - - make maximal use of your marketing fund ! http : / / www . adqueen . com service items : innovative and effective concepts and copy for logo and vi ; website design and building ; poster and drawing ; package of gifts ; exhibitions and shows ; ad designing and printing ; and etc . ( adqueen caters for your needs ! )",
+        "gold": "spam",
+        "output": "**Classification: SPAM**\n\n**Reasoning:**\n\n1. **Unsolicited promotional content** - This is an unrequested advertisement for advertising/design services\n\n2. **Generic mass mailing characteristics**:\n   - Vague greeting (\"for you!\")\n   - Generic service pitch applicable to many businesses\n   - No personalization or reference to recipient\n\n3. **Suspicious formatting**:\n   - Excessive dashes and spacing\n   - Broken URL formatting (spaces in \"http : / / www\")\n   - Awkward phrasing (\"adqueen caters for your needs!\")\n\n4. **Common spam tactics**:\n   - Urgency/persuasion language (\"make maximal use\")\n   - Broad service list to appeal to wide audience\n   - Call-to-action through website link\n\n5. **Poor English quality** - Grammatical inconsistencies suggest mass-produced content\n\nThis is a typical B2B spam/cold email solicitation for design services.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9875,
+          "rationale": "The agent correctly classified the email as spam with comprehensive, logically sound reasoning covering unsolicited nature, formatting issues, spam tactics, and poor language quality, perfectly matchi"
+        }
+      },
+      {
+        "query": "neon discussion november 29 here are some ideas for this coming wednesday . ? remember that the following week is our last neon of this semester , and it ' s your call as to what you want to do with your group to end the semester ( i . e . a party , dinner , etc . ) ? ? hope you ' ve had plenty of turkey ! ? bobby - neon christmas . doc",
+        "gold": "ham",
+        "output": "**Classification: HAM (Legitimate)**\n\n**Reasoning:**\n- This appears to be an internal organizational email about a \"NEON\" group meeting/discussion\n- Contains specific, contextual details (November 29, Wednesday meeting, semester planning)\n- References personal context (turkey/holiday) suggesting genuine colleague communication\n- Discusses legitimate group activities (end-of-semester planning, social events)\n- Informal tone and structure consistent with internal workplace communication\n- No suspicious links, requests for sensitive information, or typical spam indicators\n- Includes a document reference (\"neon christmas.doc\") that fits the context\n\nThis is a legitimate internal email, likely from a colleague named Bobby coordinating group activities.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9675,
+          "rationale": "The agent correctly classified the email as legitimate (HAM), provided sound reasoning based on contextual clues and absence of spam indicators, followed the required classification format, and matche"
+        }
+      },
+      {
+        "query": "re : sexy mhteor get fucked on video ave ! : ) shibuye baharsad",
+        "gold": "spam",
+        "output": "**Classification: SPAM**\n\n**Reasoning:**\n- Sexually explicit subject line with crude language\n- Nonsensical text mixing random words (\"shibuye baharsad\")\n- Suspicious formatting with excessive punctuation and emoticon\n- Classic spam indicators: adult content solicitation, gibberish, obfuscation tactics\n- No legitimate business or personal communication purpose\n\nThis is clearly unsolicited spam email, likely phishing or malware distribution attempt.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.98,
+          "output_integrity": 0.98,
+          "aggregate": 0.9575,
+          "rationale": "The agent correctly classified the email as spam, provided sound reasoning identifying multiple spam indicators (explicit content, gibberish, suspicious formatting), matched the reference answer, and "
+        }
+      }
+    ]
+  },
+  "final_test": {
+    "objective_runs": [
+      0.95
+    ],
+    "gpa_runs": [
+      0.931875
+    ],
+    "objective_mean": 0.95,
+    "gpa_mean": 0.931875,
+    "gpa_dims": {
+      "target_alignment": 0.9499999999999998,
+      "reasoning_soundness": 0.8775000000000001,
+      "execution_accuracy": 0.975,
+      "output_integrity": 0.925
+    },
+    "examples": [
+      {
+        "query": "re : park n ride linda , i talked with linda and michelle this week on this issue . what michelle wanted to know was does tw have operators who have pnr agreements . currently , tw does not have any operators with pnr agreements because they have mandatory obas on tw . with our 637 compliance filing tw is requesting that operators move their imbalance to a pnr if it is over a certin volume . also eog does pool on tw so as a shipper we could get them to enter into a pnr . they would need to have a shipper transport it to and from the pnr point . i also told michelle that all points the flow any volumes on tw are required to be an an oba . michelle said that they were able to resolve this issue with eog . thanks ramona",
+        "gold": "ham",
+        "output": "ham",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the email as 'ham' (legitimate business communication about park-n-ride agreements), matching the reference answer with proper format and accurate judgment."
+        }
+      },
+      {
+        "query": "ourr new great offr how to save on inflate your medlcations over 70 % . phar cabriolet mshop - successfull and proven way to save topfull your mon indicatory ey . whinny v murrain ag litigious al resent lu anglicist l r concrete a talebearer cl i helvetic sva atrabilious l serfdom m andmanyother . fighterpilot best prlces . worldwide brekker shlpplng . easy or engender der form . total confidentiai hutment ity . 250 , 000 satisfied rustless customers . order secateurs today and save !",
+        "gold": "spam",
+        "output": "spam",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9875,
+          "rationale": "The agent correctly identified the email as spam, matching the reference answer exactly, with clear spam indicators present in the garbled text promoting medications and suspicious offers."
+        }
+      },
+      {
+        "query": "o : \\ research \\ exotica access our records indicate that you are the owners / approvers for the o : \\ research \\ exotica folder . if this is correct , please reply back with your confirmation to information risk management . in an effort to update our files as well as to do some cleanup on the directory membership , we are including the current membership list for the following nt groups . please review the membership list and advise if any deletions are required . group name group description data _ exotica change access to o : \\ reasearch \\ exotica , ohara , scarlet data _ exotica _ ro read - only access to o : \\ reasearch \\ exotica , ohara , scarlet datapwr _ exoticarw change access to m : \\ exotica data _ exotica user id full name adhar amitava dhar / hou / ees btiner brent tiner / corp / enron clandry chad landry / hou / ect cuus charles uus / hou / ect dmaxwel david maxwell / hou / ect dvitrel david vitrella gmasson grant masson / hou / ect jbuss jd buss / hou / ect khopper kevin hopper / hou / ect mlay mark lay / hou / ect mvasque miguel vasquez / hou / ect pkrishn pinnamaneni krishnarao / hou / ect pzadoro pavel zadorozhny / hou / ect sgibner stinson gibner / hou / ect tha",
+        "gold": "ham",
+        "output": "ham",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the internal IT access-control email as legitimate (ham), matching the reference answer with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "tutored best n @ k . ed lolitas . . . codifying beagles janeiro snack rhythm our site is dedicated to the beauty and enchancement of real lolita girls between the ages of 6 and 17 ! we have some of the most beautiful under . age models in the world . some of our lolita girls are professionals , some are innocent . . . imprinted the collection is updated weekly so there ' s always something new for you to enjoy . worried watch them . . . here : http : / / nonstandart . biz / home / ? = improves thank you , bye brookhaven remedies grumble miracle touch allotments normals mailer amiga",
+        "gold": "spam",
+        "output": "spam",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9875,
+          "rationale": "The agent correctly identified the email as spam, matching the reference answer exactly, with clear spam indicators present in the input (suspicious content, random words, suspicious URL)."
+        }
+      },
+      {
+        "query": "new email yo bro . this is my new email address . save it . aggie _ chico 2 @ hotmail . com . love you , lacy get your private , free email at http : / / www . hotmail . com",
+        "gold": "ham",
+        "output": "spam",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.3,
+          "execution_accuracy": 1.0,
+          "output_integrity": 0.0,
+          "aggregate": 0.5625,
+          "rationale": "The agent correctly performed the triage task with proper format, but misclassified a legitimate personal email from 'Lacy' sharing a new address as spam when the reference indicates it is ham (legiti"
+        }
+      },
+      {
+        "query": "soft viagra at $ 1 . 62 per dose one time discount order for vl @ gra , clal 1 s ! vl @ gra discount order today its only $ 0 . 95 per dose . generic vi @ gra , 24 x 100 mg regular tabs ( 48 dozes ) only $ 46 . 00 new product 1 : generic viagra , 24 x 100 mg soft tabs ( 48 dozes ) what is soft tabs ? only $ 60 . 00 new product 2 : generic clal 1 s , 10 x 20 mg tadalafil what is soft clal 1 s ? only $ 68 . 00 special offer ! these prices are valid until 20 th of july ! vl @ gra discount order remove your email",
+        "gold": "spam",
+        "output": "spam",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9875,
+          "rationale": "The agent correctly identified the email as spam, matching the reference answer exactly, with clear spam indicators present (pharmaceutical sales, obfuscated text, discount offers)."
+        }
+      },
+      {
+        "query": "celebrate responsibly over the last couple of years we have had numerous social events including holiday parties , company - sponsored outings to edgefield , post - quarterly meeting outings , and going away parties . while i hope that people thoroughly enjoy themselves , i ask that you keep in mind that we all have to act professionally and responsibly during and after these events . i have been working with chris calger and amy fitzpatrick to put together some guidelines for company - sponsored social events : the company will provide soft drinks , beer , and wine . you may choose to order other beverages at your expense . functions will run for a specified period of time . if there is an open bar , we will establish a time certain after which enron will not pay for any additional drinks . if you require assisance getting home , please contact a taxi and submit the fare for expense reimbursement with no questions asked . the last thing in the world we want is to have people break the law or put their safety and the safety of others in jeopardy . let me know if you have any questions . thanks for your cooperation .",
+        "gold": "ham",
+        "output": "ham",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly identified the internal company memo about social event guidelines as legitimate (ham), matching the reference answer with proper format and no fabrication."
+        }
+      },
+      {
+        "query": "hey ! purest darted omitted sainthood lopez scapegoat agatha anchor regardless dectape reliable cycled liquidate voyaged reptiles need help for better [ s ] [ e ] [ x ] ? sabina hounds hobbling adirondack exploit yes | no ohmmeter abdomen patiently nether analyzers crimson designers sewer simulation equips auburn buckskins sommerfeld tanks grooves",
+        "gold": "spam",
+        "output": "spam",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.5,
+          "reasoning_soundness": 0.5,
+          "execution_accuracy": 0.5,
+          "output_integrity": 0.5,
+          "aggregate": 0.5,
+          "rationale": ""
+        }
+      },
+      {
+        "query": "re : working on may 10 th dinner for scholarship recipients rick and sally , all of the scholarship recipients are available for dinner on may 10 th . as soon as you let me know where you want to meet for dinner , i will let them know . if you don ' t have any place in mind , i can locate a nice casual dining place for you . thanks , karen - - from : karen marshall on 04 / 06 / 2001 09 : 51 am to : richard causey / corp / enron @ enron , sally beck / hou / ect @ ect cc : subject : working on may 10 th dinner for scholarship recipients rick & sally , i have phoned all of the scholarship recipients and left messages for them regarding dinner on may 10 th . i should have an answer by monday . thanks , karen - - - - - forwarded by karen marshall / hou / ect on 04 / 06 / 2001 09 : 48 am - - - - - karen marshall 03 / 28 / 2001 08 : 12 pm to : sally beck / hou / ect @ ect , richard causey / corp / enron @ enron , gene humphrey / enron @ enronxgate , wanda curry / hou / ees @ ees , brent a price / enron @ enronxgate , charlene jackson / corp / enron @ enron , christie patrick / hou / ect @ ect , loftus fitzwater / na / enron @ enron , roger ondreko / enron @ enronxgate , andrea v reed / en",
+        "gold": "ham",
+        "output": "ham",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9875,
+          "rationale": "The agent correctly identified the email as legitimate (ham), matching the reference answer perfectly, with clear evidence of authentic internal business communication about scheduling a dinner event."
+        }
+      },
+      {
+        "query": "hello : $ 00754 dear homeowner , you have been pre - approved for a $ 400 , 000 loan at a low fixed rate . this offer is being extended to you unconditionally and your credit is in no way a factor . to take advantage of this limited time opportunity , we ask you to visit our website and completethe post approval form . http : / / www . 2005 homeloans . com / i / lzevaw 5 kzxgvamvlenkvnmo 3 dhjommto rigoberto richvw logan financial group - - - - - - - - - - - - - - - - - - - - - - 2 : arora amgad gulvin dennie davidovihttp : / / www . 2005 homeloans . com / rem . php . . . not interested",
+        "gold": "spam",
+        "output": "spam",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9875,
+          "rationale": "The agent correctly identified the email as spam, matching the reference answer exactly, with clear indicators like unsolicited loan offers and suspicious URLs present in the input."
+        }
+      },
+      {
+        "query": "visit to enron tom , i am forwarding to you a copy of the message from nick bambos . i shall try to catch you for a few minutes today ( monday ) to close the loop on this effort . vince - - - - - - - - - - - - - - - - - - - - - - forwarded by vince j kaminski / hou / ect on 03 / 13 / 2000 11 : 15 am - - - - - - - - - - - - - - - - - - - - - - - - - - - nick bambos on 03 / 12 / 2000 05 : 32 : 35 pm to : vince . j . kaminski @ enron . com , bambos @ stanford . stanford . edu cc : subject : visit to enron hello vince , it was nice seeing you at stanford and many thanks for the lunch we had together . i really enjoyed our discussions , both at the technical level and otherwise . i promised to send you an e - mail regarding possible dates for a visit to enron . i delayed it for a week till my schedule was clearer . let ' s see if we can get a match with your schedule - mine is rather terrible : friday , 21 st of april looks good . but april 23 rd is easter sunday , so that may make it difficult for some people at enron to be around . let me know if that is the case . i am willing to visit then , because the week after that i am scheduled to be in japan and in the previous weeks i am all",
+        "gold": "ham",
+        "output": "ham",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9875,
+          "rationale": "The agent correctly identified the email as legitimate (ham), matching the reference answer exactly, with clear business context (scheduling a visit to Enron) and no spam indicators present."
+        }
+      },
+      {
+        "query": "promote your website 100 % free ! duf lmdmz receive unlimited visitors , it cost you not even a penny ! free way to promote your website , 100 % free ! direct results ! joining will take only 30 seconds , click here to learn more . remove sbqoypeulbx d",
+        "gold": "spam",
+        "output": "spam",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly identified the email as spam, matching the reference answer exactly with proper task execution and accurate classification."
+        }
+      },
+      {
+        "query": "delta and northwestern deals louise : by the way , i wanted to bring to your attention the extraordinary efforts of our legal group , specifically kay mann , on these two transactions . kay has done an outstanding job on these difficult transactions , which would likely not have closed without her efforts . regards , ben",
+        "gold": "ham",
+        "output": "ham",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly identified the email as 'ham' (legitimate), matching the reference answer exactly; the email content clearly shows internal business communication about legal work on transactions,"
+        }
+      },
+      {
+        "query": "new love tabs shop . visit our llcensed online dragstore for the best inexpensive love drags ! viagra , ciaiis , softtabs and many other love enhancers aii in one ! operative support , fast shipping , secure payment processing and complete confidentiality ! click here to find your verifled by bbb and approved by visa iove pil 1 !",
+        "gold": "spam",
+        "output": "spam",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly identified the email as spam, matching the reference answer exactly, with clear spam indicators present (misspellings, pharmaceutical products, urgency tactics) making this a strai"
+        }
+      },
+      {
+        "query": "good question ( s ) i can answer some of these",
+        "gold": "ham",
+        "output": "ham",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the email as 'ham' (legitimate), matching the reference answer exactly, with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "lockdown your files message loading image not showing ? view message here . stop future announcements . kfdbdw yrlc , sqeirh , abky . vbdguf elfhq arun , bflh , dohf . tgsojv gbxmoe ghuxb , sdpem , hbmosf . lvegs jrwzv gcn , exyjoc , tjyfxr . uci kck uivrd , usjaph , fjizuh . tatne nqhzmd kvn , rfwt , fgb . oaixh xcpbf uoeg , qsn , ggke . gmfkav jtt qveu , jor , wjipy . xey fhpk sfdbaz , ruu , zgdsyz . gqbu ftvk kwt , dwfev , xsum . cpla mij fyua , gcgevk , tsnrpm . jyelpp idyr dro , nwht , cflxx . qnnbwo kfwx bvgv , ajdnh , ijo . xonyea gydnkj kynfh , ijul , eygno . mckk mapn exoshp , pyr , hnkf . knhbkt xgojgf jmwae , pmundt , tgb . qqv arzx njftfq , dqjjfw , ubbq . hrl hgtk sjwhsb , ashdk , oqrumu . dtewef kyq sziau , cuemx , hmg . itufy lutqae sqjuyj , koiqa , hhvphd . biirt kmhqba kwhwm , kwkk , ttzk . evd dwii wszxsi , qpi , ksy . edpxe zjxey bil , fflex , opkytx . ttu jtdlu izm , cuxmb , zgb . wsfvlc eykdhd uyuez , qbcop , somuj . mrfav etdj iryil , jtv , yjbcd . qxb muios unie , qxq , jvke . xcb geq euz , qhgik , ysg . keg pbyt vwuv , zmbfi , xyhdj . fhlm xsdj hjaaey , zdyn , dvi . urf kkmxyj qofxv , ayuav , dtj . wftybk gwnstm qerv , pmeng , kck . mvbt zudc aruvf , lkojod ",
+        "gold": "spam",
+        "output": "spam",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9875,
+          "rationale": "The agent correctly identified the email as spam, matching the reference answer exactly, with clear indicators like random character strings and suspicious formatting supporting this classification."
+        }
+      },
+      {
+        "query": "intra / inter gisb keith - would you please forward an intra / inter gisb to enron - dfarmer @ enron . com if they are interested - please have them forward their pertinent information . thanks lynn",
+        "gold": "ham",
+        "output": "ham",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the email as 'ham' (legitimate), matching the reference answer exactly, with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "innovative and effective design for you ! adqueen is an institute committed to brand planning and designing for enterprises , providing end to end ad services , from plan to design , and finally press . - - - - - - - make maximal use of your marketing fund ! http : / / www . adqueen . com service items : innovative and effective concepts and copy for logo and vi ; website design and building ; poster and drawing ; package of gifts ; exhibitions and shows ; ad designing and printing ; and etc . ( adqueen caters for your needs ! )",
+        "gold": "spam",
+        "output": "spam",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly identified the unsolicited promotional email as spam, matching the reference answer with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "neon discussion november 29 here are some ideas for this coming wednesday . ? remember that the following week is our last neon of this semester , and it ' s your call as to what you want to do with your group to end the semester ( i . e . a party , dinner , etc . ) ? ? hope you ' ve had plenty of turkey ! ? bobby - neon christmas . doc",
+        "gold": "ham",
+        "output": "ham",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the email as 'ham' (legitimate), matching the reference answer exactly, with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "re : sexy mhteor get fucked on video ave ! : ) shibuye baharsad",
+        "gold": "spam",
+        "output": "spam",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly identified the email as spam, matching the reference answer exactly with appropriate classification of the sexually explicit and nonsensical content."
+        }
+      }
+    ]
+  },
+  "delta_objective": 0.3999999999999999,
+  "delta_gpa": 0.038124999999999964,
+  "optimization": {
+    "front": [
+      {
+        "obj": 1.0,
+        "gpa": 0.9762500000000001,
+        "iter": 5,
+        "strategy": "mutation"
+      }
+    ],
+    "history": [
+      {
+        "iter": 0,
+        "obj": 0.3,
+        "gpa": 0.97425,
+        "composite": 0.6371249999999999,
+        "strategy": "baseline"
+      },
+      {
+        "iter": 1,
+        "obj": 1.0,
+        "gpa": 0.97125,
+        "composite": 0.985625,
+        "strategy": "mutation",
+        "front_size": 2
+      },
+      {
+        "iter": 2,
+        "obj": 1.0,
+        "gpa": 0.97,
+        "composite": 0.985,
+        "strategy": "mutation",
+        "front_size": 2
+      },
+      {
+        "iter": 3,
+        "obj": 1.0,
+        "gpa": 0.97375,
+        "composite": 0.986875,
+        "strategy": "mutation",
+        "front_size": 2
+      },
+      {
+        "iter": 4,
+        "obj": 1.0,
+        "gpa": 0.975,
+        "composite": 0.9875,
+        "strategy": "merge",
+        "front_size": 1
+      },
+      {
+        "iter": 5,
+        "obj": 1.0,
+        "gpa": 0.9762500000000001,
+        "composite": 0.988125,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 6,
+        "obj": 1.0,
+        "gpa": 0.9725,
+        "composite": 0.9862500000000001,
+        "strategy": "mutation",
+        "front_size": 1
+      }
+    ],
+    "baseline_train_obj": 0.3,
+    "best_train_obj": 1.0
+  },
+  "duration_s": 111.9
+}

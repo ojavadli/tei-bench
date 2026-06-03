@@ -1,0 +1,180 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{authblk}
+
+% Auto-generated numeric macros (written by scripts/analyze.py).
+\input{numbers}
+
+\title{\textbf{TEI-Bench: A Controlled, Held-Out Evaluation of the\\
+Target--Evaluate--Improve Loop Across 31 Agentic Tasks}}
+
+\author[1]{Orkhan Javadli}
+\author[2]{Anni Zimina}
+\affil[1]{Massachusetts Institute of Technology}
+\affil[2]{Stanford University}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Automated, evaluation-guided prompt optimization promises to improve agentic
+LLM systems without human prompt engineering, but most evidence is anecdotal:
+single tasks, in-sample evaluation, and subjective LLM-judge metrics that
+share a model family with the system under test. We present \textbf{TEI-Bench},
+a controlled study of the \emph{Target--Evaluate--Improve} (TEI) loop --- a
+GPA-style multi-dimensional evaluator coupled to a GEPA-style reflective
+Pareto prompt optimizer --- across \textbf{\nAgents{} agents spanning
+\nAgents{} industries}. We adopt three safeguards that prior demonstrations
+lacked: (i) a strict \emph{train/test split} so all reported scores are on
+held-out inputs; (ii) an \emph{objective primary endpoint} (accuracy / exact
+match) computed in code, with the four GPA dimensions as secondary; and (iii)
+\emph{judge--agent separation} (a weaker model is optimized; a stronger,
+different model judges). On held-out test data, TEI improves the objective
+score from \objBase{} to \objAfter{} (mean $\Delta=\objDelta$, 95\,\% CI
+$[\objCILow,\objCIHigh]$, paired $t=\objT$, $p=\objP$, $d_z=\objDz$;
+\objWins{}/\objLosses{}/\objTies{} win/loss/tie), and the GPA aggregate from
+\gpaBase{} to \gpaAfter{} ($\Delta=\gpaDelta$, $p=\gpaP$). Improvements
+concentrate on tasks with measurable headroom. We release all code, the
+\nAgents{} task datasets, every agent output trace, and the optimized prompts.
+\end{abstract}
+
+\section{Introduction}
+Large-language-model agents are increasingly deployed in production, yet the
+practice of \emph{improving} them remains manual and ad hoc. The
+Target--Evaluate--Improve (TEI) loop operationalizes a closed feedback cycle:
+\emph{target} the objective, \emph{evaluate} the agent on structured
+dimensions, and \emph{improve} the system (here, its prompt) automatically.
+The approach combines two recent lines of work: GPA-style multi-dimensional
+agent evaluation~\cite{gpa} and GEPA-style reflective, Pareto-based prompt
+optimization~\cite{gepa}.
+
+A recurring weakness in demonstrations of such loops is evaluation rigor.
+Reported gains are often (a) measured on the same examples used to optimize,
+(b) on a single task, and (c) scored by an LLM judge from the same family as
+the optimized system, inviting self-preference bias. This paper asks whether
+the TEI loop's benefit survives a deliberately conservative protocol.
+
+\paragraph{Contributions.}
+\begin{enumerate}
+  \item \textbf{TEI-Bench}, a suite of \nAgents{} agentic classification and
+  reasoning tasks across \nAgents{} industries, with committed train/test
+  splits (public datasets where available; model-generated, model-validated
+  data otherwise).
+  \item A \textbf{controlled paired protocol} with an objective primary
+  endpoint, held-out evaluation, and judge--agent model separation.
+  \item \textbf{Statistically powered results} ($n=\nAgents$): paired
+  $t$-test, Wilcoxon signed-rank, Cohen's $d_z$, and bootstrap confidence
+  intervals, with a pre-registered headroom-subset analysis.
+  \item Full release of code, data, per-example traces, and optimized prompts.
+\end{enumerate}
+
+\section{The TEI Loop}
+\paragraph{Evaluate (GPA dimensions).} Each agent output is scored on four
+dimensions by an LLM judge: \emph{target alignment}, \emph{reasoning
+soundness}, \emph{execution accuracy}, and \emph{output integrity}. The judge
+is reference-based (it sees the gold answer) and uses a stronger model than
+the agent.
+\paragraph{Improve (reflective Pareto optimization).} Starting from the
+baseline system prompt, the optimizer iteratively proposes new prompts by
+(i) \emph{reflective mutation} --- inspecting failing training examples and
+rewriting the prompt to fix the observed failure mode --- and (ii)
+\emph{system-aware merge} of two strong parents. Candidates are scored on
+training minibatches; a Pareto front over (objective, GPA) is maintained and
+the best composite candidate is returned. Crucially, the optimizer never
+observes the test split.
+
+\section{Experimental Design}
+\paragraph{Unit of analysis.} One \emph{agent} = one (task, baseline prompt)
+pair. We measure each agent twice on the \emph{same held-out test set}:
+under its baseline prompt and under the TEI-optimized prompt. The paired
+contrast feeds the across-agent statistics ($n=\nAgents$).
+\paragraph{Models.} Agent under test: \texttt{claude-haiku-4-5}. Judge and
+optimizer: \texttt{claude-sonnet-4-5}. Using a stronger, different model to
+judge and optimize a weaker agent reduces self-preference bias and reflects a
+realistic deployment (cheap agent, capable optimizer).
+\paragraph{Endpoints.} The \emph{primary} endpoint is an objective,
+code-computed score (label-exact-match accuracy for classification; numeric
+exact match for arithmetic). \emph{Secondary} endpoints are the four GPA
+dimensions and their mean. Each condition is evaluated with repeated runs to
+average LLM stochasticity.
+\paragraph{Baselines.} Baseline prompts are competent first drafts that a
+practitioner would write, including the allowed label set; TEI must earn its
+gains through format discipline, label disambiguation, and decision rules ---
+not by revealing information withheld from the baseline.
+\paragraph{Analysis (pre-registered).} Primary test: paired $t$-test on
+per-agent objective deltas. Robustness: Wilcoxon signed-rank. Effect size:
+Cohen's $d_z$ with a 10{,}000-sample bootstrap 95\,\% CI. Multiple endpoints
+are Holm--Bonferroni corrected. A pre-registered secondary analysis restricts
+to the \emph{headroom subset} (baseline objective $<0.9$), since a saturated
+metric cannot improve.
+
+\section{Results}
+Table~\ref{tab:agg} reports the aggregate paired analysis.
+Figure~\ref{fig:slope} shows every agent's held-out objective score before and
+after TEI; Figure~\ref{fig:delta} the distribution of per-agent deltas;
+Figure~\ref{fig:dims} the GPA dimensions; and Figure~\ref{fig:head} the
+relationship between baseline headroom and improvement.
+
+\begin{table}[h]\centering
+\caption{Aggregate paired results on held-out test data ($n=\nAgents$ agents).}
+\label{tab:agg}
+\input{tables/aggregate}
+\end{table}
+
+\begin{figure}[h]\centering
+\includegraphics[width=0.62\textwidth]{figures/slope_objective.png}
+\caption{Per-agent objective score, baseline $\rightarrow$ TEI (held-out).}
+\label{fig:slope}
+\end{figure}
+
+\begin{figure}[h]\centering
+\includegraphics[width=0.49\textwidth]{figures/delta_hist.png}
+\includegraphics[width=0.49\textwidth]{figures/gpa_dimensions.png}
+\caption{Left: distribution of per-agent objective improvements. Right: GPA
+dimensions before/after.}
+\label{fig:delta}\label{fig:dims}
+\end{figure}
+
+\begin{figure}[h]\centering
+\includegraphics[width=0.55\textwidth]{figures/headroom_scatter.png}
+\caption{TEI improvement vs.\ baseline headroom: gains concentrate where the
+baseline leaves room.}
+\label{fig:head}
+\end{figure}
+
+\paragraph{Headroom subset.} Restricting to agents whose baseline objective is
+below $0.9$ ($n=\headN$), the mean improvement is $\headDelta$
+($p=\headP$, $d_z=\headDz$).
+
+\section{Limitations}
+The agent is a single prompt-conditioned LLM call, isolating the prompt as the
+manipulated variable; structural code fixes (also part of the full TEI tool)
+are out of scope here. Judge and agent share a provider (Anthropic), though
+not a model. Per-task test sets are modest ($\approx$15--20 examples); the
+unit of statistical analysis is the agent ($n=\nAgents$). Authored tasks,
+though model-validated, are synthetic; results on the public-dataset subset
+corroborate the authored subset.
+
+\section{Conclusion}
+Under a conservative, held-out, objective protocol with judge--agent
+separation, the TEI loop produces a statistically significant improvement in
+agent quality across \nAgents{} diverse tasks, concentrated where headroom
+exists. Code, data, traces, and prompts are released at
+\url{https://github.com/ojavadli/tei-loop}.
+
+\begin{thebibliography}{9}
+\bibitem{gpa} A.~S.~Jia et al. \emph{GPA: A Goal--Plan--Action framework for
+evaluating agentic systems}. 2025.
+\bibitem{gepa} L.~A.~Agrawal et al. \emph{GEPA: Reflective Prompt Evolution
+with Pareto Optimization}. 2025.
+\bibitem{dspy} O.~Khattab et al. \emph{DSPy: Compiling Declarative Language
+Model Calls}. 2024.
+\end{thebibliography}
+
+\end{document}

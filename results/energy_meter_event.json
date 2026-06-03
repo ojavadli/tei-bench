@@ -1,0 +1,627 @@
+{
+  "task_id": "energy_meter_event",
+  "industry": "Energy / Utilities",
+  "metric": "classification",
+  "n_train": 15,
+  "n_test": 18,
+  "source": "Authored for TEI-Bench (Sonnet-generated, Sonnet-validated; kept only label-agreed examples).",
+  "agent_model": "claude-haiku-4-5",
+  "judge_model": "claude-sonnet-4-5",
+  "optimizer_model": "claude-sonnet-4-5",
+  "seed": 0,
+  "eval_repeats": 1,
+  "baseline_prompt": "You are a smart-grid operations assistant. Classify the meter/grid event description into an event type. Classify into one of these categories: outage, overconsumption, tamper, voltage_anomaly, billing_dispute, maintenance.",
+  "optimized_prompt": "You are a smart-grid operations assistant. Classify the meter/grid event description into exactly one of these event types:\n\n**outage** - Complete or partial loss of electrical service; power interruptions; equipment offline; breaker trips causing service loss; metering devices unresponsive due to power loss; blackouts or brownouts.\n\n**overconsumption** - Abnormally high power consumption relative to baseline or expected usage patterns; sustained excessive draw; consumption significantly higher than peers or historical norms; unusual load patterns suggesting inefficient or excessive usage.\n\n**tamper** - Evidence of meter tampering, physical interference, unauthorized access, seal breaks, meter bypass attempts, or deliberate manipulation of metering equipment.\n\n**voltage_anomaly** - Voltage fluctuations, swings, or levels outside acceptable operating ranges; overvoltage or undervoltage conditions; power quality issues; voltage instability that may damage equipment.\n\n**billing_dispute** - Customer challenges to billing amounts, charges, fees, or surcharges; disputes over account accuracy; questions about unauthorized charges; complaints about unexpected or incorrect billing.\n\n**maintenance** - Scheduled or unscheduled maintenance activities; equipment servicing; routine inspections; planned work; repair activities; system upgrades.\n\n**Instructions:**\n1. Read the entire event description carefully\n2. Identify the PRIMARY issue being described\n3. Match it to the most appropriate category based on the definitions above\n4. Output ONLY the event type label (e.g., \"outage\" or \"billing_dispute\")\n5. If the description contains multiple issues, classify based on the MAIN or INITIAL event described",
+  "baseline_test": {
+    "objective_runs": [
+      0.7222222222222222
+    ],
+    "gpa_runs": [
+      0.9662499999999999
+    ],
+    "objective_mean": 0.7222222222222222,
+    "gpa_mean": 0.9662499999999999,
+    "gpa_dims": {
+      "target_alignment": 0.9499999999999997,
+      "reasoning_soundness": 0.9283333333333332,
+      "execution_accuracy": 0.99,
+      "output_integrity": 0.9966666666666667
+    },
+    "examples": [
+      {
+        "query": "Phase A voltage at the industrial park substation has been running at 252V consistently since 6 AM, which is above our 240V maximum specification. This could stress insulation and reduce equipment lifespan for connected facilities.",
+        "gold": "voltage_anomaly",
+        "output": "**Classification: voltage_anomaly**\n\n**Reasoning:**\n- The event describes an abnormal voltage condition (252V vs. 240V maximum specification)\n- This is a technical grid parameter deviation, not a service interruption (outage)\n- It's not related to consumption levels (overconsumption), equipment tampering, billing issues, or scheduled maintenance\n- The concern about equipment stress and insulation degradation is characteristic of voltage anomaly events\n\n**Recommended Action:** Investigate the cause of sustained overvoltage at the substation and implement corrective measures (voltage regulation adjustment, load balancing, or equipment inspection).",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.98,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the event as voltage_anomaly with sound reasoning that accurately identifies the voltage deviation, appropriately excludes alternative classifications, and provides the "
+        }
+      },
+      {
+        "query": "Customer called regarding their latest statement showing $487 for the month of March, claiming they were only home for 10 days during that period and the amount seems excessive compared to their typical $180 monthly charges.",
+        "gold": "billing_dispute",
+        "output": "**Classification: billing_dispute**\n\n**Reasoning:**\nThe customer is challenging the accuracy of their bill based on:\n- Significantly higher charges ($487 vs. typical $180)\n- Limited occupancy during the billing period (10 days)\n- Discrepancy between expected and actual consumption\n\nThis is a customer complaint about billing accuracy rather than a technical grid event (outage, voltage issue), operational concern (overconsumption/tamper), or maintenance need. The appropriate response would be to investigate the meter readings, usage patterns, and billing calculations.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9675,
+          "rationale": "The agent correctly classified the event as 'billing_dispute' matching the reference answer, provided sound reasoning identifying key dispute elements (price discrepancy, occupancy claim), followed pr"
+        }
+      },
+      {
+        "query": "Transformer inspection scheduled for substation 4B on Thursday at 0600 hours. Crew will perform oil sampling, thermal imaging, and bushing checks. Estimated duration 4 hours with partial load transfer to adjacent circuits.",
+        "gold": "maintenance",
+        "output": "**Event Type: maintenance**\n\n**Reasoning:**\nThis event describes a planned, scheduled activity involving:\n- Routine inspection procedures (oil sampling, thermal imaging, bushing checks)\n- Preventive maintenance work on grid infrastructure (transformer at substation)\n- Coordinated operational planning (load transfer to adjacent circuits)\n- Advance notice and defined timeline\n\nThis clearly falls under maintenance rather than any operational anomaly or issue.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.98,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the event as 'maintenance' with sound reasoning about scheduled inspections and preventive work, though the task only required classification without extended explanatio"
+        }
+      },
+      {
+        "query": "Residential customer indicates all lights and appliances went dark approximately 45 minutes ago. Remote diagnostics show meter has lost grid connection entirely.",
+        "gold": "outage",
+        "output": "**Event Type: OUTAGE**\n\n**Reasoning:**\n- Complete loss of grid connection to the meter\n- All electrical devices non-functional (lights and appliances dark)\n- Sudden event affecting the customer's ability to consume power\n- Remote diagnostics confirm the disconnection\n\nThis is a clear service outage requiring immediate investigation and restoration of grid connection.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.98,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the event as 'OUTAGE' matching the reference answer, provided sound reasoning based on the input evidence (complete grid loss, non-functional devices, remote diagnostics"
+        }
+      },
+      {
+        "query": "Small business account flagged for review: energy consumption yesterday was 1,247 kWh compared to their 30-day rolling average of 198 kWh per day, with no equipment upgrade notifications or facility expansion on record.",
+        "gold": "overconsumption",
+        "output": "**Classification: OVERCONSUMPTION**\n\n**Reasoning:**\n- Consumption spike of ~530% above the rolling average (1,247 kWh vs. 198 kWh/day baseline)\n- No documented operational changes (no equipment upgrades or facility expansion)\n- Significant anomaly warrants investigation for:\n  - Equipment malfunction or inefficiency\n  - Unauthorized usage\n  - Meter reading error\n  - Temporary operational changes not yet reported\n\n**Recommended Actions:**\n1. Contact customer to verify legitimacy of usage spike\n2. Schedule on-site inspection if customer cannot explain consumption\n3. Check for potential tamper indicators if explanation is unsatisfactory\n4. Review meter calibration if no customer explanation is plausible",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.98,
+          "output_integrity": 0.98,
+          "aggregate": 0.9575,
+          "rationale": "The agent correctly classified the event as overconsumption matching the reference, provided sound reasoning with accurate calculations, followed proper format, and added contextually appropriate (tho"
+        }
+      },
+      {
+        "query": "Technician report indicates potential shunt device installed across terminals in meter box at 2847 Maple Drive. Recorded energy usage is inconsistent with connected load and time-of-use patterns observed from neighboring comparable units.",
+        "gold": "tamper",
+        "output": "**Classification: TAMPER**\n\n**Reasoning:**\n- The presence of a \"shunt device installed across terminals\" is a classic indicator of meter tampering, used to bypass or reduce recorded consumption\n- Inconsistent energy usage relative to connected load and neighboring comparable units suggests the meter readings are being artificially suppressed\n- This pattern is characteristic of deliberate manipulation to avoid accurate billing\n\nThis event requires immediate investigation and potential enforcement action.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.98,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9824999999999999,
+          "rationale": "The agent correctly classified the event as 'tamper' matching the reference, provided sound reasoning about shunt devices and usage inconsistencies, followed proper classification format, and added no"
+        }
+      },
+      {
+        "query": "Smart meter SM-7742 recorded voltage spikes reaching 268V during the thunderstorm event last night. This exceeds our upper operating limit of 250V and may have affected sensitive electronics in the commercial district.",
+        "gold": "voltage_anomaly",
+        "output": "**Event Classification: voltage_anomaly**\n\n**Reasoning:**\n- The meter recorded voltage spikes (268V) that exceed the normal operating limit (250V)\n- This is a direct voltage measurement anomaly, not related to power outage, consumption patterns, tampering, billing issues, or scheduled maintenance\n- The event was triggered by external weather conditions (thunderstorm) causing electrical stress on the grid\n- The concern about potential equipment damage is consistent with voltage anomaly impacts\n\n**Recommended Actions:**\n- Monitor affected commercial district equipment for damage\n- Review surge protection systems in the area\n- Consider implementing or upgrading voltage regulation measures\n- Document the event for grid resilience analysis",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.98,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the event as voltage_anomaly with sound reasoning about voltage exceeding limits, though it added unsolicited recommendations beyond the classification task."
+        }
+      },
+      {
+        "query": "Consumer disagrees with estimated reading used for February billing after stating they provided actual meter photos on the 28th showing significantly lower consumption than what was invoiced.",
+        "gold": "billing_dispute",
+        "output": "**Classification: billing_dispute**\n\nThis event describes a disagreement between the consumer and the utility regarding the accuracy of a billing charge. The consumer is contesting the estimated reading that was used for their February invoice, claiming they provided evidence (meter photos) showing lower actual consumption than what was billed.\n\nKey indicators:\n- Consumer disagreement with billing amount\n- Dispute over estimated vs. actual readings\n- Consumer provided documentation to support their claim\n- Focus on invoice accuracy rather than physical grid/meter issues",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9675,
+          "rationale": "The agent correctly classified the event as 'billing_dispute' matching the reference answer, provided sound reasoning about why this classification applies, stayed on-task throughout, and delivered th"
+        }
+      },
+      {
+        "query": "Routine breaker testing at primary substation shows contact wear on CB-301. Replacement parts ordered and installation planned for Sunday overnight when demand is lowest.",
+        "gold": "maintenance",
+        "output": "**Classification: maintenance**\n\nThis event describes a planned maintenance activity involving inspection, diagnosis, and scheduled repair of equipment (circuit breaker CB-301) at a substation. The routine testing, identification of wear, parts ordering, and scheduled installation are all characteristic of preventive/corrective maintenance operations.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the event as 'maintenance' with sound reasoning about routine testing, parts replacement, and scheduled repair, perfectly matching the reference answer."
+        }
+      },
+      {
+        "query": "Transformer station T-447 shows no load activity for the past 2 hours. Downstream meters in coverage area reporting null values and communication failure.",
+        "gold": "outage",
+        "output": "**Event Type: Outage**\n\n**Reasoning:**\n- No load activity at transformer station for 2 hours indicates a loss of power supply\n- Downstream meters reporting null values and communication failures are consistent with a power outage affecting the entire coverage area\n- This represents a service interruption rather than individual meter issues, tamper, or voltage anomalies\n\n**Recommended Actions:**\n- Dispatch field crew to inspect transformer station T-447\n- Check for equipment failure, breaker trips, or physical damage\n- Verify upstream supply to the station\n- Estimate customer impact and restoration time",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.98,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the event as 'outage' matching the reference, provided sound reasoning linking symptoms to power loss, and maintained proper format, though added helpful but unrequested"
+        }
+      },
+      {
+        "query": "Customer at residential unit 4782 showing instantaneous demand of 47 kW at 2:15 PM, which is approximately 8 times their typical weekday afternoon baseline of 5.8 kW. Historical patterns show no similar peaks in the past 90 days.",
+        "gold": "overconsumption",
+        "output": "**Classification: overconsumption**\n\n**Reasoning:**\n- The instantaneous demand (47 kW) is significantly elevated compared to the customer's typical baseline (5.8 kW)\n- This represents an 8x spike with no historical precedent in the past 90 days\n- The event indicates abnormally high power consumption rather than a grid outage, voltage issue, tampering, billing dispute, or maintenance activity\n- This could indicate equipment malfunction, unauthorized usage, or temporary high-load activity at the residential unit\n\n**Recommended Actions:**\n- Alert customer to potential equipment issues\n- Monitor for sustained overconsumption patterns\n- Consider demand response or load management intervention if peak demand charges apply",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.98,
+          "output_integrity": 0.98,
+          "aggregate": 0.9575,
+          "rationale": "The agent correctly classified the event as 'overconsumption' matching the reference, provided sound reasoning based on the 8x spike and lack of historical precedent, followed proper classification fo"
+        }
+      },
+      {
+        "query": "Customer premise inspection found evidence that the meter has been inverted and reconnected improperly. Historical data shows negative energy flow indicators and consumption readings that are physically impossible given the service capacity.",
+        "gold": "tamper",
+        "output": "**Classification: TAMPER**\n\n**Reasoning:**\n- Physical evidence of meter manipulation (inversion and improper reconnection)\n- Negative energy flow indicators inconsistent with normal operation\n- Impossible consumption readings relative to service capacity\n- Clear signs of intentional or negligent interference with metering equipment\n\nThis represents meter tampering, which is a deliberate or reckless alteration of the metering device to misrepresent energy consumption.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.98,
+          "output_integrity": 0.98,
+          "aggregate": 0.9575,
+          "rationale": "The agent correctly classified the event as 'TAMPER' matching the reference answer, provided sound reasoning based on physical evidence and anomalous readings, followed proper classification format, a"
+        }
+      },
+      {
+        "query": "The distribution transformer at Oak Street reported sustained low voltage conditions at 201V throughout the afternoon. Normal operating range is 230V ±5%, so this represents a significant deviation requiring immediate investigation.",
+        "gold": "voltage_anomaly",
+        "output": "**Event Classification: voltage_anomaly**\n\n**Reasoning:**\n- The reported voltage (201V) falls significantly outside the normal operating range of 230V ±5% (218.5V - 241.5V)\n- This is a sustained electrical condition deviation, not a complete loss of power\n- The issue requires technical investigation of grid conditions rather than customer-side actions\n- This does not indicate outage (power is present), tampering, overconsumption, billing issues, or routine maintenance\n\n**Recommended Action:** Prioritize investigation of the distribution transformer and upstream supply conditions to identify the cause of the sustained low voltage and restore normal operating parameters.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.98,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the event as 'voltage_anomaly' with sound reasoning about voltage deviation from normal range, though it added extra recommendations beyond the classification task scope"
+        }
+      },
+      {
+        "query": "Business owner from Maple Street location contests the $1,240 assessed for last quarter, insists their solar panel contribution should have offset at least 60% of grid consumption but sees no credit applied.",
+        "gold": "billing_dispute",
+        "output": "**Classification: billing_dispute**\n\n**Reasoning:**\nThis event involves a customer contesting their bill and claiming an error in how credits or offsets were applied to their account. The business owner is disputing the assessed charges based on expected solar panel generation credits that they believe should have reduced their grid consumption charges. This is a billing/accounting matter rather than a physical grid or meter issue.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the event as 'billing_dispute' with sound reasoning that accurately identifies the contestation of charges and missing solar credits as a billing matter, matching the re"
+        }
+      },
+      {
+        "query": "Distribution pole #8847 identified during patrol with woodpecker damage and early signs of decay at base. Engineering recommends pole replacement before winter storm season begins.",
+        "gold": "maintenance",
+        "output": "**Classification: maintenance**\n\n**Reasoning:**\nThis event describes a proactive infrastructure inspection finding that requires scheduled preventive work. The pole damage and decay are identified during routine patrol, and the recommendation is for planned replacement before adverse weather conditions. This is clearly a maintenance activity rather than an emergency response to an active grid failure or anomaly.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the event as 'maintenance' with sound reasoning about proactive infrastructure work, matching the reference answer perfectly with proper format and no fabrication."
+        }
+      },
+      {
+        "query": "All readings from sector 7B meters have flatlined at zero since 03:15 AM. No power draw detected across 47 residential units in the Oak Street corridor.",
+        "gold": "outage",
+        "output": "**Event Type: Outage**\n\n**Reasoning:**\n- Simultaneous loss of power readings across multiple meters (47 units)\n- Complete cessation of power draw (flatlined at zero)\n- Specific time of occurrence (03:15 AM) indicates sudden event\n- Affects entire sector/corridor, suggesting infrastructure-level failure rather than individual meter issues\n\n**Recommended Actions:**\n- Dispatch field crew to Oak Street corridor to assess distribution lines\n- Check transformer status for sector 7B\n- Verify if outage is affecting other adjacent sectors\n- Notify affected customers of known outage",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9675,
+          "rationale": "The agent correctly classified the event as 'outage' matching the reference, provided sound reasoning based on the input evidence, followed proper classification format, and added helpful but non-requ"
+        }
+      },
+      {
+        "query": "Zone 7 substation experiencing localized stress due to one customer premise consuming 540 kWh in a 4-hour period this afternoon. Their monthly average daily consumption is only 45 kWh total.",
+        "gold": "overconsumption",
+        "output": "**Classification: overconsumption**\n\n**Reasoning:**\n- The customer's consumption of 540 kWh in 4 hours (135 kWh/hour) is dramatically elevated compared to their typical daily average of 45 kWh\n- This represents approximately **12x their normal daily consumption** in just a 4-hour window\n- The event is characterized by abnormally high power demand causing localized grid stress\n- While this could potentially indicate a tamper situation, the primary operational concern and classification is the **overconsumption** event itself, which is the most direct and accurate categorization for this anomalous usage pattern\n\n**Recommended action:** Investigate the cause of the spike (equipment malfunction, unauthorized usage, etc.) and consider demand response measures to relieve substation stress.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9675,
+          "rationale": "The agent correctly classified the event as 'overconsumption' matching the reference, provided sound quantitative reasoning (12x normal usage), followed proper format, and added contextually appropria"
+        }
+      },
+      {
+        "query": "Anomalous zero-consumption readings during hours when smart home system confirms multiple high-power appliances were actively drawing electricity. Physical inspection scheduled due to suspected mechanical interference with the measurement mechanism.",
+        "gold": "tamper",
+        "output": "**Classification: TAMPER**\n\n**Reasoning:**\n- **Zero-consumption readings vs. actual usage**: Smart home system confirms high-power appliances were actively running, yet the meter recorded no consumption—a clear discrepancy indicating measurement fraud\n- **Suspected mechanical interference**: Physical inspection is scheduled specifically to investigate tampering with the measurement mechanism\n- **Pattern indicative of tampering**: This combination of anomalous readings and suspected physical interference with the meter is characteristic of meter tampering rather than other event types\n\nThis is distinct from:\n- **Voltage anomaly**: Would affect readings but wouldn't typically cause complete zero readings with confirmed active loads\n- **Maintenance**: Would be scheduled proactively, not triggered by suspected interference\n- **Billing dispute**: A consequence that may follow, but the root cause is tampering\n- **Overconsumption/Outage**: Opposite of the observed pattern",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9675,
+          "rationale": "The agent correctly classified the event as 'tamper' matching the reference, provided sound reasoning linking zero-consumption with confirmed usage and mechanical interference, executed the classifica"
+        }
+      }
+    ]
+  },
+  "final_test": {
+    "objective_runs": [
+      1.0
+    ],
+    "gpa_runs": [
+      0.9791666666666665
+    ],
+    "objective_mean": 1.0,
+    "gpa_mean": 0.9791666666666665,
+    "gpa_dims": {
+      "target_alignment": 0.9583333333333331,
+      "reasoning_soundness": 0.9583333333333331,
+      "execution_accuracy": 1.0,
+      "output_integrity": 1.0
+    },
+    "examples": [
+      {
+        "query": "Phase A voltage at the industrial park substation has been running at 252V consistently since 6 AM, which is above our 240V maximum specification. This could stress insulation and reduce equipment lifespan for connected facilities.",
+        "gold": "voltage_anomaly",
+        "output": "voltage_anomaly",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the overvoltage condition as 'voltage_anomaly', matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "Customer called regarding their latest statement showing $487 for the month of March, claiming they were only home for 10 days during that period and the amount seems excessive compared to their typical $180 monthly charges.",
+        "gold": "billing_dispute",
+        "output": "billing_dispute",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the customer complaint about excessive charges as a billing_dispute, matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "Transformer inspection scheduled for substation 4B on Thursday at 0600 hours. Crew will perform oil sampling, thermal imaging, and bushing checks. Estimated duration 4 hours with partial load transfer to adjacent circuits.",
+        "gold": "maintenance",
+        "output": "maintenance",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the scheduled transformer inspection as 'maintenance', matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "Residential customer indicates all lights and appliances went dark approximately 45 minutes ago. Remote diagnostics show meter has lost grid connection entirely.",
+        "gold": "outage",
+        "output": "outage",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the meter/grid event as 'outage', matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "Small business account flagged for review: energy consumption yesterday was 1,247 kWh compared to their 30-day rolling average of 198 kWh per day, with no equipment upgrade notifications or facility expansion on record.",
+        "gold": "overconsumption",
+        "output": "overconsumption",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the event as 'overconsumption' matching the reference answer exactly, with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "Technician report indicates potential shunt device installed across terminals in meter box at 2847 Maple Drive. Recorded energy usage is inconsistent with connected load and time-of-use patterns observed from neighboring comparable units.",
+        "gold": "tamper",
+        "output": "tamper",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the meter event as 'tamper' matching the reference answer exactly, with the input clearly describing unauthorized meter manipulation via a shunt device."
+        }
+      },
+      {
+        "query": "Smart meter SM-7742 recorded voltage spikes reaching 268V during the thunderstorm event last night. This exceeds our upper operating limit of 250V and may have affected sensitive electronics in the commercial district.",
+        "gold": "voltage_anomaly",
+        "output": "voltage_anomaly",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the voltage spike event as 'voltage_anomaly', matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "Consumer disagrees with estimated reading used for February billing after stating they provided actual meter photos on the 28th showing significantly lower consumption than what was invoiced.",
+        "gold": "billing_dispute",
+        "output": "billing_dispute",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the meter/grid event as 'billing_dispute', matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "Routine breaker testing at primary substation shows contact wear on CB-301. Replacement parts ordered and installation planned for Sunday overnight when demand is lowest.",
+        "gold": "maintenance",
+        "output": "maintenance",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the routine breaker testing and planned replacement as 'maintenance', matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "Transformer station T-447 shows no load activity for the past 2 hours. Downstream meters in coverage area reporting null values and communication failure.",
+        "gold": "outage",
+        "output": "outage",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the meter/grid event as 'outage' matching the reference answer exactly, with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "Customer at residential unit 4782 showing instantaneous demand of 47 kW at 2:15 PM, which is approximately 8 times their typical weekday afternoon baseline of 5.8 kW. Historical patterns show no similar peaks in the past 90 days.",
+        "gold": "overconsumption",
+        "output": "overconsumption",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly classified the meter event as 'overconsumption', matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "Customer premise inspection found evidence that the meter has been inverted and reconnected improperly. Historical data shows negative energy flow indicators and consumption readings that are physically impossible given the service capacity.",
+        "gold": "tamper",
+        "output": "tamper",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly classified the meter event description as 'tamper', matching the reference answer exactly with clear evidence of meter manipulation described in the input."
+        }
+      },
+      {
+        "query": "The distribution transformer at Oak Street reported sustained low voltage conditions at 201V throughout the afternoon. Normal operating range is 230V ±5%, so this represents a significant deviation requiring immediate investigation.",
+        "gold": "voltage_anomaly",
+        "output": "voltage_anomaly",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the sustained low voltage condition (201V vs 230V ±5% normal range) as a voltage_anomaly, matching the reference answer exactly with proper format and no extraneous cont"
+        }
+      },
+      {
+        "query": "Business owner from Maple Street location contests the $1,240 assessed for last quarter, insists their solar panel contribution should have offset at least 60% of grid consumption but sees no credit applied.",
+        "gold": "billing_dispute",
+        "output": "billing_dispute",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the meter/grid event as 'billing_dispute', matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "Distribution pole #8847 identified during patrol with woodpecker damage and early signs of decay at base. Engineering recommends pole replacement before winter storm season begins.",
+        "gold": "maintenance",
+        "output": "maintenance",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly classified a pole replacement recommendation as a maintenance event, perfectly matching the reference answer with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "All readings from sector 7B meters have flatlined at zero since 03:15 AM. No power draw detected across 47 residential units in the Oak Street corridor.",
+        "gold": "outage",
+        "output": "outage",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the meter event as 'outage' matching the reference answer exactly, with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "Zone 7 substation experiencing localized stress due to one customer premise consuming 540 kWh in a 4-hour period this afternoon. Their monthly average daily consumption is only 45 kWh total.",
+        "gold": "overconsumption",
+        "output": "overconsumption",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the event as 'overconsumption' matching the reference answer exactly, with proper format and clear alignment to the task of categorizing a meter/grid event where consump"
+        }
+      },
+      {
+        "query": "Anomalous zero-consumption readings during hours when smart home system confirms multiple high-power appliances were actively drawing electricity. Physical inspection scheduled due to suspected mechanical interference with the measurement mechanism.",
+        "gold": "tamper",
+        "output": "tamper",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the meter event as 'tamper' matching the reference answer exactly, with the description clearly indicating suspected mechanical interference with measurement—a textbook "
+        }
+      }
+    ]
+  },
+  "delta_objective": 0.2777777777777778,
+  "delta_gpa": 0.012916666666666576,
+  "optimization": {
+    "front": [
+      {
+        "obj": 1.0,
+        "gpa": 0.9762500000000001,
+        "iter": 1,
+        "strategy": "mutation"
+      }
+    ],
+    "history": [
+      {
+        "iter": 0,
+        "obj": 0.6,
+        "gpa": 0.96475,
+        "composite": 0.782375,
+        "strategy": "baseline"
+      },
+      {
+        "iter": 1,
+        "obj": 1.0,
+        "gpa": 0.9762500000000001,
+        "composite": 0.988125,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 2,
+        "obj": 1.0,
+        "gpa": 0.975,
+        "composite": 0.9875,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 3,
+        "obj": 1.0,
+        "gpa": 0.9725,
+        "composite": 0.9862500000000001,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 4,
+        "obj": 1.0,
+        "gpa": 0.975,
+        "composite": 0.9875,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 5,
+        "obj": 1.0,
+        "gpa": 0.975,
+        "composite": 0.9875,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 6,
+        "obj": 1.0,
+        "gpa": 0.97375,
+        "composite": 0.986875,
+        "strategy": "mutation",
+        "front_size": 1
+      }
+    ],
+    "baseline_train_obj": 0.6,
+    "best_train_obj": 1.0
+  },
+  "duration_s": 100.3
+}

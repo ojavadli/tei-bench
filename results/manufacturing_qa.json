@@ -1,0 +1,627 @@
+{
+  "task_id": "manufacturing_qa",
+  "industry": "Manufacturing",
+  "metric": "classification",
+  "n_train": 15,
+  "n_test": 18,
+  "source": "Authored for TEI-Bench (Sonnet-generated, Sonnet-validated; kept only label-agreed examples).",
+  "agent_model": "claude-haiku-4-5",
+  "judge_model": "claude-sonnet-4-5",
+  "optimizer_model": "claude-sonnet-4-5",
+  "seed": 0,
+  "eval_repeats": 1,
+  "baseline_prompt": "You are a quality-assurance defect classifier. Classify the inspection note into a defect category. Classify into one of these categories: surface, dimensional, assembly, electrical, material, labeling.",
+  "optimized_prompt": "You are a quality-assurance defect classifier. Classify the inspection note into exactly one of these categories: surface, dimensional, assembly, electrical, material, labeling.\n\n**Category Definitions:**\n\n- **surface**: Defects affecting the finish, coating, appearance, or outer layer integrity. Includes scratches, abrasions, gouges, dents, discoloration, uneven finishes, buffing marks, paint damage, corrosion, or cosmetic flaws. Even if substrate is exposed or damage is measured, if the defect is about surface condition or appearance, classify as surface.\n\n- **dimensional**: Defects where physical measurements (length, width, height, diameter, thickness, tolerance, clearance, flatness, alignment) fall outside specifications. The part exists but its size, shape, position, or measured physical dimensions do not meet requirements. Includes wall thickness deviations, out-of-tolerance measurements, and dimensional variance issues.\n\n- **assembly**: Missing components, incorrect component installation, wrong parts used, loose fasteners, improper mating of parts, or incorrect assembly sequence. The defect is about what's present/absent or how parts are put together.\n\n- **electrical**: Electrical function failures, wiring issues, circuit problems, connectivity defects, power issues, electronic component malfunctions, voltage irregularities, current flow problems, or any defect where electrical performance or electronic functionality does not meet specifications. Includes non-functioning indicators, power delivery failures, and electrical component defects.\n\n- **material**: Wrong material used, material composition errors, material degradation, or material property failures (brittleness, hardness, etc.). The issue is fundamentally about what the part is made of, not its dimensions or surface condition.\n\n- **labeling**: Missing, incorrect, illegible, or misplaced labels, markings, serial numbers, documentation, or language-specific content. Includes wrong-language labels, incorrect market-specific information, or any defect where the identification, instruction, or informational marking on the product is wrong.\n\n**Output Format:**\nState only the category name in lowercase: surface, dimensional, assembly, electrical, material, or labeling.",
+  "baseline_test": {
+    "objective_runs": [
+      0.6666666666666666
+    ],
+    "gpa_runs": [
+      0.9644444444444442
+    ],
+    "objective_mean": 0.6666666666666666,
+    "gpa_mean": 0.9644444444444442,
+    "gpa_dims": {
+      "target_alignment": 0.9499999999999997,
+      "reasoning_soundness": 0.9422222222222221,
+      "execution_accuracy": 0.9822222222222222,
+      "output_integrity": 0.9833333333333331
+    },
+    "examples": [
+      {
+        "query": "Intermittent connection observed at terminal block TB2. Contact resistance fluctuates between 2 and 15 ohms during vibration test, indicating loose crimp or inadequate wire insertion.",
+        "gold": "electrical",
+        "output": "**Classification: Electrical**\n\n**Reasoning:**\nThis defect involves an intermittent electrical connection at a terminal block with fluctuating contact resistance during testing. This is a functional electrical issue related to:\n- Loose crimp connection\n- Inadequate wire insertion\n- Contact resistance problems\n\nWhile the root cause may involve assembly quality (crimp process), the defect itself is classified as **electrical** because it manifests as an electrical performance problem (intermittent connection and resistance variation) rather than a process or assembly procedure failure.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9675,
+          "rationale": "The agent correctly classified the defect as electrical, matching the reference answer, with sound reasoning about contact resistance and connection issues, proper format, and no fabrication."
+        }
+      },
+      {
+        "query": "The alloy composition analysis shows 6061-T6 aluminum was used instead of the specified 7075-T6, resulting in insufficient tensile strength for this aerospace component.",
+        "gold": "material",
+        "output": "**Classification: Material**\n\n**Reasoning:** This defect involves the use of an incorrect alloy composition (6061-T6 instead of 7075-T6). This is a material specification issue where the wrong material was supplied or used in manufacturing, rather than a defect in the surface finish, dimensions, assembly, electrical properties, or labeling of the component.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 0.95,
+          "output_integrity": 0.95,
+          "aggregate": 0.95,
+          "rationale": "The agent correctly classified the defect as 'material' with sound reasoning about alloy composition mismatch, matching the reference answer perfectly and addressing the task directly."
+        }
+      },
+      {
+        "query": "Barcode on the packaging is smudged and cannot be scanned by the reader. The digits underneath are partially illegible, making it impossible to verify the product code.",
+        "gold": "labeling",
+        "output": "**Classification: Labeling**\n\n**Reasoning:** This defect involves the barcode and product code on the packaging being illegible and unreadable. This falls under labeling defects, which encompass issues with printed information, barcodes, codes, and markings on product packaging that prevent proper identification or scanning.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the defect as 'Labeling' matching the reference answer, provided sound reasoning about barcode illegibility being a labeling issue, and followed the task format appropri"
+        }
+      },
+      {
+        "query": "Significant discoloration and hazing noted on the transparent cover panel. The affected area spans approximately 40% of the total viewable region and appears milky rather than crystal clear.",
+        "gold": "surface",
+        "output": "**Classification: SURFACE**\n\n**Reasoning:**\n- The defect involves discoloration and hazing on the transparent cover panel\n- This is a visual/appearance issue affecting the surface quality\n- The problem is characterized by optical properties (milky appearance, loss of clarity) rather than structural integrity, dimensions, or functionality\n- Surface defects include cosmetic issues like discoloration, hazing, scratches, and finish problems",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9675,
+          "rationale": "The agent correctly classified the defect as 'surface' matching the reference answer, provided sound reasoning about optical/cosmetic issues, followed proper classification format, and delivered an ac"
+        }
+      },
+      {
+        "query": "Flange width measures 38.2mm but blueprint dimensions require 40.0mm +0.1/-0.0, part is undersize and out of spec.",
+        "gold": "dimensional",
+        "output": "**Classification: Dimensional**\n\nThe defect involves a measurement that falls outside the specified blueprint tolerances. The flange width of 38.2mm is undersize compared to the required 40.0mm +0.1/-0.0 specification range (40.0-40.1mm).",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 0.95,
+          "output_integrity": 0.95,
+          "aggregate": 0.95,
+          "rationale": "The agent correctly classified the defect as 'dimensional' matching the reference answer, provided sound reasoning about tolerance violations, and executed the classification task accurately with appr"
+        }
+      },
+      {
+        "query": "Inspection revealed that the protective foam insert was never installed between the display panel and outer casing. This leaves the screen vulnerable to pressure damage during shipping.",
+        "gold": "assembly",
+        "output": "**Classification: Assembly**\n\n**Reasoning:** This defect involves a missing component (protective foam insert) that should have been installed as part of the assembly process. The issue is not with the quality of the foam itself, the dimensions of parts, labeling, electrical function, or material composition—it's that a required assembly step was not completed. This is a classic assembly defect where a component failed to be properly integrated into the final product.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the defect as 'assembly' matching the reference, provided sound reasoning about the missing component installation step, followed proper classification format, and deliv"
+        }
+      },
+      {
+        "query": "Unit draws 3.2A at startup, exceeding the 2.5A maximum specified in design requirements. Observed voltage drop of 1.8V across main supply rail under load conditions.",
+        "gold": "electrical",
+        "output": "**Classification: ELECTRICAL**\n\n**Reasoning:**\n- The defect involves electrical performance parameters (current draw and voltage drop)\n- Exceeds specified electrical design requirements (2.5A maximum vs. 3.2A observed)\n- Relates to power supply behavior and electrical characteristics under operating conditions\n- Not a surface, dimensional, assembly, material, or labeling issue\n\nThis is an electrical defect that requires investigation into the power supply design, component selection, or circuit behavior.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the defect as 'electrical' matching the reference, provided sound reasoning based on current/voltage parameters, and executed the classification task accurately without "
+        }
+      },
+      {
+        "query": "Casting porosity exceeds acceptance criteria with multiple voids detected via X-ray inspection. Iron content in aluminum casting suggests contaminated feedstock.",
+        "gold": "material",
+        "output": "**Defect Classification: MATERIAL**\n\n**Justification:**\nThis defect stems from material quality issues rather than manufacturing process failures:\n\n1. **Contaminated Feedstock** - Iron content in aluminum casting indicates the raw material itself is compromised, which is a material sourcing/quality problem\n2. **Casting Porosity** - While porosity can sometimes result from casting process parameters, the combination with feedstock contamination points to material composition as the root cause\n3. **X-ray Detection** - The internal voids detected are characteristic of material defects (gas porosity, shrinkage) originating from material quality rather than surface finish, dimensional variance, assembly issues, electrical problems, or labeling errors\n\n**Primary Issue:** Contaminated feedstock (iron in aluminum) is a material control problem requiring supplier quality review and material specification compliance.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the defect as 'material' matching the reference, provided sound reasoning linking contaminated feedstock and porosity to material quality issues, followed proper classif"
+        }
+      },
+      {
+        "query": "Expiration date printed on the bottom of the container shows 02/2023 but manufacturing records indicate this batch was produced in March 2024. Clear date discrepancy that violates food safety regulations.",
+        "gold": "labeling",
+        "output": "**Classification: Labeling**\n\n**Reasoning:**\nThis defect involves incorrect information printed on the product label (expiration date). The issue is with the accuracy and correctness of the labeling itself, not with the physical product quality, dimensions, assembly, electrical components, or material composition. The discrepancy between the printed date and actual manufacturing records is a labeling error that violates regulatory requirements.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 0.95,
+          "output_integrity": 0.95,
+          "aggregate": 0.95,
+          "rationale": "The agent correctly classified the defect as 'labeling', provided sound reasoning about why it's a labeling issue (incorrect printed information vs. manufacturing records), and the output matches the "
+        }
+      },
+      {
+        "query": "The powder coating on the left side bracket exhibits orange peel texture with uneven gloss distribution. Several areas show rough patches that do not meet the smoothness specification outlined in QC-405.",
+        "gold": "surface",
+        "output": "**Defect Classification: SURFACE**\n\n**Justification:**\n- Orange peel texture is a surface finish defect\n- Uneven gloss distribution is a surface appearance issue\n- Rough patches indicate surface quality problems\n- These defects do not affect dimensional accuracy, assembly fit, electrical function, material composition, or labeling\n- The issue is purely related to the coating surface quality and finish specification (QC-405)",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 0.95,
+          "output_integrity": 0.95,
+          "aggregate": 0.95,
+          "rationale": "The agent correctly classified the defect as 'SURFACE' matching the reference answer, provided sound reasoning linking orange peel texture and uneven gloss to surface defects, followed proper classifi"
+        }
+      },
+      {
+        "query": "Measured shaft diameter at 12.47mm, spec calls for 12.50mm ±0.02mm. Outside tolerance range.",
+        "gold": "dimensional",
+        "output": "**Classification: Dimensional**\n\n**Reasoning:**\nThe defect involves a measurement that falls outside the specified tolerance range. The shaft diameter of 12.47mm is below the lower tolerance limit of 12.48mm (12.50mm - 0.02mm), making this a dimensional/size defect rather than a surface, assembly, electrical, material, or labeling issue.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 0.95,
+          "output_integrity": 0.95,
+          "aggregate": 0.95,
+          "rationale": "The agent correctly classified the defect as 'dimensional' matching the reference answer, provided sound reasoning about tolerance violation, and executed the task properly with clear explanation."
+        }
+      },
+      {
+        "query": "Found that the heat sink was mounted without thermal paste between it and the processor. This critical interface compound is completely absent, which will result in inadequate heat dissipation.",
+        "gold": "assembly",
+        "output": "**Classification: Assembly**\n\n**Reasoning:** This defect involves the improper assembly/installation of the heat sink component. The issue is not with the physical properties of the materials themselves, but rather with how the assembly was performed—specifically, the missing thermal paste application during the mounting process. This is an assembly procedure defect that affects the functional integrity of the thermal interface.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 0.95,
+          "output_integrity": 0.95,
+          "aggregate": 0.95,
+          "rationale": "The agent correctly classified the defect as 'assembly' matching the reference answer, provided sound reasoning about improper installation procedure, followed the classification task format, and deli"
+        }
+      },
+      {
+        "query": "Short circuit detected between ground plane and signal line during in-circuit testing. Multimeter reading shows 0.3 ohms resistance where isolation should be greater than 10 megohms.",
+        "gold": "electrical",
+        "output": "**Classification: ELECTRICAL**\n\n**Justification:**\nThis defect involves a functional electrical failure detected during in-circuit testing. The short circuit between the ground plane and signal line is an electrical connectivity/isolation issue, not a physical or manufacturing defect of materials or components themselves. The multimeter readings confirm an electrical malfunction rather than a surface, dimensional, assembly, material, or labeling problem.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the defect as 'electrical' matching the reference, provided sound reasoning about short circuits and isolation failures, followed proper classification format, and deliv"
+        }
+      },
+      {
+        "query": "Chemical resistance test failure - gasket dissolved in hydraulic fluid within 48 hours. Cross-reference confirms nitrile rubber instead of Viton as per drawing.",
+        "gold": "material",
+        "output": "**Classification: MATERIAL**\n\n**Rationale:**\nThis defect involves the wrong material specification being used for the gasket component. The gasket is made from nitrile rubber instead of the specified Viton (fluoroelastomer), which has superior chemical resistance to hydraulic fluids. This is a material composition/specification issue rather than a defect in how the material was processed or assembled.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the defect as 'material' matching the reference answer, provided sound reasoning about wrong material specification (nitrile vs Viton), and delivered a well-formed respo"
+        }
+      },
+      {
+        "query": "The nutritional information panel has the allergen statement cut off at the edge where the sticker was misaligned during application. Contains wheat is not visible to consumers.",
+        "gold": "labeling",
+        "output": "**Classification: Labeling**\n\nThis defect involves incomplete or obscured labeling information due to misalignment during sticker application. The critical allergen statement is not visible to consumers, which is a labeling compliance and safety issue.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the defect as 'labeling' matching the reference answer, provided sound reasoning about allergen visibility and compliance, and delivered a properly formatted response ad"
+        }
+      },
+      {
+        "query": "Observed a 2.3-inch linear mark running diagonally across the top panel. The mark appears to have penetrated the clear coat and exposed the underlying primer layer. Reject recommended pending rework.",
+        "gold": "surface",
+        "output": "**Defect Classification: SURFACE**\n\n**Justification:**\nThe observed linear mark that has penetrated the clear coat and exposed the primer layer is a surface defect. This involves damage to the protective coating and finish of the top panel, which falls under surface quality issues rather than dimensional, assembly, electrical, material, or labeling categories.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.98,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the defect as 'surface' matching the reference answer, provided sound reasoning about coating damage, and followed proper classification format with appropriate justific"
+        }
+      },
+      {
+        "query": "Bore runout exceeds 0.05mm TIR specification, actual measurement shows 0.12mm total indicator reading.",
+        "gold": "dimensional",
+        "output": "**Classification: DIMENSIONAL**\n\n**Rationale:**\nThis defect involves a measurement that exceeds the specified tolerance for bore runout (total indicator reading/TIR). The issue is a dimensional/geometric tolerance deviation where the actual measurement (0.12mm TIR) exceeds the allowable specification (0.05mm TIR). This is a dimensional accuracy problem, not related to surface finish, assembly, electrical, material, or labeling concerns.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the defect as dimensional, provided sound reasoning about tolerance deviation, and matched the reference answer exactly with appropriate supporting explanation."
+        }
+      },
+      {
+        "query": "The product shipped with the wrong model battery compartment cover attached. The current cover does not fit properly and leaves a 3mm gap, failing to secure the batteries in place.",
+        "gold": "assembly",
+        "output": "**Classification: Assembly**\n\n**Reasoning:** This defect involves an incorrect component being assembled to the product (wrong model battery compartment cover). While there is a dimensional consequence (3mm gap), the root cause is an assembly error—the wrong part was installed during manufacturing or assembly. Assembly defects are classified as such when they involve incorrect component selection, installation, or mating of parts.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the defect as 'assembly' matching the reference answer, provided sound reasoning identifying the root cause as incorrect component installation, and delivered the respon"
+        }
+      }
+    ]
+  },
+  "final_test": {
+    "objective_runs": [
+      1.0
+    ],
+    "gpa_runs": [
+      0.9729166666666664
+    ],
+    "objective_mean": 1.0,
+    "gpa_mean": 0.9729166666666664,
+    "gpa_dims": {
+      "target_alignment": 0.9499999999999997,
+      "reasoning_soundness": 0.9416666666666662,
+      "execution_accuracy": 1.0,
+      "output_integrity": 1.0
+    },
+    "examples": [
+      {
+        "query": "Intermittent connection observed at terminal block TB2. Contact resistance fluctuates between 2 and 15 ohms during vibration test, indicating loose crimp or inadequate wire insertion.",
+        "gold": "electrical",
+        "output": "electrical",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the inspection note describing contact resistance fluctuations and connection issues as an 'electrical' defect, matching the reference answer exactly with proper format "
+        }
+      },
+      {
+        "query": "The alloy composition analysis shows 6061-T6 aluminum was used instead of the specified 7075-T6, resulting in insufficient tensile strength for this aerospace component.",
+        "gold": "material",
+        "output": "material",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the defect as 'material' matching the reference answer exactly, addressing a clear material specification violation with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "Barcode on the packaging is smudged and cannot be scanned by the reader. The digits underneath are partially illegible, making it impossible to verify the product code.",
+        "gold": "labeling",
+        "output": "labeling",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the barcode/packaging defect as 'labeling', matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "Significant discoloration and hazing noted on the transparent cover panel. The affected area spans approximately 40% of the total viewable region and appears milky rather than crystal clear.",
+        "gold": "surface",
+        "output": "surface",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the discoloration and hazing defect as 'surface', matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "Flange width measures 38.2mm but blueprint dimensions require 40.0mm +0.1/-0.0, part is undersize and out of spec.",
+        "gold": "dimensional",
+        "output": "dimensional",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the inspection note as 'dimensional', matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "Inspection revealed that the protective foam insert was never installed between the display panel and outer casing. This leaves the screen vulnerable to pressure damage during shipping.",
+        "gold": "assembly",
+        "output": "assembly",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the missing foam insert as an assembly defect, matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "Unit draws 3.2A at startup, exceeding the 2.5A maximum specified in design requirements. Observed voltage drop of 1.8V across main supply rail under load conditions.",
+        "gold": "electrical",
+        "output": "electrical",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the inspection note describing current draw and voltage issues as 'electrical', matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "Casting porosity exceeds acceptance criteria with multiple voids detected via X-ray inspection. Iron content in aluminum casting suggests contaminated feedstock.",
+        "gold": "material",
+        "output": "material",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the inspection note as 'material' defect, matching the reference answer exactly, with proper identification of contaminated feedstock and material composition issues as "
+        }
+      },
+      {
+        "query": "Expiration date printed on the bottom of the container shows 02/2023 but manufacturing records indicate this batch was produced in March 2024. Clear date discrepancy that violates food safety regulations.",
+        "gold": "labeling",
+        "output": "labeling",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the expiration date discrepancy as a labeling defect, matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "The powder coating on the left side bracket exhibits orange peel texture with uneven gloss distribution. Several areas show rough patches that do not meet the smoothness specification outlined in QC-405.",
+        "gold": "surface",
+        "output": "surface",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the powder coating defect as 'surface', matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "Measured shaft diameter at 12.47mm, spec calls for 12.50mm ±0.02mm. Outside tolerance range.",
+        "gold": "dimensional",
+        "output": "dimensional",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the inspection note as 'dimensional', matching the reference answer exactly, with proper identification of a measurement tolerance issue."
+        }
+      },
+      {
+        "query": "Found that the heat sink was mounted without thermal paste between it and the processor. This critical interface compound is completely absent, which will result in inadequate heat dissipation.",
+        "gold": "assembly",
+        "output": "assembly",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the inspection note as an 'assembly' defect, matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "Short circuit detected between ground plane and signal line during in-circuit testing. Multimeter reading shows 0.3 ohms resistance where isolation should be greater than 10 megohms.",
+        "gold": "electrical",
+        "output": "electrical",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the short circuit defect as 'electrical', matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "Chemical resistance test failure - gasket dissolved in hydraulic fluid within 48 hours. Cross-reference confirms nitrile rubber instead of Viton as per drawing.",
+        "gold": "material",
+        "output": "material",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the defect as 'material' matching the reference exactly, addressing a clear material substitution issue (nitrile rubber instead of Viton) with proper format and no extra"
+        }
+      },
+      {
+        "query": "The nutritional information panel has the allergen statement cut off at the edge where the sticker was misaligned during application. Contains wheat is not visible to consumers.",
+        "gold": "labeling",
+        "output": "labeling",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the inspection note as a 'labeling' defect, matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "Observed a 2.3-inch linear mark running diagonally across the top panel. The mark appears to have penetrated the clear coat and exposed the underlying primer layer. Reject recommended pending rework.",
+        "gold": "surface",
+        "output": "surface",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the inspection note describing a surface mark/coating defect as 'surface' category, matching the reference answer exactly with proper format."
+        }
+      },
+      {
+        "query": "Bore runout exceeds 0.05mm TIR specification, actual measurement shows 0.12mm total indicator reading.",
+        "gold": "dimensional",
+        "output": "dimensional",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the bore runout measurement deviation as a dimensional defect, matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "The product shipped with the wrong model battery compartment cover attached. The current cover does not fit properly and leaves a 3mm gap, failing to secure the batteries in place.",
+        "gold": "assembly",
+        "output": "assembly",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the defect as 'assembly' matching the reference answer exactly, addressing a wrong-part installation issue which is clearly an assembly defect."
+        }
+      }
+    ]
+  },
+  "delta_objective": 0.33333333333333337,
+  "delta_gpa": 0.008472222222222214,
+  "optimization": {
+    "front": [
+      {
+        "obj": 1.0,
+        "gpa": 0.975,
+        "iter": 2,
+        "strategy": "mutation"
+      }
+    ],
+    "history": [
+      {
+        "iter": 0,
+        "obj": 0.4,
+        "gpa": 0.9682499999999999,
+        "composite": 0.684125,
+        "strategy": "baseline"
+      },
+      {
+        "iter": 1,
+        "obj": 1.0,
+        "gpa": 0.97375,
+        "composite": 0.986875,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 2,
+        "obj": 1.0,
+        "gpa": 0.975,
+        "composite": 0.9875,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 3,
+        "obj": 1.0,
+        "gpa": 0.97375,
+        "composite": 0.986875,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 4,
+        "obj": 1.0,
+        "gpa": 0.97375,
+        "composite": 0.986875,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 5,
+        "obj": 1.0,
+        "gpa": 0.9724999999999999,
+        "composite": 0.98625,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 6,
+        "obj": 1.0,
+        "gpa": 0.9725,
+        "composite": 0.9862500000000001,
+        "strategy": "mutation",
+        "front_size": 1
+      }
+    ],
+    "baseline_train_obj": 0.4,
+    "best_train_obj": 1.0
+  },
+  "duration_s": 100.6
+}

@@ -1,0 +1,701 @@
+{
+  "task_id": "trust_safety_hate",
+  "industry": "Trust & Safety",
+  "metric": "classification",
+  "n_train": 15,
+  "n_test": 20,
+  "source": "SetFit/hate_speech_offensive via HuggingFace (see dataset card for license).",
+  "agent_model": "claude-haiku-4-5",
+  "judge_model": "claude-sonnet-4-5",
+  "optimizer_model": "claude-sonnet-4-5",
+  "seed": 0,
+  "eval_repeats": 1,
+  "baseline_prompt": "You are a content-moderation assistant. Moderate the message for hateful/offensive content. Classify into one of these categories: hate speech, neither, offensive language.",
+  "optimized_prompt": "You are a content-moderation assistant. Moderate the message for hateful/offensive content. Classify into ONE of these categories: hate speech, offensive language, neither.\n\n**Definitions:**\n\n- **hate speech**: Content that attacks, demeans, or expresses hatred toward individuals or groups based on protected characteristics (race, ethnicity, religion, gender, sexual orientation, disability, etc.). This includes identity-based slurs, dehumanizing language, calls for violence or exclusion against protected groups, and stereotyping used to demean.\n\n- **offensive language**: Content containing profanity, vulgar language, crude sexual references, or general insults that are NOT targeted at protected characteristics. This includes casual use of slurs when not directed at the identity group (e.g., used as general insults between individuals), swear words, sexually explicit language, and non-identity-based derogatory terms like \"bitch\" or \"asshole.\"\n\n- **neither**: Content that contains none of the above. Casual conversation, informal language, slang, pet names, and non-offensive discussions are classified as neither.\n\n**Critical distinction**: A slur word alone does NOT automatically mean hate speech. Determine whether it's being used:\n1. As an identity-based attack on a protected group → hate speech\n2. As casual profanity or general insult between individuals → offensive language\n\n**Output format**: State only the classification category name: \"hate speech\" OR \"offensive language\" OR \"neither\"",
+  "baseline_test": {
+    "objective_runs": [
+      0.35
+    ],
+    "gpa_runs": [
+      0.7736249999999998
+    ],
+    "objective_mean": 0.35,
+    "gpa_mean": 0.7736249999999998,
+    "gpa_dims": {
+      "target_alignment": 0.8299999999999997,
+      "reasoning_soundness": 0.7995,
+      "execution_accuracy": 0.7399999999999999,
+      "output_integrity": 0.7249999999999999
+    },
+    "examples": [
+      {
+        "query": "Theres one dude i can not stand at my school because he stays on the freshman girls and girls from other schools cause none fw him. #bitch",
+        "gold": "offensive language",
+        "output": "**Classification: Offensive language**\n\n**Reasoning:**\n- The message expresses a personal complaint about someone's behavior (pursuing younger girls)\n- Uses the slur \"#bitch\" as a derogatory term\n- Does not target a protected group or promote hatred based on identity characteristics\n- The offensive element is primarily the use of crude language rather than hate speech\n\nThe concern about predatory behavior toward minors is legitimate, but the language used to express it crosses into offensive territory.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the message as 'offensive language' matching the reference answer, provided sound reasoning distinguishing offensive language from hate speech, and properly identified t"
+        }
+      },
+      {
+        "query": "Got my vans on.. My pockets chunky",
+        "gold": "neither",
+        "output": "**Classification: Neither**\n\nThis message appears to be casual, colloquial speech—likely referencing wearing Vans shoes and having money in one's pockets. There is no hateful, offensive, or derogatory content present.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 0.95,
+          "output_integrity": 0.95,
+          "aggregate": 0.9375,
+          "rationale": "The agent correctly classified the message as 'neither' hateful nor offensive, provided sound reasoning about the casual nature of the content, and matched the reference answer with proper formatting."
+        }
+      },
+      {
+        "query": "@MakeAnothaHov T.o. was a faggot crybaby",
+        "gold": "hate speech",
+        "output": "**Classification: Hate speech**\n\nThis message contains:\n1. A slur targeting LGBTQ+ individuals\n2. Derogatory language used as an insult\n3. Personal attacks combining the slur with insulting characterizations\n\nThis meets the threshold for hate speech due to the use of a derogatory term based on sexual orientation/identity.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 0.95,
+          "output_integrity": 0.95,
+          "aggregate": 0.95,
+          "rationale": "The agent correctly identified the message as hate speech, provided sound reasoning about the slur and derogatory language, and matched the reference answer with appropriate supporting detail."
+        }
+      },
+      {
+        "query": "Bitch, you may have a million dollar body, but you got a dollar menu face and a four-piece nugget pussy, so you ain't worth shit.",
+        "gold": "offensive language",
+        "output": "**Classification: Offensive language**\n\nThis message contains crude sexual insults and derogatory language directed at someone, but does not promote hatred based on protected characteristics (race, religion, ethnicity, gender identity, sexual orientation, etc.). It's abusive and disrespectful personal attack language rather than hate speech.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 0.95,
+          "aggregate": 0.95,
+          "rationale": "The agent correctly classified the content as 'offensive language' matching the reference answer, provided sound reasoning distinguishing personal attacks from hate speech, and executed the moderation"
+        }
+      },
+      {
+        "query": "RT @AlexPappas: Rick Scott Refuses To Appear On Debate Stage Because Charlie Crist Has An Illegal Electronic Fan http://t.co/qTPeHb2seX via&#8230;",
+        "gold": "neither",
+        "output": "# Moderation Classification\n\n**Category: Neither**\n\n**Reasoning:**\nThis appears to be a satirical or humorous political tweet making a joke about a debate dispute. The claim about an \"illegal electronic fan\" is absurd and clearly not meant to be taken literally—it's political satire/commentary.\n\nThe content:\n- Does not contain hate speech targeting protected groups\n- Does not contain genuinely offensive language\n- Is political commentary/satire, which is protected speech\n\nThis is appropriate social media discourse, even if humorous or critical of a political figure.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the content as 'neither' hateful nor offensive, provided sound reasoning about political satire, and delivered the answer in proper format matching the reference exactly"
+        }
+      },
+      {
+        "query": "@__Black_Jesus yea I forgot I was talkin to a degenerate faggot",
+        "gold": "hate speech",
+        "output": "**Classification: Offensive language**\n\nThis message contains a slur and a derogatory insult. While it's directed at an individual rather than a group, it uses a well-known slur and dehumanizing language (\"degenerate\"). This falls under offensive language rather than hate speech, as it appears to be personal insult rather than advocacy against a group.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.75,
+          "reasoning_soundness": 0.6,
+          "execution_accuracy": 0.4,
+          "output_integrity": 0.35,
+          "aggregate": 0.525,
+          "rationale": "The agent correctly identified problematic content but misclassified it as 'offensive language' instead of 'hate speech' despite the message containing a homophobic slur targeting a protected group, w"
+        }
+      },
+      {
+        "query": "Living with my bitches #live @lauren_borrelli @Kathinator6 @jenna_saispas http://t.co/c3vy1xuOHa",
+        "gold": "offensive language",
+        "output": "**Classification: Neither**\n\n**Reasoning:** \nThe word \"bitches\" in this context is being used as slang to refer to female friends in a casual, colloquial manner. The post is about living with roommates/friends and includes friendly tags and a photo link. There is no hateful intent, dehumanization, or targeting of a protected group. This is common informal language used among peers and does not constitute hate speech or offensive language in this context.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.25,
+          "reasoning_soundness": 0.4,
+          "execution_accuracy": 0.2,
+          "output_integrity": 0.15,
+          "aggregate": 0.25,
+          "rationale": "The agent misclassified the content as 'Neither' when the reference answer correctly identifies it as 'offensive language,' and while the reasoning about colloquial usage has some merit, it fails to r"
+        }
+      },
+      {
+        "query": "Shut up birds it's bed time.",
+        "gold": "neither",
+        "output": "**Classification: Neither**\n\nThis message is not hateful, offensive, or using offensive language. It's a lighthearted, playful statement directed at birds (likely referring to actual birds making noise, or used colloquially). The tone is humorous rather than hostile or derogatory.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the message as 'neither' (matching the reference), provided sound reasoning about the playful/non-hostile nature of the statement, and executed the moderation task prope"
+        }
+      },
+      {
+        "query": "It's unbelievable to me that there are Americans who refused to kill the okies. That means all Americans weak willed trash.",
+        "gold": "hate speech",
+        "output": "**Classification: Offensive language**\n\nThis message contains dehumanizing language and sweeping insults (\"weak willed trash\") directed at a group of people based on a historical disagreement. However, it doesn't appear to target a protected characteristic or advocate violence against a specific group based on identity.\n\nThe statement is inflammatory and disrespectful, but falls into offensive language rather than hate speech in the strict sense.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.45,
+          "reasoning_soundness": 0.3,
+          "execution_accuracy": 0.2,
+          "output_integrity": 0.15,
+          "aggregate": 0.27499999999999997,
+          "rationale": "The agent misclassified hate speech as merely offensive language, failing to recognize the dehumanizing slur 'okies' (a derogatory term for a group) and the call to violence ('refused to kill'), which"
+        }
+      },
+      {
+        "query": "Wanna find out the truth about somebody? Just tell em \"NO\" and watch the real bitch nigga or hoe come out em!",
+        "gold": "offensive language",
+        "output": "**Classification: Offensive language**\n\n**Reasoning:**\nThis message contains offensive slurs and derogatory terms (\"nigga,\" \"bitch,\" \"hoe\") used in a casual, conversational context. While the language is crude and disrespectful, the statement appears to be offering general social commentary rather than targeting a specific individual or group for harm based on protected characteristics. It doesn't promote violence or discrimination against a particular community.\n\nThe offensive language warrants flagging, but it doesn't rise to the level of hate speech, which would involve dehumanization, calls for violence, or systematic denigration of a group.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the content as 'offensive language' matching the reference answer, provided sound reasoning distinguishing offensive language from hate speech, followed proper moderatio"
+        }
+      },
+      {
+        "query": "#rejectedpeanutsspecials Its The Grape Crackhead, Charlie Brown!",
+        "gold": "neither",
+        "output": "**Classification: Neither**\n\nThis appears to be a humorous, absurdist joke riffing on the Peanuts characters and cartoon specials. While it uses the word \"crackhead\" as slang/insult, it's directed at a fictional character in a comedic context, not targeting any real person or protected group. The humor relies on the incongruity of applying modern slang to a classic children's cartoon.\n\nThis does not constitute hate speech or offensive language in a harmful sense.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 0.95,
+          "aggregate": 0.95,
+          "rationale": "The agent correctly classified the content as 'neither' (matching the reference), provided sound reasoning about context and fictional targets, followed the required format, and delivered an accurate,"
+        }
+      },
+      {
+        "query": "@_GOLDwhippp faggots, old people, people who can't drive, drunk people",
+        "gold": "hate speech",
+        "output": "**Classification: Hate Speech**\n\nThis message contains slurs and dehumanizing language targeting multiple groups:\n- Uses a homophobic slur\n- Disparages elderly people, people with disabilities (implied), and people struggling with addiction\n- The list format suggests grouping these populations as problems/annoyances\n\nThis crosses the threshold into hate speech due to the slur and the pattern of dehumanizing language toward vulnerable groups.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 0.95,
+          "output_integrity": 0.95,
+          "aggregate": 0.9375,
+          "rationale": "The agent correctly classified the message as hate speech, provided sound reasoning identifying the slur and dehumanizing language, matched the reference answer, and executed the moderation task appro"
+        }
+      },
+      {
+        "query": "&#8220;@_xCianna: I don't like Popeye's spicy chicken &#128545;&#8221; them bitches be on 10 boa you trippen",
+        "gold": "offensive language",
+        "output": "**Classification: Offensive language**\n\n**Reasoning:**\n- The use of \"bitches\" is vulgar/offensive language\n- However, this does not constitute hate speech (not targeting a protected group with dehumanizing language or calls for harm)\n- The overall message is casual slang criticism of a food product, not expressing hatred toward any group of people\n- The vulgarity is the primary concern for content moderation",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the content as offensive language matching the reference answer, provided sound reasoning distinguishing offensive language from hate speech, and executed the moderation"
+        }
+      },
+      {
+        "query": "No cuz redskins are dumpster juice RT @trackinBlackKev: game of the week. still the best rivalry in sports",
+        "gold": "neither",
+        "output": "**Classification: Offensive language**\n\n**Reasoning:** The message uses \"dumpster juice\" as a derogatory insult directed at the Redskins (a sports team). While this is crude and disrespectful language, it's sports trash talk rather than hate speech targeting a protected group. It doesn't promote hatred based on race, ethnicity, religion, or other protected characteristics—it's simply insulting commentary about a sports team's performance.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.25,
+          "reasoning_soundness": 0.6,
+          "execution_accuracy": 0.2,
+          "output_integrity": 0.15,
+          "aggregate": 0.3,
+          "rationale": "The agent classified the content as 'Offensive language' when the reference answer is 'neither', indicating no moderation action needed; the agent misidentified sports trash talk as requiring moderati"
+        }
+      },
+      {
+        "query": "@alexissert leave dyke",
+        "gold": "hate speech",
+        "output": "**Classification: Offensive language**\n\n**Explanation:** This message contains a slur (\"dyke\") used as a derogatory term targeting LGBTQ+ individuals. While it appears to be a brief command or insult rather than extended hate speech advocacy, it uses offensive language that demeans a protected group.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.85,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 0.7,
+          "output_integrity": 0.75,
+          "aggregate": 0.8,
+          "rationale": "The agent correctly identified offensive/hateful content and provided sound reasoning, but classified it as 'offensive language' rather than the reference label 'hate speech', which represents a meani"
+        }
+      },
+      {
+        "query": "&#128588;&#128588;&#128588; RT @MidCityAce: Y'all excited about that strip mall being built in Louisiana and Claiborne?? That bitch gone be in fiya!!!! &#128514;&#128514;",
+        "gold": "offensive language",
+        "output": "**Classification: Neither**\n\n**Reasoning:**\n- The use of \"bitch\" here is colloquial slang expressing enthusiasm about a development project (\"that bitch gone be in fiya\" = \"that's going to be great/amazing\")\n- The context is clearly positive and celebratory about local community development\n- There is no hateful content, slurs targeting protected groups, or dehumanizing language\n- The tone is casual/informal but not directed at harming any person or group",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.7,
+          "execution_accuracy": 0.0,
+          "output_integrity": 0.0,
+          "aggregate": 0.4125,
+          "rationale": "The agent correctly analyzed the context and reasoning but failed the core task by classifying as 'Neither' when the reference answer is 'offensive language' — the profanity 'bitch' makes this offensi"
+        }
+      },
+      {
+        "query": "@goldietaylor @theGrio puppets like Don will intentionally and forever cripple our people's ability to unify a Eco and political consensus",
+        "gold": "neither",
+        "output": "# Moderation Assessment\n\n**Category: Neither**\n\n**Reasoning:**\n\nThis message contains political criticism and disagreement, but does not meet the threshold for hate speech or offensive language:\n\n- **Not hate speech**: It doesn't target a protected group based on identity characteristics (race, religion, ethnicity, etc.). It's directed at an individual political figure.\n- **Not offensive language**: While \"puppets\" is derogatory, it's a common political metaphor used across the political spectrum to criticize perceived lack of autonomy.\n- **Political speech**: The message expresses a political viewpoint about consensus-building and policy direction.\n\nThe content is critical and uses charged language, but remains within the bounds of acceptable political discourse.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.95,
+          "output_integrity": 0.95,
+          "aggregate": 0.9425000000000001,
+          "rationale": "The agent correctly classified the message as 'neither' hateful nor offensive, provided sound reasoning distinguishing political criticism from hate speech, followed proper moderation assessment forma"
+        }
+      },
+      {
+        "query": "@Campos_uli is a fag #hesgay",
+        "gold": "hate speech",
+        "output": "**Classification: Offensive language**\n\nThis message uses a slur (\"fag\") to demean someone based on sexual orientation. While it contains a derogatory term, the overall intent appears to be outing or mocking someone's sexual orientation rather than inciting violence or dehumanization of a group.\n\nThis falls under offensive language rather than hate speech, though it's still inappropriate and harmful.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.75,
+          "reasoning_soundness": 0.7,
+          "execution_accuracy": 0.4,
+          "output_integrity": 0.35,
+          "aggregate": 0.55,
+          "rationale": "The agent correctly identified offensive content and provided reasonable analysis, but misclassified the output as 'offensive language' when the reference answer specifies 'hate speech' — a slur targe"
+        }
+      },
+      {
+        "query": ".@SarahPalinUSA Wow, \"impeachment.\" Look at you using your Vocab Workshop words. Guess we were only half wrong about you being a dumb cunt.",
+        "gold": "offensive language",
+        "output": "**Classification: Offensive language**\n\nThis message contains:\n- A derogatory slur (\"cunt\")\n- Insulting language attacking someone's intelligence\n- Condescending tone\n\nWhile it's clearly disrespectful and uses offensive language, it doesn't promote hatred toward a protected group or incite violence. It's a personal attack using crude language rather than hate speech targeting a category of people.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 0.95,
+          "output_integrity": 0.95,
+          "aggregate": 0.9375,
+          "rationale": "The agent correctly classified the content as 'offensive language' matching the reference answer, provided sound reasoning identifying the derogatory slur and insulting nature, and distinguished it ap"
+        }
+      },
+      {
+        "query": "lmao I s2g having roots with yellow/white hair makes it look so dirty I'm &#128567; http://t.co/SqbYdUiZr8",
+        "gold": "neither",
+        "output": "**Classification: Neither**\n\nThis message is discussing a personal aesthetic opinion about hair appearance (specifically about root regrowth with contrasting hair colors). While the person expresses dissatisfaction with how it looks, they are not targeting, demeaning, or attacking any group of people based on protected characteristics. This is casual commentary about a cosmetic/styling concern, not hate speech or offensive language.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.95,
+          "output_integrity": 0.95,
+          "aggregate": 0.9425000000000001,
+          "rationale": "The agent correctly classified the message as 'neither' hateful nor offensive, provided sound reasoning about it being a personal aesthetic opinion without targeting protected groups, and matched the "
+        }
+      }
+    ]
+  },
+  "final_test": {
+    "objective_runs": [
+      0.8
+    ],
+    "gpa_runs": [
+      0.9106249999999998
+    ],
+    "objective_mean": 0.8,
+    "gpa_mean": 0.9106249999999998,
+    "gpa_dims": {
+      "target_alignment": 0.9499999999999996,
+      "reasoning_soundness": 0.8699999999999999,
+      "execution_accuracy": 0.9375,
+      "output_integrity": 0.885
+    },
+    "examples": [
+      {
+        "query": "Theres one dude i can not stand at my school because he stays on the freshman girls and girls from other schools cause none fw him. #bitch",
+        "gold": "offensive language",
+        "output": "offensive language",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly identified the message as containing offensive language (specifically the hashtag '#bitch'), matching the reference answer exactly with proper format and accurate content moderatio"
+        }
+      },
+      {
+        "query": "Got my vans on.. My pockets chunky",
+        "gold": "neither",
+        "output": "neither",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly identified the message as containing neither hateful nor offensive content, matching the reference answer exactly with proper format and valid reasoning about benign lyrical conten"
+        }
+      },
+      {
+        "query": "@MakeAnothaHov T.o. was a faggot crybaby",
+        "gold": "hate speech",
+        "output": "hate speech\n\nThe message uses a slur (\"faggot\") that is specifically targeted at sexual orientation as a demeaning attack on an individual. This is identity-based hate speech, not casual profanity.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified the message as hate speech, provided accurate reasoning about the slur's nature, and matched the reference answer perfectly."
+        }
+      },
+      {
+        "query": "Bitch, you may have a million dollar body, but you got a dollar menu face and a four-piece nugget pussy, so you ain't worth shit.",
+        "gold": "offensive language",
+        "output": "offensive language",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly identified the message as 'offensive language,' matching the reference answer exactly with proper task execution and accurate content moderation."
+        }
+      },
+      {
+        "query": "RT @AlexPappas: Rick Scott Refuses To Appear On Debate Stage Because Charlie Crist Has An Illegal Electronic Fan http://t.co/qTPeHb2seX via&#8230;",
+        "gold": "neither",
+        "output": "neither",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly identified the message as containing neither hateful nor offensive content, matching the reference answer exactly with proper format."
+        }
+      },
+      {
+        "query": "@__Black_Jesus yea I forgot I was talkin to a degenerate faggot",
+        "gold": "hate speech",
+        "output": "hate speech\n\n**Reasoning**: The message uses a slur (\"faggot\") that is a well-known identity-based slur targeting LGBTQ+ individuals, combined with a dehumanizing term (\"degenerate\"). This is directed at someone's sexual orientation/identity as a form of attack and demeanor, which constitutes hate speech.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified the content as hate speech, provided sound reasoning identifying the slur and dehumanizing language, matched the reference answer exactly, and executed the moderation ta"
+        }
+      },
+      {
+        "query": "Living with my bitches #live @lauren_borrelli @Kathinator6 @jenna_saispas http://t.co/c3vy1xuOHa",
+        "gold": "offensive language",
+        "output": "neither",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.3,
+          "execution_accuracy": 0.85,
+          "output_integrity": 0.0,
+          "aggregate": 0.525,
+          "rationale": "The agent correctly understood the moderation task and provided a valid label format, but failed to identify the offensive language present in the message, producing an answer directly contradicting t"
+        }
+      },
+      {
+        "query": "Shut up birds it's bed time.",
+        "gold": "neither",
+        "output": "neither",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly identified the message as 'neither' hateful nor offensive, matching the reference answer exactly with proper format and valid reasoning about the benign nature of the statement."
+        }
+      },
+      {
+        "query": "It's unbelievable to me that there are Americans who refused to kill the okies. That means all Americans weak willed trash.",
+        "gold": "hate speech",
+        "output": "hate speech\n\n**Reasoning**: This message uses dehumanizing language (\"weak willed trash\") to demean Americans based on a group characteristic (their nationality/perceived values). The statement generalizes negatively about an entire group of people and expresses contempt toward them based on their identity as Americans. This constitutes identity-based demeaning language targeting a protected group.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly identified the content as hate speech matching the reference answer, provided sound reasoning about dehumanizing language and group-based demeaning, executed the classification tas"
+        }
+      },
+      {
+        "query": "Wanna find out the truth about somebody? Just tell em \"NO\" and watch the real bitch nigga or hoe come out em!",
+        "gold": "offensive language",
+        "output": "offensive language",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly identified the message as containing offensive language, matching the reference answer exactly with proper format and accurate content moderation."
+        }
+      },
+      {
+        "query": "#rejectedpeanutsspecials Its The Grape Crackhead, Charlie Brown!",
+        "gold": "neither",
+        "output": "neither",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.85,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.95,
+          "rationale": "The agent correctly identified the message as 'neither' hateful nor offensive, matching the reference answer exactly with proper format and label from the allowed set."
+        }
+      },
+      {
+        "query": "@_GOLDwhippp faggots, old people, people who can't drive, drunk people",
+        "gold": "hate speech",
+        "output": "hate speech\n\n**Reasoning**: This message uses a slur (\"faggots\") targeting sexual orientation, which is a protected characteristic. Additionally, the list demeans multiple groups (LGBTQ+ individuals, elderly people, people with disabilities affecting driving ability, and people struggling with addiction). The structure and language are clearly identity-based attacks on protected groups, making this hate speech.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly identified the content as hate speech matching the reference answer, provided sound reasoning about the slur and targeted groups, and executed the moderation task accurately with p"
+        }
+      },
+      {
+        "query": "&#8220;@_xCianna: I don't like Popeye's spicy chicken &#128545;&#8221; them bitches be on 10 boa you trippen",
+        "gold": "offensive language",
+        "output": "offensive language",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly identified the message as containing offensive language (matching the reference answer exactly), properly addressing the moderation task with accurate execution and sound judgment."
+        }
+      },
+      {
+        "query": "No cuz redskins are dumpster juice RT @trackinBlackKev: game of the week. still the best rivalry in sports",
+        "gold": "neither",
+        "output": "offensive language",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.85,
+          "execution_accuracy": 0.0,
+          "output_integrity": 0.0,
+          "aggregate": 0.44999999999999996,
+          "rationale": "The agent correctly identified problematic content ('redskins' as a slur and 'dumpster juice' as derogatory), demonstrating sound reasoning, but the reference answer indicates this should be classifie"
+        }
+      },
+      {
+        "query": "@alexissert leave dyke",
+        "gold": "hate speech",
+        "output": "offensive language",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.85,
+          "execution_accuracy": 0.9,
+          "output_integrity": 0.7,
+          "aggregate": 0.8499999999999999,
+          "rationale": "The agent correctly identified problematic content and provided a reasonable classification (offensive language), though the reference answer specifies the more precise category of hate speech, which "
+        }
+      },
+      {
+        "query": "&#128588;&#128588;&#128588; RT @MidCityAce: Y'all excited about that strip mall being built in Louisiana and Claiborne?? That bitch gone be in fiya!!!! &#128514;&#128514;",
+        "gold": "offensive language",
+        "output": "offensive language",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly identified and labeled the message as 'offensive language' matching the reference answer exactly, with proper task execution and accurate content moderation."
+        }
+      },
+      {
+        "query": "@goldietaylor @theGrio puppets like Don will intentionally and forever cripple our people's ability to unify a Eco and political consensus",
+        "gold": "neither",
+        "output": "neither",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly identified the message as 'neither' hateful nor offensive, matching the reference answer exactly with proper format and valid reasoning about the content's political criticism natu"
+        }
+      },
+      {
+        "query": "@Campos_uli is a fag #hesgay",
+        "gold": "hate speech",
+        "output": "hate speech\n\nThis message uses a slur (\"fag\") as an identity-based attack targeting someone's sexual orientation, which is a protected characteristic. The addition of \"#hesgay\" confirms the slur is being weaponized specifically because of the person's sexual orientation, making this hate speech rather than merely offensive language.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified the content as hate speech, provided sound reasoning about the slur and identity-based attack, matched the reference answer exactly, and executed the moderation task pro"
+        }
+      },
+      {
+        "query": ".@SarahPalinUSA Wow, \"impeachment.\" Look at you using your Vocab Workshop words. Guess we were only half wrong about you being a dumb cunt.",
+        "gold": "offensive language",
+        "output": "offensive language",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly identified the message as containing offensive language, matching the reference answer exactly with proper task execution."
+        }
+      },
+      {
+        "query": "lmao I s2g having roots with yellow/white hair makes it look so dirty I'm &#128567; http://t.co/SqbYdUiZr8",
+        "gold": "neither",
+        "output": "neither",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly identified the message as neither hateful nor offensive (matching the reference answer 'neither'), properly executed the moderation task, and the output is accurate and complete."
+        }
+      }
+    ]
+  },
+  "delta_objective": 0.45000000000000007,
+  "delta_gpa": 0.137,
+  "optimization": {
+    "front": [
+      {
+        "obj": 0.7,
+        "gpa": 0.92875,
+        "iter": 2,
+        "strategy": "mutation"
+      },
+      {
+        "obj": 0.6,
+        "gpa": 0.94,
+        "iter": 3,
+        "strategy": "mutation"
+      },
+      {
+        "obj": 0.9,
+        "gpa": 0.9175,
+        "iter": 5,
+        "strategy": "mutation"
+      },
+      {
+        "obj": 0.7,
+        "gpa": 0.92875,
+        "iter": 6,
+        "strategy": "mutation"
+      }
+    ],
+    "history": [
+      {
+        "iter": 0,
+        "obj": 0.8,
+        "gpa": 0.8925000000000001,
+        "composite": 0.8462500000000001,
+        "strategy": "baseline"
+      },
+      {
+        "iter": 1,
+        "obj": 0.5,
+        "gpa": 0.93125,
+        "composite": 0.715625,
+        "strategy": "mutation",
+        "front_size": 2
+      },
+      {
+        "iter": 2,
+        "obj": 0.7,
+        "gpa": 0.92875,
+        "composite": 0.814375,
+        "strategy": "mutation",
+        "front_size": 3
+      },
+      {
+        "iter": 3,
+        "obj": 0.6,
+        "gpa": 0.94,
+        "composite": 0.77,
+        "strategy": "mutation",
+        "front_size": 3
+      },
+      {
+        "iter": 4,
+        "obj": 0.6,
+        "gpa": 0.925,
+        "composite": 0.7625,
+        "strategy": "merge",
+        "front_size": 3
+      },
+      {
+        "iter": 5,
+        "obj": 0.9,
+        "gpa": 0.9175,
+        "composite": 0.90875,
+        "strategy": "mutation",
+        "front_size": 3
+      },
+      {
+        "iter": 6,
+        "obj": 0.7,
+        "gpa": 0.92875,
+        "composite": 0.814375,
+        "strategy": "mutation",
+        "front_size": 4
+      }
+    ],
+    "baseline_train_obj": 0.8,
+    "best_train_obj": 0.9
+  },
+  "duration_s": 117.3
+}

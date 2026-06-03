@@ -1,0 +1,683 @@
+{
+  "task_id": "community_forum_topic",
+  "industry": "Online Community",
+  "metric": "classification",
+  "n_train": 15,
+  "n_test": 20,
+  "source": "SetFit/20_newsgroups via HuggingFace (see dataset card for license).",
+  "agent_model": "claude-haiku-4-5",
+  "judge_model": "claude-sonnet-4-5",
+  "optimizer_model": "claude-sonnet-4-5",
+  "seed": 0,
+  "eval_repeats": 1,
+  "baseline_prompt": "You are a forum routing assistant. Categorize the forum post into its newsgroup topic. Classify into one of these categories: alt.atheism, comp.graphics, comp.os.ms-windows.misc, comp.sys.ibm.pc.hardware, comp.sys.mac.hardware, comp.windows.x, misc.forsale, rec.autos, rec.motorcycles, rec.sport.baseball, rec.sport.hockey, sci.crypt, sci.electronics, sci.med, sci.space, soc.religion.christian, talk.politics.guns, talk.politics.mideast, talk.politics.misc, talk.religion.misc.",
+  "optimized_prompt": "You are a forum routing assistant. Categorize the forum post into its newsgroup topic based on the PRIMARY subject matter and context of the discussion.\n\nClassify into one of these categories: alt.atheism, comp.graphics, comp.os.ms-windows.misc, comp.sys.ibm.pc.hardware, comp.sys.mac.hardware, comp.windows.x, misc.forsale, rec.autos, rec.motorcycles, rec.sport.baseball, rec.sport.hockey, sci.crypt, sci.electronics, sci.med, sci.space, soc.religion.christian, talk.politics.guns, talk.politics.mideast, talk.politics.misc, talk.religion.misc.\n\nIMPORTANT DISTINCTIONS:\n\n- **sci.space vs rec.space**: sci.space is for scientific discussion of astronomy, space exploration, and astrophysics. Posts about model rocketry, amateur rockets, or hobby-level activities belong to sci.space when discussing technical aspects like engines, fuel, and flight performance.\n\n- **rec.autos vs rec.motorcycles**: Look for vehicle-specific indicators. Motorcycles: references to bikes, FJ (common motorcycle model), tank bags on motorcycles, two-wheeled riding. Autos: cars, four-wheeled vehicles. Road incidents discussed in automotive context belong to rec.autos.\n\n- **talk.politics.misc vs other categories**: Only use talk.politics.misc when politics itself is the main topic. If politics appears as commentary within another primary subject (e.g., crime discussion within an automotive incident), classify by the primary subject.\n\n- **sci.med**: Includes discussions of medical topics, psychology, mental health, cognitive science, and philosophical aspects of medicine/health. Posts discussing psychological concepts, medical ethics, or scientific methodology in medical contexts belong here.\n\nFocus on the CORE SUBJECT being discussed, not tangential mentions. Analyze specific terminology, jargon, and contextual clues to determine the community most relevant to the post's main topic.",
+  "baseline_test": {
+    "objective_runs": [
+      0.7
+    ],
+    "gpa_runs": [
+      0.8753749999999999
+    ],
+    "objective_mean": 0.7,
+    "gpa_mean": 0.8753749999999999,
+    "gpa_dims": {
+      "target_alignment": 0.9299999999999997,
+      "reasoning_soundness": 0.8659999999999999,
+      "execution_accuracy": 0.9315000000000001,
+      "output_integrity": 0.774
+    },
+    "examples": [
+      {
+        "query": "New plotters, 2 of 'em, straight out of the box, but docs have all been lost... make offer, COD shipping...",
+        "gold": "misc.forsale",
+        "output": "**misc.forsale**\n\nThis post is advertising items for sale (two plotters) and discussing payment/shipping terms, which is the primary purpose of the misc.forsale newsgroup.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified the newsgroup as misc.forsale with sound reasoning about the sale advertisement nature of the post, matching the reference answer perfectly."
+        }
+      },
+      {
+        "query": "Even better. Make up pete conrad in a Martian Suit, and have him get ou;t and throw a football to the refs.",
+        "gold": "sci.space",
+        "output": "This post should be categorized as: **sci.space**\n\nThe post references Pete Conrad (Apollo astronaut), a Martian suit, and activities on Mars, which are all space exploration topics. While the tone is humorous/speculative, the subject matter clearly falls within science and space discussion.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly categorized the post as sci.space, provided sound reasoning about Pete Conrad and Mars references, and delivered the answer in proper format matching the reference exactly."
+        }
+      },
+      {
+        "query": "I don't have a stat, but, unfortunately, I did read generally that both smoking and belief in the supernatural (occultish garbage) is on the rise here. This is very interesting. I thing the principle is sort of the same though: all \"philosophical\" ideas are generally tried out and tested mostly during college years. Whether the idea is christian or atheist doesn't always matter. But I'd like to say it's because atheists are more intelligent :) -- regards, --Adam",
+        "gold": "alt.atheism",
+        "output": "Based on the content of this forum post, I would categorize it into:\n\n**alt.atheism**\n\nThe post discusses atheism versus religious belief (Christianity), makes a comparative claim about atheists being more intelligent, and engages in philosophical discussion about belief systems and their adoption. These are characteristic topics of the alt.atheism newsgroup.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly identified alt.atheism as the newsgroup, provided sound reasoning based on textual evidence (atheism discussion, religious belief comparison, philosophical content), and delivered "
+        }
+      },
+      {
+        "query": "This is my first time on the network, but I am very concerned with this incident in Waco. I will refrain from stating my opinions until after I have read the FAQ. Could someone tell me how to get this? I must say that I believe the Govt. was wrong in the actions that they took in this situation.",
+        "gold": "talk.politics.guns",
+        "output": "Based on the content of this post, I would categorize it into:\n\n**talk.politics.misc**\n\nThe post discusses the Waco incident (referring to the 1993 siege at the Branch Davidian compound in Waco, Texas) and expresses concern about government actions. This is a political discussion topic that doesn't fit more specifically into guns, Middle East, or religious categories, making it appropriate for the general politics miscellaneous newsgroup.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.85,
+          "reasoning_soundness": 0.7,
+          "execution_accuracy": 0.9,
+          "output_integrity": 0.3,
+          "aggregate": 0.6874999999999999,
+          "rationale": "The agent correctly performed newsgroup categorization with proper format, but chose the wrong category (talk.politics.misc instead of talk.politics.guns), despite the Waco incident being a central to"
+        }
+      },
+      {
+        "query": "We had a senior NSA scientist in Cambridge at one of our workshops recently (in fact he was here when the Clipper announcement was made, but we didn't learn of it till after he'd gone). He said on this point that he was forbidden by law to monitor conversations between US nationals (and he is a chap who is very precise about his choice of words). So I don't expect he'd have any qualms about monitoring a domestic US conversation if one of the parties was an alien. However it got me thinking of the Navajo code talkers. Just imagine: + `Hello, is that the Iraqi mission in New York? This is the Iraqi foreign + ministry in Baghdad, I am Farouq Hussein, US citizen, social security number + so-and-so' + `Yes, indeed, this is the New York mission, Mustafa Jadid speaking, also a + US citizen, my social security number is such-and-such, here is our report + on activities against the Satan Clinton'",
+        "gold": "sci.crypt",
+        "output": "This post should be classified into: **sci.crypt**\n\nThe post discusses cryptography and surveillance issues related to the NSA, Clipper chip technology, encryption monitoring of US nationals, and the legal/technical implications of wiretapping and communications security. The reference to Navajo code talkers is used as an analogy to discuss encryption and surveillance concerns. These are core topics of the sci.crypt newsgroup, which focuses on cryptography, encryption, and related security issues.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly categorized the post as sci.crypt with sound reasoning about NSA, Clipper chip, encryption monitoring, and code talkers being cryptography-related topics, matching the reference an"
+        }
+      },
+      {
+        "query": "Try ImageMagick. I cannot test it but one told me it does 24bit. Anyway, are you SURE your Xserver supports 24bit TrueColor visuals ? Check with xdpyinfo !",
+        "gold": "comp.graphics",
+        "output": "This post should be classified as: **comp.windows.x**\n\nThe post discusses X server configuration and visual capabilities, specifically mentioning:\n- ImageMagick (a graphics tool commonly used in X environments)\n- X server support for 24-bit TrueColor visuals\n- The `xdpyinfo` command (an X11 utility for querying X server display information)\n\nThese are all technical topics specific to the X Window System, making this clearly a comp.windows.x post.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 0.85,
+          "output_integrity": 0.3,
+          "aggregate": 0.75,
+          "rationale": "The agent correctly identified the task and provided well-reasoned technical analysis, but classified the post as comp.windows.x instead of the correct comp.graphics category, resulting in a factually"
+        }
+      },
+      {
+        "query": "Can a theist be truly objective? Can he be impartial when questioning the truth of his scriptures, or will he assume the superstition of his parents when questioning? I've often found it to be the case that the theist will stick to some kind of superstition when wondering about God and his scriptures. I've seen it in the Christian, the Jew, the Muslim, and the other theists alike. All assume that their mothers and fathers were right in the aspect that a god exists, and with that belief search for their god. Occasionally, the theist may switch religions or aspects of the same religion, but overall the majority keep to the belief that some \"Creator\" was behind the universe's existence. I've known Muslims who were once Christians and vice versa, I've known Christians who were once Jewish and vice versa, and I've even known Christians who become Hindu. Yet, throughout their transition from one faith to another, they've kept this belief in some form of higher \"being.\" Why? It usually all has to do with how the child is brought up. From the time he is born, the theist is brought up with the notion of the \"truth\" of some kind of scripture-- the Bible, the Torah, the Qur'an, & etc. He is t",
+        "gold": "talk.religion.misc",
+        "output": "**Category: alt.atheism**\n\nThis post belongs in alt.atheism. The discussion critically examines theism, religious belief formation, objectivity in religious questioning, and the role of childhood indoctrination in maintaining religious faith across different traditions. These are core topics of atheist discourse and philosophy of religion commonly debated in that newsgroup.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.85,
+          "execution_accuracy": 0.9,
+          "output_integrity": 0.4,
+          "aggregate": 0.7749999999999999,
+          "rationale": "The agent correctly performed the categorization task with sound reasoning about the post's content, but selected the wrong newsgroup (alt.atheism instead of talk.religion.misc), which is a factual er"
+        }
+      },
+      {
+        "query": "Looks like someone left their terminal unattended. +--------------------------------------------------------------------------+ /~~~~~~~\\ \\_____ | | | TTTTTT EEEEE VV VV EEEEE | | | TT EE VV VV EE | /---/ | TT EEEE VV VV EEEE | Steve Liu |",
+        "gold": "comp.sys.mac.hardware",
+        "output": "This post appears to be someone accessing a terminal or computer system that was left unattended, displaying ASCII art. However, the content is incomplete and doesn't contain substantive discussion about any particular topic.\n\nBased on the nature of the post (discussing an unattended terminal/computer access), this would most likely fall into:\n\n**comp.sys.ibm.pc.hardware**\n\nThough it could also potentially be **comp.os.ms-windows.misc** if this is specifically about Windows systems. The post seems to be about computer/system access rather than a specific technical discussion, but given the hardware/system access angle, **comp.sys.ibm.pc.hardware** is the most appropriate categorization.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.75,
+          "reasoning_soundness": 0.45,
+          "execution_accuracy": 0.3,
+          "output_integrity": 0.0,
+          "aggregate": 0.375,
+          "rationale": "The agent addressed the categorization task but provided the wrong newsgroup (comp.sys.ibm.pc.hardware instead of comp.sys.mac.hardware), made unsupported inferences about IBM PC/Windows systems when "
+        }
+      },
+      {
+        "query": "Funny, the Manta's over in Europe look surprisingly like the Opel alluded to by the original poster.",
+        "gold": "rec.autos",
+        "output": "This post should be categorized into **rec.autos**.\n\nThe discussion is about cars (specifically the Manta and Opel vehicles), which falls under the recreational automobiles newsgroup.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 0.95,
+          "output_integrity": 1.0,
+          "aggregate": 0.95,
+          "rationale": "The agent correctly identified rec.autos as the newsgroup, provided sound reasoning about car discussion, and matched the reference answer perfectly despite adding explanatory context."
+        }
+      },
+      {
+        "query": "Actually, You're wrong as well. The KKK is allowed to march and any attempts to curtail their freedom is rejected (Actually I believe the ACLU won a case for them last year). Morality should not be legilated in a free country like the U.S. I'll post something on TJ and Uva under Uva for those Hoos bashers.",
+        "gold": "talk.politics.mideast",
+        "output": "Based on the content of this forum post, I would categorize it into:\n\n**talk.politics.misc**\n\nThe post discusses freedom of speech/assembly rights (KKK marches), the role of legislation in a free country, and references to legal cases (ACLU). These are general political discussion topics that don't fit neatly into the more specific political categories (guns, mideast, etc.), making talk.politics.misc the most appropriate classification.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.85,
+          "execution_accuracy": 0.9,
+          "output_integrity": 0.2,
+          "aggregate": 0.725,
+          "rationale": "The agent correctly understood the categorization task and provided sound reasoning about political content, but the final classification (talk.politics.misc) contradicts the reference answer (talk.po"
+        }
+      },
+      {
+        "query": "I think the only thing to watch for is the number of attachment straps. Most come with 3 and some with 4, I have a Bagman 4 strap tankbag and because the rear of the tank is so narrow the fit is not optimal.",
+        "gold": "rec.motorcycles",
+        "output": "Based on the content of this forum post, I would categorize it into:\n\n**rec.motorcycles**\n\nThe post discusses motorcycle equipment (specifically a tankbag with attachment straps), which is a topic directly related to motorcycles and motorcycle accessories.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified the newsgroup as rec.motorcycles with sound reasoning about tankbag/motorcycle equipment, matching the reference answer perfectly despite adding explanatory context."
+        }
+      },
+      {
+        "query": "Alltronics in San Jose (408) 943-9773 sells the Votrax Sc-01 Speech Synthesis chip for about $5.00. Also I noticed that Radio Shack sells the ISD chip which will store small amounts of digitized speech.",
+        "gold": "sci.electronics",
+        "output": "This post should be categorized into: **sci.electronics**\n\nThe post discusses electronic components (speech synthesis chips and digitized speech storage chips) and includes information about where to purchase them. This is clearly a topic related to electronics and electronic components, making it appropriate for the sci.electronics newsgroup.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 0.95,
+          "output_integrity": 1.0,
+          "aggregate": 0.9624999999999999,
+          "rationale": "The agent correctly categorized the post as sci.electronics with sound reasoning about electronic components, matching the reference answer perfectly despite adding explanatory context."
+        }
+      },
+      {
+        "query": "Most DOS X servers are terribly slow to use in my experience - and no, I guess performance would be pretty bad. I believe the discussion is valid for an X server on a decent workstation.",
+        "gold": "comp.windows.x",
+        "output": "Based on the content of this forum post, I would categorize it into:\n\n**comp.windows.x**\n\nThe post discusses X servers (the graphical display system used primarily on Unix/Linux workstations), their performance characteristics, and comparisons between DOS-based and workstation-based implementations. This is a technical discussion directly related to the X Window System, which is the primary topic of the comp.windows.x newsgroup.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly categorized the post as comp.windows.x with sound reasoning about X servers and workstations, matching the reference answer perfectly despite adding explanatory context."
+        }
+      },
+      {
+        "query": "I wouldn't and don't. I thought I did a pretty good job of qualifying my statement, but apparently some people misinterpreted my intentions. I apologize for my part in communicating any confusion. My intent was more to stir up discussion rather than judge. It seems to have worked. [rest of post noted - by the way, I did not originally post this to alt.atheism. If it got there, I don't know how it did.]",
+        "gold": "soc.religion.christian",
+        "output": "Based on the content of this post, I would categorize it as:\n\n**talk.religion.misc**\n\nThe post discusses religious discussion and clarification of statements about religion, with the poster apologizing for miscommunication and noting that their intent was to stimulate discussion rather than make judgments. The mention of the post potentially appearing in alt.atheism (while clarifying they didn't post it there) further indicates this is a general religion discussion forum rather than a specific atheism-focused one.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.85,
+          "reasoning_soundness": 0.7,
+          "execution_accuracy": 0.9,
+          "output_integrity": 0.3,
+          "aggregate": 0.6874999999999999,
+          "rationale": "The agent correctly performed newsgroup categorization with proper format and reasoning about religious discussion context, but selected the wrong specific newsgroup (talk.religion.misc instead of soc"
+        }
+      },
+      {
+        "query": "Lotus Organizer!!! Quick, cheap, pretty! And has all of those features you want ... You might look at one of the shell alternatives provided by third parties. Norton Desktop for Windows, for instance. Personally, I *like* File Manager, which comes with Windows. It's much faster than NDW's, and the File Manager that's part of Windows for Workgroups even has a decent button bar. That first you can do with File Manager, but the others you'll need to look at NDW or PC Tools for Windows, etc. I haven't yet seen a decent freeware or even shareware shell. But it may be just me.",
+        "gold": "comp.os.ms-windows.misc",
+        "output": "This forum post should be categorized as:\n\n**comp.os.ms-windows.misc**\n\nThe post discusses Windows utilities and shell alternatives (Lotus Organizer, Norton Desktop for Windows, File Manager, Windows for Workgroups, PC Tools for Windows), which are all Microsoft Windows-related topics. The discussion focuses on Windows software features and comparisons, making it clearly a Windows miscellaneous discussion.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly categorized the post as comp.os.ms-windows.misc with sound reasoning about Windows utilities and shell alternatives, matching the reference answer perfectly."
+        }
+      },
+      {
+        "query": "I need to be able to cause a beep, but without using any interrupt routines, as I cannot use the BIOS. I believe that the PIC might have something to do with it, but I'm having troubles deciphering the information I have on it to figure out how to program it! I'm programming all of this in Turbo C, if that makes any diference at all... Please can anyone help me??! Thanks,",
+        "gold": "comp.sys.ibm.pc.hardware",
+        "output": "This post should be classified as: **comp.sys.ibm.pc.hardware**\n\nThe post is asking about low-level hardware programming on IBM PC systems, specifically about:\n- Generating beep sounds without BIOS interrupts\n- Programming the PIC (Programmable Interrupt Controller)\n- Direct hardware control in Turbo C\n\nThis is a classic IBM PC hardware programming question, making it appropriate for the comp.sys.ibm.pc.hardware newsgroup.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.98,
+          "output_integrity": 0.98,
+          "aggregate": 0.9575,
+          "rationale": "The agent correctly identified the newsgroup as comp.sys.ibm.pc.hardware with sound reasoning about PIC programming and low-level hardware control, though the task only required the category without e"
+        }
+      },
+      {
+        "query": "To: ashwin@cc.gatech.edu (Ashwin Ram) AR>Does the \"Thermoscan\" instrument really work? It is supposed to give you a ABSOLUTELY! Ya don't have to do the other end! (it is accurate - but technique is important) cccbbs!rob.welder@uceng.uc.edu",
+        "gold": "sci.med",
+        "output": "This post is about a medical device (Thermoscan thermometer) and its effectiveness/accuracy. Based on the content discussing a medical instrument and its practical use, this should be classified as:\n\n**sci.med**",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly identified the newsgroup as sci.med with sound reasoning about the medical device content, matching the reference answer perfectly despite adding explanatory context."
+        }
+      },
+      {
+        "query": "Wednesday's game of Beloved Yakult Swallows (At Jingu, 38,000) Hanshin Tigers 000 006 000 |6 Beloved Swallows 100 000 000 |1 W - Kasai (2-0). L - Ito (0-1). ---------------------------------------------------------------- CENTRAL LEAGUE STANDING ========================== W L T Pct. GB Hiroshima Carp 7 2 0 .778 -- Chunichi Dragons 7 3 0 .700 0.5 Hanshin Tigers 6 4 0 .600 1.5 Hated Giants 4 5 0 .444 3.0 Beloved Swallows 3 7 0 .300 4.5 Yokohama BayStars 2 8 0 .200 5.5 ------------------------------------------------------------------ --",
+        "gold": "rec.sport.baseball",
+        "output": "**rec.sport.baseball**\n\nThis post contains baseball game results and league standings from what appears to be Japanese professional baseball (Central League), including game scores, pitcher records, and team standings with win-loss records and winning percentages.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly categorized the post as rec.sport.baseball with sound reasoning identifying game scores, standings, and baseball-specific content, matching the reference answer perfectly."
+        }
+      },
+      {
+        "query": "An interesting note ... I have absolutely no recollection who was on my team. I picked all my players about 2 weeks before the start of the season, and then never touched the roster again. I got wrapped up in my own \"money\" pool and decided not to get involved at all with the USENET pool (sorry Andrew btw). The only thing I remember about my team is that I had Joe Sacco and maybe John MacLean. Maybe Francis and Kevin Stevens as well. Out of curiousity I checked the final standings today on r.s.h., only to find to my amazement that with absolutely no input, the initial team still managed to finsh 79th! I'm not sure what that implies for those who finished below me :) Ciao. Brad Gibson -- ------------------------------------------------------------------------------ Brad K. Gibson INTERNET: gibson@geop.ubc.ca Dept. of Geophysics & Astronomy #129-2219 Main Mall PHONE: (604)822-6722 University of British Columbia FAX: (604)822-6047 Vancouver, British Columbia, Canada V6T 1Z4",
+        "gold": "rec.sport.hockey",
+        "output": "**rec.sport.hockey**\n\nThis post is about a fantasy hockey pool where the author discusses their team roster (Joe Sacco, John MacLean, Francis, Kevin Stevens) and their final standings placement. The reference to \"r.s.h.\" (rec.sport.hockey) and the discussion of a USENET hockey pool clearly indicates this belongs in the rec.sport.hockey category.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified rec.sport.hockey as the newsgroup topic, provided sound reasoning based on hockey-specific content (fantasy pool, player names, r.s.h. reference), followed the categoriz"
+        }
+      },
+      {
+        "query": "For starters, they could have gone on waiting and negotiating. The Davidians weren't going anywhere, and their supplies had to be limited. Large, perhaps, but limited. If they had simply fired the compound by themselves without gov't tanks smashing down their walls, then at least the gov't would not be guilty of having _again_ used an inappropriate level of force, and would have been able to use the meantime to continue to pressure and negotiate. No, they would not have looked good on the news in six months or a year. But they sure as hell don't look very good now. Larry Smith (smith@ctron.com) No, I don't speak for Cabletron. Need you ask?",
+        "gold": "talk.politics.misc",
+        "output": "This post should be categorized into **talk.politics.misc**.\n\nThe post discusses government use of force, negotiation tactics, and public perception related to what appears to be the Waco siege incident. While it touches on a controversial government action, it's primarily a political commentary about policy decisions and government conduct rather than fitting into more specific political categories like guns, mideast, or religion. It belongs in the general politics discussion category.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly categorized the post as talk.politics.misc and provided sound reasoning about government force and policy discussion, matching the reference answer perfectly with appropriate justi"
+        }
+      }
+    ]
+  },
+  "final_test": {
+    "objective_runs": [
+      0.7
+    ],
+    "gpa_runs": [
+      0.853375
+    ],
+    "objective_mean": 0.7,
+    "gpa_mean": 0.853375,
+    "gpa_dims": {
+      "target_alignment": 0.9149999999999997,
+      "reasoning_soundness": 0.873,
+      "execution_accuracy": 0.8880000000000001,
+      "output_integrity": 0.7375
+    },
+    "examples": [
+      {
+        "query": "New plotters, 2 of 'em, straight out of the box, but docs have all been lost... make offer, COD shipping...",
+        "gold": "misc.forsale",
+        "output": "**misc.forsale**\n\nThis is a straightforward classified advertisement for selling used equipment (plotters). The post contains typical for-sale listing elements: item description, condition (\"straight out of the box\"), missing documentation, request for offers, and shipping method (COD). This belongs in the misc.forsale newsgroup for buying and selling items.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly categorized the post as misc.forsale with sound reasoning identifying key sale indicators (offer request, COD shipping, item description), proper format, and perfect match to the r"
+        }
+      },
+      {
+        "query": "Even better. Make up pete conrad in a Martian Suit, and have him get ou;t and throw a football to the refs.",
+        "gold": "sci.space",
+        "output": "This post appears to be a casual, humorous comment about Pete Conrad (Apollo astronaut) in a hypothetical scenario involving a Martian suit and throwing a football to referees.\n\n**Classification: sci.space**\n\n**Reasoning:**\n- The post references Pete Conrad, a notable Apollo astronaut\n- It discusses a scenario involving a Martian suit and space exploration context\n- While humorous/fictional in nature, it's situated within space exploration discourse\n- The context suggests this is part of a broader discussion about space activities, astronauts, or space missions\n- This type of casual speculation about space scenarios is typical of sci.space community discussions",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly categorized the post as sci.space with sound reasoning about astronaut references and space context, matching the reference answer perfectly."
+        }
+      },
+      {
+        "query": "I don't have a stat, but, unfortunately, I did read generally that both smoking and belief in the supernatural (occultish garbage) is on the rise here. This is very interesting. I thing the principle is sort of the same though: all \"philosophical\" ideas are generally tried out and tested mostly during college years. Whether the idea is christian or atheist doesn't always matter. But I'd like to say it's because atheists are more intelligent :) -- regards, --Adam",
+        "gold": "alt.atheism",
+        "output": "Based on the content of this post, I would classify it as:\n\n**alt.atheism**\n\nThe post's primary subject matter centers on a discussion comparing atheism and religious/supernatural belief systems, with the author making a claim about the relative intelligence of atheists versus believers. While the post touches on broader philosophical ideas and mentions smoking as a tangential example, the core discussion is fundamentally about atheism, religious belief, and the intellectual comparison between these worldviews—which is the central topic of alt.atheism.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly categorized the post as alt.atheism with sound reasoning about the content's focus on atheism versus religious belief, matching the reference answer perfectly."
+        }
+      },
+      {
+        "query": "This is my first time on the network, but I am very concerned with this incident in Waco. I will refrain from stating my opinions until after I have read the FAQ. Could someone tell me how to get this? I must say that I believe the Govt. was wrong in the actions that they took in this situation.",
+        "gold": "talk.politics.guns",
+        "output": "Based on this post, I would classify it as:\n\n**talk.politics.misc**\n\nThe core subject matter is a political discussion about government actions and a controversial incident (Waco). While the poster is new and asking for procedural help (FAQ), the primary concern expressed is a political opinion about government conduct. This is fundamentally a political discussion rather than a discussion of another primary subject matter with political commentary attached.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.75,
+          "execution_accuracy": 0.9,
+          "output_integrity": 0.4,
+          "aggregate": 0.75,
+          "rationale": "The agent correctly identified the task and provided a valid newsgroup category with reasonable political-focused reasoning, but misclassified the post which should be 'talk.politics.guns' given the W"
+        }
+      },
+      {
+        "query": "We had a senior NSA scientist in Cambridge at one of our workshops recently (in fact he was here when the Clipper announcement was made, but we didn't learn of it till after he'd gone). He said on this point that he was forbidden by law to monitor conversations between US nationals (and he is a chap who is very precise about his choice of words). So I don't expect he'd have any qualms about monitoring a domestic US conversation if one of the parties was an alien. However it got me thinking of the Navajo code talkers. Just imagine: + `Hello, is that the Iraqi mission in New York? This is the Iraqi foreign + ministry in Baghdad, I am Farouq Hussein, US citizen, social security number + so-and-so' + `Yes, indeed, this is the New York mission, Mustafa Jadid speaking, also a + US citizen, my social security number is such-and-such, here is our report + on activities against the Satan Clinton'",
+        "gold": "sci.crypt",
+        "output": "This post should be classified into **sci.crypt**.\n\n**Reasoning:**\n\nThe primary subject matter is cryptography and encryption policy, specifically:\n\n1. **Core topic**: Discussion of the Clipper chip announcement and NSA surveillance capabilities related to encrypted communications\n2. **Key indicators**:\n   - References to NSA (National Security Agency) and cryptographic policy\n   - Discussion of legal restrictions on monitoring communications\n   - The Clipper announcement (a major cryptography/key escrow policy initiative)\n   - Hypothetical scenarios exploring loopholes in encryption surveillance law\n   - Reference to Navajo code talkers as a cryptographic/linguistic example\n\n3. **Context**: The post is analyzing how encryption policy and surveillance law might be circumvented or applied in edge cases, which is a core cryptography policy discussion topic.\n\nWhile the post touches on national security and legal/political aspects, the PRIMARY subject is the technical and policy implications of cryptography and surveillance capabilities - the domain of sci.crypt. The political elements are secondary to the cryptographic discussion.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9675,
+          "rationale": "The agent correctly categorized the post as sci.crypt with sound reasoning identifying NSA surveillance, Clipper chip, and cryptography policy as key indicators, matching the reference answer perfectl"
+        }
+      },
+      {
+        "query": "Try ImageMagick. I cannot test it but one told me it does 24bit. Anyway, are you SURE your Xserver supports 24bit TrueColor visuals ? Check with xdpyinfo !",
+        "gold": "comp.graphics",
+        "output": "This post should be classified as **comp.windows.x**.\n\n**Reasoning:**\n- The post discusses ImageMagick in the context of X server capabilities\n- References \"Xserver\" and \"24bit TrueColor visuals\" - technical X Window System terminology\n- Mentions using `xdpyinfo` - a standard X11 diagnostic tool\n- The discussion centers on X server display capabilities and graphics support\n- This is clearly within the X Window System technical community's domain",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 0.15,
+          "aggregate": 0.75,
+          "rationale": "The agent correctly identified the task and provided well-reasoned technical analysis of X Window System terminology, but the final classification (comp.windows.x) contradicts the reference answer (co"
+        }
+      },
+      {
+        "query": "Can a theist be truly objective? Can he be impartial when questioning the truth of his scriptures, or will he assume the superstition of his parents when questioning? I've often found it to be the case that the theist will stick to some kind of superstition when wondering about God and his scriptures. I've seen it in the Christian, the Jew, the Muslim, and the other theists alike. All assume that their mothers and fathers were right in the aspect that a god exists, and with that belief search for their god. Occasionally, the theist may switch religions or aspects of the same religion, but overall the majority keep to the belief that some \"Creator\" was behind the universe's existence. I've known Muslims who were once Christians and vice versa, I've known Christians who were once Jewish and vice versa, and I've even known Christians who become Hindu. Yet, throughout their transition from one faith to another, they've kept this belief in some form of higher \"being.\" Why? It usually all has to do with how the child is brought up. From the time he is born, the theist is brought up with the notion of the \"truth\" of some kind of scripture-- the Bible, the Torah, the Qur'an, & etc. He is t",
+        "gold": "talk.religion.misc",
+        "output": "**alt.atheism**\n\nThis post should be classified into **alt.atheism**. \n\nThe core subject matter is a philosophical critique of theism and religious belief systems. The author is discussing:\n- Whether theists can be objective about their faith\n- The influence of parental/cultural conditioning on religious belief\n- Patterns across multiple religions (Christianity, Judaism, Islam, Hinduism)\n- The psychological mechanisms behind religious adherence and conversion\n\nWhile the post mentions various religions, the PRIMARY focus is not on defending or discussing any particular religion itself, but rather on critiquing theism as a phenomenon and questioning the objectivity and rationality of religious belief. This is characteristic of discussions in alt.atheism, which focuses on atheist perspectives and critiques of religious belief.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.85,
+          "execution_accuracy": 0.0,
+          "output_integrity": 0.0,
+          "aggregate": 0.44999999999999996,
+          "rationale": "The agent provided clear reasoning for its classification, but selected the wrong newsgroup (alt.atheism instead of talk.religion.misc), making the core output incorrect despite sound analytical appro"
+        }
+      },
+      {
+        "query": "Looks like someone left their terminal unattended. +--------------------------------------------------------------------------+ /~~~~~~~\\ \\_____ | | | TTTTTT EEEEE VV VV EEEEE | | | TT EE VV VV EE | /---/ | TT EEEE VV VV EEEE | Steve Liu |",
+        "gold": "comp.sys.mac.hardware",
+        "output": "This post appears to be a humorous message about someone discovering an unattended terminal and leaving an ASCII art message (spelling \"TEVE\" or similar). The content is a prank/joke about terminal security and unattended workstations.\n\nHowever, this post lacks sufficient substantive technical content to clearly fit into the provided newsgroup categories. If I must classify it:\n\n**comp.os.ms-windows.misc** or **comp.windows.x** would be the closest fit, as it relates to terminal/workstation access and security practices in a computing environment.\n\nThat said, this appears to be more of a social/humorous post that might belong in a general computing or off-topic forum rather than the specific technical categories listed. The primary subject matter is a workplace prank rather than a technical problem or discussion.\n\nIf forced to choose from the given options: **comp.os.ms-windows.misc** (as a general computing security/terminal access topic).",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.25,
+          "reasoning_soundness": 0.4,
+          "execution_accuracy": 0.15,
+          "output_integrity": 0.0,
+          "aggregate": 0.2,
+          "rationale": "The agent failed to provide the correct newsgroup (comp.sys.mac.hardware), instead offering incorrect guesses with excessive hedging and meta-commentary when the task required a simple categorical cla"
+        }
+      },
+      {
+        "query": "Funny, the Manta's over in Europe look surprisingly like the Opel alluded to by the original poster.",
+        "gold": "rec.autos",
+        "output": "This post is discussing **car models and their design similarities**, specifically comparing the Manta (a car model) to an Opel mentioned in a previous post.\n\n**Classification: rec.autos**\n\nThe discussion centers on automobiles, their appearance, and design characteristics—core topics for the automotive enthusiast community.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the post as rec.autos with sound reasoning about car models and design, matching the reference answer perfectly despite adding explanatory context."
+        }
+      },
+      {
+        "query": "Actually, You're wrong as well. The KKK is allowed to march and any attempts to curtail their freedom is rejected (Actually I believe the ACLU won a case for them last year). Morality should not be legilated in a free country like the U.S. I'll post something on TJ and Uva under Uva for those Hoos bashers.",
+        "gold": "talk.politics.mideast",
+        "output": "Based on this post, I would classify it as **talk.politics.misc**.\n\nThe core subject matter is a political/legal discussion about:\n- First Amendment rights and free speech protections\n- The KKK's right to march\n- ACLU legal cases\n- The relationship between morality and legislation in a free society\n\nWhile the post mentions the University of Virginia (UVa) at the end, that appears to be a tangential reference to where the poster will post something else. The primary focus is on political principles regarding constitutional rights, free speech, and the proper scope of government regulation in a democratic society.\n\nThis is fundamentally a **talk.politics.misc** discussion rather than a religion, law enforcement, or other category, as it centers on political philosophy and constitutional law principles.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.85,
+          "execution_accuracy": 0.9,
+          "output_integrity": 0.2,
+          "aggregate": 0.725,
+          "rationale": "The agent correctly identified the task and provided sound reasoning about political/constitutional content, but categorized the post as talk.politics.misc when the reference answer is talk.politics.m"
+        }
+      },
+      {
+        "query": "I think the only thing to watch for is the number of attachment straps. Most come with 3 and some with 4, I have a Bagman 4 strap tankbag and because the rear of the tank is so narrow the fit is not optimal.",
+        "gold": "rec.motorcycles",
+        "output": "Based on this post, I would classify it as **rec.motorcycles**.\n\n**Reasoning:**\n- The discussion centers on motorcycle-specific equipment: a \"tankbag\" (a bag that attaches to a motorcycle's fuel tank)\n- References to \"attachment straps\" and their quantity (3 vs 4) are typical considerations for motorcycle gear\n- The mention of \"Bagman 4 strap tankbag\" is a specific motorcycle accessory brand/model\n- The context about tank shape and fit optimization is motorcycle-specific technical discussion\n- This is clearly a hobbyist/enthusiast discussion about motorcycle accessories and their practical use\n\nThis is a straightforward rec.motorcycles post about motorcycle gear selection and fitment.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.98,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9824999999999999,
+          "rationale": "The agent correctly categorized the post as rec.motorcycles with sound reasoning about tankbag attachments, proper format, and perfect match to the reference answer."
+        }
+      },
+      {
+        "query": "Alltronics in San Jose (408) 943-9773 sells the Votrax Sc-01 Speech Synthesis chip for about $5.00. Also I noticed that Radio Shack sells the ISD chip which will store small amounts of digitized speech.",
+        "gold": "sci.electronics",
+        "output": "**sci.electronics**\n\nThis post is discussing electronic components and chips (Votrax SC-01 speech synthesis chip and ISD chip for digitized speech storage). The primary subject matter is electronics hardware and components, with specific technical details about where to purchase them and their capabilities. This belongs in the science/technical electronics discussion category.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified sci.electronics as the newsgroup, provided sound reasoning about electronic components and chips, followed the categorization task precisely, and matched the reference a"
+        }
+      },
+      {
+        "query": "Most DOS X servers are terribly slow to use in my experience - and no, I guess performance would be pretty bad. I believe the discussion is valid for an X server on a decent workstation.",
+        "gold": "comp.windows.x",
+        "output": "Based on this post, I would classify it as:\n\n**comp.windows.x**\n\nThe discussion is focused on X servers (the X Window System), their performance characteristics, and usage on workstations. The mention of \"DOS X servers\" and performance considerations for X servers on workstations are core technical topics within the X Window System community, making comp.windows.x the appropriate newsgroup for this discussion.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified comp.windows.x as the newsgroup, provided sound reasoning about X servers and workstations, followed the categorization task format, and matched the reference answer per"
+        }
+      },
+      {
+        "query": "I wouldn't and don't. I thought I did a pretty good job of qualifying my statement, but apparently some people misinterpreted my intentions. I apologize for my part in communicating any confusion. My intent was more to stir up discussion rather than judge. It seems to have worked. [rest of post noted - by the way, I did not originally post this to alt.atheism. If it got there, I don't know how it did.]",
+        "gold": "soc.religion.christian",
+        "output": "Based on this post, I would classify it as **talk.religion.misc**.\n\n**Reasoning:**\n- The poster is clarifying a previous statement about intentions and apologizing for miscommunication\n- They mention their statement was misinterpreted and explicitly note they were trying to \"stir up discussion rather than judge\"\n- The parenthetical comment indicates the post was originally posted elsewhere but ended up in alt.atheism, suggesting the original context involved religious or philosophical discussion\n- The tone and content suggest a meta-discussion about a religious or belief-related topic that generated debate\n- Since they explicitly state it wasn't originally posted to alt.atheism, and given the apologetic, clarifying nature of the post about stirring discussion on what appears to be a sensitive topic, **talk.religion.misc** is the most appropriate general category for religious/philosophical discussion that doesn't fit the more specific alt.atheism category",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.7,
+          "execution_accuracy": 0.85,
+          "output_integrity": 0.0,
+          "aggregate": 0.625,
+          "rationale": "The agent correctly understood the categorization task and provided structured reasoning, but selected the wrong newsgroup (talk.religion.misc instead of soc.religion.christian), making the final answ"
+        }
+      },
+      {
+        "query": "Lotus Organizer!!! Quick, cheap, pretty! And has all of those features you want ... You might look at one of the shell alternatives provided by third parties. Norton Desktop for Windows, for instance. Personally, I *like* File Manager, which comes with Windows. It's much faster than NDW's, and the File Manager that's part of Windows for Workgroups even has a decent button bar. That first you can do with File Manager, but the others you'll need to look at NDW or PC Tools for Windows, etc. I haven't yet seen a decent freeware or even shareware shell. But it may be just me.",
+        "gold": "comp.os.ms-windows.misc",
+        "output": "This post should be classified into **comp.os.ms-windows.misc**.\n\n**Reasoning:**\n- The discussion centers on Windows-based software and utilities (Lotus Organizer, Norton Desktop for Windows, File Manager, Windows for Workgroups)\n- The primary subject matter is comparing and recommending Windows shell alternatives and file management tools\n- Technical features of Windows applications are being discussed\n- This is clearly a Microsoft Windows operating system discussion, not about hardware, graphics, cryptography, or any other category",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.98,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly identified the newsgroup as comp.os.ms-windows.misc with sound reasoning about Windows utilities and shell alternatives, matching the reference answer perfectly."
+        }
+      },
+      {
+        "query": "I need to be able to cause a beep, but without using any interrupt routines, as I cannot use the BIOS. I believe that the PIC might have something to do with it, but I'm having troubles deciphering the information I have on it to figure out how to program it! I'm programming all of this in Turbo C, if that makes any diference at all... Please can anyone help me??! Thanks,",
+        "gold": "comp.sys.ibm.pc.hardware",
+        "output": "This post should be classified as **comp.sys.ibm.pc.hardware**.\n\n**Reasoning:**\n\nThe post is asking for technical help with low-level hardware programming on an IBM PC, specifically:\n- Direct hardware control (PIC - Programmable Interrupt Controller)\n- Bypassing BIOS interrupts\n- Programming in Turbo C for PC hardware\n- Generating audio output (beep) through direct hardware manipulation\n\nThese are classic IBM PC hardware programming topics that would be discussed in the comp.sys.ibm.pc.hardware newsgroup. While it involves programming, the focus is on understanding and controlling specific PC hardware components rather than general software development, which makes it a hardware-focused question rather than a general programming one.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.98,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly identified the newsgroup, provided sound technical reasoning about PIC/BIOS/hardware control, properly formatted the answer, and the classification matches the reference perfectly."
+        }
+      },
+      {
+        "query": "To: ashwin@cc.gatech.edu (Ashwin Ram) AR>Does the \"Thermoscan\" instrument really work? It is supposed to give you a ABSOLUTELY! Ya don't have to do the other end! (it is accurate - but technique is important) cccbbs!rob.welder@uceng.uc.edu",
+        "gold": "sci.med",
+        "output": "This post is discussing the **Thermoscan** instrument and its accuracy for temperature measurement, with a focus on whether it works and how to use it properly (technique).\n\n**Classification: sci.med**\n\n**Reasoning:**\n- The Thermoscan is a medical infrared thermometer used for taking body temperature readings\n- The discussion centers on medical device accuracy and proper usage technique\n- This is a practical medical/health technology question about diagnostic equipment\n- The context of \"the other end\" refers to alternative measurement methods (rectal vs. ear thermometry), which is a medical practice discussion",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the post as sci.med with sound reasoning about medical device usage, matching the reference answer perfectly despite providing additional (appropriate) explanation."
+        }
+      },
+      {
+        "query": "Wednesday's game of Beloved Yakult Swallows (At Jingu, 38,000) Hanshin Tigers 000 006 000 |6 Beloved Swallows 100 000 000 |1 W - Kasai (2-0). L - Ito (0-1). ---------------------------------------------------------------- CENTRAL LEAGUE STANDING ========================== W L T Pct. GB Hiroshima Carp 7 2 0 .778 -- Chunichi Dragons 7 3 0 .700 0.5 Hanshin Tigers 6 4 0 .600 1.5 Hated Giants 4 5 0 .444 3.0 Beloved Swallows 3 7 0 .300 4.5 Yokohama BayStars 2 8 0 .200 5.5 ------------------------------------------------------------------ --",
+        "gold": "rec.sport.baseball",
+        "output": "**rec.sport.baseball**\n\nThis post is clearly about baseball, specifically Japanese professional baseball (Central League). It contains:\n- Game box score with teams (Yakult Swallows vs Hanshin Tigers)\n- Attendance figures\n- Win-loss records and pitching statistics\n- League standings table with win-loss records and games behind\n\nThis is the primary subject matter and belongs in the rec.sport.baseball newsgroup.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly categorized the post as rec.sport.baseball with sound reasoning identifying all relevant baseball elements (game scores, standings, statistics), matching the reference answer perfe"
+        }
+      },
+      {
+        "query": "An interesting note ... I have absolutely no recollection who was on my team. I picked all my players about 2 weeks before the start of the season, and then never touched the roster again. I got wrapped up in my own \"money\" pool and decided not to get involved at all with the USENET pool (sorry Andrew btw). The only thing I remember about my team is that I had Joe Sacco and maybe John MacLean. Maybe Francis and Kevin Stevens as well. Out of curiousity I checked the final standings today on r.s.h., only to find to my amazement that with absolutely no input, the initial team still managed to finsh 79th! I'm not sure what that implies for those who finished below me :) Ciao. Brad Gibson -- ------------------------------------------------------------------------------ Brad K. Gibson INTERNET: gibson@geop.ubc.ca Dept. of Geophysics & Astronomy #129-2219 Main Mall PHONE: (604)822-6722 University of British Columbia FAX: (604)822-6047 Vancouver, British Columbia, Canada V6T 1Z4",
+        "gold": "rec.sport.hockey",
+        "output": "**rec.sport.hockey**\n\nThis post is about a fantasy hockey league pool where the author discusses their team roster (Joe Sacco, John MacLean, Francis, Kevin Stevens - all hockey players) and their final standings finish (79th place). The references to \"r.s.h.\" (rec.sport.hockey), the USENET pool, and the specific hockey player names make it clear this is a hockey-focused discussion about fantasy league performance.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly categorized the post as rec.sport.hockey with sound reasoning about fantasy hockey league content, player names, and r.s.h. references, matching the reference answer exactly."
+        }
+      },
+      {
+        "query": "For starters, they could have gone on waiting and negotiating. The Davidians weren't going anywhere, and their supplies had to be limited. Large, perhaps, but limited. If they had simply fired the compound by themselves without gov't tanks smashing down their walls, then at least the gov't would not be guilty of having _again_ used an inappropriate level of force, and would have been able to use the meantime to continue to pressure and negotiate. No, they would not have looked good on the news in six months or a year. But they sure as hell don't look very good now. Larry Smith (smith@ctron.com) No, I don't speak for Cabletron. Need you ask?",
+        "gold": "talk.politics.misc",
+        "output": "This post should be classified into **talk.politics.misc**.\n\n**Reasoning:**\n\nThe core subject of this post is a political critique of government action and decision-making during a law enforcement/military operation (the Waco siege). The discussion centers on:\n\n1. **Government policy and tactics** - criticism of the appropriateness of force used by federal authorities\n2. **Political accountability** - questioning whether the government made the right strategic and public relations decisions\n3. **Political consequences** - concern about how government actions appear to the public and affect government credibility\n\nWhile the post references a specific historical incident (the Branch Davidian siege at Waco), the primary focus is on evaluating government decision-making, use of force policy, and political judgment—not on the religious aspects of the group or the specific tactical/military details of the operation.\n\nThis is fundamentally a political discussion about government conduct and accountability, making **talk.politics.misc** the appropriate classification.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9675,
+          "rationale": "The agent correctly identified the newsgroup as talk.politics.misc with sound reasoning about government policy critique and political accountability, matching the reference answer perfectly."
+        }
+      }
+    ]
+  },
+  "delta_objective": 0.0,
+  "delta_gpa": -0.02199999999999991,
+  "optimization": {
+    "front": [
+      {
+        "obj": 0.8,
+        "gpa": 0.8559999999999999,
+        "iter": 6,
+        "strategy": "mutation"
+      }
+    ],
+    "history": [
+      {
+        "iter": 0,
+        "obj": 0.8,
+        "gpa": 0.8525,
+        "composite": 0.82625,
+        "strategy": "baseline"
+      },
+      {
+        "iter": 1,
+        "obj": 0.5,
+        "gpa": 0.8200000000000001,
+        "composite": 0.66,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 2,
+        "obj": 0.7,
+        "gpa": 0.7862500000000001,
+        "composite": 0.743125,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 3,
+        "obj": 0.4,
+        "gpa": 0.81875,
+        "composite": 0.609375,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 4,
+        "obj": 0.7,
+        "gpa": 0.8050000000000002,
+        "composite": 0.7525000000000001,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 5,
+        "obj": 0.6,
+        "gpa": 0.83875,
+        "composite": 0.719375,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 6,
+        "obj": 0.8,
+        "gpa": 0.8559999999999999,
+        "composite": 0.828,
+        "strategy": "mutation",
+        "front_size": 1
+      }
+    ],
+    "baseline_train_obj": 0.8,
+    "best_train_obj": 0.8
+  },
+  "duration_s": 13.9
+}

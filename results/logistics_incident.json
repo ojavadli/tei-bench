@@ -1,0 +1,627 @@
+{
+  "task_id": "logistics_incident",
+  "industry": "Logistics / Supply Chain",
+  "metric": "classification",
+  "n_train": 15,
+  "n_test": 18,
+  "source": "Authored for TEI-Bench (Sonnet-generated, Sonnet-validated; kept only label-agreed examples).",
+  "agent_model": "claude-haiku-4-5",
+  "judge_model": "claude-sonnet-4-5",
+  "optimizer_model": "claude-sonnet-4-5",
+  "seed": 0,
+  "eval_repeats": 1,
+  "baseline_prompt": "You are a logistics incident classifier. Classify the shipment incident report into an incident category. Classify into one of these categories: delayed, damaged, lost, customs_hold, wrong_address, partial.",
+  "optimized_prompt": "You are a logistics incident classifier. Your task is to analyze shipment incident reports and classify them into exactly ONE incident category.\n\n**Categories:**\n- **delayed**: Shipment arrived later than scheduled\n- **damaged**: Physical harm to goods (crushing, breaking, spoilage, contamination, etc.)\n- **lost**: Shipment missing or cannot be located\n- **customs_hold**: Shipment detained by customs or regulatory authorities\n- **wrong_address**: Delivery to incorrect location or address issues\n- **partial**: Incomplete shipment (missing items, quantity discrepancies)\n\n**Instructions:**\n1. Read the incident report carefully\n2. Identify the primary issue described\n3. Output ONLY the category name (one word, lowercase)\n4. Do not include explanations, reasoning, or additional text\n5. Do not use formatting like bold, asterisks, or headers\n\n**Output format:** Return only the category name, nothing else.",
+  "baseline_test": {
+    "objective_runs": [
+      0.6111111111111112
+    ],
+    "gpa_runs": [
+      0.9724999999999999
+    ],
+    "objective_mean": 0.6111111111111112,
+    "gpa_mean": 0.9724999999999999,
+    "gpa_dims": {
+      "target_alignment": 0.9499999999999997,
+      "reasoning_soundness": 0.9488888888888888,
+      "execution_accuracy": 0.995,
+      "output_integrity": 0.9961111111111111
+    },
+    "examples": [
+      {
+        "query": "Import declaration was rejected due to incomplete information about the manufacturer. The clearance agent is working to obtain the necessary certificates and permits, but the merchandise will remain in the bonded warehouse until approval is granted.",
+        "gold": "customs_hold",
+        "output": "**Classification: customs_hold**\n\n**Reasoning:**\nThis incident involves merchandise being held in a bonded warehouse pending customs clearance approval. The shipment cannot proceed until the customs authority grants approval after receiving the required documentation (manufacturer certificates and permits). This is a typical customs hold situation where regulatory/administrative requirements are preventing the shipment from moving forward.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the incident as 'customs_hold' matching the reference answer, provided sound reasoning about regulatory holds and bonded warehouse detention, and followed the classifica"
+        }
+      },
+      {
+        "query": "Driver delivered the package to 123 Main Street instead of 123 Main Avenue as specified on the shipping label. Customer called stating they never received their order and confirmed their correct location is on the Avenue, not the Street.",
+        "gold": "wrong_address",
+        "output": "**Classification: wrong_address**\n\nThe package was delivered to an incorrect address (123 Main Street instead of 123 Main Avenue) as specified on the shipping label. This is a clear case of wrong address delivery, even though it appears to be a similar address with a minor difference in the street designation.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the incident as 'wrong_address' matching the reference answer, provided sound reasoning about the address mismatch, and executed the classification task properly with ap"
+        }
+      },
+      {
+        "query": "Received the order today but only got 8 out of 12 boxes listed on the manifest. The remaining items are missing and we need them urgently to complete our inventory restocking.",
+        "gold": "partial",
+        "output": "**Classification: partial**\n\nThe shipment was received but is incomplete, with only 8 out of 12 boxes delivered. This is a partial shipment incident rather than a complete loss.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the incident as 'partial' with sound reasoning that directly addresses the incomplete shipment scenario, matching the reference answer perfectly."
+        }
+      },
+      {
+        "query": "Shipment is currently running 24 hours behind the original ETA because of unexpected road closures and detours around the construction zone on Highway 95.",
+        "gold": "delayed",
+        "output": "**Classification: delayed**\n\nThe shipment is behind schedule due to external factors (road closures and construction detours) affecting delivery time, but there is no indication of damage, loss, customs issues, address problems, or partial delivery.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the incident as 'delayed' matching the reference answer, provided sound reasoning about external factors causing the delay, and properly excluded other incident categori"
+        }
+      },
+      {
+        "query": "Electronics order arrived with water infiltration. Customer opened packages to find moisture inside sealed boxes, corroded circuit boards, and non-functional units. Tracking shows shipment was exposed to heavy rainfall during transfer at Memphis hub where trailer door was reportedly left open.",
+        "gold": "damaged",
+        "output": "**Incident Classification: DAMAGED**\n\n**Reasoning:**\n- Physical damage to product integrity (water infiltration, corrosion, non-functionality)\n- Damage occurred during transit due to operational failure (open trailer door)\n- Products are unusable/compromised upon delivery\n- This is a clear case of cargo damage rather than loss, delay, customs, addressing, or partial delivery issues",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.98,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9824999999999999,
+          "rationale": "The agent correctly classified the incident as 'damaged', provided sound reasoning linking water damage to the damaged category, followed proper format, and the answer perfectly matches the reference "
+        }
+      },
+      {
+        "query": "Customer contacted us reporting their order never arrived. Investigation reveals the last scan was at our Memphis hub 3 weeks ago, with no further tracking updates. All warehouse searches have been conducted without success in recovering the item.",
+        "gold": "lost",
+        "output": "**Classification: LOST**\n\n**Reasoning:**\n- No tracking updates for 3 weeks since last scan at Memphis hub\n- Comprehensive warehouse searches conducted with no recovery\n- Item has not arrived at destination\n- Extended time period without location data indicates the shipment cannot be located in the logistics network\n\nThis meets the criteria for a lost shipment rather than other categories like delayed (which would show recent activity) or damaged (which would involve physical recovery of the item).",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.98,
+          "output_integrity": 0.98,
+          "aggregate": 0.9575,
+          "rationale": "The agent correctly classified the incident as 'lost' with sound reasoning based on the 3-week gap, failed warehouse searches, and absence of tracking updates, fully addressing the task with proper fo"
+        }
+      },
+      {
+        "query": "Container #MSCU4567812 remains at the port facility pending resolution of tariff classification dispute. The authorities are requesting a detailed commercial invoice with harmonized codes for the electronic components included in this consignment.",
+        "gold": "customs_hold",
+        "output": "**Incident Classification: customs_hold**\n\n**Reasoning:**\nThe shipment is detained at the port due to a tariff classification dispute with authorities requesting documentation (commercial invoice with harmonized codes). This is a customs-related administrative hold, not a physical issue with the goods themselves, and fits the definition of a customs hold incident.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.98,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9824999999999999,
+          "rationale": "The agent correctly classified the incident as 'customs_hold' matching the reference answer, provided sound reasoning about tariff disputes and documentation requirements, followed proper classificati"
+        }
+      },
+      {
+        "query": "Recipient contacted us indicating the shipment went to their old residence from which they moved two months ago. The updated information was in our system but appears the label printed with outdated details.",
+        "gold": "wrong_address",
+        "output": "**Classification: wrong_address**\n\nThis incident involves a shipment being delivered to an incorrect address due to outdated label information, despite the correct address being available in the system. This is a clear case of wrong address delivery.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the incident as 'wrong_address' matching the reference answer, provided sound reasoning about outdated label information causing delivery to an incorrect address, and fo"
+        }
+      },
+      {
+        "query": "The driver left three cartons at our warehouse dock, however the purchase order indicates we were expecting seven cartons total. Please investigate why the shipment is incomplete.",
+        "gold": "partial",
+        "output": "**Classification: PARTIAL**\n\nThe shipment is incomplete, with only 3 of 7 expected cartons delivered. This is a partial shipment incident.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 0.95,
+          "output_integrity": 0.95,
+          "aggregate": 0.95,
+          "rationale": "The agent correctly classified the incident as 'partial' (matching the reference), provided sound reasoning about incomplete delivery (3 of 7 cartons), and executed the classification task accurately "
+        }
+      },
+      {
+        "query": "Weather conditions in the Midwest caused significant slowdowns on Route 80, and the shipment that was supposed to arrive Tuesday morning is now estimated for Thursday evening.",
+        "gold": "delayed",
+        "output": "**Classification: delayed**\n\nThe shipment is experiencing a time delay due to weather-related traffic conditions on the highway, but there is no indication of damage, loss, customs issues, address problems, or partial delivery. The incident is purely a delay in arrival time.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the incident as 'delayed' with sound reasoning about weather-caused slowdowns, properly formatted output, and complete accuracy matching the reference answer."
+        }
+      },
+      {
+        "query": "Upon delivery inspection, the customer reported that all 15 boxes of ceramic tiles had significant cracks and chips throughout. The external packaging showed clear signs of impact with torn cardboard and visible crushing on multiple sides. Driver confirmed rough handling during unloading.",
+        "gold": "damaged",
+        "output": "**Classification: DAMAGED**\n\nThis incident clearly falls into the \"damaged\" category based on:\n\n1. **Physical damage confirmed**: Significant cracks and chips on all 15 boxes of ceramic tiles\n2. **Packaging damage**: Torn cardboard and visible crushing on multiple sides\n3. **Root cause identified**: Rough handling during unloading confirmed by driver\n4. **Inspection documentation**: Damage was documented upon delivery inspection\n\nThe shipment arrived at its intended destination but the goods were rendered unsuitable for use due to mishandling during the delivery process.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.98,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the incident as 'damaged' matching the reference answer, provided sound reasoning with evidence from the input, followed proper classification format, and added no fabri"
+        }
+      },
+      {
+        "query": "Three pallets scheduled for delivery to the Portland distribution center are unaccounted for. The bill of lading was signed by our carrier, but the freight never materialized at the receiving dock. Cross-referencing with all regional facilities has produced no results regarding the current location of these goods.",
+        "gold": "lost",
+        "output": "**Classification: LOST**\n\nThe shipment is unaccounted for despite being signed by the carrier, with no trace found at the destination or any regional facilities. This indicates the freight has been lost in transit.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the incident as 'lost' matching the reference answer, provided sound reasoning based on the evidence (signed bill of lading but no freight at destination), and followed "
+        }
+      },
+      {
+        "query": "Our freight forwarder reports that the package is being inspected by border protection services due to discrepancies in the declared value. They have requested proof of purchase and additional certificates of origin to validate the transaction.",
+        "gold": "customs_hold",
+        "output": "**Classification: customs_hold**\n\nThis incident involves the shipment being detained by customs/border protection authorities pending resolution of documentation and compliance issues. The package cannot proceed until the required documentation (proof of purchase, certificates of origin) is provided and the declared value discrepancies are cleared.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the incident as 'customs_hold' matching the reference answer, provided sound reasoning about border protection detention and documentation requirements, and delivered th"
+        }
+      },
+      {
+        "query": "Package scanned as delivered but recipient states it was brought to the neighbor's house three doors down. The GPS coordinates show the driver stopped at a location approximately 100 meters from the intended drop-off point.",
+        "gold": "wrong_address",
+        "output": "**Classification: wrong_address**\n\n**Reasoning:**\nThe package was delivered to an incorrect location (neighbor's house instead of the intended recipient's address). While the driver's GPS coordinates show a deviation from the intended drop-off point, the core issue is that the package ended up at the wrong address, making it inaccessible to the actual recipient. This is a delivery accuracy/wrong address incident rather than a lost package, since the package's location is known and recoverable.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the incident as 'wrong_address' with sound reasoning that accurately identifies the core issue (delivery to neighbor's house) and distinguishes it from other incident ty"
+        }
+      },
+      {
+        "query": "The construction materials were delivered yesterday but we're short several pallets of cement bags and all the rebar that was ordered. Can you trace where the rest of our shipment ended up?",
+        "gold": "partial",
+        "output": "**Incident Classification: PARTIAL**\n\nThis shipment is missing multiple items (cement bags and rebar), but a portion of the order was successfully delivered. This is a partial shipment delivery incident rather than a complete loss.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the incident as 'partial' matching the reference answer, provided sound reasoning about why it's a partial delivery (some items delivered, others missing), and followed "
+        }
+      },
+      {
+        "query": "The truck arrived at the distribution center 3 hours past the expected delivery window due to heavy traffic on the interstate. Customer has been notified of the revised timeline.",
+        "gold": "delayed",
+        "output": "**Classification: delayed**\n\nThis incident involves a shipment that arrived later than the scheduled delivery window due to external circumstances (heavy traffic). The shipment itself is intact and on track, but the timing has been impacted.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the incident as 'delayed' matching the reference answer, provided sound reasoning about timing impact, and followed proper classification format with appropriate support"
+        }
+      },
+      {
+        "query": "Industrial machinery part arrived with bent hydraulic arm and scratched metal housing. Crate was intact with no external indicators of mishandling, but internal foam padding had shifted, allowing 200-pound component to move freely during the 3-day cross-country journey.",
+        "gold": "damaged",
+        "output": "**Classification: DAMAGED**\n\n**Reasoning:**\nThe shipment arrived with physical damage to the product itself (bent hydraulic arm and scratched metal housing). Despite the crate's external integrity, the internal packaging failure allowed the heavy component to shift during transit, resulting in product damage. This is clearly a damage incident rather than other categories like delayed, lost, customs_hold, wrong_address, or partial delivery.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the incident as 'damaged' with sound reasoning about physical damage and packaging failure, fully matching the reference answer and addressing the task precisely."
+        }
+      },
+      {
+        "query": "Recipient filed a claim stating the high-value electronics shipment was never delivered. Our records indicate the package was loaded onto delivery vehicle DV-2847 on Tuesday morning, but the driver has no recollection of the item and it's not present in the vehicle or warehouse upon inspection.",
+        "gold": "lost",
+        "output": "**Classification: LOST**\n\n**Reasoning:**\n- Package was confirmed loaded onto delivery vehicle but never reached the recipient\n- Thorough investigation (driver interview, vehicle inspection, warehouse check) found no trace of the shipment\n- No evidence of delivery or current location\n- This meets the criteria for a lost shipment rather than other categories:\n  - Not delayed (sufficient time has passed with no delivery)\n  - Not damaged (no damage reported)\n  - Not customs_hold (no customs involvement mentioned)\n  - Not wrong_address (delivery vehicle assignment indicates correct routing)\n  - Not partial (entire shipment is missing, not a partial delivery)",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.98,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9824999999999999,
+          "rationale": "The agent correctly classified the incident as 'lost' with comprehensive, logically sound reasoning that systematically ruled out alternative categories and directly addressed the classification task."
+        }
+      }
+    ]
+  },
+  "final_test": {
+    "objective_runs": [
+      1.0
+    ],
+    "gpa_runs": [
+      0.9701388888888889
+    ],
+    "objective_mean": 1.0,
+    "gpa_mean": 0.9701388888888889,
+    "gpa_dims": {
+      "target_alignment": 0.9499999999999997,
+      "reasoning_soundness": 0.9305555555555556,
+      "execution_accuracy": 1.0,
+      "output_integrity": 1.0
+    },
+    "examples": [
+      {
+        "query": "Import declaration was rejected due to incomplete information about the manufacturer. The clearance agent is working to obtain the necessary certificates and permits, but the merchandise will remain in the bonded warehouse until approval is granted.",
+        "gold": "customs_hold",
+        "output": "customs_hold",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the incident as 'customs_hold' matching the reference answer exactly, with proper format and clear alignment to the customs-related delay described in the input."
+        }
+      },
+      {
+        "query": "Driver delivered the package to 123 Main Street instead of 123 Main Avenue as specified on the shipping label. Customer called stating they never received their order and confirmed their correct location is on the Avenue, not the Street.",
+        "gold": "wrong_address",
+        "output": "wrong_address",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the incident as 'wrong_address', matching the reference answer exactly, with proper format and clear alignment to the task of categorizing a delivery to an incorrect add"
+        }
+      },
+      {
+        "query": "Received the order today but only got 8 out of 12 boxes listed on the manifest. The remaining items are missing and we need them urgently to complete our inventory restocking.",
+        "gold": "partial",
+        "output": "partial",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the incident as 'partial' matching the reference answer exactly, addressing a clear case of incomplete shipment delivery."
+        }
+      },
+      {
+        "query": "Shipment is currently running 24 hours behind the original ETA because of unexpected road closures and detours around the construction zone on Highway 95.",
+        "gold": "delayed",
+        "output": "delayed",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the shipment incident as 'delayed', matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "Electronics order arrived with water infiltration. Customer opened packages to find moisture inside sealed boxes, corroded circuit boards, and non-functional units. Tracking shows shipment was exposed to heavy rainfall during transfer at Memphis hub where trailer door was reportedly left open.",
+        "gold": "damaged",
+        "output": "damaged",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the water-damaged electronics incident as 'damaged', matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "Customer contacted us reporting their order never arrived. Investigation reveals the last scan was at our Memphis hub 3 weeks ago, with no further tracking updates. All warehouse searches have been conducted without success in recovering the item.",
+        "gold": "lost",
+        "output": "lost",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the incident as 'lost' matching the reference answer exactly, with proper format and clear alignment to the task of categorizing a shipment that disappeared after the la"
+        }
+      },
+      {
+        "query": "Container #MSCU4567812 remains at the port facility pending resolution of tariff classification dispute. The authorities are requesting a detailed commercial invoice with harmonized codes for the electronic components included in this consignment.",
+        "gold": "customs_hold",
+        "output": "customs_hold",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the incident as 'customs_hold' matching the reference answer exactly, with the input clearly describing a customs-related delay due to tariff classification dispute."
+        }
+      },
+      {
+        "query": "Recipient contacted us indicating the shipment went to their old residence from which they moved two months ago. The updated information was in our system but appears the label printed with outdated details.",
+        "gold": "wrong_address",
+        "output": "wrong_address",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the incident as 'wrong_address', matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "The driver left three cartons at our warehouse dock, however the purchase order indicates we were expecting seven cartons total. Please investigate why the shipment is incomplete.",
+        "gold": "partial",
+        "output": "partial",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the incomplete shipment (3 of 7 cartons delivered) as 'partial', matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "Weather conditions in the Midwest caused significant slowdowns on Route 80, and the shipment that was supposed to arrive Tuesday morning is now estimated for Thursday evening.",
+        "gold": "delayed",
+        "output": "delayed",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the shipment incident as 'delayed', matching the reference answer exactly, with proper format and clear alignment to the task of categorizing a weather-related delivery "
+        }
+      },
+      {
+        "query": "Upon delivery inspection, the customer reported that all 15 boxes of ceramic tiles had significant cracks and chips throughout. The external packaging showed clear signs of impact with torn cardboard and visible crushing on multiple sides. Driver confirmed rough handling during unloading.",
+        "gold": "damaged",
+        "output": "damaged",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the incident as 'damaged', matching the reference answer exactly, with clear evidence of physical damage to the shipment described in the input."
+        }
+      },
+      {
+        "query": "Three pallets scheduled for delivery to the Portland distribution center are unaccounted for. The bill of lading was signed by our carrier, but the freight never materialized at the receiving dock. Cross-referencing with all regional facilities has produced no results regarding the current location of these goods.",
+        "gold": "lost",
+        "output": "lost",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the incident as 'lost' matching the reference answer exactly, with the input clearly describing missing freight that cannot be located despite cross-referencing faciliti"
+        }
+      },
+      {
+        "query": "Our freight forwarder reports that the package is being inspected by border protection services due to discrepancies in the declared value. They have requested proof of purchase and additional certificates of origin to validate the transaction.",
+        "gold": "customs_hold",
+        "output": "customs_hold",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the incident as 'customs_hold' matching the reference answer exactly, with proper format and clear alignment to the border inspection scenario described."
+        }
+      },
+      {
+        "query": "Package scanned as delivered but recipient states it was brought to the neighbor's house three doors down. The GPS coordinates show the driver stopped at a location approximately 100 meters from the intended drop-off point.",
+        "gold": "wrong_address",
+        "output": "wrong_address",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the incident as 'wrong_address' matching the reference answer exactly, with proper format and clear alignment to the task of categorizing a delivery to an incorrect loca"
+        }
+      },
+      {
+        "query": "The construction materials were delivered yesterday but we're short several pallets of cement bags and all the rebar that was ordered. Can you trace where the rest of our shipment ended up?",
+        "gold": "partial",
+        "output": "partial",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the incident as 'partial' matching the reference answer, addressing the task precisely with proper format and accurate identification of a shipment that arrived incomple"
+        }
+      },
+      {
+        "query": "The truck arrived at the distribution center 3 hours past the expected delivery window due to heavy traffic on the interstate. Customer has been notified of the revised timeline.",
+        "gold": "delayed",
+        "output": "delayed",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the incident as 'delayed' matching the reference answer exactly, with the input clearly describing a delivery delay scenario."
+        }
+      },
+      {
+        "query": "Industrial machinery part arrived with bent hydraulic arm and scratched metal housing. Crate was intact with no external indicators of mishandling, but internal foam padding had shifted, allowing 200-pound component to move freely during the 3-day cross-country journey.",
+        "gold": "damaged",
+        "output": "damaged",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the incident as 'damaged' matching the reference answer exactly, with proper format and clear alignment to the task of categorizing a shipment incident involving physica"
+        }
+      },
+      {
+        "query": "Recipient filed a claim stating the high-value electronics shipment was never delivered. Our records indicate the package was loaded onto delivery vehicle DV-2847 on Tuesday morning, but the driver has no recollection of the item and it's not present in the vehicle or warehouse upon inspection.",
+        "gold": "lost",
+        "output": "lost",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the incident as 'lost' matching the reference answer exactly, with proper format and clear alignment to the task of categorizing a shipment incident where a package disa"
+        }
+      }
+    ]
+  },
+  "delta_objective": 0.38888888888888884,
+  "delta_gpa": -0.002361111111111036,
+  "optimization": {
+    "front": [
+      {
+        "obj": 1.0,
+        "gpa": 0.97625,
+        "iter": 1,
+        "strategy": "mutation"
+      }
+    ],
+    "history": [
+      {
+        "iter": 0,
+        "obj": 0.9,
+        "gpa": 0.968,
+        "composite": 0.9339999999999999,
+        "strategy": "baseline"
+      },
+      {
+        "iter": 1,
+        "obj": 1.0,
+        "gpa": 0.97625,
+        "composite": 0.9881249999999999,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 2,
+        "obj": 1.0,
+        "gpa": 0.9725,
+        "composite": 0.9862500000000001,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 3,
+        "obj": 1.0,
+        "gpa": 0.9725,
+        "composite": 0.9862500000000001,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 4,
+        "obj": 1.0,
+        "gpa": 0.9725,
+        "composite": 0.9862500000000001,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 5,
+        "obj": 1.0,
+        "gpa": 0.97125,
+        "composite": 0.985625,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 6,
+        "obj": 1.0,
+        "gpa": 0.975,
+        "composite": 0.9875,
+        "strategy": "mutation",
+        "front_size": 1
+      }
+    ],
+    "baseline_train_obj": 0.9,
+    "best_train_obj": 1.0
+  },
+  "duration_s": 112.2
+}

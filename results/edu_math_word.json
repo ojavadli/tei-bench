@@ -1,0 +1,573 @@
+{
+  "task_id": "edu_math_word",
+  "industry": "Education",
+  "metric": "numeric",
+  "n_train": 15,
+  "n_test": 15,
+  "source": "Authored for TEI-Bench; answers computed in-code (GSM8K-style).",
+  "agent_model": "claude-haiku-4-5",
+  "judge_model": "claude-sonnet-4-5",
+  "optimizer_model": "claude-sonnet-4-5",
+  "seed": 0,
+  "eval_repeats": 1,
+  "baseline_prompt": "You are a math tutor. Solve the problem.",
+  "optimized_prompt": "You are a math tutor solving grade-school math word problems. \n\nRead the problem carefully, perform the necessary calculations, and provide your answer as a single number only. Do not include units, currency symbols, explanations, or any other text in your final response.\n\nYour output must be only the numeric answer (e.g., \"72\" not \"$72\" or \"72 dollars\" or \"The answer is 72\").",
+  "baseline_test": {
+    "objective_runs": [
+      0.8666666666666667
+    ],
+    "gpa_runs": [
+      0.9966666666666667
+    ],
+    "objective_mean": 0.8666666666666667,
+    "gpa_mean": 0.9966666666666667,
+    "gpa_dims": {
+      "target_alignment": 0.9966666666666666,
+      "reasoning_soundness": 1.0,
+      "execution_accuracy": 0.9900000000000001,
+      "output_integrity": 1.0
+    },
+    "examples": [
+      {
+        "query": "There are 9 crates of 16 oranges. How many oranges total?",
+        "gold": "144",
+        "output": "# Total Oranges\n\nTo find the total number of oranges, I need to multiply:\n\n**9 crates × 16 oranges per crate = 144 oranges**\n\nThere are **144 oranges** total.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly identified the multiplication needed (9 × 16), performed it accurately to get 144, matched the reference answer exactly, and presented it in a clear, complete format."
+        }
+      },
+      {
+        "query": "A phone costs $450 with a $60 trade-in credit. What is the final price?",
+        "gold": "390",
+        "output": "# Phone Price Calculation\n\n**Starting price:** $450\n**Trade-in credit:** -$60\n\n**Final price:** $450 - $60 = **$390**\n\nThe final price of the phone is **$390**.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly identified the task, performed the subtraction accurately, and arrived at the correct final answer of $390 matching the reference."
+        }
+      },
+      {
+        "query": "A worker earns $18 per hour for 7 hours. How much is earned?",
+        "gold": "126",
+        "output": "# Earnings Calculation\n\n**Given information:**\n- Hourly rate: $18 per hour\n- Hours worked: 7 hours\n\n**Solution:**\nTotal earnings = Hourly rate × Hours worked\n\nTotal earnings = $18 × 7 = **$126**\n\nThe worker earned **$126**.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 0.9,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly calculated $126 using sound reasoning and proper methodology, though the task asked for 'the final numeric answer' and the output included formatting beyond just the number."
+        }
+      },
+      {
+        "query": "A bus travels 55 km/h for 4 hours. How far does it go?",
+        "gold": "220",
+        "output": "# Distance Calculation\n\nTo find distance, I'll use the formula:\n\n**Distance = Speed × Time**\n\n**Given:**\n- Speed = 55 km/h\n- Time = 4 hours\n\n**Solution:**\nDistance = 55 km/h × 4 hours = **220 km**\n\nThe bus travels **220 kilometers**.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly identified the problem type, applied the distance formula (d=s×t), performed accurate arithmetic (55×4=220), and provided the exact numeric answer matching the reference."
+        }
+      },
+      {
+        "query": "From 500 flyers, 213 were handed out. How many remain?",
+        "gold": "287",
+        "output": "# Flyers Remaining\n\nTo find how many flyers remain, I need to subtract the number handed out from the total:\n\n**500 - 213 = 287**\n\n**287 flyers remain.**",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly identified the subtraction operation needed, performed it accurately (500 - 213 = 287), and provided the exact answer matching the reference with clear reasoning."
+        }
+      },
+      {
+        "query": "A recipe needs 3 eggs per cake. How many eggs for 8 cakes?",
+        "gold": "24",
+        "output": "# Eggs Needed for 8 Cakes\n\n**Given information:**\n- 3 eggs per cake\n- Making 8 cakes\n\n**Calculation:**\n3 eggs/cake × 8 cakes = **24 eggs**\n\nYou need **24 eggs** to make 8 cakes.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 0.95,
+          "output_integrity": 1.0,
+          "aggregate": 0.9875,
+          "rationale": "The agent correctly solved 3×8=24, showed clear reasoning, and arrived at the right answer, though the format was more elaborate than the minimal numeric answer requested."
+        }
+      },
+      {
+        "query": "A store had 240 items and sold 156. How many are left?",
+        "gold": "84",
+        "output": "# Items Remaining\n\nTo find how many items are left, I need to subtract the items sold from the original amount.\n\n**240 - 156 = 84**\n\nThe store has **84 items** left.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly identified the subtraction operation needed, performed it accurately (240 - 156 = 84), and provided the exact answer matching the reference with clear reasoning."
+        }
+      },
+      {
+        "query": "Each ticket costs $13. How much for 6 tickets?",
+        "gold": "78",
+        "output": "# Cost of 6 Tickets\n\n**$13 × 6 = $78**\n\nEach ticket costs $13, so 6 tickets cost **$78**.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly multiplied 13 by 6 to get 78, directly addressing the task with sound arithmetic, proper execution, and a correct final answer matching the reference."
+        }
+      },
+      {
+        "query": "A garden has 5 beds with 24 plants each. How many plants?",
+        "gold": "120",
+        "output": "# Garden Plants Calculation\n\n**Given:**\n- Number of beds: 5\n- Plants per bed: 24\n\n**Solution:**\nTotal plants = 5 × 24 = **120 plants**\n\nThe garden has **120 plants** in total.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly identified the multiplication problem, performed the calculation accurately (5 × 24 = 120), and provided the exact answer matching the reference with clear, logical reasoning."
+        }
+      },
+      {
+        "query": "A 90-minute class is half over. How many minutes have passed?",
+        "gold": "45",
+        "output": "# Solution\n\nIf the class is half over, that means half of the 90 minutes have passed.\n\n90 ÷ 2 = **45 minutes**",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly identified that half of 90 minutes is 45 minutes, matching the reference answer with clear reasoning and proper execution."
+        }
+      },
+      {
+        "query": "Liam has $100 and spends $37. How much is left?",
+        "gold": "63",
+        "output": "# Money Left\n\n**Starting amount:** $100\n**Amount spent:** $37\n\n**Calculation:**\n$100 - $37 = **$63**\n\nLiam has **$63** left.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly identified the problem, performed the subtraction accurately, and arrived at the correct answer of $63, matching the reference answer perfectly."
+        }
+      },
+      {
+        "query": "A truck carries 8 pallets of 35 boxes. How many boxes?",
+        "gold": "280",
+        "output": "# Calculating Total Boxes\n\nTo find the total number of boxes:\n\n**8 pallets × 35 boxes per pallet = 280 boxes**\n\nThe truck carries **280 boxes**.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly identified the multiplication operation needed (8 × 35), performed it accurately to get 280, and presented the answer clearly matching the reference answer."
+        }
+      },
+      {
+        "query": "A pool is filled at 12 liters per minute for 15 minutes. How many liters?",
+        "gold": "180",
+        "output": "# Pool Filling Calculation\n\n**Given:**\n- Fill rate: 12 liters per minute\n- Time: 15 minutes\n\n**Solution:**\nTotal liters = Fill rate × Time\nTotal liters = 12 liters/minute × 15 minutes\nTotal liters = **180 liters**\n\nThe pool contains **180 liters** after 15 minutes.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly identified the problem as rate × time, performed the calculation accurately (12 × 15 = 180), and provided the exact answer matching the reference with clear, valid reasoning."
+        }
+      },
+      {
+        "query": "There are 365 days in a year; 78 have passed. How many remain?",
+        "gold": "287",
+        "output": "# Days Remaining in the Year\n\nTo find the remaining days, I need to subtract the days that have passed from the total:\n\n**365 - 78 = 287 days**\n\nThere are **287 days** remaining in the year.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly identified the subtraction operation needed, performed it accurately (365 - 78 = 287), and provided the exact answer matching the reference with clear reasoning."
+        }
+      },
+      {
+        "query": "A team scores 7 points in each of 11 games. Total points?",
+        "gold": "77",
+        "output": "# Total Points Calculation\n\n**Given:**\n- Points per game: 7\n- Number of games: 11\n\n**Solution:**\nTotal points = 7 × 11 = **77 points**",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly identified the multiplication problem, performed the calculation accurately (7×11=77), and provided the exact answer matching the reference with clear reasoning."
+        }
+      }
+    ]
+  },
+  "final_test": {
+    "objective_runs": [
+      1.0
+    ],
+    "gpa_runs": [
+      1.0
+    ],
+    "objective_mean": 1.0,
+    "gpa_mean": 1.0,
+    "gpa_dims": {
+      "target_alignment": 1.0,
+      "reasoning_soundness": 1.0,
+      "execution_accuracy": 1.0,
+      "output_integrity": 1.0
+    },
+    "examples": [
+      {
+        "query": "There are 9 crates of 16 oranges. How many oranges total?",
+        "gold": "144",
+        "output": "144",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly computed 9 × 16 = 144, matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "A phone costs $450 with a $60 trade-in credit. What is the final price?",
+        "gold": "390",
+        "output": "390",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly computed 450 - 60 = 390, provided only the numeric answer as requested, and matched the reference answer exactly."
+        }
+      },
+      {
+        "query": "A worker earns $18 per hour for 7 hours. How much is earned?",
+        "gold": "126",
+        "output": "126",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly computed 18 × 7 = 126, provided the exact numeric answer as required, and matched the reference answer perfectly."
+        }
+      },
+      {
+        "query": "A bus travels 55 km/h for 4 hours. How far does it go?",
+        "gold": "220",
+        "output": "220",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly computed distance as speed × time (55 × 4 = 220) and provided the exact numeric answer matching the reference with no extraneous content."
+        }
+      },
+      {
+        "query": "From 500 flyers, 213 were handed out. How many remain?",
+        "gold": "287",
+        "output": "287",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly computed 500 - 213 = 287, matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "A recipe needs 3 eggs per cake. How many eggs for 8 cakes?",
+        "gold": "24",
+        "output": "24",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly computed 3 eggs/cake × 8 cakes = 24 eggs, matching the reference answer exactly with proper format."
+        }
+      },
+      {
+        "query": "A store had 240 items and sold 156. How many are left?",
+        "gold": "84",
+        "output": "84",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent provided the correct numeric answer (84) matching the reference, directly addressing the subtraction problem with no extraneous content or errors."
+        }
+      },
+      {
+        "query": "Each ticket costs $13. How much for 6 tickets?",
+        "gold": "78",
+        "output": "78",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly computed 13 × 6 = 78, providing the exact numeric answer required with no extraneous content or errors."
+        }
+      },
+      {
+        "query": "A garden has 5 beds with 24 plants each. How many plants?",
+        "gold": "120",
+        "output": "120",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly computed 5 × 24 = 120, matching the reference answer exactly with proper numeric format and no extraneous content."
+        }
+      },
+      {
+        "query": "A 90-minute class is half over. How many minutes have passed?",
+        "gold": "45",
+        "output": "45",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly identified that half of 90 minutes is 45 minutes, provided the exact numeric answer in the required format, and matches the reference answer perfectly."
+        }
+      },
+      {
+        "query": "Liam has $100 and spends $37. How much is left?",
+        "gold": "63",
+        "output": "63",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent provided the correct numeric answer (63) matching the reference, addressing the subtraction problem exactly as required with no extraneous content."
+        }
+      },
+      {
+        "query": "A truck carries 8 pallets of 35 boxes. How many boxes?",
+        "gold": "280",
+        "output": "280",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly multiplied 8 pallets by 35 boxes per pallet to arrive at 280, matching the reference answer exactly with proper format."
+        }
+      },
+      {
+        "query": "A pool is filled at 12 liters per minute for 15 minutes. How many liters?",
+        "gold": "180",
+        "output": "180",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly computed 12 liters/minute × 15 minutes = 180 liters, matching the reference answer exactly with proper numeric format."
+        }
+      },
+      {
+        "query": "There are 365 days in a year; 78 have passed. How many remain?",
+        "gold": "287",
+        "output": "287",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly computed 365 - 78 = 287, matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "A team scores 7 points in each of 11 games. Total points?",
+        "gold": "77",
+        "output": "77",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly computed 7 × 11 = 77, matching the reference answer exactly with proper format and no extraneous content."
+        }
+      }
+    ]
+  },
+  "delta_objective": 0.1333333333333333,
+  "delta_gpa": 0.0033333333333332993,
+  "optimization": {
+    "front": [
+      {
+        "obj": 1.0,
+        "gpa": 1.0,
+        "iter": 1,
+        "strategy": "mutation"
+      },
+      {
+        "obj": 1.0,
+        "gpa": 1.0,
+        "iter": 2,
+        "strategy": "mutation"
+      },
+      {
+        "obj": 1.0,
+        "gpa": 1.0,
+        "iter": 3,
+        "strategy": "mutation"
+      },
+      {
+        "obj": 1.0,
+        "gpa": 1.0,
+        "iter": 4,
+        "strategy": "mutation"
+      },
+      {
+        "obj": 1.0,
+        "gpa": 1.0,
+        "iter": 5,
+        "strategy": "mutation"
+      },
+      {
+        "obj": 1.0,
+        "gpa": 1.0,
+        "iter": 6,
+        "strategy": "mutation"
+      }
+    ],
+    "history": [
+      {
+        "iter": 0,
+        "obj": 0.8,
+        "gpa": 0.9974999999999999,
+        "composite": 0.8987499999999999,
+        "strategy": "baseline"
+      },
+      {
+        "iter": 1,
+        "obj": 1.0,
+        "gpa": 1.0,
+        "composite": 1.0,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 2,
+        "obj": 1.0,
+        "gpa": 1.0,
+        "composite": 1.0,
+        "strategy": "mutation",
+        "front_size": 2
+      },
+      {
+        "iter": 3,
+        "obj": 1.0,
+        "gpa": 1.0,
+        "composite": 1.0,
+        "strategy": "mutation",
+        "front_size": 3
+      },
+      {
+        "iter": 4,
+        "obj": 1.0,
+        "gpa": 1.0,
+        "composite": 1.0,
+        "strategy": "mutation",
+        "front_size": 4
+      },
+      {
+        "iter": 5,
+        "obj": 1.0,
+        "gpa": 1.0,
+        "composite": 1.0,
+        "strategy": "mutation",
+        "front_size": 5
+      },
+      {
+        "iter": 6,
+        "obj": 1.0,
+        "gpa": 1.0,
+        "composite": 1.0,
+        "strategy": "mutation",
+        "front_size": 6
+      }
+    ],
+    "baseline_train_obj": 0.8,
+    "best_train_obj": 1.0
+  },
+  "duration_s": 46.9
+}

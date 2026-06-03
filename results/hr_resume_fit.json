@@ -1,0 +1,627 @@
+{
+  "task_id": "hr_resume_fit",
+  "industry": "Human Resources",
+  "metric": "classification",
+  "n_train": 15,
+  "n_test": 18,
+  "source": "Authored for TEI-Bench (Sonnet-generated, Sonnet-validated; kept only label-agreed examples).",
+  "agent_model": "claude-haiku-4-5",
+  "judge_model": "claude-sonnet-4-5",
+  "optimizer_model": "claude-sonnet-4-5",
+  "seed": 0,
+  "eval_repeats": 1,
+  "baseline_prompt": "You are a recruiting screening assistant. Classify the candidate note into a hiring-stage recommendation. Classify into one of these categories: strong_fit, maybe_fit, culture_concern, overqualified, underqualified, wrong_role.",
+  "optimized_prompt": "You are a recruiting screening assistant. Your task is to classify candidate notes into a hiring-stage recommendation category.\n\n**Classification Categories:**\n- **strong_fit**: Candidate meets or exceeds requirements with no significant concerns\n- **maybe_fit**: Candidate has potential but has gaps, uncertainties, or areas requiring further validation\n- **culture_concern**: Candidate has technical qualifications but shows behavioral red flags or misalignment with company values/culture\n- **overqualified**: Candidate's experience/seniority significantly exceeds the role requirements in ways that may cause retention or fit issues\n- **underqualified**: Candidate lacks fundamental requirements or has too many critical skill gaps\n- **wrong_role**: Candidate's background/interests are misaligned with the core responsibilities of the position\n\n**Instructions:**\n1. Read the entire candidate note carefully\n2. Identify the primary concern or strength pattern\n3. Select the SINGLE most appropriate category\n4. Output ONLY the category label (e.g., \"maybe_fit\") with no additional text, formatting, rationale, or explanation\n5. If both technical strengths and cultural concerns are present, prioritize culture_concern\n6. If gaps exist but candidate shows promise, choose maybe_fit over underqualified\n\n**Output format:** Return only the classification label as plain text.",
+  "baseline_test": {
+    "objective_runs": [
+      0.7777777777777778
+    ],
+    "gpa_runs": [
+      0.9254166666666668
+    ],
+    "objective_mean": 0.7777777777777778,
+    "gpa_mean": 0.9254166666666668,
+    "gpa_dims": {
+      "target_alignment": 0.9111111111111109,
+      "reasoning_soundness": 0.9072222222222224,
+      "execution_accuracy": 0.9411111111111112,
+      "output_integrity": 0.9422222222222223
+    },
+    "examples": [
+      {
+        "query": "Candidate applying for warehouse associate position has 12 years as Director of Supply Chain Operations, implemented ERP systems across multi-site operations, and managed logistics budgets exceeding $100M annually. They hold Six Sigma Black Belt and an advanced degree in Operations Management. This hourly position involves picking, packing, and inventory tasks that wouldn't utilize their strategic expertise.",
+        "gold": "overqualified",
+        "output": "**Classification: overqualified**\n\n**Rationale:**\n\nThis candidate's extensive background significantly exceeds the requirements for a warehouse associate role:\n\n- **Experience mismatch**: 12 years in director-level strategic operations vs. hourly tactical warehouse tasks\n- **Skill gap (upward)**: ERP implementation, multi-site management, and $100M+ budget oversight far exceed picking/packing needs\n- **Credentials surplus**: Six Sigma Black Belt and advanced degree are unnecessary for this position\n- **Flight risk**: High likelihood of rapid departure once boredom sets in or a more suitable role becomes available\n- **Compensation concern**: May expect salary/benefits misaligned with hourly warehouse associate pay\n\n**Recommendation:** \nConsider redirecting this candidate toward operations management, logistics coordination, or supply chain roles within your organization where their expertise would be fully utilized. If they insist on this position, clarify expectations about role scope and growth trajectory to avoid costly turnover.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.98,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9824999999999999,
+          "rationale": "The agent correctly classified the candidate as 'overqualified' with comprehensive, logically sound reasoning that directly addresses the task without deviation, though the additional recommendation s"
+        }
+      },
+      {
+        "query": "Candidate has 6 months of customer service experience but the position requires 3+ years in B2B sales with proven track record of closing enterprise deals. No evidence of any sales methodology training or quota achievement. Friendly personality but lacks the fundamental sales competencies we need.",
+        "gold": "underqualified",
+        "output": "**Classification: underqualified**\n\n**Rationale:**\n- Significant experience gap (6 months vs. 3+ years required)\n- Wrong domain (customer service vs. B2B sales)\n- No demonstrated sales competencies (closing ability, quota achievement, sales methodology)\n- Missing enterprise sales experience entirely\n\nWhile the candidate's friendly personality is a positive trait, they lack the foundational sales experience and proven track record essential for this role. This is a clear experience/skill mismatch rather than a cultural or role-fit issue.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified as 'underqualified' matching the reference, provided sound reasoning identifying all key gaps (experience, domain, competencies), followed proper format, and added no fa"
+        }
+      },
+      {
+        "query": "Candidate has exceptional backend engineering skills with 8 years of Java and Python experience, but we're hiring for a frontend React developer. Their portfolio shows no JavaScript framework work. They mentioned interest in transitioning but lack the required skills for this specific opening.",
+        "gold": "wrong_role",
+        "output": "**Classification: wrong_role**\n\n**Reasoning:**\n- The candidate's core expertise (backend engineering with Java/Python) doesn't align with the frontend React developer position\n- No demonstrated experience with JavaScript frameworks, which is essential for this role\n- While their interest in transitioning is noted, they lack the **required skills** for this specific opening\n- This is a skill-set mismatch rather than a qualification level issue\n\n**Recommendation:**\nConsider flagging this candidate for future backend positions that match their expertise, or discuss with them whether they have concrete plans and timeline for building frontend skills. For this current frontend role, continue searching for candidates with demonstrated React/JavaScript experience.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified as 'wrong_role' matching the reference, provided sound reasoning about skill mismatch, and added helpful context without deviating from the core task."
+        }
+      },
+      {
+        "query": "Evaluated candidate for Project Manager role in our construction division. He holds PMP certification, has managed 12+ commercial building projects ranging from $2M to $15M, and maintained an average 96% on-time completion rate. Familiar with Procore and our preferred project management methodology. His conflict resolution example during the panel interview demonstrated maturity and client-first thinking. Drug test and background check already cleared. His 20 years of experience brings stability without rigidity.",
+        "gold": "strong_fit",
+        "output": "**Classification: strong_fit**\n\n**Rationale:**\n\n- **Credentials**: PMP certification directly matches role requirements\n- **Relevant experience**: 12+ commercial building projects in the $2M-$15M range aligns well with construction division scope\n- **Proven performance**: 96% on-time completion rate demonstrates consistent delivery excellence\n- **Technical competency**: Proficiency with Procore and familiarity with your preferred methodology reduces onboarding friction\n- **Soft skills**: Conflict resolution example and client-first mindset indicate maturity and cultural alignment\n- **Risk mitigation**: Background check and drug test already cleared\n- **Experience depth**: 20 years brings valuable stability without suggesting inflexibility\n\nThis candidate demonstrates clear capability across technical, behavioral, and cultural dimensions with minimal gaps or concerns.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9675,
+          "rationale": "The agent correctly classified as 'strong_fit' matching the reference, provided well-structured supporting rationale grounded in the input evidence, followed proper format, and demonstrated sound reas"
+        }
+      },
+      {
+        "query": "The candidate has 3 years of experience in project coordination, which is close to what we need, though they haven't directly managed the specific software platforms we use. Their communication skills during the phone screen were excellent, and they showed genuine enthusiasm for the role. However, I'd like the hiring manager to probe deeper into their ability to handle our scale of operations, as their previous company was significantly smaller. Worth a second conversation to assess technical adaptability.",
+        "gold": "maybe_fit",
+        "output": "**Classification: maybe_fit**\n\n**Rationale:**\n- **Positive indicators:** Relevant experience level (3 years in project coordination), strong communication skills, genuine enthusiasm, and demonstrated interest in the role\n- **Key concerns:** Lack of direct experience with your specific software platforms and potential scaling concerns (smaller company background)\n- **Recommendation alignment:** Your instinct to move forward with a second conversation is sound—this candidate warrants deeper exploration before making a final decision\n\n**Suggested focus areas for hiring manager:**\n- Technical adaptability and learning velocity with new platforms\n- Experience scaling processes or handling increased complexity\n- Specific examples of how they've managed growth or larger-scope projects\n- Willingness and ability to ramp up quickly on your tech stack\n\nThis is a candidate with foundational fit who needs validation on key gaps before proceeding further.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.98,
+          "output_integrity": 0.98,
+          "aggregate": 0.9575,
+          "rationale": "The agent correctly classified as 'maybe_fit' matching the reference, provided well-structured reasoning aligned with the input concerns, followed proper format, and added valuable context without fab"
+        }
+      },
+      {
+        "query": "Technical skills are definitely there - strong background in data analysis and Python. However, multiple interviewers noted that the candidate interrupted frequently and didn't seem to listen to questions fully before responding. They also made several comments about their previous workplace being 'too collaborative' and needing 'less hand-holding from management.'",
+        "gold": "culture_concern",
+        "output": "**Classification: culture_concern**\n\n**Reasoning:**\n\nWhile the candidate has solid technical qualifications (data analysis, Python), the behavioral red flags outweigh the technical fit:\n\n1. **Communication style issues**: Frequent interrupting and not fully listening to questions suggests potential collaboration challenges, especially problematic in team-based environments\n\n2. **Culture misalignment**: Comments about previous workplace being \"too collaborative\" and wanting less management support indicate potential friction with:\n   - Team dynamics\n   - Feedback receptiveness\n   - Organizational norms around teamwork\n\n3. **Multiple observer consensus**: Multiple interviewers noted the same patterns, which strengthens the signal\n\n**Recommendation:** Before moving forward, clarify whether your role/team culture actually requires less collaboration (unlikely for most data roles). If collaboration is important, this candidate may struggle with integration despite technical capability. Consider a culture-fit conversation or pass.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9675,
+          "rationale": "The agent correctly classified as 'culture_concern' matching the reference, provided sound reasoning grounded in the input evidence (interrupting, collaboration comments, multiple interviewer consensu"
+        }
+      },
+      {
+        "query": "Reviewed application for customer service representative role. Applicant holds an MBA from Wharton and spent the last decade as VP of Customer Experience at two Fortune 500 companies, leading transformation initiatives and reporting directly to C-suite. Their salary history is 3-4x our budgeted range. Concerned they're applying during a job search gap and will leave as soon as a director-level opportunity emerges.",
+        "gold": "overqualified",
+        "output": "**Classification: overqualified**\n\n**Rationale:**\n\n1. **Significant credential/experience mismatch** – MBA from top-tier program + VP-level experience + C-suite exposure far exceeds customer service representative requirements\n\n2. **Compensation misalignment** – 3-4x salary expectations creates financial sustainability risk; they're unlikely to be satisfied with the role long-term\n\n3. **Flight risk** – Job search gap combined with overqualification pattern suggests this is a placeholder position, not a genuine career move. High probability of departure once a director-level role materializes\n\n4. **Role satisfaction concern** – Someone accustomed to strategic transformation and executive visibility will likely find representative-level work unfulfilling\n\n**Recommendation:** \nPass on this candidate for this role. Consider whether you have director/manager-level positions that might be appropriate, or suggest they reapply when such openings exist. If you reach out, be transparent about the role scope to avoid wasting both parties' time.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9675,
+          "rationale": "The agent correctly classified as 'overqualified' matching the reference, provided logically sound reasoning grounded in the input facts (MBA, VP experience, salary mismatch, flight risk), followed pr"
+        }
+      },
+      {
+        "query": "Candidate expressed interest in the Construction Project Manager position but has only worked as a general laborer and foreman on small residential projects. Role demands PMP certification, experience managing commercial builds over $10M, and vendor/subcontractor coordination for multi-phase developments. Foundation is there but nowhere near the level we need.",
+        "gold": "underqualified",
+        "output": "**Classification: underqualified**\n\n**Rationale:**\n- The candidate lacks the required PMP certification\n- Experience is limited to small residential projects; role requires commercial builds at $10M+ scale\n- No demonstrated experience with complex vendor/subcontractor coordination or multi-phase project management\n- While general labor and foreman background provides relevant foundation, there's a significant gap between current capability and role requirements\n\n**Recommendation:** Consider for entry-level project coordinator or assistant PM role if available, or suggest they pursue PMP certification and larger project experience before reapplying for this position.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.98,
+          "output_integrity": 0.98,
+          "aggregate": 0.9575,
+          "rationale": "The agent correctly classified as 'underqualified' matching the reference, provided sound reasoning citing specific gaps (PMP, scale, complexity), maintained proper format, and added helpful context w"
+        }
+      },
+      {
+        "query": "This person has deep expertise in supply chain logistics and warehouse operations management, which would be valuable for our operations team. However, they applied for the customer success manager position which requires client relationship skills they haven't demonstrated.",
+        "gold": "wrong_role",
+        "output": "**Classification: wrong_role**\n\n**Reasoning:**\nThe candidate has strong, relevant expertise in supply chain and warehouse operations—valuable skills for your organization. However, there's a fundamental mismatch between their background and the specific position they applied for (customer success manager).\n\n**Recommendation:**\nConsider one of these approaches:\n1. **Redirect internally** – Suggest they apply for an operations or logistics role where their expertise is a direct fit\n2. **Discuss with hiring manager** – If you have open operations positions, flag this candidate as a strong fit for those roles instead\n3. **Provide feedback** – If no suitable roles exist, let them know their background is strong but doesn't align with the CSM position's client-facing requirements\n\nThis is a salvageable situation where the candidate may be a strong fit for a *different* role in your organization.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9675,
+          "rationale": "The agent correctly classified as 'wrong_role' matching the reference, provided sound reasoning about the mismatch between candidate skills and position requirements, and added helpful but non-require"
+        }
+      },
+      {
+        "query": "Phone screened candidate for the Full Stack Developer role. She has 4 years building React/Node.js applications, contributed to open source projects, and her GitHub shows clean, well-documented code. Solved our technical challenge in 35 minutes with an elegant solution. Currently works at a similar-sized startup and understands the pace. Her motivation for leaving is legitimate—seeking more backend infrastructure work, which is exactly what this position offers.",
+        "gold": "strong_fit",
+        "output": "**Classification: strong_fit**\n\n**Rationale:**\n- **Technical skills**: 4 years of directly relevant experience (React/Node.js) with demonstrated code quality\n- **Problem-solving**: Solved technical challenge efficiently with an elegant approach\n- **Cultural alignment**: Startup experience shows she understands the pace and environment\n- **Role alignment**: Her stated motivation (more backend infrastructure work) matches what the position offers—this is a genuine fit, not a lateral move\n- **Growth trajectory**: Open source contributions indicate initiative and continuous learning\n\nThis candidate checks all primary boxes for a strong hire. Recommend moving to next interview stage.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9675,
+          "rationale": "The agent correctly classified as 'strong_fit' matching the reference, provided well-structured supporting rationale grounded in the input details, followed proper format, and added no fabricated info"
+        }
+      },
+      {
+        "query": "Interviewed someone with a non-traditional background who has transferable skills from adjacent fields. They demonstrated strong critical thinking and picked up on nuances quickly during our discussion, but they lack direct domain expertise that other candidates might bring. The salary expectations are reasonable and they're clearly motivated to pivot into this space. It's a bit of a gamble, so I'd suggest another round focused on assessing how steep the learning curve would actually be.",
+        "gold": "maybe_fit",
+        "output": "**Classification: maybe_fit**\n\n**Rationale:**\n- **Positive signals**: Strong critical thinking, quick learning ability, reasonable salary expectations, genuine motivation, and transferable skills are valuable indicators of potential success\n- **Key uncertainty**: Lack of direct domain expertise creates genuine risk that warrants further evaluation\n- **Appropriate next step**: Your instinct to conduct another assessment round is sound—use it to specifically probe:\n  - How quickly they've picked up technical/domain knowledge in past transitions\n  - Specific examples of steep learning curves they've overcome\n  - Their approach to self-directed learning\n  - Whether the domain expertise gap is truly learnable vs. requiring years of foundational experience\n\nThis candidate isn't a strong fit yet (too much unknown), but they're not underqualified either (demonstrated capability is there). A second round focused on learning velocity and domain-specific aptitude could move them to strong_fit or confirm underqualified concerns.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9675,
+          "rationale": "The agent correctly classified as 'maybe_fit' matching the reference, provided well-structured reasoning that directly addresses the task's ambiguity signals (transferable skills vs. domain gap), and "
+        }
+      },
+      {
+        "query": "The candidate's project management experience aligns well with the job description and they have the certifications we're looking for. What's concerning is their response to questions about feedback - they stated they don't typically need much direction and seemed resistant to our quarterly review process. Their previous tenure history shows a pattern of leaving roles after 12-18 months when they felt 'micromanaged.'",
+        "gold": "culture_concern",
+        "output": "**Classification: culture_concern**\n\n**Reasoning:**\n\nThe candidate has strong technical qualifications (relevant PM experience and certifications), but the behavioral red flags suggest a potential cultural misalignment:\n\n- **Resistance to feedback mechanisms** - dismissing the need for direction and showing hesitation about quarterly reviews\n- **Pattern of early departures** - consistent 12-18 month tenure with stated frustration about oversight\n- **Autonomy expectations mismatch** - their preference for independence may conflict with your organization's management style\n\n**Recommendation:**\n\nBefore moving forward, clarify:\n1. Your company's actual management philosophy and oversight level\n2. Whether this role genuinely allows high autonomy or requires closer collaboration\n3. Probe deeper on their feedback receptiveness - is this a communication style issue or a fundamental resistance to accountability?\n\nIf your organization has a collaborative, structured feedback culture, this candidate could create friction. If you operate with high autonomy and minimal check-ins, they might be a fit despite the concern.\n\nThe pattern suggests this isn't about the work itself - it's about working *style* compatibility.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9675,
+          "rationale": "The agent correctly classified as 'culture_concern' with sound reasoning about behavioral red flags and cultural misalignment, though it added helpful but unrequested elaboration beyond the core class"
+        }
+      },
+      {
+        "query": "Candidate's resume shows they were Chief Technology Officer at a Series C startup, previously Principal Engineer at Google, and hold a PhD in Computer Science from MIT. They've published 20+ papers and hold several patents. Our opening is for a junior backend developer position requiring 1-3 years experience. The gap between their credentials and this role is substantial.",
+        "gold": "overqualified",
+        "output": "**Classification: overqualified**\n\n**Reasoning:**\n\nThis candidate's background significantly exceeds the requirements for a junior backend developer role:\n\n- **Experience level mismatch**: CTO and Principal Engineer roles are 10+ years ahead of the 1-3 year requirement\n- **Educational overqualification**: PhD from MIT far exceeds typical junior developer expectations\n- **Research/IP track record**: 20+ publications and patents indicate deep expertise beyond the scope of this position\n\n**Risk factors:**\n- High likelihood of rapid disengagement due to lack of challenge\n- Compensation expectations will likely be misaligned\n- Retention risk—they'll likely seek advancement or leave for more senior roles quickly\n- May become frustrated with junior-level tasks and responsibilities\n\n**Recommendation:**\nConsider redirecting this candidate toward senior/staff engineer, architect, or technical leadership roles if available. If you proceed, have an explicit conversation about role expectations and growth trajectory to ensure mutual fit.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.98,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9824999999999999,
+          "rationale": "The agent correctly classified as 'overqualified' with sound reasoning about the credential-role gap, proper format, and comprehensive analysis that aligns perfectly with the reference answer."
+        }
+      },
+      {
+        "query": "Interviewed for the Machine Learning Engineer opening. Candidate completed an online bootcamp and has built a few personal projects with scikit-learn. However, the position requires advanced degree in Computer Science or related field, plus 5+ years deploying production ML systems. Not ready for this senior-level position.",
+        "gold": "underqualified",
+        "output": "**Classification: underqualified**\n\n**Reasoning:**\n- The candidate lacks the required advanced degree (CS or related field)\n- No demonstrated production ML deployment experience vs. the required 5+ years\n- Background limited to bootcamp training and personal projects with basic ML libraries\n- Clear gap between candidate's junior level and the senior-level position requirements\n\n**Recommendation:** Consider for junior/entry-level ML roles if available, or suggest the candidate gain production experience before reapplying for this position.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.98,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9824999999999999,
+          "rationale": "The agent correctly classified as 'underqualified' matching the reference, provided sound reasoning identifying all qualification gaps, followed proper format, and added helpful context without fabric"
+        }
+      },
+      {
+        "query": "Strong project management credentials with PMP certification and 10 years leading cross-functional teams, but they applied for an individual contributor software engineering role. Their technical skills are outdated and they clearly excel at coordination rather than coding.",
+        "gold": "wrong_role",
+        "output": "**Classification: overqualified**\n\n**Reasoning:**\n- The candidate's extensive project management experience (10 years, PMP certification) and demonstrated strength in leadership/coordination significantly exceed the requirements for an individual contributor engineering role\n- While their technical skills are outdated, the primary concern here is overqualification rather than underqualification—they're overqualified for the *role level* (IC vs. leadership)\n- This candidate would likely become disengaged, leave quickly, or push for promotion, creating retention risk\n- Their strengths (team leadership, cross-functional coordination) are misaligned with an IC position that typically requires deep technical contribution without management responsibilities\n\n**Recommendation:** Consider redirecting them toward engineering management, technical program management, or senior/staff engineer roles where their leadership background and coordination skills would be valued assets.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.25,
+          "reasoning_soundness": 0.45,
+          "execution_accuracy": 0.0,
+          "output_integrity": 0.0,
+          "aggregate": 0.175,
+          "rationale": "The agent classified as 'overqualified' when the correct answer is 'wrong_role'—a fundamental mismatch where someone excelling at coordination rather than coding is applying for a software engineering"
+        }
+      },
+      {
+        "query": "Interviewed Sarah Chen for the Senior Data Analyst position. She has 6 years of experience with SQL, Python, and Tableau—exactly what we need. Her portfolio demonstrated complex dashboard projects for Fortune 500 clients. She explained her approach to A/B testing clearly and showed genuine enthusiasm about our mission. References were glowing. Salary expectations align with our range at $95-105k. Available to start in 3 weeks.",
+        "gold": "strong_fit",
+        "output": "**Classification: strong_fit**\n\n**Rationale:**\n- **Experience match**: 6 years directly relevant experience with all required technical skills (SQL, Python, Tableau)\n- **Demonstrated capability**: Portfolio shows complex, enterprise-level work with Fortune 500 clients\n- **Role alignment**: Clear understanding of core competencies (A/B testing methodology)\n- **Cultural indicators**: Genuine enthusiasm about mission suggests values alignment\n- **Practical factors**: References validate experience, salary expectations align, reasonable start timeline\n- **No red flags**: No overqualification concerns, no skill gaps, no availability issues\n\n**Recommendation**: Move forward to next stage. This candidate checks all boxes for the Senior Data Analyst role.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.98,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified as 'strong_fit' matching the reference, provided well-structured supporting rationale with valid reasoning from the input evidence, followed proper format, and delivered"
+        }
+      },
+      {
+        "query": "Candidate performed well on the coding challenge and has impressive credentials. However, during the lunch interview, they made several offhand remarks that suggested a lack of awareness around inclusive language. When the team discussed our commitment to diversity initiatives, the candidate seemed disengaged and changed the subject quickly.",
+        "gold": "culture_concern",
+        "output": "**Classification: culture_concern**\n\n**Rationale:**\n\nThe candidate demonstrates strong technical qualifications (solid coding performance and impressive credentials), which would normally suggest a \"strong_fit.\" However, the behavioral observations during the lunch interview raise meaningful red flags:\n\n- Insensitive language choices\n- Disengagement with diversity initiatives\n- Apparent avoidance of the topic\n\n**Why not other categories:**\n- Not \"underqualified\" or \"wrong_role\" — technical skills are clearly there\n- Not \"overqualified\" — credentials aren't the issue\n- Not \"maybe_fit\" — culture alignment concerns are significant enough to warrant a distinct flag\n\n**Recommendation:**\nThis warrants further exploration before moving forward. Consider:\n1. A structured conversation with the candidate about your company values and team dynamics\n2. Additional interviews with team members to assess cultural fit more thoroughly\n3. Clarifying whether this was an isolated incident or reflects deeper misalignment\n\nStrong technical skills don't compensate for potential team friction or values misalignment, especially in organizations prioritizing inclusive culture.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9675,
+          "rationale": "The agent correctly classified as 'culture_concern' matching the reference, provided sound reasoning distinguishing this from other categories, and offered relevant context without fabrication or drif"
+        }
+      },
+      {
+        "query": "This candidate has 15 years of senior leadership experience managing teams of 50+ engineers, including P&L responsibility for a $200M division. The open position is for an individual contributor software developer role with no management responsibilities. While technically skilled, their background suggests they would quickly become disengaged with the scope and compensation level of this junior-to-mid level position.",
+        "gold": "overqualified",
+        "output": "**Classification: overqualified**\n\n**Rationale:**\n- Extensive senior leadership experience (15 years) far exceeds the requirements of an individual contributor role\n- Track record managing large teams and significant P&L responsibility indicates someone accustomed to strategic scope and decision-making authority\n- Significant mismatch in role level (senior leader → junior-to-mid IC developer)\n- High risk of disengagement due to limited growth trajectory and likely compensation misalignment\n- Candidate would likely view this as a step backward, creating retention risk\n\n**Recommendation:** Consider whether this candidate might be better suited for a senior/staff engineer, tech lead, or engineering management position if available. If pursuing this candidate, be transparent about role scope to avoid wasting both parties' time.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9675,
+          "rationale": "The agent correctly classified as 'overqualified' matching the reference, provided sound reasoning about the experience-role mismatch, followed proper format, and added helpful context without contrad"
+        }
+      }
+    ]
+  },
+  "final_test": {
+    "objective_runs": [
+      1.0
+    ],
+    "gpa_runs": [
+      0.9708333333333332
+    ],
+    "objective_mean": 1.0,
+    "gpa_mean": 0.9708333333333332,
+    "gpa_dims": {
+      "target_alignment": 0.9527777777777775,
+      "reasoning_soundness": 0.9305555555555556,
+      "execution_accuracy": 1.0,
+      "output_integrity": 1.0
+    },
+    "examples": [
+      {
+        "query": "Candidate applying for warehouse associate position has 12 years as Director of Supply Chain Operations, implemented ERP systems across multi-site operations, and managed logistics budgets exceeding $100M annually. They hold Six Sigma Black Belt and an advanced degree in Operations Management. This hourly position involves picking, packing, and inventory tasks that wouldn't utilize their strategic expertise.",
+        "gold": "overqualified",
+        "output": "overqualified",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the candidate as 'overqualified' matching the reference answer exactly, with clear alignment between the extensive executive credentials and the basic hourly warehouse r"
+        }
+      },
+      {
+        "query": "Candidate has 6 months of customer service experience but the position requires 3+ years in B2B sales with proven track record of closing enterprise deals. No evidence of any sales methodology training or quota achievement. Friendly personality but lacks the fundamental sales competencies we need.",
+        "gold": "underqualified",
+        "output": "underqualified",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the candidate as 'underqualified' matching the reference answer exactly, with the input clearly supporting this conclusion due to significant experience gaps and missing"
+        }
+      },
+      {
+        "query": "Candidate has exceptional backend engineering skills with 8 years of Java and Python experience, but we're hiring for a frontend React developer. Their portfolio shows no JavaScript framework work. They mentioned interest in transitioning but lack the required skills for this specific opening.",
+        "gold": "wrong_role",
+        "output": "wrong_role",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the candidate as 'wrong_role' matching the reference answer exactly, with the classification clearly justified by the mismatch between backend skills and frontend requir"
+        }
+      },
+      {
+        "query": "Evaluated candidate for Project Manager role in our construction division. He holds PMP certification, has managed 12+ commercial building projects ranging from $2M to $15M, and maintained an average 96% on-time completion rate. Familiar with Procore and our preferred project management methodology. His conflict resolution example during the panel interview demonstrated maturity and client-first thinking. Drug test and background check already cleared. His 20 years of experience brings stability without rigidity.",
+        "gold": "strong_fit",
+        "output": "strong_fit",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the candidate as 'strong_fit' matching the reference answer exactly, with the input clearly supporting this classification through extensive qualifications, certificatio"
+        }
+      },
+      {
+        "query": "The candidate has 3 years of experience in project coordination, which is close to what we need, though they haven't directly managed the specific software platforms we use. Their communication skills during the phone screen were excellent, and they showed genuine enthusiasm for the role. However, I'd like the hiring manager to probe deeper into their ability to handle our scale of operations, as their previous company was significantly smaller. Worth a second conversation to assess technical adaptability.",
+        "gold": "maybe_fit",
+        "output": "maybe_fit",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the candidate note as 'maybe_fit', which perfectly matches the reference answer and appropriately captures the mixed signals of strong soft skills but concerns about tec"
+        }
+      },
+      {
+        "query": "Technical skills are definitely there - strong background in data analysis and Python. However, multiple interviewers noted that the candidate interrupted frequently and didn't seem to listen to questions fully before responding. They also made several comments about their previous workplace being 'too collaborative' and needing 'less hand-holding from management.'",
+        "gold": "culture_concern",
+        "output": "culture_concern",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the candidate note as 'culture_concern' based on clear behavioral red flags (interrupting, not listening, negative comments about collaboration), matching the reference "
+        }
+      },
+      {
+        "query": "Reviewed application for customer service representative role. Applicant holds an MBA from Wharton and spent the last decade as VP of Customer Experience at two Fortune 500 companies, leading transformation initiatives and reporting directly to C-suite. Their salary history is 3-4x our budgeted range. Concerned they're applying during a job search gap and will leave as soon as a director-level opportunity emerges.",
+        "gold": "overqualified",
+        "output": "overqualified",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the candidate as 'overqualified' matching the reference answer exactly, with the input clearly describing excessive credentials (MBA, VP experience, Fortune 500 backgrou"
+        }
+      },
+      {
+        "query": "Candidate expressed interest in the Construction Project Manager position but has only worked as a general laborer and foreman on small residential projects. Role demands PMP certification, experience managing commercial builds over $10M, and vendor/subcontractor coordination for multi-phase developments. Foundation is there but nowhere near the level we need.",
+        "gold": "underqualified",
+        "output": "underqualified",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the candidate as 'underqualified' matching the reference answer exactly, with the input clearly supporting this conclusion given the significant gap between candidate ex"
+        }
+      },
+      {
+        "query": "This person has deep expertise in supply chain logistics and warehouse operations management, which would be valuable for our operations team. However, they applied for the customer success manager position which requires client relationship skills they haven't demonstrated.",
+        "gold": "wrong_role",
+        "output": "wrong_role",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the candidate as 'wrong_role' matching the reference answer, with proper format and clear alignment to the task of hiring-stage recommendation based on role mismatch evi"
+        }
+      },
+      {
+        "query": "Phone screened candidate for the Full Stack Developer role. She has 4 years building React/Node.js applications, contributed to open source projects, and her GitHub shows clean, well-documented code. Solved our technical challenge in 35 minutes with an elegant solution. Currently works at a similar-sized startup and understands the pace. Her motivation for leaving is legitimate—seeking more backend infrastructure work, which is exactly what this position offers.",
+        "gold": "strong_fit",
+        "output": "strong_fit",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the candidate as 'strong_fit' matching the reference answer exactly, with proper format and clear alignment to the positive indicators in the input note."
+        }
+      },
+      {
+        "query": "Interviewed someone with a non-traditional background who has transferable skills from adjacent fields. They demonstrated strong critical thinking and picked up on nuances quickly during our discussion, but they lack direct domain expertise that other candidates might bring. The salary expectations are reasonable and they're clearly motivated to pivot into this space. It's a bit of a gamble, so I'd suggest another round focused on assessing how steep the learning curve would actually be.",
+        "gold": "maybe_fit",
+        "output": "maybe_fit",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the candidate as 'maybe_fit' matching the reference answer, properly interpreting the mixed signals of strong potential but lacking direct expertise and the suggestion f"
+        }
+      },
+      {
+        "query": "The candidate's project management experience aligns well with the job description and they have the certifications we're looking for. What's concerning is their response to questions about feedback - they stated they don't typically need much direction and seemed resistant to our quarterly review process. Their previous tenure history shows a pattern of leaving roles after 12-18 months when they felt 'micromanaged.'",
+        "gold": "culture_concern",
+        "output": "culture_concern",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the input as 'culture_concern' matching the reference answer, properly identifying resistance to feedback processes and tenure patterns as cultural fit issues rather tha"
+        }
+      },
+      {
+        "query": "Candidate's resume shows they were Chief Technology Officer at a Series C startup, previously Principal Engineer at Google, and hold a PhD in Computer Science from MIT. They've published 20+ papers and hold several patents. Our opening is for a junior backend developer position requiring 1-3 years experience. The gap between their credentials and this role is substantial.",
+        "gold": "overqualified",
+        "output": "overqualified",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the candidate as 'overqualified' matching the reference answer exactly, with the input clearly supporting this conclusion given the massive credential-to-role gap."
+        }
+      },
+      {
+        "query": "Interviewed for the Machine Learning Engineer opening. Candidate completed an online bootcamp and has built a few personal projects with scikit-learn. However, the position requires advanced degree in Computer Science or related field, plus 5+ years deploying production ML systems. Not ready for this senior-level position.",
+        "gold": "underqualified",
+        "output": "underqualified",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly classified the candidate as 'underqualified' matching the reference answer exactly, with the input clearly describing a mismatch between candidate qualifications (bootcamp, persona"
+        }
+      },
+      {
+        "query": "Strong project management credentials with PMP certification and 10 years leading cross-functional teams, but they applied for an individual contributor software engineering role. Their technical skills are outdated and they clearly excel at coordination rather than coding.",
+        "gold": "wrong_role",
+        "output": "wrong_role",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified the mismatch between the candidate's project management strengths and the individual contributor software engineering role, producing the exact classification label requ"
+        }
+      },
+      {
+        "query": "Interviewed Sarah Chen for the Senior Data Analyst position. She has 6 years of experience with SQL, Python, and Tableau—exactly what we need. Her portfolio demonstrated complex dashboard projects for Fortune 500 clients. She explained her approach to A/B testing clearly and showed genuine enthusiasm about our mission. References were glowing. Salary expectations align with our range at $95-105k. Available to start in 3 weeks.",
+        "gold": "strong_fit",
+        "output": "strong_fit",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the candidate as 'strong_fit' matching the reference answer exactly, with the input clearly supporting this classification through multiple positive indicators (experien"
+        }
+      },
+      {
+        "query": "Candidate performed well on the coding challenge and has impressive credentials. However, during the lunch interview, they made several offhand remarks that suggested a lack of awareness around inclusive language. When the team discussed our commitment to diversity initiatives, the candidate seemed disengaged and changed the subject quickly.",
+        "gold": "culture_concern",
+        "output": "culture_concern",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly identified the hiring-stage recommendation as 'culture_concern' based on behavioral red flags around inclusive language and disengagement with diversity topics, matching the refere"
+        }
+      },
+      {
+        "query": "This candidate has 15 years of senior leadership experience managing teams of 50+ engineers, including P&L responsibility for a $200M division. The open position is for an individual contributor software developer role with no management responsibilities. While technically skilled, their background suggests they would quickly become disengaged with the scope and compensation level of this junior-to-mid level position.",
+        "gold": "overqualified",
+        "output": "overqualified",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the candidate as 'overqualified' matching the reference answer exactly, with the input clearly describing a senior leader applying for a junior IC role."
+        }
+      }
+    ]
+  },
+  "delta_objective": 0.2222222222222222,
+  "delta_gpa": 0.04541666666666644,
+  "optimization": {
+    "front": [
+      {
+        "obj": 1.0,
+        "gpa": 0.9775,
+        "iter": 1,
+        "strategy": "mutation"
+      }
+    ],
+    "history": [
+      {
+        "iter": 0,
+        "obj": 0.8,
+        "gpa": 0.964,
+        "composite": 0.882,
+        "strategy": "baseline"
+      },
+      {
+        "iter": 1,
+        "obj": 1.0,
+        "gpa": 0.9775,
+        "composite": 0.98875,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 2,
+        "obj": 1.0,
+        "gpa": 0.9725,
+        "composite": 0.9862500000000001,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 3,
+        "obj": 1.0,
+        "gpa": 0.9675,
+        "composite": 0.98375,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 4,
+        "obj": 1.0,
+        "gpa": 0.975,
+        "composite": 0.9875,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 5,
+        "obj": 1.0,
+        "gpa": 0.9725,
+        "composite": 0.9862500000000001,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 6,
+        "obj": 1.0,
+        "gpa": 0.9762500000000001,
+        "composite": 0.988125,
+        "strategy": "mutation",
+        "front_size": 1
+      }
+    ],
+    "baseline_train_obj": 0.8,
+    "best_train_obj": 1.0
+  },
+  "duration_s": 112.2
+}

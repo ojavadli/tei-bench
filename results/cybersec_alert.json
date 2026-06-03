@@ -1,0 +1,633 @@
+{
+  "task_id": "cybersec_alert",
+  "industry": "Cybersecurity",
+  "metric": "classification",
+  "n_train": 15,
+  "n_test": 18,
+  "source": "Authored for TEI-Bench (Sonnet-generated, Sonnet-validated; kept only label-agreed examples).",
+  "agent_model": "claude-haiku-4-5",
+  "judge_model": "claude-sonnet-4-5",
+  "optimizer_model": "claude-sonnet-4-5",
+  "seed": 0,
+  "eval_repeats": 1,
+  "baseline_prompt": "You are a SOC alert triage analyst. Classify the security alert into a threat category. Classify into one of these categories: phishing, malware, brute_force, data_exfiltration, insider_threat, ddos.",
+  "optimized_prompt": "You are a SOC alert triage analyst. Classify the security alert into exactly one of these threat categories: phishing, malware, brute_force, data_exfiltration, insider_threat, ddos.\n\n**Category Definitions:**\n\n- **phishing**: Social engineering attacks attempting to trick users into revealing credentials or sensitive information through deceptive emails, messages, or fake websites. Includes credential harvesting forms, impersonation of trusted entities, and malicious links leading to fake login portals.\n\n- **malware**: Malicious software including viruses, trojans, ransomware, keyloggers, or any executable code with harmful capabilities. Indicators include suspicious executables, keylogging functionality, credential harvesting modules, C2 communications, code obfuscation, or anti-debugging techniques.\n\n- **brute_force**: Automated attempts to gain unauthorized access through repeated login attempts, password guessing, or credential stuffing. Characterized by high volumes of failed authentication attempts from single or distributed sources.\n\n- **data_exfiltration**: Unauthorized transfer of sensitive data outside the organization. Includes large data transfers to external destinations, unusual file access patterns, or suspicious outbound network traffic containing sensitive information.\n\n- **insider_threat**: Malicious or negligent actions by authorized users that compromise security. Includes unauthorized access to sensitive systems, policy violations, data theft by employees, or abuse of legitimate access privileges.\n\n- **ddos**: Distributed Denial of Service attacks aimed at overwhelming systems or networks with excessive traffic to cause service disruption or unavailability.\n\n**Classification Instructions:**\n\n1. Analyze the alert description carefully for key indicators\n2. Match the primary attack vector and intent to the category definitions above\n3. Output ONLY the category name in lowercase (e.g., \"phishing\", \"malware\", \"brute_force\")\n4. If multiple categories seem applicable, choose the one that best describes the PRIMARY threat mechanism",
+  "baseline_test": {
+    "objective_runs": [
+      0.7222222222222222
+    ],
+    "gpa_runs": [
+      0.9813888888888889
+    ],
+    "objective_mean": 0.7222222222222222,
+    "gpa_mean": 0.9813888888888889,
+    "gpa_dims": {
+      "target_alignment": 0.9805555555555555,
+      "reasoning_soundness": 0.958888888888889,
+      "execution_accuracy": 0.991111111111111,
+      "output_integrity": 0.995
+    },
+    "examples": [
+      {
+        "query": "Cloud access security broker flagged abnormal Box.com sync activity. User jennifer.martinez uploaded 2,847 documents totaling 5.1GB from Engineering/Patents directory to personal cloud storage account. Upload pattern inconsistent with normal usage baseline for this employee.",
+        "gold": "data_exfiltration",
+        "output": "# Alert Classification: **Data Exfiltration**\n\n## Justification:\n\n**Primary Indicators:**\n- **Large volume transfer**: 2,847 documents (5.1GB) significantly exceeds normal baseline\n- **Sensitive data**: Engineering/Patents directory contains proprietary intellectual property\n- **Unauthorized destination**: Personal cloud storage account (outside corporate control)\n- **Behavioral anomaly**: Upload pattern inconsistent with established user baseline\n- **Deliberate action**: Bulk sync to external account suggests intentional data movement\n\n**Why not other categories:**\n- Not phishing (no social engineering component)\n- Not malware (no malicious code execution indicated)\n- Not brute force (legitimate credentials used)\n- Not DDoS (no service disruption)\n- Could indicate insider threat *motivation*, but the **classification is data exfiltration** (the *action*)\n\n## Recommended Actions:\n1. **Immediate**: Suspend Box.com sync permissions pending investigation\n2. **Verify**: Confirm whether upload was authorized/legitimate business purpose\n3. **Preserve**: Capture logs of what was transferred and to which external account\n4. **Interview**: Contact jennifer.martinez to understand business justification\n5. **Escalate**: If unauthorized, treat as potential insider threat investigation",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9675,
+          "rationale": "The agent correctly classified the alert as data_exfiltration with sound reasoning about volume, sensitivity, and unauthorized destination, though the extensive additional context slightly exceeds the"
+        }
+      },
+      {
+        "query": "Marketing employee taccess attempted to view proprietary source code repositories for engineering projects unrelated to their role, making 47 failed access attempts across different systems within a 3-hour window.",
+        "gold": "insider_threat",
+        "output": "# Alert Classification: **Insider Threat**\n\n## Reasoning:\n\n1. **Role Misalignment**: Marketing employee attempting to access engineering source code repositories is outside their legitimate job function.\n\n2. **Suspicious Behavior Pattern**: \n   - 47 failed access attempts in 3 hours indicates deliberate, persistent effort\n   - Attempts across multiple systems suggests systematic reconnaissance\n   - High failure rate with continued attempts is characteristic of insider threat activity\n\n3. **Motivation Indicators**:\n   - Access to proprietary source code suggests potential intent for:\n     - IP theft/data exfiltration\n     - Competitive advantage\n     - Sabotage\n\n## Why Not Other Categories:\n\n- **Not Brute Force**: While there are multiple failed attempts, the context of an authenticated employee with role misalignment makes this an insider threat rather than external credential attack\n- **Not Data Exfiltration**: This is the *attempt* phase; exfiltration would be the potential next step\n- **Not Phishing/Malware/DDoS**: No indicators of these attack vectors\n\n## Recommended Actions:\n\n- Immediate account review and access restriction\n- Interview employee regarding access attempts\n- Monitor for successful access or data movement\n- Review historical access logs for this user\n- Check for data staging or transfer activities",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9675,
+          "rationale": "The agent correctly classified the alert as 'insider_threat' matching the reference answer, provided sound reasoning about role misalignment and suspicious patterns, properly formatted the response, a"
+        }
+      },
+      {
+        "query": "CloudFront distribution alert: Origin server 10.10.10.50 receiving 1.2 million simultaneous connection attempts. Pattern analysis indicates Layer 7 attack using randomized user agents and slowly-transmitted POST requests designed to exhaust application threads. Cache hit ratio dropped to 4%. Customer portal experiencing complete outage.",
+        "gold": "ddos",
+        "output": "**Classification: DDoS**\n\n**Reasoning:**\n\nThis alert exhibits clear characteristics of a Distributed Denial of Service (DDoS) attack:\n\n1. **Volume-based attack**: 1.2 million simultaneous connection attempts targeting the origin server\n2. **Application-layer exploitation**: Layer 7 attack using POST requests designed to exhaust application threads (Slowloris-style attack)\n3. **Obfuscation tactics**: Randomized user agents to evade detection and filtering\n4. **Service degradation**: Complete customer portal outage with cache hit ratio collapse (4% vs. normal baseline)\n5. **Resource exhaustion goal**: Slow-transmitted requests designed to hold connections open and deplete server resources\n\n**Key Indicators:**\n- High connection volume\n- Deliberate slowness (not network congestion)\n- Application thread exhaustion intent\n- Service unavailability as outcome\n\nThis is a sophisticated Layer 7 DDoS attack rather than simpler volumetric attacks, but the classification remains **DDoS** as the primary threat category.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9875,
+          "rationale": "The agent correctly classified the alert as DDoS matching the reference answer, provided sound technical reasoning with accurate identification of attack characteristics, followed proper classificatio"
+        }
+      },
+      {
+        "query": "SIEM correlation detected anomalous email from external sender impersonating company's legal counsel requesting confidential case file access. Message bypassed initial filters using zero-point font obfuscation. Embedded link leads to fake Office365 authentication page collecting usernames and passwords from legal team members.",
+        "gold": "phishing",
+        "output": "# Alert Classification: **PHISHING**\n\n## Justification:\n\nThis alert exhibits multiple classic phishing indicators:\n\n1. **Social Engineering**: Impersonation of trusted internal role (legal counsel) to manipulate target behavior\n2. **Credential Harvesting**: Fake Office365 authentication page designed to capture usernames and passwords\n3. **Obfuscation Technique**: Zero-point font bypass indicates intentional evasion of email filters\n4. **Pretexting**: False urgency/authority (confidential case file access request) to prompt quick action\n5. **External Origin**: Message from external sender masquerading as internal trusted source\n\n## Secondary Observations:\n- While this could have *downstream* malware or data exfiltration consequences if successful, the primary attack vector and intent is credential theft through phishing\n- The targeting of legal team members suggests potential follow-on attacks for sensitive information access\n\n**Recommended Actions**: Block sender, alert legal team, reset credentials of any users who may have interacted with the link, and review email filter rules for zero-point font detection.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9875,
+          "rationale": "The agent correctly classified the threat as phishing with comprehensive justification covering all relevant indicators (impersonation, credential harvesting, obfuscation), matching the reference answ"
+        }
+      },
+      {
+        "query": "USB device auto-run initiated worm propagation affecting 23 endpoints in manufacturing facility. Self-replicating executable copying itself to network shares and removable media while dropping info-stealer component targeting browser credentials and cryptocurrency wallets.",
+        "gold": "malware",
+        "output": "**Threat Classification: MALWARE**\n\n**Justification:**\n\nThis alert exhibits multiple characteristics of malware:\n\n1. **Self-replicating behavior** - The worm propagates autonomously across endpoints and network shares\n2. **Lateral movement** - Spreading to 23 endpoints via USB and network shares\n3. **Persistence mechanism** - Auto-run functionality for execution\n4. **Payload delivery** - Info-stealer component targeting sensitive data (credentials, crypto wallets)\n5. **Multi-stage attack** - Combines worm propagation with credential theft capabilities\n\n**Secondary Concerns:**\n- Potential **data exfiltration** risk (info-stealer component)\n- Potential **insider threat** angle if USB introduction was intentional\n\nHowever, the primary and most immediate threat classification is **MALWARE** due to the autonomous propagation, self-replication, and malicious payload characteristics.\n\n**Recommended Actions:**\n- Isolate affected endpoints immediately\n- Disable USB auto-run policies\n- Scan all connected removable media\n- Monitor for credential compromise and unauthorized access\n- Analyze network shares for infected files",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9875,
+          "rationale": "The agent correctly classified the threat as malware with sound reasoning identifying self-replication, lateral movement, and payload characteristics; the classification matches the reference answer e"
+        }
+      },
+      {
+        "query": "VPN gateway logs reveal 456 authentication failures for multiple domain accounts originating from IP range 194.165.16.0/24. Failed attempts span 18 different usernames with common passwords being tested sequentially.",
+        "gold": "brute_force",
+        "output": "# Alert Classification: **BRUTE_FORCE**\n\n## Justification:\n\n**Key Indicators:**\n- **High volume of failed authentication attempts** (456 failures)\n- **Multiple user accounts targeted** (18 different usernames)\n- **Sequential password testing** (systematic approach)\n- **Single source IP range** (194.165.16.0/24)\n- **VPN gateway as attack vector** (remote access target)\n\n## Risk Assessment:\n- **Severity:** HIGH\n- **Pattern:** Classic credential stuffing/brute force attack\n- **Intent:** Unauthorized access to network resources\n\n## Recommended Actions:\n1. **Immediate:** Block source IP range 194.165.16.0/24 at firewall/VPN gateway\n2. **Short-term:** \n   - Force password resets for targeted accounts\n   - Enable MFA on VPN access\n   - Implement account lockout policies\n3. **Investigation:** Determine if any accounts were successfully compromised before lockout\n4. **Monitoring:** Alert on similar patterns from other sources",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.98,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9824999999999999,
+          "rationale": "The agent correctly classified the alert as brute_force (matching the reference), provided sound reasoning based on the input indicators, followed proper classification format, and delivered an accura"
+        }
+      },
+      {
+        "query": "Firewall logs show employee workstation transmitted 12,000 files to personal Dropbox account within 15 minutes. Total transfer size 8.2GB including contents from shared drives containing customer records and financial spreadsheets. Activity occurred during user's last day of employment.",
+        "gold": "data_exfiltration",
+        "output": "# Alert Classification: **DATA_EXFILTRATION**\n\n## Justification\n\nThis alert exhibits multiple critical indicators of data exfiltration:\n\n1. **Volume & Velocity**: 12,000 files (8.2GB) in 15 minutes is abnormally high and suggests intentional bulk transfer rather than normal work activity\n\n2. **Sensitive Data**: Transfer includes:\n   - Customer records (PII/regulated data)\n   - Financial spreadsheets (confidential business data)\n   - Shared drive contents (likely restricted access)\n\n3. **Unauthorized Destination**: Personal Dropbox account indicates data moving outside organizational control\n\n4. **Contextual Red Flag**: Activity on employee's last day strongly suggests intentional data theft rather than accidental misconfiguration\n\n5. **Access Pattern**: Accessing shared drives (not personal files) indicates deliberate targeting of company assets\n\n## Recommended Actions\n\n- **Immediate**: Revoke employee access, force password reset, disable accounts\n- **Forensic**: Preserve firewall/endpoint logs, check for data deletion attempts\n- **Legal**: Notify legal/HR; consider law enforcement involvement\n- **Containment**: Monitor Dropbox account access, attempt data recovery/deletion\n- **Review**: Audit other recent departures for similar patterns\n\nThis is a **high-severity insider threat** incident requiring urgent response.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.98,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9824999999999999,
+          "rationale": "The agent correctly classified the alert as data_exfiltration with sound reasoning based on volume, sensitivity, timing, and context; the classification matches the reference answer exactly and all su"
+        }
+      },
+      {
+        "query": "System administrator account dparker created five new privileged accounts with naming patterns similar to service accounts, granted them domain admin rights, and accessed multiple executives' email folders over a weekend period.",
+        "gold": "insider_threat",
+        "output": "# Alert Classification: **INSIDER_THREAT**\n\n## Justification:\n\nThis alert exhibits multiple indicators of insider threat activity:\n\n1. **Privileged User Abuse**: A system administrator (trusted account) is leveraging legitimate access to perform unauthorized actions\n\n2. **Suspicious Account Creation**: Creating multiple privileged accounts with obfuscated naming patterns (mimicking service accounts) suggests intentional concealment\n\n3. **Privilege Escalation**: Granting domain admin rights to newly created accounts indicates preparation for persistent unauthorized access\n\n4. **Unauthorized Data Access**: Accessing executives' email folders without documented business justification\n\n5. **Timing & Pattern**: Weekend activity during off-hours is a common tactic to avoid detection\n\n6. **Coordinated Actions**: The sequence of activities (create accounts → elevate privileges → access sensitive data) suggests deliberate malicious intent rather than accidental misconfiguration\n\n## Recommended Actions:\n- Immediately suspend dparker's account pending investigation\n- Audit all accounts created by dparker\n- Review email access logs for data exfiltration\n- Preserve forensic evidence\n- Escalate to incident response and legal teams",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9875,
+          "rationale": "The agent correctly classified the alert as insider_threat (matching the reference), provided logically sound reasoning with well-supported indicators, followed proper classification format, and deliv"
+        }
+      },
+      {
+        "query": "Network monitoring detected abnormal traffic spike from 847 unique source IPs targeting web server 10.45.23.101 on port 443. Traffic volume exceeded 15 Gbps, representing a 2300% increase from baseline. Server response times degraded to timeout levels. SYN packets dominate the traffic pattern with minimal completion of TCP handshakes.",
+        "gold": "ddos",
+        "output": "**Threat Classification: DDoS (Distributed Denial of Service)**\n\n**Justification:**\n\n1. **Multiple Attack Indicators:**\n   - 847 unique source IPs (distributed attack pattern)\n   - Massive traffic spike (15 Gbps, 2300% above baseline)\n   - Service degradation (timeout-level response times)\n\n2. **SYN Flood Signature:**\n   - Dominance of SYN packets with incomplete TCP handshakes is a classic SYN flood attack pattern\n   - Indicates attackers are not completing connections, only initiating them to exhaust server resources\n\n3. **Impact Pattern:**\n   - Server unavailability/degradation\n   - Resource exhaustion rather than data theft or unauthorized access\n   - Volumetric attack characteristics\n\n**Recommended Actions:**\n- Activate DDoS mitigation (rate limiting, traffic filtering)\n- Engage ISP/CDN DDoS protection services\n- Implement geo-blocking if sources are from unexpected regions\n- Monitor for attack persistence and evolution\n- Review firewall/WAF rules for SYN flood protection",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly classified the threat as DDoS matching the reference answer, provided sound technical reasoning identifying all key attack indicators (distributed sources, SYN flood pattern, volum"
+        }
+      },
+      {
+        "query": "Web proxy logs show user clicked link in email purporting to be from HR benefits portal. Destination site cloned our legitimate benefits provider interface with nearly identical branding. Site hosted on newly registered domain benefits-verify-portal.net. Form fields capture username, password, and MFA token.",
+        "gold": "phishing",
+        "output": "**Classification: PHISHING**\n\n**Justification:**\n\nThis alert exhibits the classic hallmarks of a phishing attack:\n\n1. **Social Engineering Vector**: Email impersonating a trusted internal source (HR benefits portal)\n2. **Credential Harvesting**: Fake form designed to capture:\n   - Username\n   - Password\n   - MFA token (particularly valuable for account takeover)\n3. **Domain Spoofing**: Newly registered lookalike domain (`benefits-verify-portal.net`) mimicking legitimate benefits provider\n4. **Visual Deception**: Cloned interface with near-identical branding to increase credibility\n5. **User Interaction**: Successful click-through to malicious site\n\n**Risk Level**: HIGH\n- MFA token capture significantly increases account compromise risk\n- Credentials could enable lateral movement and unauthorized access\n- Newly registered domain suggests active, targeted campaign\n\n**Recommended Actions**:\n- Alert affected user(s) immediately\n- Force password reset for any users who entered credentials\n- Monitor for unauthorized account access attempts\n- Block domain and sender email address\n- Consider security awareness training for targeted users",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9875,
+          "rationale": "The agent correctly classified the threat as phishing with comprehensive justification covering all relevant indicators, though the task only required classification without the extensive additional a"
+        }
+      },
+      {
+        "query": "Endpoint detection triggered on DESKTOP-8472 showing suspicious executable 'svchost32.exe' running from %TEMP% directory with process injection behavior and attempting to modify registry run keys for persistence. File hash matches known Emotet variant signatures.",
+        "gold": "malware",
+        "output": "# Alert Classification: **MALWARE**\n\n## Justification:\n\nThis alert exhibits multiple indicators of malware infection:\n\n1. **Suspicious Executable Location**: `svchost32.exe` running from `%TEMP%` directory (legitimate svchost.exe runs from `System32`)\n\n2. **Malicious Behaviors**:\n   - Process injection (code execution technique)\n   - Registry run key modification (persistence mechanism)\n\n3. **Known Threat Intelligence**: File hash matches Emotet variant signatures (confirmed malware family)\n\n4. **Evasion Tactics**: Mimicking legitimate Windows service name (svchost.exe) is a common obfuscation technique\n\n## Recommended Actions:\n- Isolate endpoint immediately\n- Initiate malware remediation procedures\n- Check for lateral movement and C2 communications\n- Review for data exfiltration (Emotet is known for banking credential theft)",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly classified the alert as malware with comprehensive, accurate justification covering all key indicators (suspicious location, process injection, persistence mechanisms, known Emotet"
+        }
+      },
+      {
+        "query": "Office 365 tenant protection flagged anomalous sign-in activity: 1,247 password validation failures for executive accounts from TOR exit nodes across 7 geographic regions within 20-minute timeframe.",
+        "gold": "brute_force",
+        "output": "# Alert Classification: **BRUTE_FORCE**\n\n## Justification:\n\n**Primary Indicators:**\n- **1,247 password validation failures** - Classic brute force signature\n- **Rapid timeframe** (20 minutes) - Automated attack pattern\n- **Multiple geographic origins** (TOR exit nodes across 7 regions) - Distributed attack infrastructure to evade rate limiting\n- **Targeted high-value accounts** (executive accounts) - Attackers prioritizing access to privileged accounts\n\n**Attack Pattern:**\nThis is a distributed credential stuffing/brute force attack leveraging anonymization infrastructure (TOR) to bypass geographic and IP-based detection controls.\n\n## Recommended Actions:\n1. **Immediate:** Enforce MFA on all flagged executive accounts\n2. **Urgent:** Implement conditional access policies blocking TOR traffic\n3. **Investigation:** Check for any successful authentications in the attack window\n4. **Hardening:** Review and enforce strong password policies; consider passwordless authentication",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9875,
+          "rationale": "The agent correctly classified the alert as brute_force with sound reasoning based on password failures, rapid timeframe, and distributed attack patterns, matching the reference answer perfectly while"
+        }
+      },
+      {
+        "query": "DNS queries reveal workstation WS-2847 establishing connection to file-sharing service WeTransfer. Network monitoring captured 3.4GB upload to external recipient outside organization. Source files originated from HR shared folder containing employee personal information and salary data.",
+        "gold": "data_exfiltration",
+        "output": "# Alert Classification: **DATA_EXFILTRATION**\n\n## Justification:\n\n**Primary Indicators:**\n- **Large data transfer** (3.4GB) to external service\n- **Sensitive data source** (HR folder with PII and salary information)\n- **External recipient** outside organizational control\n- **Legitimate service abuse** (WeTransfer used as exfiltration vector)\n\n**Supporting Evidence:**\n- DNS queries show intentional connection to file-sharing platform\n- Source data contains high-value confidential information (employee PII, compensation)\n- Transfer volume suggests deliberate data collection, not accidental sharing\n\n## Secondary Considerations:\n\nWhile this could potentially indicate an **insider_threat** (if the user had legitimate access), the classification prioritizes the **data_exfiltration** mechanism and impact, which is the primary security concern requiring immediate containment.\n\n## Recommended Actions:\n1. **Immediate containment** - Block WS-2847 network access\n2. **Preserve evidence** - Capture full network logs and endpoint artifacts\n3. **Investigate source** - Determine user identity and access justification\n4. **Breach assessment** - Identify all files transferred and notify affected parties\n5. **Credential review** - Check for account compromise or unauthorized access",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.88,
+          "output_integrity": 0.95,
+          "aggregate": 0.925,
+          "rationale": "The agent correctly identified data_exfiltration with sound reasoning based on the evidence (large transfer, sensitive data, external recipient), though the format was more elaborate than required and"
+        }
+      },
+      {
+        "query": "Privileged admin credentials for user mwilliams were used to disable audit logging on three file servers, followed by access to confidential merger documents in the legal department share. User submitted resignation two days prior.",
+        "gold": "insider_threat",
+        "output": "**Classification: INSIDER_THREAT**\n\n**Justification:**\n\nThis alert exhibits multiple hallmark indicators of insider threat:\n\n1. **Privileged Access Abuse** - Admin credentials used to disable security controls (audit logging), which is a classic insider evasion technique\n\n2. **Suspicious Timing** - Recent resignation creates motive and urgency; the two-day gap suggests premeditation\n\n3. **Targeted Data Access** - Deliberate access to high-value confidential documents (merger information) rather than random/opportunistic access\n\n4. **Cover-up Behavior** - Disabling audit logging before accessing sensitive data indicates intent to hide activities\n\n5. **Escalation Pattern** - Progression from disabling monitoring → accessing restricted data shows planned malicious activity\n\n**Recommended Actions:**\n- Immediately revoke mwilliams' credentials\n- Preserve forensic evidence of file access and audit log deletion\n- Investigate what merger documents were accessed/exfiltrated\n- Review data transfer logs for the timeframe\n- Coordinate with legal/HR regarding the resignation\n- Check for data staging or external transfers",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.98,
+          "output_integrity": 0.98,
+          "aggregate": 0.9575,
+          "rationale": "The agent correctly classified the threat as insider_threat (matching the reference), provided sound reasoning with well-supported indicators, followed proper classification format, and delivered accu"
+        }
+      },
+      {
+        "query": "Firewall logs show UDP flood targeting gaming servers in DMZ subnet 172.30.0.0/24. Inbound packet rate sustained at 8.5 million packets per second from spoofed source addresses. Bandwidth consumption at 23 Gbps. Game service authentication system non-responsive. Edge routers approaching maximum packet processing capacity.",
+        "gold": "ddos",
+        "output": "**Threat Classification: DDoS**\n\n**Justification:**\n\nThis alert exhibits all hallmark characteristics of a Distributed Denial of Service (DDoS) attack:\n\n1. **Attack Vector**: UDP flood - a volumetric DDoS technique\n2. **Scale**: 8.5 million packets per second is a massive volumetric attack\n3. **Bandwidth Consumption**: 23 Gbps indicates a large-scale infrastructure attack\n4. **Source Spoofing**: Multiple spoofed source addresses typical of distributed attacks\n5. **Impact**: Service degradation (authentication system non-responsive) and infrastructure strain (routers at capacity)\n6. **Target**: Gaming servers in DMZ - typical DDoS target\n\n**Recommended Actions:**\n- Activate DDoS mitigation (rate limiting, traffic filtering)\n- Engage ISP/DDoS mitigation service if available\n- Implement geo-blocking if attack sources are identifiable\n- Monitor for secondary attacks during mitigation\n- Document attack patterns for forensics",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly classified the threat as DDoS (matching the reference answer 'ddos'), provided sound reasoning with accurate technical indicators, followed the classification task format, and adde"
+        }
+      },
+      {
+        "query": "User reported suspicious email from what appeared to be IT department requesting password reset via external link. Email header analysis shows sender domain microsoftt-support.com with recent registration date. Link redirects through multiple shortened URLs before landing on a login page mimicking our corporate SSO portal. Page source contains credential harvesting JavaScript.",
+        "gold": "phishing",
+        "output": "**Classification: PHISHING**\n\n**Justification:**\n\nThis alert exhibits multiple classic phishing indicators:\n\n1. **Social Engineering**: Impersonation of trusted internal IT department to create urgency around password reset\n2. **Domain Spoofing**: Typosquatting domain (microsoftt-support.com vs legitimate Microsoft/corporate domain) with recent registration—hallmark of phishing infrastructure\n3. **Obfuscation Techniques**: Multiple URL redirects designed to obscure the malicious destination\n4. **Credential Harvesting**: Fake SSO login page with JavaScript credential capture code\n5. **Attack Chain**: Classic phishing workflow (deceptive email → obfuscated link → fake login → credential theft)\n\n**Recommended Actions:**\n- Block sender domain and all associated URLs/IPs\n- Alert users about the phishing campaign\n- Check for any users who may have entered credentials\n- Force password resets for potentially compromised accounts\n- Add domain to email gateway blocklist",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly classified the alert as phishing (matching the reference), provided sound reasoning with accurate identification of all phishing indicators from the input, followed proper classifi"
+        }
+      },
+      {
+        "query": "Host-based intrusion prevention system blocked file-less attack leveraging PowerShell Empire framework. Malicious script injected into memory space of legitimate Windows process attempting to disable antivirus services and establish reverse shell connection.",
+        "gold": "malware",
+        "output": "# Alert Classification: **MALWARE**\n\n## Justification:\n\nThis alert exhibits clear characteristics of malware activity:\n\n- **File-less attack technique** - In-memory execution to evade disk-based detection\n- **PowerShell Empire framework** - Known malware/post-exploitation framework\n- **Malicious script injection** - Code injected into legitimate process memory\n- **Antivirus disabling** - Typical malware behavior to remove security controls\n- **Reverse shell establishment** - Command & control communication mechanism\n\n## Secondary Indicators:\n- Process hollowing/injection technique (process masquerading)\n- Persistence and lateral movement capabilities\n- Post-exploitation activity\n\nThis represents an active malware infection attempt with advanced evasion techniques, requiring immediate containment and investigation.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.98,
+          "output_integrity": 0.98,
+          "aggregate": 0.9575,
+          "rationale": "The agent correctly classified the alert as malware with sound reasoning based on PowerShell Empire framework, memory injection, AV disabling, and reverse shell indicators, though the task only requir"
+        }
+      },
+      {
+        "query": "Database server access logs show repetitive connection attempts using invalid credentials. Source 91.203.5.118 attempted to authenticate with 'sa' account 2,890 times in 45-minute period before firewall rule blocked traffic.",
+        "gold": "brute_force",
+        "output": "**Classification: BRUTE_FORCE**\n\n**Justification:**\n\n- **High-volume authentication attempts**: 2,890 failed login attempts in 45 minutes indicates automated credential guessing\n- **Targeting privileged account**: 'sa' (SQL Server system administrator) is a high-value target\n- **Invalid credentials**: Repeated use of wrong passwords is characteristic of brute force attacks\n- **Single external source**: 91.203.5.118 shows coordinated attack from one IP\n- **Rapid succession**: 45-minute timeframe demonstrates non-human attack velocity\n\n**Recommended Actions:**\n1. Verify firewall rule remains active to block 91.203.5.118\n2. Review if any successful authentications occurred before blocking\n3. Check for similar patterns from other IPs\n4. Consider implementing account lockout policies and rate limiting\n5. Monitor for lateral movement if breach occurred",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly classified the alert as brute_force (matching reference), provided sound reasoning identifying all key attack indicators, followed proper classification format, and added valuable "
+        }
+      }
+    ]
+  },
+  "final_test": {
+    "objective_runs": [
+      1.0
+    ],
+    "gpa_runs": [
+      0.9774999999999999
+    ],
+    "objective_mean": 1.0,
+    "gpa_mean": 0.9774999999999999,
+    "gpa_dims": {
+      "target_alignment": 0.9638888888888886,
+      "reasoning_soundness": 0.946111111111111,
+      "execution_accuracy": 1.0,
+      "output_integrity": 1.0
+    },
+    "examples": [
+      {
+        "query": "Cloud access security broker flagged abnormal Box.com sync activity. User jennifer.martinez uploaded 2,847 documents totaling 5.1GB from Engineering/Patents directory to personal cloud storage account. Upload pattern inconsistent with normal usage baseline for this employee.",
+        "gold": "data_exfiltration",
+        "output": "data_exfiltration",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the security alert as data_exfiltration, matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "Marketing employee taccess attempted to view proprietary source code repositories for engineering projects unrelated to their role, making 47 failed access attempts across different systems within a 3-hour window.",
+        "gold": "insider_threat",
+        "output": "insider_threat\n\n**Reasoning:**\nThis alert exhibits clear indicators of insider threat:\n- **Authorized user**: Marketing employee with legitimate system access\n- **Unauthorized access attempt**: Attempting to access proprietary source code repositories outside their role's scope\n- **Suspicious pattern**: 47 failed access attempts across multiple systems in a short timeframe (3 hours) suggests deliberate probing\n- **Policy violation**: Accessing engineering resources unrelated to marketing responsibilities\n\nWhile the high volume of failed attempts might superficially resemble brute_force, the key distinction is that this involves an authorized user abusing their legitimate access privileges to reach restricted resources, which is the defining characteristic of insider threat rather than external credential guessing.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.98,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9824999999999999,
+          "rationale": "The agent correctly classified the alert as insider_threat with comprehensive, logically sound reasoning that accurately identifies all key indicators (authorized user, unauthorized access attempts, s"
+        }
+      },
+      {
+        "query": "CloudFront distribution alert: Origin server 10.10.10.50 receiving 1.2 million simultaneous connection attempts. Pattern analysis indicates Layer 7 attack using randomized user agents and slowly-transmitted POST requests designed to exhaust application threads. Cache hit ratio dropped to 4%. Customer portal experiencing complete outage.",
+        "gold": "ddos",
+        "output": "ddos",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the security alert as 'ddos', matching the reference answer exactly, with the input clearly describing a Distributed Denial of Service attack through Layer 7 application"
+        }
+      },
+      {
+        "query": "SIEM correlation detected anomalous email from external sender impersonating company's legal counsel requesting confidential case file access. Message bypassed initial filters using zero-point font obfuscation. Embedded link leads to fake Office365 authentication page collecting usernames and passwords from legal team members.",
+        "gold": "phishing",
+        "output": "phishing",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly classified the security alert as phishing, matching the reference answer exactly with proper identification of the impersonation, credential harvesting, and social engineering atta"
+        }
+      },
+      {
+        "query": "USB device auto-run initiated worm propagation affecting 23 endpoints in manufacturing facility. Self-replicating executable copying itself to network shares and removable media while dropping info-stealer component targeting browser credentials and cryptocurrency wallets.",
+        "gold": "malware",
+        "output": "malware",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the security alert as 'malware', matching the reference answer exactly, with the description clearly indicating worm propagation, self-replication, and info-stealer comp"
+        }
+      },
+      {
+        "query": "VPN gateway logs reveal 456 authentication failures for multiple domain accounts originating from IP range 194.165.16.0/24. Failed attempts span 18 different usernames with common passwords being tested sequentially.",
+        "gold": "brute_force",
+        "output": "brute_force",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the security alert as 'brute_force', matching the reference answer exactly, with proper identification of the sequential password testing pattern across multiple account"
+        }
+      },
+      {
+        "query": "Firewall logs show employee workstation transmitted 12,000 files to personal Dropbox account within 15 minutes. Total transfer size 8.2GB including contents from shared drives containing customer records and financial spreadsheets. Activity occurred during user's last day of employment.",
+        "gold": "data_exfiltration",
+        "output": "data_exfiltration",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly classified the security alert as data_exfiltration, matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "System administrator account dparker created five new privileged accounts with naming patterns similar to service accounts, granted them domain admin rights, and accessed multiple executives' email folders over a weekend period.",
+        "gold": "insider_threat",
+        "output": "insider_threat",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the security alert as 'insider_threat', matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "Network monitoring detected abnormal traffic spike from 847 unique source IPs targeting web server 10.45.23.101 on port 443. Traffic volume exceeded 15 Gbps, representing a 2300% increase from baseline. Server response times degraded to timeout levels. SYN packets dominate the traffic pattern with minimal completion of TCP handshakes.",
+        "gold": "ddos",
+        "output": "ddos",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly classified the security alert as 'ddos', matching the reference answer exactly with proper identification of the distributed denial-of-service attack pattern described in the input"
+        }
+      },
+      {
+        "query": "Web proxy logs show user clicked link in email purporting to be from HR benefits portal. Destination site cloned our legitimate benefits provider interface with nearly identical branding. Site hosted on newly registered domain benefits-verify-portal.net. Form fields capture username, password, and MFA token.",
+        "gold": "phishing",
+        "output": "phishing",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified the security alert as phishing, matching the reference answer exactly with proper classification of the credential harvesting attack described."
+        }
+      },
+      {
+        "query": "Endpoint detection triggered on DESKTOP-8472 showing suspicious executable 'svchost32.exe' running from %TEMP% directory with process injection behavior and attempting to modify registry run keys for persistence. File hash matches known Emotet variant signatures.",
+        "gold": "malware",
+        "output": "malware",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the security alert as 'malware', matching the reference answer exactly, with clear indicators (Emotet variant, process injection, persistence mechanisms) supporting this"
+        }
+      },
+      {
+        "query": "Office 365 tenant protection flagged anomalous sign-in activity: 1,247 password validation failures for executive accounts from TOR exit nodes across 7 geographic regions within 20-minute timeframe.",
+        "gold": "brute_force",
+        "output": "brute_force",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the security alert as 'brute_force' matching the reference answer exactly, with the input clearly describing password validation failures characteristic of brute-force a"
+        }
+      },
+      {
+        "query": "DNS queries reveal workstation WS-2847 establishing connection to file-sharing service WeTransfer. Network monitoring captured 3.4GB upload to external recipient outside organization. Source files originated from HR shared folder containing employee personal information and salary data.",
+        "gold": "data_exfiltration",
+        "output": "data_exfiltration",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly classified the security alert as data_exfiltration, matching the reference answer exactly, with the classification appropriately identifying the unauthorized transfer of sensitive "
+        }
+      },
+      {
+        "query": "Privileged admin credentials for user mwilliams were used to disable audit logging on three file servers, followed by access to confidential merger documents in the legal department share. User submitted resignation two days prior.",
+        "gold": "insider_threat",
+        "output": "insider_threat",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the security alert as 'insider_threat' matching the reference answer exactly, with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "Firewall logs show UDP flood targeting gaming servers in DMZ subnet 172.30.0.0/24. Inbound packet rate sustained at 8.5 million packets per second from spoofed source addresses. Bandwidth consumption at 23 Gbps. Game service authentication system non-responsive. Edge routers approaching maximum packet processing capacity.",
+        "gold": "ddos",
+        "output": "ddos",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly classified the UDP flood attack with massive packet rate and bandwidth consumption as a DDoS threat, matching the reference answer exactly."
+        }
+      },
+      {
+        "query": "User reported suspicious email from what appeared to be IT department requesting password reset via external link. Email header analysis shows sender domain microsoftt-support.com with recent registration date. Link redirects through multiple shortened URLs before landing on a login page mimicking our corporate SSO portal. Page source contains credential harvesting JavaScript.",
+        "gold": "phishing",
+        "output": "phishing",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the security alert as phishing, matching the reference answer exactly, with all task requirements met and no extraneous content."
+        }
+      },
+      {
+        "query": "Host-based intrusion prevention system blocked file-less attack leveraging PowerShell Empire framework. Malicious script injected into memory space of legitimate Windows process attempting to disable antivirus services and establish reverse shell connection.",
+        "gold": "malware",
+        "output": "malware",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the PowerShell Empire framework attack with memory injection and reverse shell as malware, matching the reference answer exactly with proper format and no extraneous con"
+        }
+      },
+      {
+        "query": "Database server access logs show repetitive connection attempts using invalid credentials. Source 91.203.5.118 attempted to authenticate with 'sa' account 2,890 times in 45-minute period before firewall rule blocked traffic.",
+        "gold": "brute_force",
+        "output": "brute_force",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the security alert as 'brute_force', matching the reference answer exactly, with proper identification of repetitive invalid credential attempts as the defining characte"
+        }
+      }
+    ]
+  },
+  "delta_objective": 0.2777777777777778,
+  "delta_gpa": -0.0038888888888889417,
+  "optimization": {
+    "front": [
+      {
+        "obj": 1.0,
+        "gpa": 0.98375,
+        "iter": 1,
+        "strategy": "mutation"
+      },
+      {
+        "obj": 0.9,
+        "gpa": 0.9875,
+        "iter": 2,
+        "strategy": "mutation"
+      }
+    ],
+    "history": [
+      {
+        "iter": 0,
+        "obj": 1.0,
+        "gpa": 0.9825,
+        "composite": 0.99125,
+        "strategy": "baseline"
+      },
+      {
+        "iter": 1,
+        "obj": 1.0,
+        "gpa": 0.98375,
+        "composite": 0.9918750000000001,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 2,
+        "obj": 0.9,
+        "gpa": 0.9875,
+        "composite": 0.9437500000000001,
+        "strategy": "mutation",
+        "front_size": 2
+      },
+      {
+        "iter": 3,
+        "obj": 1.0,
+        "gpa": 0.9774999999999999,
+        "composite": 0.98875,
+        "strategy": "mutation",
+        "front_size": 2
+      },
+      {
+        "iter": 4,
+        "obj": 0.8,
+        "gpa": 0.925,
+        "composite": 0.8625,
+        "strategy": "mutation",
+        "front_size": 2
+      },
+      {
+        "iter": 5,
+        "obj": 0.9,
+        "gpa": 0.9525,
+        "composite": 0.92625,
+        "strategy": "mutation",
+        "front_size": 2
+      },
+      {
+        "iter": 6,
+        "obj": 0.7,
+        "gpa": 0.9135000000000001,
+        "composite": 0.8067500000000001,
+        "strategy": "mutation",
+        "front_size": 2
+      }
+    ],
+    "baseline_train_obj": 1.0,
+    "best_train_obj": 1.0
+  },
+  "duration_s": 145.4
+}

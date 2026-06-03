@@ -1,0 +1,627 @@
+{
+  "task_id": "telecom_churn_reason",
+  "industry": "Telecom",
+  "metric": "classification",
+  "n_train": 15,
+  "n_test": 18,
+  "source": "Authored for TEI-Bench (Sonnet-generated, Sonnet-validated; kept only label-agreed examples).",
+  "agent_model": "claude-haiku-4-5",
+  "judge_model": "claude-sonnet-4-5",
+  "optimizer_model": "claude-sonnet-4-5",
+  "seed": 0,
+  "eval_repeats": 1,
+  "baseline_prompt": "You are a customer-retention analyst. Classify the churn reason expressed in the customer's cancellation message. Classify into one of these categories: price, coverage, service, speed, moving, competitor.",
+  "optimized_prompt": "You are a customer-retention analyst. Classify the churn reason expressed in the customer's cancellation message into ONE of these categories: price, coverage, service, speed, moving, competitor.\n\nReturn ONLY the category label as your answer - no additional text, explanations, formatting, or markdown. Just output the single word classification.\n\nCategory definitions:\n- price: Customer cites cost, affordability, pricing, rates, budget concerns, promotional rate expiration, or plan costs as the reason for leaving\n- coverage: Customer reports poor signal, reception issues, network availability problems, connectivity gaps, \"no service\" messages, or inability to use the service in their location (home, office, or general area)\n- service: Customer complains about customer support quality, billing issues, account management problems, wait times, company responsiveness, or unresolved complaints about non-technical issues\n- speed: Customer reports slow data speeds, bandwidth issues, lag, buffering, or performance problems with network throughput\n- moving: Customer is relocating to a new location where service is unavailable or they explicitly state they need to cancel due to moving/relocation\n- competitor: Customer is switching to a named competitor and cites specific features, benefits, deals, or offerings from that competitor as the attraction (not problems with current service)\n\nClassification rules:\n1. Focus on the PRIMARY stated reason - what the customer explicitly identifies as their motivation for canceling\n2. When a customer mentions switching to another provider AND describes problems with current service (coverage, speed, service issues), classify by the service problem, NOT as competitor\n3. Only classify as \"competitor\" when the customer proactively names a competitor and highlights that competitor's superior offerings, features, promotional deals, or benefits as the draw\n4. \"Switching to another provider\" without naming the competitor or their specific benefits is NOT a competitor classification - classify by the underlying problem mentioned\n5. Coverage issues include any mention of signal problems, \"no service,\" poor reception, or inability to connect in specific locations\n6. Price includes promotional rate expirations, affordability concerns, and cost comparisons even if brief",
+  "baseline_test": {
+    "objective_runs": [
+      0.4444444444444444
+    ],
+    "gpa_runs": [
+      0.9541666666666665
+    ],
+    "objective_mean": 0.4444444444444444,
+    "gpa_mean": 0.9541666666666665,
+    "gpa_dims": {
+      "target_alignment": 0.9388888888888887,
+      "reasoning_soundness": 0.9444444444444442,
+      "execution_accuracy": 0.9749999999999999,
+      "output_integrity": 0.9583333333333334
+    },
+    "examples": [
+      {
+        "query": "I'm canceling because the latency issues are making it impossible to enjoy any online activities. Gaming is completely out of the question with this much delay, and even loading social media feeds feels painfully slow. I've tested my connection multiple times and the results are consistently far below acceptable levels.",
+        "gold": "speed",
+        "output": "**Classification: SPEED**\n\nThe customer is canceling due to poor network performance, specifically citing:\n- High latency issues\n- Inability to perform online activities (gaming, social media)\n- Consistently slow connection speeds below acceptable levels\n\nThis is clearly a speed/performance-related churn reason.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 0.95,
+          "output_integrity": 0.95,
+          "aggregate": 0.95,
+          "rationale": "The agent correctly classified the churn reason as 'speed' matching the reference answer, provided sound reasoning citing latency and slow connection issues, followed the classification task format ap"
+        }
+      },
+      {
+        "query": "I've accepted a job offer in another state and will be relocating next month, so I need to cancel my account since you don't provide service in that area.",
+        "gold": "moving",
+        "output": "**Classification: moving**\n\nThe customer is canceling due to relocation to another state where your service is not available.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 0.95,
+          "output_integrity": 0.95,
+          "aggregate": 0.95,
+          "rationale": "The agent correctly classified the churn reason as 'moving' matching the reference answer, provided sound reasoning about relocation, and followed proper format with minimal extraneous content."
+        }
+      },
+      {
+        "query": "I've decided to switch to Verizon because they're offering me unlimited data plus a free phone upgrade, which is a much better deal than what I'm currently getting with you. My last day will be the 15th of next month.",
+        "gold": "competitor",
+        "output": "**Classification: competitor**\n\nThe customer is explicitly switching to a competitor (Verizon) due to a better offer they're receiving elsewhere. While the message mentions pricing elements (unlimited data, free phone), the primary churn reason is the competitive offer from another provider.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the churn reason as 'competitor', provided sound reasoning distinguishing between competitive switching and pricing concerns, executed the classification task perfectly "
+        }
+      },
+      {
+        "query": "After looking at my expenses, I realized I'm spending way more than I should on this subscription. A friend showed me what they're paying with another provider and it's literally half of what you're charging me for basically the same thing. I have to make the switch.",
+        "gold": "price",
+        "output": "**Classification: price**\n\nThe customer's primary churn reason is price. They explicitly mention:\n- Concern about overall spending/expenses\n- Direct price comparison with a competitor offering the same service at half the cost\n- Decision to switch based on cost savings\n\nWhile there's a secondary mention of a competitor, the driving factor is the price differential, making this a price-driven churn.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the churn reason as 'price' matching the reference answer, provided sound reasoning identifying the cost-related statements in the input, followed proper classification "
+        }
+      },
+      {
+        "query": "There's literally no signal at my new workplace and the surrounding area has very spotty reception. Since I need to be reachable during business hours, I have to find a carrier that actually works where I spend most of my time.",
+        "gold": "coverage",
+        "output": "**Classification: Coverage**\n\nThe customer is canceling due to inadequate network coverage and signal strength at their workplace and surrounding area. This is a coverage issue, not related to price, service quality, speed, moving to a new location, or switching to a competitor for other reasons.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the churn reason as 'coverage' matching the reference answer, provided sound reasoning about inadequate network signal, and followed the task format appropriately."
+        }
+      },
+      {
+        "query": "I spent two hours on chat yesterday trying to get a simple question answered and the agent kept giving me generic copy-paste responses that didn't address my actual problem. When I asked for clarification, they just repeated the same unhelpful information. It's clear nobody actually reads what customers are saying.",
+        "gold": "service",
+        "output": "**Classification: Service**\n\nThis customer is expressing frustration with poor customer service quality—specifically inadequate support interactions, unhelpful responses, and lack of personalized attention from support agents. This falls clearly under service issues rather than other categories like price, coverage, speed, moving, or competitor comparisons.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the churn reason as 'service' with sound reasoning about poor customer support quality, matching the reference answer perfectly and following the required classification"
+        }
+      },
+      {
+        "query": "The connection has become unbearably sluggish over the past few months. Pages take ages to load, and I frequently get timeout errors. I've tried everything from resetting my router to optimizing my device settings, but nothing improves the situation. I can't run my online business with these performance issues.",
+        "gold": "speed",
+        "output": "**Classification: SPEED**\n\nThe customer's primary churn reason is **speed**. \n\nKey indicators:\n- \"unbearably sluggish\" connection\n- \"Pages take ages to load\"\n- \"timeout errors\"\n- Performance issues preventing business operations\n- Customer has already attempted troubleshooting steps\n\nThis is a clear performance/speed degradation issue rather than pricing, coverage gaps, general service quality, relocation, or competitor switching.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the churn reason as 'speed', provided sound evidence-based reasoning with relevant quotes, and delivered a complete answer matching the reference exactly."
+        }
+      },
+      {
+        "query": "I'm a college student graduating and returning to my home country permanently, so I won't need this service anymore once I leave next week.",
+        "gold": "moving",
+        "output": "**Classification: moving**\n\nThe customer is relocating to their home country permanently due to graduation, making the service unnecessary at their new location.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the churn reason as 'moving', provided sound reasoning about permanent relocation, and delivered a properly formatted response that matches the reference answer exactly."
+        }
+      },
+      {
+        "query": "My family and I are switching over to Mint Mobile. They contacted us with a plan that's significantly cheaper per month and honestly the features they're advertising seem comparable to what we have now.",
+        "gold": "competitor",
+        "output": "**Classification: Price**\n\nThe primary churn reason is **price**. The customer explicitly states that Mint Mobile's plan is \"significantly cheaper per month,\" which is the driving factor in their decision to switch. While they mention comparable features, the cost savings is the main motivator for leaving.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.75,
+          "reasoning_soundness": 0.85,
+          "execution_accuracy": 0.7,
+          "output_integrity": 0.4,
+          "aggregate": 0.6749999999999999,
+          "rationale": "The agent provided sound reasoning about price being the motivator, but misclassified the churn reason as 'Price' when the reference answer is 'competitor' — the customer is leaving specifically becau"
+        }
+      },
+      {
+        "query": "I've been with you for three years, but honestly I just can't justify the monthly bill anymore. My budget is tight right now and I need to cut expenses wherever I can. I compared what I'm paying to what's actually in my bank account each month and something has to give.",
+        "gold": "price",
+        "output": "**Classification: Price**\n\nThe customer's primary churn reason is price. They explicitly cite:\n- Monthly bill being unjustifiable\n- Tight budget and need to cut expenses\n- Financial comparison showing the service cost is unsustainable\n\nWhile this could theoretically involve a competitor comparison, the message focuses on affordability and budget constraints rather than finding a better deal elsewhere.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the churn reason as 'price' matching the reference answer, provided sound reasoning citing budget constraints and affordability issues, and delivered the response in pro"
+        }
+      },
+      {
+        "query": "I've been having constant dropped calls in my neighborhood and the bars on my phone rarely go above two. I can't rely on this connection anymore, so I need to cancel my account.",
+        "gold": "coverage",
+        "output": "**Classification: Coverage**\n\nThe customer is citing poor signal strength (\"bars on my phone rarely go above two\") and dropped calls in their neighborhood as the reason for cancellation. This is a coverage issue, indicating inadequate network signal in their area.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 0.95,
+          "output_integrity": 0.95,
+          "aggregate": 0.95,
+          "rationale": "The agent correctly classified the churn reason as 'coverage' with sound reasoning based on signal strength and dropped calls, matching the reference answer perfectly with appropriate supporting expla"
+        }
+      },
+      {
+        "query": "Every interaction with your company has been frustrating and exhausting. Wait times are endless, representatives lack basic product knowledge, and follow-up promises are never kept. I've documented six separate occasions where someone said they'd call me back within 24 hours and never did. I can't continue dealing with this level of incompetence.",
+        "gold": "service",
+        "output": "**Classification: SERVICE**\n\nThis churn reason is clearly about service quality issues. The customer's complaints center on:\n- Poor customer service interactions (frustrating, exhausting experiences)\n- Long wait times\n- Inadequate staff knowledge\n- Broken promises and follow-up failures\n- Lack of accountability\n\nWhile the customer expresses frustration, the core issue is not about pricing, coverage gaps, speed/performance, relocation, or switching to a competitor—it's fundamentally about the company's failure to deliver acceptable service standards.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.98,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9824999999999999,
+          "rationale": "The agent correctly classified the churn reason as 'service', provided sound reasoning identifying all relevant service quality issues from the input, followed proper classification format, and the an"
+        }
+      },
+      {
+        "query": "Unfortunately, I need to discontinue my service because the bandwidth has been consistently underwhelming. I'm paying for high-tier internet, yet I can barely manage to upload files or participate in remote meetings without constant lag. My colleagues on other networks have no such problems, which makes this especially frustrating.",
+        "gold": "speed",
+        "output": "**Classification: speed**\n\nThe customer's primary churn reason is **speed**. They explicitly mention:\n- Consistently underwhelming bandwidth\n- Inability to upload files without issues\n- Lag during remote meetings\n- Performance comparison showing other networks work better\n\nWhile the message touches on price (\"paying for high-tier internet\"), the core complaint is about the service not delivering the speed/performance promised at that price point, making speed the dominant churn factor.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9675,
+          "rationale": "The agent correctly classified the churn reason as 'speed' with sound supporting evidence from the input, though the additional explanation slightly exceeds minimal task requirements."
+        }
+      },
+      {
+        "query": "Got transferred by my employer to the west coast office, so I'll be leaving town in two weeks. Since you're not available there, I need to end my subscription.",
+        "gold": "moving",
+        "output": "**Classification: moving**\n\nThe customer is relocating to the west coast due to an employer transfer and needs to cancel because the service is not available in their new location.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the churn reason as 'moving' with accurate supporting explanation that directly addresses the relocation scenario described in the input."
+        }
+      },
+      {
+        "query": "I've accepted an offer from Cricket Wireless that includes three months at half price plus no activation fees. Given that several of my coworkers switched recently and recommended it, I've decided to make the move as well.",
+        "gold": "competitor",
+        "output": "**Classification: Competitor**\n\nThis customer is churning due to a competitive offer from Cricket Wireless. The decision was driven by:\n- An attractive promotional offer (3 months at half price + no activation fees)\n- Positive recommendations from coworkers who switched to the competitor\n\nThis is a clear competitor-driven churn case.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the churn reason as 'competitor' matching the reference answer, provided sound reasoning identifying the competitive offer and peer influence, and delivered a well-struc"
+        }
+      },
+      {
+        "query": "The value just isn't there anymore for what I'm being charged. When I first signed up the rate was reasonable, but after all these increases over the past year it's gotten out of hand. I can't keep paying this much.",
+        "gold": "price",
+        "output": "**Classification: Price**\n\nThe customer's primary concern is the cost of the service relative to the value received. They specifically mention rate increases over time and that the charges have become unaffordable, which is a clear price-related churn reason.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the churn reason as 'price' matching the reference answer, provided sound reasoning citing rate increases and affordability concerns, and delivered the response in prope"
+        }
+      },
+      {
+        "query": "I live in a rural area and was told I'd have adequate connectivity, but I barely get one bar and data doesn't work at all. I need something more reliable for my home business.",
+        "gold": "coverage",
+        "output": "**Classification: Coverage**\n\nThe customer's primary churn reason is **coverage**. They explicitly state that they were promised adequate connectivity but are experiencing poor signal strength (one bar) and non-functional data service in their rural area. This is a coverage/network availability issue, not related to price, speed (as a separate service tier), moving, competitor comparison, or general service quality.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the churn reason as 'coverage' with sound reasoning that directly addresses the poor signal and data issues in the rural area, matching the reference answer perfectly."
+        }
+      },
+      {
+        "query": "The technician who came to my house last Tuesday was unprofessional and left without fixing anything. He barely looked at the problem, said it wasn't his job, and rushed out. When I called to complain, the supervisor was defensive and dismissive instead of apologizing or offering a solution.",
+        "gold": "service",
+        "output": "**Classification: Service**\n\nThis churn reason falls under **service** because the customer's dissatisfaction stems from:\n- Poor technician professionalism and conduct\n- Incomplete/inadequate technical support\n- Lack of problem resolution\n- Poor customer service response to complaints (defensive supervisor behavior)\n\nThe core issue is the quality and responsiveness of customer service, not pricing, coverage area, internet speed, relocation, or competitor offerings.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the churn reason as 'service' with sound reasoning that accurately identifies all service-related issues (unprofessional technician, poor complaint handling), proper for"
+        }
+      }
+    ]
+  },
+  "final_test": {
+    "objective_runs": [
+      1.0
+    ],
+    "gpa_runs": [
+      0.9791666666666665
+    ],
+    "objective_mean": 1.0,
+    "gpa_mean": 0.9791666666666665,
+    "gpa_dims": {
+      "target_alignment": 0.9611111111111109,
+      "reasoning_soundness": 0.9555555555555553,
+      "execution_accuracy": 1.0,
+      "output_integrity": 1.0
+    },
+    "examples": [
+      {
+        "query": "I'm canceling because the latency issues are making it impossible to enjoy any online activities. Gaming is completely out of the question with this much delay, and even loading social media feeds feels painfully slow. I've tested my connection multiple times and the results are consistently far below acceptable levels.",
+        "gold": "speed",
+        "output": "speed",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the churn reason as 'speed' based on clear indicators (latency issues, slow loading, below acceptable connection levels), matching the reference answer perfectly with pr"
+        }
+      },
+      {
+        "query": "I've accepted a job offer in another state and will be relocating next month, so I need to cancel my account since you don't provide service in that area.",
+        "gold": "moving",
+        "output": "moving",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified 'moving' as the churn reason from a clear relocation statement, matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "I've decided to switch to Verizon because they're offering me unlimited data plus a free phone upgrade, which is a much better deal than what I'm currently getting with you. My last day will be the 15th of next month.",
+        "gold": "competitor",
+        "output": "competitor",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified 'competitor' as the churn reason from a clear statement about switching to Verizon for a better deal, with perfect format and accuracy."
+        }
+      },
+      {
+        "query": "After looking at my expenses, I realized I'm spending way more than I should on this subscription. A friend showed me what they're paying with another provider and it's literally half of what you're charging me for basically the same thing. I have to make the switch.",
+        "gold": "price",
+        "output": "price",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified 'price' as the churn reason from a message explicitly about cost comparison and switching to a cheaper provider, with perfect format and accuracy."
+        }
+      },
+      {
+        "query": "There's literally no signal at my new workplace and the surrounding area has very spotty reception. Since I need to be reachable during business hours, I have to find a carrier that actually works where I spend most of my time.",
+        "gold": "coverage",
+        "output": "coverage",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified 'coverage' as the churn reason, matching the reference answer exactly with proper format and clear alignment to the customer's complaint about signal and reception issue"
+        }
+      },
+      {
+        "query": "I spent two hours on chat yesterday trying to get a simple question answered and the agent kept giving me generic copy-paste responses that didn't address my actual problem. When I asked for clarification, they just repeated the same unhelpful information. It's clear nobody actually reads what customers are saying.",
+        "gold": "service",
+        "output": "service",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the churn reason as 'service' based on clear customer service quality complaints, matching the reference answer exactly with proper format."
+        }
+      },
+      {
+        "query": "The connection has become unbearably sluggish over the past few months. Pages take ages to load, and I frequently get timeout errors. I've tried everything from resetting my router to optimizing my device settings, but nothing improves the situation. I can't run my online business with these performance issues.",
+        "gold": "speed",
+        "output": "speed",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified 'speed' as the churn reason from a message explicitly describing sluggish connection, slow page loads, and timeout errors, matching the reference answer perfectly with p"
+        }
+      },
+      {
+        "query": "I'm a college student graduating and returning to my home country permanently, so I won't need this service anymore once I leave next week.",
+        "gold": "moving",
+        "output": "moving",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the churn reason as 'moving' which perfectly matches the reference answer, as the customer is relocating permanently to another country."
+        }
+      },
+      {
+        "query": "My family and I are switching over to Mint Mobile. They contacted us with a plan that's significantly cheaper per month and honestly the features they're advertising seem comparable to what we have now.",
+        "gold": "competitor",
+        "output": "competitor",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly identified 'competitor' as the churn reason when the customer explicitly stated they are switching to Mint Mobile for a cheaper comparable plan, perfectly matching the reference an"
+        }
+      },
+      {
+        "query": "I've been with you for three years, but honestly I just can't justify the monthly bill anymore. My budget is tight right now and I need to cut expenses wherever I can. I compared what I'm paying to what's actually in my bank account each month and something has to give.",
+        "gold": "price",
+        "output": "price",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified 'price' as the churn reason from clear budget and cost-related language in the cancellation message, matching the reference answer exactly with proper format."
+        }
+      },
+      {
+        "query": "I've been having constant dropped calls in my neighborhood and the bars on my phone rarely go above two. I can't rely on this connection anymore, so I need to cancel my account.",
+        "gold": "coverage",
+        "output": "coverage",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly identified 'coverage' as the churn reason from a message explicitly describing poor signal strength and dropped calls, matching the reference answer perfectly with proper format an"
+        }
+      },
+      {
+        "query": "Every interaction with your company has been frustrating and exhausting. Wait times are endless, representatives lack basic product knowledge, and follow-up promises are never kept. I've documented six separate occasions where someone said they'd call me back within 24 hours and never did. I can't continue dealing with this level of incompetence.",
+        "gold": "service",
+        "output": "service",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly classified the churn reason as 'service', perfectly matching the reference answer for a complaint clearly centered on poor customer service quality, wait times, and unresponsive re"
+        }
+      },
+      {
+        "query": "Unfortunately, I need to discontinue my service because the bandwidth has been consistently underwhelming. I'm paying for high-tier internet, yet I can barely manage to upload files or participate in remote meetings without constant lag. My colleagues on other networks have no such problems, which makes this especially frustrating.",
+        "gold": "speed",
+        "output": "speed",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified 'speed' as the churn reason from a message explicitly describing bandwidth and lag issues, with perfect format and complete alignment to the reference answer."
+        }
+      },
+      {
+        "query": "Got transferred by my employer to the west coast office, so I'll be leaving town in two weeks. Since you're not available there, I need to end my subscription.",
+        "gold": "moving",
+        "output": "moving",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly identified 'moving' as the churn reason from a clear relocation scenario, matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "I've accepted an offer from Cricket Wireless that includes three months at half price plus no activation fees. Given that several of my coworkers switched recently and recommended it, I've decided to make the move as well.",
+        "gold": "competitor",
+        "output": "competitor",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified 'competitor' as the churn reason from a message explicitly describing switching to Cricket Wireless due to their promotional offer and peer recommendations, with perfect"
+        }
+      },
+      {
+        "query": "The value just isn't there anymore for what I'm being charged. When I first signed up the rate was reasonable, but after all these increases over the past year it's gotten out of hand. I can't keep paying this much.",
+        "gold": "price",
+        "output": "price",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified 'price' as the churn reason from a message explicitly discussing rate increases and cost concerns, with perfect format and accuracy."
+        }
+      },
+      {
+        "query": "I live in a rural area and was told I'd have adequate connectivity, but I barely get one bar and data doesn't work at all. I need something more reliable for my home business.",
+        "gold": "coverage",
+        "output": "coverage",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified 'coverage' as the churn reason from a message explicitly describing poor signal strength and connectivity issues in a rural area, matching the reference answer perfectly"
+        }
+      },
+      {
+        "query": "The technician who came to my house last Tuesday was unprofessional and left without fixing anything. He barely looked at the problem, said it wasn't his job, and rushed out. When I called to complain, the supervisor was defensive and dismissive instead of apologizing or offering a solution.",
+        "gold": "service",
+        "output": "service",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the churn reason as 'service', matching the reference answer perfectly, with the customer's complaint clearly centered on poor technician behavior and inadequate supervi"
+        }
+      }
+    ]
+  },
+  "delta_objective": 0.5555555555555556,
+  "delta_gpa": 0.025000000000000022,
+  "optimization": {
+    "front": [
+      {
+        "obj": 1.0,
+        "gpa": 0.9774999999999999,
+        "iter": 6,
+        "strategy": "mutation"
+      }
+    ],
+    "history": [
+      {
+        "iter": 0,
+        "obj": 0.5,
+        "gpa": 0.9729999999999999,
+        "composite": 0.7364999999999999,
+        "strategy": "baseline"
+      },
+      {
+        "iter": 1,
+        "obj": 1.0,
+        "gpa": 0.97625,
+        "composite": 0.9881249999999999,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 2,
+        "obj": 1.0,
+        "gpa": 0.97375,
+        "composite": 0.986875,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 3,
+        "obj": 1.0,
+        "gpa": 0.97625,
+        "composite": 0.9881249999999999,
+        "strategy": "mutation",
+        "front_size": 2
+      },
+      {
+        "iter": 4,
+        "obj": 1.0,
+        "gpa": 0.97625,
+        "composite": 0.9881249999999999,
+        "strategy": "mutation",
+        "front_size": 3
+      },
+      {
+        "iter": 5,
+        "obj": 1.0,
+        "gpa": 0.97625,
+        "composite": 0.9881249999999999,
+        "strategy": "mutation",
+        "front_size": 4
+      },
+      {
+        "iter": 6,
+        "obj": 1.0,
+        "gpa": 0.9774999999999999,
+        "composite": 0.98875,
+        "strategy": "mutation",
+        "front_size": 1
+      }
+    ],
+    "baseline_train_obj": 0.5,
+    "best_train_obj": 1.0
+  },
+  "duration_s": 102.5
+}

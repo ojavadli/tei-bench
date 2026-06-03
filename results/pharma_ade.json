@@ -1,0 +1,695 @@
+{
+  "task_id": "pharma_ade",
+  "industry": "Pharmacovigilance",
+  "metric": "classification",
+  "n_train": 15,
+  "n_test": 20,
+  "source": "SetFit/ade_corpus_v2_classification via HuggingFace (see dataset card for license).",
+  "agent_model": "claude-haiku-4-5",
+  "judge_model": "claude-sonnet-4-5",
+  "optimizer_model": "claude-sonnet-4-5",
+  "seed": 0,
+  "eval_repeats": 1,
+  "baseline_prompt": "You are a pharmacovigilance detection assistant. Detect whether the text reports an adverse drug event. Classify into one of these categories: Not-Related, Related.",
+  "optimized_prompt": "You are a pharmacovigilance detection assistant. Detect whether the text reports an adverse drug event (ADE).\n\nAn adverse drug event is an actual harmful or undesirable outcome that occurred in a specific patient or case after drug administration.\n\nClassify into one of these categories: Not-Related, Related.\n\n**Classification Guidelines:**\n\n**Related** - The text reports an actual adverse event that happened:\n- Describes a specific patient/case experiencing a harmful outcome temporally associated with a drug\n- Reports concrete clinical observations of adverse effects in real patients\n- Documents actual harm, injury, or negative health outcomes that occurred\n- Uses past tense or present perfect indicating events that occurred (e.g., \"patient developed,\" \"experienced,\" \"suffered from\")\n- Contains case reports or clinical narratives describing adverse outcomes with patient-specific details\n\n**Not-Related** - The text does NOT report an actual adverse event:\n- General statements about drug properties, mechanisms, indications, or therapeutic uses\n- Descriptions of what drugs are used for or approved indications\n- Theoretical discussions about potential risks without reporting actual cases\n- Statements about diagnostic or treatment approaches\n- General medical knowledge or clinical guidance\n- Statements about what drugs \"can cause\" or \"may cause\" without reporting actual occurrences\n- Discussions about causality, suspicion, or diagnostic considerations without reporting an actual event that occurred\n- Abstract or hypothetical scenarios\n- Background information about diseases or conditions\n- Study titles, article titles, or abstracts mentioning adverse outcomes without case details\n- Clinical recommendations or guidelines (e.g., \"should suspect,\" \"should be aware,\" \"physicians should,\" \"can be used if\")\n- Conclusions or summary statements without case narratives\n- Statements about treatment options, when drugs/procedures \"can be used,\" or clinical decision-making\n- Statements about what clinicians \"should suspect,\" \"should consider,\" or diagnostic reasoning\n- General prognostic statements (e.g., \"offer excellent chances,\" \"fatal condition\") without specific case details\n- Background sections describing disease etiology or natural history\n- Statements about misdiagnosis risk, differential diagnosis, or what symptoms \"are mistaken for\" without reporting an actual case\n- Statements about what \"is usually not suspected\" or causality attribution patterns without an actual case\n- Educational content about clinical awareness, diagnostic pitfalls, or recognition of conditions\n\n**Critical distinctions:** \n1. A text mentioning both a drug and an adverse outcome is only \"Related\" if it reports that the outcome actually occurred in a real case with clinical details\n2. Titles or brief mentions of adverse events without accompanying case narrative are NOT sufficient\n3. Merely discussing possibility, causality assessment, clinical context, therapeutic applications, or diagnostic considerations without reporting an actual event is \"Not-Related\"\n4. Clinical guidance, educational, or awareness-raising language (should, should be aware, can be used, offer, recommend, physicians should know, usually not suspected, easily mistaken) always indicates Not-Related\n5. Isolated sentences without patient-specific details are typically Not-Related, even if they mention conditions or outcomes\n\n**IMPORTANT: Output format must be ONLY the classification label. Do not include any rationale, explanation, or additional text. Output exactly one of: \"Related\" or \"Not-Related\"**",
+  "baseline_test": {
+    "objective_runs": [
+      0.5
+    ],
+    "gpa_runs": [
+      0.9111249999999997
+    ],
+    "objective_mean": 0.5,
+    "gpa_mean": 0.9111249999999997,
+    "gpa_dims": {
+      "target_alignment": 0.9499999999999996,
+      "reasoning_soundness": 0.9139999999999999,
+      "execution_accuracy": 0.8889999999999999,
+      "output_integrity": 0.8915
+    },
+    "examples": [
+      {
+        "query": "Intraperitoneal chromic phosphate is widely used as adjuvant therapy in the treatment of early-stage ovarian epithelial carcinoma.",
+        "gold": "Not-Related",
+        "output": "**Classification: Not-Related**\n\n**Reasoning:**\n\nThis text is a factual statement about the clinical use of intraperitoneal chromic phosphate as an adjuvant therapy for early-stage ovarian epithelial carcinoma. It describes:\n\n- A therapeutic indication (early-stage ovarian epithelial carcinoma)\n- A route of administration (intraperitoneal)\n- A clinical application (adjuvant therapy)\n\nThe statement does **not report**:\n- Any adverse event or side effect\n- Any harmful outcome\n- Any safety concern\n- Any unintended or unwanted effect\n\nThis is purely informational/educational content about a treatment modality, not a pharmacovigilance report of an adverse drug event.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 0.95,
+          "output_integrity": 0.95,
+          "aggregate": 0.95,
+          "rationale": "The agent correctly classified the text as 'Not-Related' with sound reasoning that accurately identifies this as a factual statement about therapeutic use rather than an adverse event report, matching"
+        }
+      },
+      {
+        "query": "Cholesterol crystal embolization-associated renal failure after therapy with recombinant tissue-type plasminogen activator.",
+        "gold": "Related",
+        "output": "# Pharmacovigilance Classification\n\n**Classification: Related**\n\n## Rationale:\n\nThis case reports an adverse drug event (ADE) associated with recombinant tissue-type plasminogen activator (rt-PA).\n\n**Key indicators:**\n- **Drug identified**: Recombinant tissue-type plasminogen activator (rt-PA)\n- **Adverse event identified**: Cholesterol crystal embolization-associated renal failure\n- **Temporal relationship**: The renal failure occurred \"after therapy\" with rt-PA, establishing a temporal association\n- **Mechanism**: rt-PA, as a thrombolytic agent, can destabilize atherosclerotic plaques and dislodge cholesterol crystals, leading to embolization and subsequent renal dysfunction\n\nThis represents a known but serious complication of thrombolytic therapy and constitutes a reportable adverse drug event for pharmacovigilance purposes.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.95,
+          "output_integrity": 0.95,
+          "aggregate": 0.9425000000000001,
+          "rationale": "The agent correctly classified this as 'Related' (matching the reference), provided sound pharmacological reasoning linking rt-PA to the adverse event through a plausible mechanism, followed proper fo"
+        }
+      },
+      {
+        "query": "Low-dose oral methotrexate treatment for recalcitrant palmoplantar pompholyx.",
+        "gold": "Not-Related",
+        "output": "# Pharmacovigilance Classification\n\n**Classification: Not-Related**\n\n## Rationale:\n\nThis text is a **clinical case title/heading** describing a therapeutic use of methotrexate for treating palmoplantar pompholyx (a skin condition). \n\n**Key observations:**\n- The text presents a treatment approach/case report title\n- It does not describe or report an **adverse drug event**\n- It indicates methotrexate is being used therapeutically for a dermatological condition\n- There is no mention of harmful, unintended, or negative effects from the medication\n- The context is about efficacy/treatment, not safety concerns\n\n**Conclusion:** This is a clinical case describing drug use for therapeutic purposes, not a report of an adverse drug event.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the text as 'Not-Related' to adverse drug events, provided sound reasoning distinguishing therapeutic use from adverse events, used proper format, and matched the refere"
+        }
+      },
+      {
+        "query": "Fatal interstitial pneumonitis following high-dose intermittent chlorambucil therapy for chronic lymphocyte leukemia.",
+        "gold": "Related",
+        "output": "# Pharmacovigilance Classification\n\n**Classification: Related**\n\n## Rationale:\n\nThis text reports an adverse drug event (ADE) that is clearly **Related** to drug therapy:\n\n1. **Specific Drug Identified**: Chlorambucil (a chemotherapy agent)\n2. **Serious Adverse Event**: Fatal interstitial pneumonitis (a severe lung condition)\n3. **Clear Temporal Relationship**: The pneumonitis occurred following high-dose intermittent chlorambucil therapy\n4. **Clinical Context**: Patient was receiving treatment for chronic lymphocytic leukemia\n\n**Key Indicators of Relatedness:**\n- Direct causal language (\"following...therapy\")\n- Known adverse effect profile (interstitial pneumonitis is a recognized toxicity of chlorambucil)\n- Fatal outcome (serious adverse event)\n- Specific dosing regimen mentioned\n\nThis represents a serious adverse drug reaction requiring pharmacovigilance reporting and documentation.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.98,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the text as 'Related' (matching the reference), provided sound reasoning identifying the drug, adverse event, temporal relationship, and clinical context, executed the t"
+        }
+      },
+      {
+        "query": "Moderate lymphocytic infiltration of the substantia propria of the conjunctiva of both upper and lower lid specimens was present, as was scarring and keratinization of the epithelium.",
+        "gold": "Not-Related",
+        "output": "**Classification: Not-Related**\n\n**Reasoning:**\n\nThis text is a **pathological/histological description** of conjunctival tissue findings, not an adverse drug event report. \n\nKey indicators:\n- Uses clinical/pathological terminology (\"substantia propria,\" \"epithelium,\" \"keratinization\")\n- Describes tissue examination findings from specimens\n- No mention of a drug, medication, or pharmaceutical agent\n- No temporal relationship to drug administration\n- No causality assessment or adverse event narrative\n- Appears to be from a medical report or case study describing disease pathology rather than reporting a drug-related harm\n\nTo be classified as \"Related,\" the text would need to explicitly link these findings to a specific medication exposure and indicate it as an adverse outcome.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.98,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9824999999999999,
+          "rationale": "The agent correctly classified the text as 'Not-Related' matching the reference answer, provided sound reasoning identifying the absence of drug mention and the pathological nature of the description,"
+        }
+      },
+      {
+        "query": "The role of Adriamycin in the production of cardiotoxicity is reviewed.",
+        "gold": "Related",
+        "output": "**Classification: Related**\n\n**Reasoning:**\nThis text reports on an adverse drug event. It explicitly discusses Adriamycin (doxorubicin) and its role in producing **cardiotoxicity** (heart toxicity), which is a well-documented adverse effect of this chemotherapy agent. The text is reviewing the relationship between the drug and this serious adverse outcome.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the text as 'Related' (matching the reference), provided sound reasoning identifying cardiotoxicity as an adverse drug event, and executed the task with proper format an"
+        }
+      },
+      {
+        "query": "In conclusion, we were confronted with an unusual case of pheochromocytoma associated with renal artery stenosis and the appearance of watery diarrhea some days after surgical treatment.",
+        "gold": "Not-Related",
+        "output": "# Pharmacovigilance Classification\n\n**Classification: Not-Related**\n\n## Reasoning:\n\nThis text describes a clinical case involving:\n- Pheochromocytoma (a tumor)\n- Renal artery stenosis (a vascular condition)\n- Watery diarrhea (a symptom)\n\n**Key factors for classification:**\n\n1. **No medication mentioned** - The text does not identify any specific drug or pharmaceutical agent as the cause of the adverse event.\n\n2. **Surgical intervention** - The diarrhea appeared after surgical treatment, suggesting it may be related to the surgical procedure itself rather than a drug.\n\n3. **No drug-event relationship established** - While watery diarrhea could be an adverse drug event in other contexts, this text does not attribute it to any medication.\n\nThis appears to be a clinical case report focused on the disease presentation and surgical outcome, not a pharmacovigilance report of an adverse drug event.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the text as 'Not-Related' with sound reasoning identifying the absence of drug mention, surgical context, and lack of drug-event relationship, perfectly matching the ref"
+        }
+      },
+      {
+        "query": "PURPOSE: We evaluated the in vitro hemodialysis ratio and subsequent toxicity and pharmacokinetics of ifosfamide in an anephric patient with Wilms' tumor.",
+        "gold": "Related",
+        "output": "# Pharmacovigilance Detection Analysis\n\n## Classification: **Related**\n\n## Rationale:\n\nThis text reports an **adverse drug event** related to ifosfamide use in a clinical context:\n\n1. **Drug Identified**: Ifosfamide (chemotherapy agent)\n\n2. **Adverse Event Indicators**:\n   - Patient is **anephric** (without kidneys) - indicating severe renal impairment\n   - Study evaluates **toxicity** of ifosfamide in this compromised patient\n   - Concern about altered **pharmacokinetics** due to lack of renal function\n   - Hemodialysis ratio evaluation suggests need for intervention to manage drug exposure\n\n3. **Clinical Significance**:\n   - The study specifically addresses toxicity concerns arising from ifosfamide administration in a patient with complete renal failure\n   - This represents a safety/tolerability issue requiring pharmacokinetic investigation\n\n**Note**: While this appears to be a case study/research abstract rather than a spontaneous adverse event report, it documents a clinically significant adverse situation (toxicity in an anephric patient) related to ifosfamide use.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.75,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.925,
+          "rationale": "The agent correctly classified the text as 'Related' matching the reference, provided the required label, and offered coherent reasoning about toxicity evaluation, though the interpretation of 'advers"
+        }
+      },
+      {
+        "query": "The severity of cutaneous and hematologic toxicity experienced by our patient has rarely been reported.",
+        "gold": "Not-Related",
+        "output": "**Classification: Related**\n\n**Reasoning:**\n\nThis text reports an adverse drug event. Key indicators:\n\n1. **Explicit mention of toxicity**: The statement directly references \"cutaneous and hematologic toxicity\" - both are recognized adverse effects\n2. **Clinical severity**: The phrase \"severity of...toxicity...has rarely been reported\" indicates a notable adverse event in a patient\n3. **Pharmacovigilance relevance**: This is clearly documenting an unusual or severe presentation of drug-related adverse effects\n\nThe statement is reporting that a patient experienced cutaneous (skin) and hematologic (blood-related) toxicity, which are recognized categories of adverse drug reactions.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.75,
+          "execution_accuracy": 0.0,
+          "output_integrity": 0.0,
+          "aggregate": 0.425,
+          "rationale": "The agent correctly identified the task and provided coherent reasoning about toxicity indicators, but reached the wrong classification (Related vs. Not-Related), which is a fundamental error that nul"
+        }
+      },
+      {
+        "query": "This report describes a case of flucytosine-associated ulcerating enteritis in which the small bowel x-ray demonstrated severe luminal narrowing, ulceration, and marked separation of loops of bowel.",
+        "gold": "Related",
+        "output": "**Classification: Related**\n\n**Reasoning:**\n\nThis text clearly reports an adverse drug event associated with flucytosine. The key indicators are:\n\n1. **Explicit drug-adverse event association**: The phrase \"flucytosine-associated ulcerating enteritis\" directly links the drug to the adverse event\n\n2. **Specific clinical manifestation**: Ulcerating enteritis (inflammation and ulceration of the small intestine) is described as the adverse outcome\n\n3. **Objective clinical findings**: Radiological evidence supports the adverse event:\n   - Severe luminal narrowing\n   - Ulceration\n   - Marked separation of bowel loops\n\n4. **Causality language**: The use of \"associated\" indicates a temporal and clinical relationship between flucytosine exposure and the gastrointestinal pathology\n\nThis is a clear case of a drug-related adverse event (specifically, a gastrointestinal toxicity of flucytosine).",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9675,
+          "rationale": "The agent correctly classified this as 'Related' (matching the reference), provided sound reasoning identifying the drug-adverse event association with supporting clinical evidence, followed the requi"
+        }
+      },
+      {
+        "query": "Lithium has been reported to raise serum calcium and lower serum phosphate concentrations and to increase urinary calcium excretion.",
+        "gold": "Not-Related",
+        "output": "**Classification: Related**\n\n**Reasoning:**\n\nThis text reports adverse drug effects associated with lithium use:\n\n1. **Raises serum calcium** - Hypercalcemia is a known adverse effect\n2. **Lowers serum phosphate** - Hypophosphatemia is a documented adverse effect\n3. **Increases urinary calcium excretion** - Hypercalciuria is an associated adverse effect\n\nThese are recognized pharmacological effects of lithium that can lead to metabolic disturbances and potential clinical complications (such as nephrogenic diabetes insipidus, kidney stones, and bone disease). The text clearly describes adverse drug events related to lithium therapy.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.75,
+          "execution_accuracy": 0.0,
+          "output_integrity": 0.0,
+          "aggregate": 0.425,
+          "rationale": "The agent correctly identified the task and provided coherent reasoning about lithium's effects, but critically misclassified the text as 'Related' when the reference answer is 'Not-Related', indicati"
+        }
+      },
+      {
+        "query": "Ciprofloxacin-induced toxic epidermal necrolysis in a patient with systemic lupus erythematosus.",
+        "gold": "Related",
+        "output": "# Pharmacovigilance Detection Analysis\n\n**Classification: RELATED**\n\n## Rationale:\n\nThis text clearly reports an **adverse drug event (ADE)** with a direct causal relationship:\n\n1. **Drug Identified**: Ciprofloxacin (a fluoroquinolone antibiotic)\n\n2. **Adverse Event Identified**: Toxic epidermal necrolysis (TEN) - a severe, life-threatening cutaneous reaction\n\n3. **Causal Relationship**: The title explicitly states \"Ciprofloxacin-induced,\" indicating a direct drug-adverse event association\n\n4. **Supporting Context**: The mention of systemic lupus erythematosus (SLE) as a comorbidity is relevant, as SLE patients may have increased susceptibility to drug reactions\n\n**Conclusion**: This is a clear case report of a serious adverse drug reaction that should be documented in pharmacovigilance systems.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.95,
+          "output_integrity": 0.98,
+          "aggregate": 0.9500000000000001,
+          "rationale": "The agent correctly identified this as an adverse drug event (matching 'Related'), provided sound reasoning about the causal relationship and severity, followed proper classification format, and deliv"
+        }
+      },
+      {
+        "query": "Captopril, a competitive inhibitor of angiotensin-converting enzyme, is widely used in the treatment of hypertension and heart failure.",
+        "gold": "Not-Related",
+        "output": "# Pharmacovigilance Classification\n\n**Classification: Not-Related**\n\n## Reasoning:\n\nThis text is a **factual, educational statement** about captopril's mechanism of action and clinical uses. It contains:\n\n- A description of the drug's pharmacological mechanism (ACE inhibitor)\n- Information about approved therapeutic indications (hypertension and heart failure)\n- No report of an adverse event or safety concern\n\n**Key indicators of \"Not-Related\":**\n- No adverse outcome or unwanted effect is described\n- No patient experiencing harm or side effects\n- No safety signal or adverse drug event mentioned\n- This is descriptive/informational content, not a case report\n\nAn adverse drug event report would typically describe a patient experiencing an unwanted effect (e.g., \"Patient developed persistent dry cough after starting captopril\" or \"Captopril caused severe hypotension\").",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the text as 'Not-Related' with sound reasoning that accurately identifies the absence of adverse event reporting and distinguishes educational content from case reports."
+        }
+      },
+      {
+        "query": "Amphotericin B (AmB) is effective, but its use is limited by toxicity: renal impairment, anaemia, fever, malaise, and hypokalaemia are common.",
+        "gold": "Related",
+        "output": "# Pharmacovigilance Detection Analysis\n\n## Classification: **Related**\n\n## Reasoning:\n\nThis text reports **adverse drug events (ADEs)** associated with Amphotericin B. The passage explicitly identifies and lists multiple adverse effects:\n\n1. **Renal impairment** - kidney toxicity\n2. **Anaemia** - reduced red blood cells\n3. **Fever** - systemic reaction\n4. **Malaise** - general discomfort/illness\n5. **Hypokalaemia** - low potassium levels\n\nThe text directly addresses drug toxicity and acknowledges these are \"common\" adverse effects that limit the clinical use of this medication.\n\n## Conclusion:\nThis is a clear pharmacovigilance signal describing known adverse drug reactions associated with Amphotericin B therapy.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the text as 'Related' (matching the reference), provided sound reasoning identifying all five adverse events mentioned, and delivered a well-structured response that dir"
+        }
+      },
+      {
+        "query": "All eyes had subfoveal CNV secondary to AMD.",
+        "gold": "Not-Related",
+        "output": "**Classification: Not-Related**\n\n**Reasoning:**\n\nThis text describes a clinical finding (subfoveal choroidal neovascularization secondary to age-related macular degeneration) rather than reporting an adverse drug event.\n\nKey indicators:\n- **No medication mentioned** - There is no drug or pharmaceutical agent referenced\n- **Clinical observation only** - This is a description of a disease state/pathological condition\n- **No temporal relationship to drug exposure** - No causality or temporal association with any drug administration is implied\n\n**Note:** While CNV (choroidal neovascularization) can be an adverse event in some contexts (e.g., if caused by a medication), this statement simply describes the condition as secondary to AMD without attributing it to any drug exposure.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the text as 'Not-Related' matching the reference answer, provided sound reasoning about absence of drug mention and lack of temporal relationship to drug exposure, follo"
+        }
+      },
+      {
+        "query": "Two children with rheumatic fever developed anicteric hepatitis while on high-dose aspirin therapy.",
+        "gold": "Related",
+        "output": "**Classification: Related**\n\n**Reasoning:**\n\nThis text reports an adverse drug event with a clear causal relationship:\n\n1. **Clear Adverse Event**: Anicteric hepatitis (liver inflammation without jaundice) is documented in two pediatric patients.\n\n2. **Temporal Association**: The hepatitis developed \"while on\" high-dose aspirin therapy, indicating temporal relationship.\n\n3. **Known Adverse Effect**: Hepatotoxicity is a recognized adverse effect of aspirin, particularly at high doses.\n\n4. **Clinical Context**: The patients were receiving aspirin for rheumatic fever treatment, which is a legitimate therapeutic use but at doses that can increase hepatotoxicity risk.\n\n5. **Multiple Cases**: Two cases strengthen the signal of a drug-related adverse event rather than coincidental occurrence.\n\nThis is a classic pharmacovigilance report documenting a drug-induced liver injury associated with aspirin therapy.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.95,
+          "output_integrity": 0.95,
+          "aggregate": 0.9425000000000001,
+          "rationale": "The agent correctly classified the text as 'Related' (matching the reference), provided sound reasoning about temporal association and known hepatotoxicity, executed the binary classification task pro"
+        }
+      },
+      {
+        "query": "A 74-year old white man was undergoing treatment with palliative chemotherapy for Stage IV Prostate Adenocarcinoma with multiple osteoblastic metastases.",
+        "gold": "Not-Related",
+        "output": "# Pharmacovigilance Classification\n\n**Classification: Not-Related**\n\n## Rationale:\n\nThis text describes a **clinical presentation and disease status** but does **not report an adverse drug event**. \n\nKey observations:\n- The passage provides demographic information (74-year-old white man)\n- It describes the patient's diagnosis (Stage IV Prostate Adenocarcinoma with osteoblastic metastases)\n- It mentions the patient is undergoing palliative chemotherapy treatment\n- **No adverse event, side effect, or harmful outcome is described**\n\nTo be classified as \"Related\" to an adverse drug event, the text would need to report:\n- Specific adverse effects or side effects from the chemotherapy\n- Toxicities, complications, or harm resulting from treatment\n- Unexpected or harmful outcomes attributed to the medication\n\n**Conclusion:** This is a clinical case description without documentation of an adverse drug event.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the text as 'Not-Related' with sound reasoning that the passage describes clinical status without reporting any adverse event, matching the reference answer perfectly."
+        }
+      },
+      {
+        "query": "Protease inhibitors (ritonavir and saquinavir) were added to the treatment and the patient developed progressive ataxia related to carbamazepine toxicity.",
+        "gold": "Related",
+        "output": "**Classification: Related**\n\n**Reasoning:**\n\nThis text reports an adverse drug event with a clear causal relationship:\n\n1. **Drug Interaction Identified**: Protease inhibitors (ritonavir and saquinavir) were added to the patient's treatment regimen.\n\n2. **Adverse Event Reported**: The patient developed progressive ataxia.\n\n3. **Mechanism Established**: The ataxia is explicitly attributed to **carbamazepine toxicity**.\n\n4. **Causal Link**: Protease inhibitors are known to inhibit cytochrome P450 enzymes (particularly CYP3A4), which metabolize carbamazepine. This interaction reduces carbamazepine clearance, leading to increased serum concentrations and toxicity manifestations such as ataxia.\n\nThis is a documented drug-drug interaction resulting in an adverse event, making it clearly **Related** to medication use.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9675,
+          "rationale": "The agent correctly classified the text as 'Related' (matching the reference), provided sound pharmacological reasoning about the drug interaction mechanism, addressed the task precisely, and delivere"
+        }
+      },
+      {
+        "query": "We present an unusual case of verified myocardial infarction without surgery.",
+        "gold": "Not-Related",
+        "output": "# Pharmacovigilance Classification\n\n**Classification: Not-Related**\n\n## Reasoning:\n\nThis text appears to be a case report title or abstract introduction describing a clinical presentation of myocardial infarction (MI). \n\n**Key factors for this classification:**\n\n1. **No drug mentioned** - The text does not identify or reference any medication or pharmaceutical agent\n2. **No adverse event causality** - There is no indication that a drug caused or contributed to the myocardial infarction\n3. **Clinical observation only** - This reads as a descriptive case report about an unusual presentation of MI, not a report of drug-related harm\n\n**Note:** To classify this as \"Related\" to a pharmacovigilance event, the text would need to:\n- Identify a specific drug/medication\n- Establish or suggest a temporal or causal relationship between the drug and the MI\n- Report this as a suspected adverse drug reaction\n\nIf the full case report discusses medication use as a potential contributing factor to the MI, reclassification may be warranted upon review of the complete text.",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the text as 'Not-Related' matching the reference answer, provided sound reasoning about the absence of drug mention or causal relationship, and properly executed the adv"
+        }
+      },
+      {
+        "query": "Two cases of childhood-onset schizophrenia associated with clozapine-induced akathisia responsive to beta-blocker treatment are described.",
+        "gold": "Related",
+        "output": "**Classification: Related**\n\n**Reasoning:**\n\nThis text reports an adverse drug event (ADE). Specifically:\n\n1. **Drug identified**: Clozapine (an antipsychotic medication)\n\n2. **Adverse event identified**: Akathisia (a movement disorder characterized by restlessness and inability to sit still)\n\n3. **Causal relationship**: The text explicitly states the akathisia was \"clozapine-induced,\" indicating a direct association between the drug and the adverse event\n\n4. **Clinical context**: The cases describe a known pharmacological adverse effect of clozapine that required additional treatment (beta-blockers) for management\n\nThis is a clear example of pharmacovigilance reporting documenting an adverse drug reaction and its management.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.98,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9824999999999999,
+          "rationale": "The agent correctly classified the text as 'Related' (matching the reference), provided sound reasoning identifying the drug (clozapine), adverse event (akathisia), and causal relationship, with prope"
+        }
+      }
+    ]
+  },
+  "final_test": {
+    "objective_runs": [
+      0.5
+    ],
+    "gpa_runs": [
+      0.8456249999999998
+    ],
+    "objective_mean": 0.5,
+    "gpa_mean": 0.8456249999999998,
+    "gpa_dims": {
+      "target_alignment": 0.9499999999999996,
+      "reasoning_soundness": 0.7424999999999999,
+      "execution_accuracy": 0.9824999999999999,
+      "output_integrity": 0.7075
+    },
+    "examples": [
+      {
+        "query": "Intraperitoneal chromic phosphate is widely used as adjuvant therapy in the treatment of early-stage ovarian epithelial carcinoma.",
+        "gold": "Not-Related",
+        "output": "Not-Related",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly identified that the text describes a therapeutic use of chromic phosphate without reporting any adverse event, matching the reference answer exactly with proper format."
+        }
+      },
+      {
+        "query": "Cholesterol crystal embolization-associated renal failure after therapy with recombinant tissue-type plasminogen activator.",
+        "gold": "Related",
+        "output": "Not-Related",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.3,
+          "execution_accuracy": 0.95,
+          "output_integrity": 0.0,
+          "aggregate": 0.55,
+          "rationale": "The agent correctly understood the task and provided a properly formatted label, but the answer is factually wrong—the text clearly describes renal failure following drug therapy, which is an adverse "
+        }
+      },
+      {
+        "query": "Low-dose oral methotrexate treatment for recalcitrant palmoplantar pompholyx.",
+        "gold": "Not-Related",
+        "output": "Not-Related",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly identified that the input describes a treatment study rather than reporting an adverse drug event, matching the reference answer with proper format and label."
+        }
+      },
+      {
+        "query": "Fatal interstitial pneumonitis following high-dose intermittent chlorambucil therapy for chronic lymphocyte leukemia.",
+        "gold": "Related",
+        "output": "Related",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified the text as reporting an adverse drug event (fatal interstitial pneumonitis from chlorambucil), matching the reference answer 'Related' with proper format and accurate c"
+        }
+      },
+      {
+        "query": "Moderate lymphocytic infiltration of the substantia propria of the conjunctiva of both upper and lower lid specimens was present, as was scarring and keratinization of the epithelium.",
+        "gold": "Not-Related",
+        "output": "Not-Related",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly identified the text as 'Not-Related' to an adverse drug event, matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "The role of Adriamycin in the production of cardiotoxicity is reviewed.",
+        "gold": "Related",
+        "output": "Not-Related",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.4,
+          "execution_accuracy": 0.95,
+          "output_integrity": 0.0,
+          "aggregate": 0.575,
+          "rationale": "The agent correctly understood the task and provided a valid label format, but the answer is factually wrong—a review of Adriamycin's cardiotoxicity clearly relates to adverse drug events, making the "
+        }
+      },
+      {
+        "query": "In conclusion, we were confronted with an unusual case of pheochromocytoma associated with renal artery stenosis and the appearance of watery diarrhea some days after surgical treatment.",
+        "gold": "Not-Related",
+        "output": "Related",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.3,
+          "execution_accuracy": 1.0,
+          "output_integrity": 0.0,
+          "aggregate": 0.5625,
+          "rationale": "The agent correctly formatted the binary classification task but produced the wrong answer—labeling a post-surgical complication case as an adverse drug event when no drug causality is mentioned, cont"
+        }
+      },
+      {
+        "query": "PURPOSE: We evaluated the in vitro hemodialysis ratio and subsequent toxicity and pharmacokinetics of ifosfamide in an anephric patient with Wilms' tumor.",
+        "gold": "Related",
+        "output": "Not-Related",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.4,
+          "execution_accuracy": 0.95,
+          "output_integrity": 0.0,
+          "aggregate": 0.575,
+          "rationale": "The agent correctly understood the binary classification task and provided a valid label format, but selected the wrong answer—the text describes evaluation of drug toxicity (an adverse event concern)"
+        }
+      },
+      {
+        "query": "The severity of cutaneous and hematologic toxicity experienced by our patient has rarely been reported.",
+        "gold": "Not-Related",
+        "output": "Related",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.4,
+          "execution_accuracy": 0.95,
+          "output_integrity": 0.15,
+          "aggregate": 0.6124999999999999,
+          "rationale": "The agent correctly understood the binary classification task and provided a valid label, but misclassified the input as 'Related' when it merely discusses the rarity of previously reported toxicity r"
+        }
+      },
+      {
+        "query": "This report describes a case of flucytosine-associated ulcerating enteritis in which the small bowel x-ray demonstrated severe luminal narrowing, ulceration, and marked separation of loops of bowel.",
+        "gold": "Related",
+        "output": "Related",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified the text as describing an adverse drug event (flucytosine-associated enteritis), provided the exact required label format, and matched the reference answer perfectly."
+        }
+      },
+      {
+        "query": "Lithium has been reported to raise serum calcium and lower serum phosphate concentrations and to increase urinary calcium excretion.",
+        "gold": "Not-Related",
+        "output": "Not-Related",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly identified this as 'Not-Related' since the text describes known pharmacological effects of lithium rather than an adverse event report, matching the reference answer perfectly with"
+        }
+      },
+      {
+        "query": "Ciprofloxacin-induced toxic epidermal necrolysis in a patient with systemic lupus erythematosus.",
+        "gold": "Related",
+        "output": "Related",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified the text as reporting an adverse drug event (ciprofloxacin-induced toxic epidermal necrolysis), matching the reference answer 'Related' with perfect execution and sound "
+        }
+      },
+      {
+        "query": "Captopril, a competitive inhibitor of angiotensin-converting enzyme, is widely used in the treatment of hypertension and heart failure.",
+        "gold": "Not-Related",
+        "output": "Not-Related",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified that the text describes captopril's mechanism and therapeutic uses without reporting any adverse event, matching the reference answer perfectly with proper format."
+        }
+      },
+      {
+        "query": "Amphotericin B (AmB) is effective, but its use is limited by toxicity: renal impairment, anaemia, fever, malaise, and hypokalaemia are common.",
+        "gold": "Related",
+        "output": "Not-Related",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.2,
+          "execution_accuracy": 0.85,
+          "output_integrity": 0.0,
+          "aggregate": 0.5,
+          "rationale": "The agent correctly understood the task format but reached the opposite conclusion—the text clearly describes multiple adverse drug events (renal impairment, anaemia, fever, malaise, hypokalaemia) ass"
+        }
+      },
+      {
+        "query": "All eyes had subfoveal CNV secondary to AMD.",
+        "gold": "Not-Related",
+        "output": "Not-Related",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly identified that the clinical description of CNV secondary to AMD is a disease state presentation, not an adverse drug event, matching the reference answer perfectly with proper for"
+        }
+      },
+      {
+        "query": "Two children with rheumatic fever developed anicteric hepatitis while on high-dose aspirin therapy.",
+        "gold": "Related",
+        "output": "Related",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified the text as reporting an adverse drug event (hepatitis from aspirin), matching the reference answer 'Related' with proper format and accurate classification."
+        }
+      },
+      {
+        "query": "A 74-year old white man was undergoing treatment with palliative chemotherapy for Stage IV Prostate Adenocarcinoma with multiple osteoblastic metastases.",
+        "gold": "Not-Related",
+        "output": "Not-Related",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly identified that the text describes a patient's medical condition and treatment context without reporting any adverse drug event, matching the reference answer exactly with proper f"
+        }
+      },
+      {
+        "query": "Protease inhibitors (ritonavir and saquinavir) were added to the treatment and the patient developed progressive ataxia related to carbamazepine toxicity.",
+        "gold": "Related",
+        "output": "Related",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly identified the adverse drug event (carbamazepine toxicity causing ataxia) and provided the exact label matching the reference answer with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "We present an unusual case of verified myocardial infarction without surgery.",
+        "gold": "Not-Related",
+        "output": "Not-Related",
+        "objective": 0.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly identified that a myocardial infarction case without mention of drugs is not an adverse drug event, matching the reference answer perfectly with proper format."
+        }
+      },
+      {
+        "query": "Two cases of childhood-onset schizophrenia associated with clozapine-induced akathisia responsive to beta-blocker treatment are described.",
+        "gold": "Related",
+        "output": "Related",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly identified the text as reporting an adverse drug event (clozapine-induced akathisia), matching the reference answer 'Related' with proper format and accurate classification."
+        }
+      }
+    ]
+  },
+  "delta_objective": 0.0,
+  "delta_gpa": -0.06549999999999989,
+  "optimization": {
+    "front": [
+      {
+        "obj": 0.4,
+        "gpa": 0.9649999999999999,
+        "iter": 2,
+        "strategy": "mutation"
+      },
+      {
+        "obj": 0.6,
+        "gpa": 0.7987500000000001,
+        "iter": 3,
+        "strategy": "mutation"
+      },
+      {
+        "obj": 0.5,
+        "gpa": 0.95375,
+        "iter": 6,
+        "strategy": "mutation"
+      }
+    ],
+    "history": [
+      {
+        "iter": 0,
+        "obj": 0.3,
+        "gpa": 0.8442500000000002,
+        "composite": 0.5721250000000001,
+        "strategy": "baseline"
+      },
+      {
+        "iter": 1,
+        "obj": 0.4,
+        "gpa": 0.9152499999999999,
+        "composite": 0.6576249999999999,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 2,
+        "obj": 0.4,
+        "gpa": 0.9649999999999999,
+        "composite": 0.6824999999999999,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 3,
+        "obj": 0.6,
+        "gpa": 0.7987500000000001,
+        "composite": 0.6993750000000001,
+        "strategy": "mutation",
+        "front_size": 2
+      },
+      {
+        "iter": 4,
+        "obj": 0.4,
+        "gpa": 0.8005,
+        "composite": 0.60025,
+        "strategy": "mutation",
+        "front_size": 2
+      },
+      {
+        "iter": 5,
+        "obj": 0.5,
+        "gpa": 0.92875,
+        "composite": 0.714375,
+        "strategy": "mutation",
+        "front_size": 3
+      },
+      {
+        "iter": 6,
+        "obj": 0.5,
+        "gpa": 0.95375,
+        "composite": 0.7268749999999999,
+        "strategy": "mutation",
+        "front_size": 3
+      }
+    ],
+    "baseline_train_obj": 0.3,
+    "best_train_obj": 0.5
+  },
+  "duration_s": 135.5
+}

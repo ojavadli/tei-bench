@@ -1,0 +1,627 @@
+{
+  "task_id": "legal_contract_clause",
+  "industry": "Legal",
+  "metric": "classification",
+  "n_train": 15,
+  "n_test": 18,
+  "source": "Authored for TEI-Bench (Sonnet-generated, Sonnet-validated; kept only label-agreed examples).",
+  "agent_model": "claude-haiku-4-5",
+  "judge_model": "claude-sonnet-4-5",
+  "optimizer_model": "claude-sonnet-4-5",
+  "seed": 0,
+  "eval_repeats": 1,
+  "baseline_prompt": "You are a contract-clause classifier. Classify the contract clause into its clause type. Classify into one of these categories: indemnification, termination, confidentiality, governing_law, limitation_of_liability, payment_terms.",
+  "optimized_prompt": "You are a contract-clause classifier. Your task is to classify contract clauses into exactly one of these categories: indemnification, termination, confidentiality, governing_law, limitation_of_liability, payment_terms.\n\nOUTPUT FORMAT: You must respond with ONLY the category name in lowercase, with no additional text, explanation, formatting, or punctuation. Do not include phrases like \"Classification:\", \"This clause is\", asterisks, quotes, or any other commentary.\n\nCLASSIFICATION GUIDELINES:\n\n- **indemnification**: Clauses where one party agrees to compensate, reimburse, shield, or hold harmless another party for losses, damages, claims, liabilities, expenses, or legal fees arising from specific events, actions, or breaches. Key indicators include: \"indemnify\", \"hold harmless\", \"reimburse\", \"compensate for losses\", \"cover costs incurred by\", \"protect against claims\", or language about one party bearing financial responsibility for damages, fines, penalties, or legal expenses that another party suffers due to third-party claims, regulatory penalties, or breaches of obligations. The defining feature is one party assuming responsibility for losses caused to another party.\n\n- **termination**: Clauses describing how, when, or under what conditions a contract ends, is dissolved, or ceases to be effective. This includes: termination rights, notice periods for ending the contract, conditions triggering contract dissolution, post-termination obligations (return of materials, completion of deliverables, wind-down procedures), survival clauses, and consequences that follow the end of the contractual relationship. Key indicators: \"termination\", \"dissolution\", \"upon expiration\", \"end of agreement\", \"wind down\", \"return of materials after\", \"upon cessation\".\n\n- **confidentiality**: Clauses requiring parties to keep information secret, not disclose proprietary data, protect trade secrets, restrict sharing with third parties, maintain confidentiality of sensitive information, or impose obligations regarding the handling of confidential materials. Key indicators: \"confidential\", \"not disclose\", \"proprietary information\", \"trade secrets\", \"non-disclosure\", \"protect from unauthorized access\", \"keep secret\". Includes duration of confidentiality obligations and scope of protected information.\n\n- **governing_law**: Clauses specifying which jurisdiction's laws apply to the contract, choice of law provisions, which legal system governs interpretation or enforcement, or references to specific national, state, or regional law that controls the agreement. Key indicators: \"governed by the laws of\", \"subject to [jurisdiction] law\", \"construed in accordance with\", \"applicable law shall be\". This includes conflict of law provisions.\n\n- **limitation_of_liability**: Clauses that cap, limit, exclude, reduce, or disclaim one party's liability for damages, losses, or claims. Key indicators: \"liability shall not exceed\", \"limited to\", \"maximum liability\", \"capped at\", \"not liable for\", \"shall not be responsible for\", disclaimers of consequential/indirect/incidental/punitive damages, exclusions of specific damage types, or caps on aggregate damages. These provisions restrict or reduce financial exposure for breach or non-performance.\n\n- **payment_terms**: Clauses specifying payment amounts, schedules, methods, due dates, payment cycles, currencies, invoicing procedures, billing frequency, or financial compensation structure for goods or services provided under the contract. Key indicators: \"payment\", \"fees\", \"invoices\", \"remittance\", \"compensation\", \"bill\", \"rate of $\", \"due within\", payment timing or frequency.\n\nCLASSIFICATION APPROACH:\n1. Identify the PRIMARY legal function and purpose of the clause\n2. Look for the key indicators and terminology specific to each category\n3. Match to the single category that best captures what the clause is fundamentally about\n4. When obligations relate to contract ending, classify as termination; when they relate to liability caps, classify as limitation_of_liability; when they relate to payment schedules, classify as payment_terms\n\nRespond with only the category name in lowercase.",
+  "baseline_test": {
+    "objective_runs": [
+      1.0
+    ],
+    "gpa_runs": [
+      0.9695833333333332
+    ],
+    "objective_mean": 1.0,
+    "gpa_mean": 0.9695833333333332,
+    "gpa_dims": {
+      "target_alignment": 0.9499999999999997,
+      "reasoning_soundness": 0.9416666666666664,
+      "execution_accuracy": 0.9916666666666667,
+      "output_integrity": 0.995
+    },
+    "examples": [
+      {
+        "query": "This Agreement and all matters arising out of or relating to this Agreement shall be governed by the federal laws of the United States and the laws of the State of New York applicable to contracts entered into and performed entirely within New York.",
+        "gold": "governing_law",
+        "output": "**Classification: governing_law**\n\nThis clause specifies which jurisdiction's laws will govern the interpretation and enforcement of the agreement. It explicitly states that the agreement will be governed by federal laws of the United States and the laws of the State of New York.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the clause as 'governing_law' matching the reference answer, provided sound reasoning about jurisdictional law specification, and executed the task with proper format an"
+        }
+      },
+      {
+        "query": "In no event shall either party be liable for any indirect, incidental, special, consequential, or punitive damages, including but not limited to loss of profits, loss of revenue, loss of data, or business interruption, regardless of the theory of liability, whether arising under contract, tort, or otherwise, even if such party has been advised of the possibility of such damages.",
+        "gold": "limitation_of_liability",
+        "output": "**Classification: limitation_of_liability**\n\nThis clause limits the liability of the parties by excluding indirect, incidental, special, consequential, and punitive damages. It is a standard limitation of liability provision that restricts the types and amounts of damages that can be recovered in case of breach or other legal claims.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the clause as 'limitation_of_liability' matching the reference answer, provided sound reasoning explaining why this classification applies, followed the required format,"
+        }
+      },
+      {
+        "query": "The Client shall remit full compensation within thirty (30) days of invoice date. Invoices will be issued monthly on the first business day of each month for services rendered during the preceding month. Late payments shall accrue interest at a rate of 1.5% per month.",
+        "gold": "payment_terms",
+        "output": "**Classification: payment_terms**\n\nThis clause specifies the payment obligations between parties, including:\n- Payment deadline (30 days from invoice)\n- Invoice timing and frequency (monthly, on first business day)\n- Consequences for late payment (1.5% monthly interest)\n\nThese are all characteristic elements of payment terms provisions.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the clause as 'payment_terms' matching the reference answer, provided sound reasoning identifying key payment elements, and delivered a well-formed response with appropr"
+        }
+      },
+      {
+        "query": "Consultant will protect Company from financial harm and assume responsibility for any damages awarded against Company in connection with bodily injury or property damage to the extent such injury or damage is caused by Consultant's negligent acts or omissions in performing the services described herein.",
+        "gold": "indemnification",
+        "output": "**Classification: Indemnification**\n\nThis clause requires the Consultant to protect the Company from financial harm and assume responsibility for damages, which is the core function of an indemnification clause. Specifically, it obligates one party (Consultant) to compensate the other party (Company) for losses or damages arising from the indemnifying party's negligent acts or omissions.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 0.95,
+          "output_integrity": 0.95,
+          "aggregate": 0.95,
+          "rationale": "The agent correctly classified the clause as indemnification, provided sound reasoning about protection from financial harm and assumption of responsibility, followed proper format, and matched the re"
+        }
+      },
+      {
+        "query": "In the event of acquisition, merger, or change of control affecting either party, the non-affected party shall have the option to discontinue this Agreement without penalty upon sixty (60) days notice.",
+        "gold": "termination",
+        "output": "**Classification: Termination**\n\nThis clause deals with the right to end the agreement under specific circumstances (acquisition, merger, or change of control), with notice requirements and conditions. This is a termination provision, specifically addressing termination rights triggered by corporate events.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the clause as 'termination' matching the reference answer, provided sound reasoning about discontinuation rights triggered by corporate events, and delivered the respons"
+        }
+      },
+      {
+        "query": "All technical specifications, designs, drawings, reports, and analyses provided under this Agreement are considered confidential and proprietary. Recipient shall not reproduce, reverse engineer, or create derivative works based on such materials without express written authorization.",
+        "gold": "confidentiality",
+        "output": "**Classification: Confidentiality**\n\nThis clause protects sensitive technical information by restricting the recipient's ability to reproduce, reverse engineer, or create derivative works without authorization. It establishes confidentiality obligations and defines what materials are considered confidential and proprietary under the agreement.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.98,
+          "output_integrity": 0.98,
+          "aggregate": 0.9575,
+          "rationale": "The agent correctly classified the clause as 'Confidentiality' matching the reference answer, provided sound reasoning about information protection and restrictions, followed the classification task f"
+        }
+      },
+      {
+        "query": "The parties agree that the substantive laws of England and Wales shall apply to any disputes arising out of or relating to this Contract, excluding any rules of private international law that would lead to the application of any other law.",
+        "gold": "governing_law",
+        "output": "**Classification: governing_law**\n\nThis clause specifies that the substantive laws of England and Wales will govern the contract and any disputes arising from it, which is the defining characteristic of a governing law clause.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the clause as 'governing_law' matching the reference answer, provided sound reasoning about why it fits this category, and executed the task with proper format and accur"
+        }
+      },
+      {
+        "query": "Supplier shall not be liable for damages exceeding the purchase price of the specific goods that are the subject of the claim, and in no case shall Supplier be liable for incidental or consequential damages of any nature, including without limitation, lost profits or revenues.",
+        "gold": "limitation_of_liability",
+        "output": "**Classification: limitation_of_liability**\n\nThis clause limits the supplier's liability by:\n1. Capping damages at the purchase price of the goods in question\n2. Excluding incidental and consequential damages (lost profits, revenues, etc.)\n\nThese are characteristic provisions of a limitation of liability clause that restrict the scope and amount of damages a party can recover.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the clause as 'limitation_of_liability' matching the reference answer, provided sound reasoning identifying the key limiting provisions, and delivered the response in pr"
+        }
+      },
+      {
+        "query": "Licensee shall pay an annual licensing fee of $25,000, due on January 1st of each calendar year. Additionally, Licensee owes a royalty of 5% of net revenues from licensed products, calculated and paid quarterly within 45 days after quarter end.",
+        "gold": "payment_terms",
+        "output": "**Classification: payment_terms**\n\nThis clause specifies the financial obligations of the Licensee, including:\n- Annual licensing fee amount ($25,000) and due date (January 1st)\n- Royalty percentage (5% of net revenues)\n- Payment frequency (quarterly)\n- Payment deadline (within 45 days after quarter end)\n\nThese are all characteristic elements of payment terms provisions.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.98,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the clause as 'payment_terms' matching the reference answer, provided sound reasoning identifying key payment elements, followed proper format, and added helpful but non"
+        }
+      },
+      {
+        "query": "In the event that any action, lawsuit, or claim is brought against Licensee by a third party alleging that the Product infringes any intellectual property rights, Licensor shall assume full responsibility for the defense of such claim and shall pay all judgments, settlements, and legal fees incurred.",
+        "gold": "indemnification",
+        "output": "**Classification: Indemnification**\n\nThis clause is an indemnification provision. It establishes that the Licensor will defend the Licensee against third-party intellectual property infringement claims and cover all associated costs (legal fees, judgments, and settlements). This is a classic indemnity obligation where one party agrees to compensate and protect the other party from losses arising from specified claims or liabilities.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the clause as indemnification, matching the reference answer, with sound reasoning explaining the defense obligation and cost coverage that characterizes indemnity provi"
+        }
+      },
+      {
+        "query": "Either party may cancel this Agreement upon thirty (30) days written notice to the other party if a material breach remains uncured after the notice period has elapsed.",
+        "gold": "termination",
+        "output": "**Classification: Termination**\n\nThis clause outlines the conditions and procedures under which either party can end the agreement, specifically through cancellation upon written notice following a material breach that remains uncured. This is a termination provision.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the clause as 'termination' matching the reference answer, provided sound reasoning about cancellation rights following uncured material breach, and delivered the respon"
+        }
+      },
+      {
+        "query": "Consultant shall not, during or after the consulting period, reveal to any person or entity any confidential knowledge or data concerning the Company's operations, clients, financial condition, business relationships, or any other information not available to the general public that was acquired during the provision of services hereunder.",
+        "gold": "confidentiality",
+        "output": "**Classification: Confidentiality**\n\nThis clause establishes obligations to protect and maintain the secrecy of non-public information acquired during the consulting engagement, which is the core function of a confidentiality clause.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.98,
+          "output_integrity": 0.98,
+          "aggregate": 0.9575,
+          "rationale": "The agent correctly classified the clause as 'Confidentiality' matching the reference answer, provided sound reasoning about information protection obligations, followed proper format, and delivered a"
+        }
+      },
+      {
+        "query": "The validity, interpretation, and performance of this Agreement shall be governed by and construed in accordance with the internal laws of the State of California, excluding its choice of law provisions.",
+        "gold": "governing_law",
+        "output": "**Classification: governing_law**\n\nThis clause specifies that the agreement will be governed by and construed according to California state law, which is the defining characteristic of a governing law clause. It explicitly excludes choice of law provisions, further clarifying the jurisdiction and legal framework applicable to the agreement.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the clause as 'governing_law' matching the reference answer, provided sound reasoning about why this classification applies, and executed the task with proper format and"
+        }
+      },
+      {
+        "query": "Under no circumstances shall Provider be responsible for any loss of business, loss of anticipated savings, loss of goodwill, or any form of special, indirect, or consequential loss or damage whatsoever, even where such loss was reasonably foreseeable or Provider had been advised of the possibility thereof.",
+        "gold": "limitation_of_liability",
+        "output": "**Classification: limitation_of_liability**\n\nThis clause limits the Provider's liability by excluding responsibility for certain types of damages, including indirect, consequential, and special damages. It is a standard limitation of liability provision that caps or restricts the damages a party can recover.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the clause as 'limitation_of_liability' matching the reference answer, provided sound reasoning about why this classification applies, and executed the task with proper "
+        }
+      },
+      {
+        "query": "The purchase price for the goods is $175,000 FOB origin. Buyer shall pay 40% deposit upon order confirmation, 40% prior to shipment, and the final 20% within seven days of delivery and inspection.",
+        "gold": "payment_terms",
+        "output": "**Classification: payment_terms**\n\nThis clause specifies the financial obligations and payment schedule for the transaction, including:\n- Total purchase price ($175,000)\n- Payment structure (40% deposit, 40% pre-shipment, 20% upon delivery)\n- Timing of each payment installment\n- Condition triggering final payment (delivery and inspection)",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.98,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the clause as 'payment_terms' matching the reference answer, provided sound reasoning identifying all payment-related elements, followed proper format, and added no fabr"
+        }
+      },
+      {
+        "query": "The Contractor shall defend, hold harmless, and reimburse the Company for any damages, costs, expenses, or liabilities arising from any claims, suits, or proceedings related to the Contractor's breach of this Agreement or negligent performance of services hereunder, including reasonable attorneys' fees.",
+        "gold": "indemnification",
+        "output": "**Classification: indemnification**\n\nThis clause is an indemnification clause. It requires the Contractor to defend, hold harmless, and reimburse the Company for damages, costs, expenses, and liabilities arising from the Contractor's breach or negligent performance. These are the key characteristics of an indemnification provision: one party agrees to compensate the other for losses, damages, or legal costs resulting from specified events or breaches.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.92,
+          "execution_accuracy": 0.98,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the clause as 'indemnification' matching the reference answer, provided sound reasoning identifying the key characteristics (defend, hold harmless, reimburse for damages"
+        }
+      },
+      {
+        "query": "This contract may be dissolved by mutual agreement of the parties at any time, provided that such dissolution is documented in writing and signed by authorized representatives of both entities.",
+        "gold": "termination",
+        "output": "**Classification: Termination**\n\nThis clause describes the conditions and procedures under which the contract can be ended by mutual agreement of the parties, which is a core element of termination provisions.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the clause as 'Termination' matching the reference answer, provided sound reasoning about mutual dissolution being a termination provision, and followed the required cla"
+        }
+      },
+      {
+        "query": "The parties recognize that disclosure of confidential business information could cause irreparable harm. Each party therefore agrees to implement appropriate safeguards including password protection, encryption where applicable, and physical security measures to prevent unauthorized disclosure or access to confidential materials.",
+        "gold": "confidentiality",
+        "output": "**Classification: Confidentiality**\n\nThis clause establishes obligations to protect confidential business information through specific safeguards (password protection, encryption, physical security measures) and acknowledges the harm that could result from unauthorized disclosure. These are core elements of a confidentiality clause.",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the clause as 'Confidentiality' matching the reference answer, provided sound reasoning identifying key protective obligations and harm acknowledgment, and delivered the"
+        }
+      }
+    ]
+  },
+  "final_test": {
+    "objective_runs": [
+      1.0
+    ],
+    "gpa_runs": [
+      0.9777777777777776
+    ],
+    "objective_mean": 1.0,
+    "gpa_mean": 0.9777777777777776,
+    "gpa_dims": {
+      "target_alignment": 0.9583333333333331,
+      "reasoning_soundness": 0.9527777777777775,
+      "execution_accuracy": 1.0,
+      "output_integrity": 1.0
+    },
+    "examples": [
+      {
+        "query": "This Agreement and all matters arising out of or relating to this Agreement shall be governed by the federal laws of the United States and the laws of the State of New York applicable to contracts entered into and performed entirely within New York.",
+        "gold": "governing_law",
+        "output": "governing_law",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly identified the clause type as 'governing_law', which perfectly matches the reference answer and accurately describes a clause specifying which jurisdiction's laws govern the agreem"
+        }
+      },
+      {
+        "query": "In no event shall either party be liable for any indirect, incidental, special, consequential, or punitive damages, including but not limited to loss of profits, loss of revenue, loss of data, or business interruption, regardless of the theory of liability, whether arising under contract, tort, or otherwise, even if such party has been advised of the possibility of such damages.",
+        "gold": "limitation_of_liability",
+        "output": "limitation_of_liability",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly identified the clause as 'limitation_of_liability', matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "The Client shall remit full compensation within thirty (30) days of invoice date. Invoices will be issued monthly on the first business day of each month for services rendered during the preceding month. Late payments shall accrue interest at a rate of 1.5% per month.",
+        "gold": "payment_terms",
+        "output": "payment_terms",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the clause as 'payment_terms', matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "Consultant will protect Company from financial harm and assume responsibility for any damages awarded against Company in connection with bodily injury or property damage to the extent such injury or damage is caused by Consultant's negligent acts or omissions in performing the services described herein.",
+        "gold": "indemnification",
+        "output": "indemnification",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified the clause as 'indemnification' matching the reference answer exactly, with the clause clearly describing protection from financial harm and assumption of responsibility"
+        }
+      },
+      {
+        "query": "In the event of acquisition, merger, or change of control affecting either party, the non-affected party shall have the option to discontinue this Agreement without penalty upon sixty (60) days notice.",
+        "gold": "termination",
+        "output": "termination",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly classified the clause as 'termination' matching the reference answer exactly, addressing the task directly with proper format and accurate substance."
+        }
+      },
+      {
+        "query": "All technical specifications, designs, drawings, reports, and analyses provided under this Agreement are considered confidential and proprietary. Recipient shall not reproduce, reverse engineer, or create derivative works based on such materials without express written authorization.",
+        "gold": "confidentiality",
+        "output": "confidentiality",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified the clause type as 'confidentiality', matching the reference answer exactly, with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "The parties agree that the substantive laws of England and Wales shall apply to any disputes arising out of or relating to this Contract, excluding any rules of private international law that would lead to the application of any other law.",
+        "gold": "governing_law",
+        "output": "governing_law",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified the clause type as 'governing_law', matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "Supplier shall not be liable for damages exceeding the purchase price of the specific goods that are the subject of the claim, and in no case shall Supplier be liable for incidental or consequential damages of any nature, including without limitation, lost profits or revenues.",
+        "gold": "limitation_of_liability",
+        "output": "limitation_of_liability",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 1.0,
+          "reasoning_soundness": 1.0,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 1.0,
+          "rationale": "The agent correctly identified the clause as 'limitation_of_liability', which perfectly matches the reference answer and accurately describes a clause that caps damages and excludes consequential dama"
+        }
+      },
+      {
+        "query": "Licensee shall pay an annual licensing fee of $25,000, due on January 1st of each calendar year. Additionally, Licensee owes a royalty of 5% of net revenues from licensed products, calculated and paid quarterly within 45 days after quarter end.",
+        "gold": "payment_terms",
+        "output": "payment_terms",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified the clause type as 'payment_terms', matching the reference answer exactly, with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "In the event that any action, lawsuit, or claim is brought against Licensee by a third party alleging that the Product infringes any intellectual property rights, Licensor shall assume full responsibility for the defense of such claim and shall pay all judgments, settlements, and legal fees incurred.",
+        "gold": "indemnification",
+        "output": "indemnification",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified the clause as 'indemnification' matching the reference answer exactly, with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "Either party may cancel this Agreement upon thirty (30) days written notice to the other party if a material breach remains uncured after the notice period has elapsed.",
+        "gold": "termination",
+        "output": "termination",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified the clause type as 'termination', matching the reference answer exactly, with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "Consultant shall not, during or after the consulting period, reveal to any person or entity any confidential knowledge or data concerning the Company's operations, clients, financial condition, business relationships, or any other information not available to the general public that was acquired during the provision of services hereunder.",
+        "gold": "confidentiality",
+        "output": "confidentiality",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified the clause type as 'confidentiality', matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "The validity, interpretation, and performance of this Agreement shall be governed by and construed in accordance with the internal laws of the State of California, excluding its choice of law provisions.",
+        "gold": "governing_law",
+        "output": "governing_law",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified the clause type as 'governing_law', matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "Under no circumstances shall Provider be responsible for any loss of business, loss of anticipated savings, loss of goodwill, or any form of special, indirect, or consequential loss or damage whatsoever, even where such loss was reasonably foreseeable or Provider had been advised of the possibility thereof.",
+        "gold": "limitation_of_liability",
+        "output": "limitation_of_liability",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.9,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.9625,
+          "rationale": "The agent correctly identified the clause type as 'limitation_of_liability', matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "The purchase price for the goods is $175,000 FOB origin. Buyer shall pay 40% deposit upon order confirmation, 40% prior to shipment, and the final 20% within seven days of delivery and inspection.",
+        "gold": "payment_terms",
+        "output": "payment_terms",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the clause as 'payment_terms', matching the reference answer exactly with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "The Contractor shall defend, hold harmless, and reimburse the Company for any damages, costs, expenses, or liabilities arising from any claims, suits, or proceedings related to the Contractor's breach of this Agreement or negligent performance of services hereunder, including reasonable attorneys' fees.",
+        "gold": "indemnification",
+        "output": "indemnification",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified the clause type as 'indemnification', matching the reference answer exactly, with proper format and no extraneous content."
+        }
+      },
+      {
+        "query": "This contract may be dissolved by mutual agreement of the parties at any time, provided that such dissolution is documented in writing and signed by authorized representatives of both entities.",
+        "gold": "termination",
+        "output": "termination",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly classified the clause as 'termination' matching the reference answer exactly, addressing a clause about contract dissolution which is precisely a termination provision."
+        }
+      },
+      {
+        "query": "The parties recognize that disclosure of confidential business information could cause irreparable harm. Each party therefore agrees to implement appropriate safeguards including password protection, encryption where applicable, and physical security measures to prevent unauthorized disclosure or access to confidential materials.",
+        "gold": "confidentiality",
+        "output": "confidentiality",
+        "objective": 1.0,
+        "gpa": {
+          "target_alignment": 0.95,
+          "reasoning_soundness": 0.95,
+          "execution_accuracy": 1.0,
+          "output_integrity": 1.0,
+          "aggregate": 0.975,
+          "rationale": "The agent correctly identified the clause type as 'confidentiality', matching the reference answer exactly, with the clause clearly describing confidential information protection measures."
+        }
+      }
+    ]
+  },
+  "delta_objective": 0.0,
+  "delta_gpa": 0.008194444444444393,
+  "optimization": {
+    "front": [
+      {
+        "obj": 1.0,
+        "gpa": 0.9774999999999999,
+        "iter": 4,
+        "strategy": "mutation"
+      }
+    ],
+    "history": [
+      {
+        "iter": 0,
+        "obj": 1.0,
+        "gpa": 0.9704999999999999,
+        "composite": 0.98525,
+        "strategy": "baseline"
+      },
+      {
+        "iter": 1,
+        "obj": 1.0,
+        "gpa": 0.975,
+        "composite": 0.9875,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 2,
+        "obj": 1.0,
+        "gpa": 0.97375,
+        "composite": 0.986875,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 3,
+        "obj": 1.0,
+        "gpa": 0.97625,
+        "composite": 0.9881249999999999,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 4,
+        "obj": 1.0,
+        "gpa": 0.9774999999999999,
+        "composite": 0.98875,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 5,
+        "obj": 1.0,
+        "gpa": 0.97375,
+        "composite": 0.986875,
+        "strategy": "mutation",
+        "front_size": 1
+      },
+      {
+        "iter": 6,
+        "obj": 1.0,
+        "gpa": 0.97625,
+        "composite": 0.9881249999999999,
+        "strategy": "mutation",
+        "front_size": 1
+      }
+    ],
+    "baseline_train_obj": 1.0,
+    "best_train_obj": 1.0
+  },
+  "duration_s": 122.6
+}
