@@ -3,6 +3,13 @@
 A **controlled, held-out evaluation** of the Target–Evaluate–Improve (TEI) loop
 across **31 agentic tasks spanning 31 industries**.
 
+> 📄 **Read the full article:** [`ARTICLE.md`](ARTICLE.md) (figures, tables, references) ·
+> 📑 **arXiv manuscript:** [`paper/main.tex`](paper/main.tex) (compile guide: [`paper/HOWTO_COMPILE.md`](paper/HOWTO_COMPILE.md))
+>
+> **Headline result (held-out, n=31 paired):** objective accuracy **0.682 → 0.857**,
+> Δ = **+0.175**, 95% CI [+0.115, +0.237], paired *t* = 5.60, ***p* = 4.3×10⁻⁶**,
+> Cohen's *d_z* = 1.01 (23 win / 1 loss / 7 tie).
+
 TEI-Bench measures whether evaluation-guided, GEPA-style reflective prompt
 optimization (the "Improve" half of [tei-loop](https://github.com/ojavadli/tei-loop))
 produces *real, generalizing* improvements — not in-sample, not self-judged,
