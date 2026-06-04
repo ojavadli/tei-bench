@@ -16,7 +16,7 @@ from typing import Optional
 
 from .gpa_judge import DIMENSIONS, gpa_judge
 from .llm import LLM
-from .scorers import score_example
+from .scorers import build_output_contract, score_example
 
 
 @dataclass
@@ -41,10 +41,13 @@ class SplitEval:
 
 async def run_agent(
     llm: LLM, agent_model: str, system_prompt: str, query: str,
-    *, temperature: float = 0.0, max_tokens: int = 800,
+    *, temperature: float = 0.0, max_tokens: int = 800, output_contract: str = "",
 ) -> str:
+    # The output contract (FINAL: <answer>) is appended to EVERY condition's
+    # prompt identically, so the scorer reads a clean final line in all arms.
+    full_system = system_prompt + output_contract
     return await llm.complete(
-        model=agent_model, system=system_prompt, user=query,
+        model=agent_model, system=full_system, user=query,
         temperature=temperature, max_tokens=max_tokens,
     )
 
@@ -61,10 +64,12 @@ async def evaluate_split(
     agent_temperature: float = 0.0,
 ) -> SplitEval:
     """Run the agent on every example, score objective + (optionally) GPA."""
+    contract = build_output_contract(task.metric, task.labels)
+
     async def _one(ex) -> ExampleResult:
         out = await run_agent(
             llm, agent_model, system_prompt, ex["query"],
-            temperature=agent_temperature,
+            temperature=agent_temperature, output_contract=contract,
         )
         obj = score_example(task.metric, out, ex["gold"], task.labels)
         gpa = {}

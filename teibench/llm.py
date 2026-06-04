@@ -34,7 +34,16 @@ PRICES = {
     "claude-haiku-4-5":   {"in": 1.00, "out": 5.00},
     "claude-sonnet-4-5":  {"in": 3.00, "out": 15.00},
     "claude-opus-4-1":    {"in": 15.00, "out": 75.00},
+    # OpenAI (approx, for budget reporting only)
+    "gpt-4o-mini":        {"in": 0.15, "out": 0.60},
+    "gpt-4.1-mini":       {"in": 0.40, "out": 1.60},
+    "gpt-4o":             {"in": 2.50, "out": 10.00},
+    "gpt-4.1":            {"in": 2.00, "out": 8.00},
 }
+
+
+def _is_openai(model: str) -> bool:
+    return model.startswith(("gpt-", "o1", "o3", "o4", "chatgpt"))
 
 
 def _price(model: str) -> dict:
@@ -91,10 +100,20 @@ class LLM:
         usage: Optional[Usage] = None,
     ):
         self._client = AsyncAnthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
+        self._openai = None  # created lazily on first OpenAI call
         self._cache_dir = Path(cache_dir)
         self._cache_dir.mkdir(parents=True, exist_ok=True)
         self._sem = asyncio.Semaphore(max_concurrency)
         self.usage = usage or Usage()
+
+    def _openai_client(self):
+        if self._openai is None:
+            from openai import AsyncOpenAI
+            key = os.environ.get("OPENAI_API_KEY")
+            if not key:
+                raise RuntimeError("OPENAI_API_KEY not set (needed for gpt-* models)")
+            self._openai = AsyncOpenAI(api_key=key)
+        return self._openai
 
     def _key(self, model, system, user, temperature, max_tokens, nonce) -> str:
         blob = json.dumps(
@@ -105,6 +124,26 @@ class LLM:
 
     def _cache_path(self, key: str) -> Path:
         return self._cache_dir / f"{key}.json"
+
+    async def _call_openai(self, model, system, user, temperature, max_tokens):
+        """OpenAI chat completion with param fallbacks for newer models."""
+        client = self._openai_client()
+        msgs = [{"role": "system", "content": system},
+                {"role": "user", "content": user}]
+        params = {"model": model, "messages": msgs,
+                  "max_tokens": max_tokens, "temperature": temperature}
+        try:
+            resp = await client.chat.completions.create(**params)
+        except Exception as e:
+            err = str(e).lower()
+            if "max_tokens" in err and "max_completion_tokens" in err:
+                params.pop("max_tokens"); params["max_completion_tokens"] = max_tokens
+            if "temperature" in err:
+                params.pop("temperature", None)
+            resp = await client.chat.completions.create(**params)
+        text = resp.choices[0].message.content or ""
+        u = resp.usage
+        return text, (u.prompt_tokens if u else 0), (u.completion_tokens if u else 0)
 
     async def complete(
         self,
@@ -133,16 +172,20 @@ class LLM:
         for attempt in range(max_retries):
             try:
                 async with self._sem:
-                    resp = await self._client.messages.create(
-                        model=model,
-                        max_tokens=max_tokens,
-                        system=system,
-                        messages=[{"role": "user", "content": user}],
-                        temperature=temperature,
-                    )
-                text = resp.content[0].text if resp.content else ""
-                in_tok = resp.usage.input_tokens if resp.usage else 0
-                out_tok = resp.usage.output_tokens if resp.usage else 0
+                    if _is_openai(model):
+                        text, in_tok, out_tok = await self._call_openai(
+                            model, system, user, temperature, max_tokens)
+                    else:
+                        resp = await self._client.messages.create(
+                            model=model,
+                            max_tokens=max_tokens,
+                            system=system,
+                            messages=[{"role": "user", "content": user}],
+                            temperature=temperature,
+                        )
+                        text = resp.content[0].text if resp.content else ""
+                        in_tok = resp.usage.input_tokens if resp.usage else 0
+                        out_tok = resp.usage.output_tokens if resp.usage else 0
                 self.usage.add(model, in_tok, out_tok, cached=False)
                 cpath.write_text(
                     json.dumps({"text": text, "in": in_tok, "out": out_tok}),

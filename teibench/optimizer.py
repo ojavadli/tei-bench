@@ -1,22 +1,25 @@
-"""GEPA-style reflective Pareto prompt optimizer (the 'Improve' in TEI).
+"""Prompt optimizer with three modes, for the ablation the reviewers asked for.
 
-Faithful port of the tei-loop optimization strategy, adapted for a
-controlled study:
+  * mode="tei"                  : reflective mutation on FAILING train examples
+                                  + system-aware merge, selection by a Pareto
+                                  front over (objective, GPA). The full method.
+  * mode="objective_reflection" : same reflective mutation + merge, but selection
+                                  by OBJECTIVE ONLY (no GPA). Isolates the value
+                                  of the GPA-guided evaluation signal.
+  * mode="random"               : undirected paraphrase of the prompt (the
+                                  optimizer never sees failures), selection by
+                                  objective only. Tests whether TEI beats random
+                                  prompt search of the same budget.
 
-  * Maintains a Pareto front over (objective, gpa_aggregate).
-  * Reflective mutation: the optimizer model is shown the current prompt and
-    a sample of FAILING train examples (query, agent output, gold) and asked
-    to produce an improved system prompt that would fix those failures.
-  * System-aware merge: combine two strong parents into one prompt.
-  * Candidates are scored on TRAIN minibatches only — the test split is
-    never touched here. This is what makes the held-out result meaningful.
-
-Returns the best candidate by composite train score.
+All modes use the SAME iteration budget and the SAME train minibatches, and
+NONE of them touch the test split. Only mode="tei" calls the GPA judge during
+optimization (the other arms are objective-only by construction, which also
+makes them cheaper).
 """
 from __future__ import annotations
 
 import random
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Optional
 
 from .agent import evaluate_split
@@ -31,33 +34,34 @@ class Candidate:
     iteration: int = 0
     strategy: str = "baseline"
 
-    def composite(self, w_obj: float = 0.5) -> float:
+    def composite(self, w_obj: float) -> float:
         return w_obj * self.objective + (1 - w_obj) * self.gpa
 
     def dominates(self, other: "Candidate") -> bool:
-        return (
-            self.objective >= other.objective
-            and self.gpa >= other.gpa
-            and (self.objective > other.objective or self.gpa > other.gpa)
-        )
+        return (self.objective >= other.objective and self.gpa >= other.gpa
+                and (self.objective > other.objective or self.gpa > other.gpa))
 
 
 _REFLECT_SYSTEM = """You are an expert prompt engineer improving the SYSTEM PROMPT
 of a task agent. You are given the current system prompt and several examples
 where the agent FAILED (its output did not match the reference answer).
 
-Diagnose the failure pattern, then rewrite the system prompt so the agent
-would handle these and similar cases correctly. You may add explicit
-instructions, output-format constraints, decision rules, or label
-definitions. Keep it focused and general (do NOT hard-code answers to the
-specific examples — that would not generalise). Return ONLY the improved
-system prompt text, nothing else."""
+Diagnose the failure pattern, then rewrite the system prompt so the agent would
+handle these and similar cases correctly. You may add explicit instructions,
+output-format constraints, decision rules, or label definitions. Keep it focused
+and general (do NOT hard-code answers to the specific examples). Return ONLY the
+improved system prompt text, nothing else."""
 
 _MERGE_SYSTEM = """You are an expert prompt engineer. You are given two strong
-SYSTEM PROMPTS for the same task agent. Produce a single improved system
-prompt that combines the best instructions and decision rules from both,
-without redundancy or contradiction. Return ONLY the merged system prompt
-text, nothing else."""
+SYSTEM PROMPTS for the same task agent. Produce a single improved system prompt
+that combines the best instructions and decision rules from both, without
+redundancy or contradiction. Return ONLY the merged system prompt text."""
+
+_PARAPHRASE_SYSTEM = """You are an expert prompt engineer. Rewrite the SYSTEM PROMPT
+below into a different but equally reasonable phrasing for the same task. You may
+restructure, rephrase, and lightly expand instructions, but you are NOT given any
+information about which examples the agent got wrong. Return ONLY the rewritten
+system prompt text, nothing else."""
 
 
 def _failures(split_eval, k: int = 4) -> list:
@@ -74,104 +78,91 @@ async def optimize(
     task,
     baseline_prompt: str,
     train: list,
-    num_iterations: int = 8,
-    minibatch: int = 8,
+    mode: str = "tei",
+    num_iterations: int = 6,
+    minibatch: int = 10,
     seed: int = 0,
-    w_obj: float = 0.5,
     log: Optional[list] = None,
 ) -> dict:
-    """Run reflective Pareto optimization on the train split.
-
-    Returns dict with best_prompt, front, history, and the baseline train eval.
-    """
+    """Optimize the prompt on the train split under the given ablation mode."""
+    assert mode in ("tei", "objective_reflection", "random")
     rng = random.Random(seed)
     log = log if log is not None else []
+    run_judge = (mode == "tei")
+    w_obj = 0.5 if mode == "tei" else 1.0
+    score = lambda c: c.composite(w_obj)
 
     def _mb() -> list:
-        if len(train) <= minibatch:
-            return train
-        return rng.sample(train, minibatch)
+        return train if len(train) <= minibatch else rng.sample(train, minibatch)
 
-    # Baseline candidate, evaluated on a train minibatch
-    base_mb = _mb()
     base_eval = await evaluate_split(
         llm, agent_model=agent_model, judge_model=judge_model,
-        system_prompt=baseline_prompt, task=task, examples=base_mb,
-    )
-    base = Candidate(
-        prompt=baseline_prompt, objective=base_eval.objective_mean,
-        gpa=base_eval.gpa_mean, iteration=0, strategy="baseline",
-    )
-    front: list[Candidate] = [base]
+        system_prompt=baseline_prompt, task=task, examples=_mb(), run_judge=run_judge)
+    base = Candidate(prompt=baseline_prompt, objective=base_eval.objective_mean,
+                     gpa=base_eval.gpa_mean, iteration=0, strategy="baseline")
+    pool: list[Candidate] = [base]
     best = base
-    history = [{"iter": 0, "obj": base.objective, "gpa": base.gpa,
-                "composite": base.composite(w_obj), "strategy": "baseline"}]
-    log.append(f"    [opt] baseline train: obj={base.objective:.3f} gpa={base.gpa:.3f}")
+    history = [{"iter": 0, "obj": base.objective, "gpa": base.gpa, "strategy": "baseline"}]
+    last_eval = base_eval
+    log.append(f"    [opt:{mode}] baseline train obj={base.objective:.3f} gpa={base.gpa:.3f}")
 
-    last_fail_eval = base_eval
     for it in range(1, num_iterations + 1):
-        strategy = "merge" if (len(front) >= 2 and rng.random() < 0.3) else "mutation"
+        if mode == "random":
+            strategy = "paraphrase"
+        else:
+            strategy = "merge" if (len(pool) >= 2 and rng.random() < 0.3) else "mutation"
 
-        if strategy == "merge":
-            a, b = rng.sample(front, 2)
+        if strategy == "paraphrase":
+            src = rng.choice(pool)
+            new_prompt = await llm.complete(
+                model=optimizer_model, system=_PARAPHRASE_SYSTEM,
+                user=f"SYSTEM PROMPT:\n{src.prompt}", temperature=0.9,
+                max_tokens=1200, nonce=f"para-{seed}-{it}")
+        elif strategy == "merge":
+            ranked = sorted(pool, key=score, reverse=True)[:4]
+            a, b = rng.sample(ranked, 2) if len(ranked) >= 2 else (ranked[0], ranked[0])
             new_prompt = await llm.complete(
                 model=optimizer_model, system=_MERGE_SYSTEM,
                 user=f"SYSTEM PROMPT A:\n{a.prompt}\n\nSYSTEM PROMPT B:\n{b.prompt}",
-                temperature=0.8, max_tokens=1200, nonce=f"merge-{seed}-{it}",
-            )
-        else:
-            parent = max(front, key=lambda c: c.composite(w_obj))
-            fails = _failures(last_fail_eval, k=4)
+                temperature=0.8, max_tokens=1200, nonce=f"merge-{seed}-{it}")
+        else:  # mutation (reflective)
+            parent = max(pool, key=score)
+            fails = _failures(last_eval, k=4)
             fail_block = "\n\n".join(
                 f"QUERY: {f.query}\nAGENT OUTPUT: {f.output[:300]}\nREFERENCE: {f.gold}"
-                for f in fails
-            )
+                for f in fails)
             new_prompt = await llm.complete(
                 model=optimizer_model, system=_REFLECT_SYSTEM,
-                user=(
-                    f"TASK: {task.instruction}\n\n"
-                    f"CURRENT SYSTEM PROMPT:\n{parent.prompt}\n\n"
-                    f"FAILING EXAMPLES:\n{fail_block}\n\n"
-                    f"Return the improved system prompt only."
-                ),
-                temperature=0.8, max_tokens=1200, nonce=f"mut-{seed}-{it}",
-            )
+                user=(f"TASK: {task.instruction}\n\nCURRENT SYSTEM PROMPT:\n{parent.prompt}"
+                      f"\n\nFAILING EXAMPLES:\n{fail_block}\n\nReturn the improved system prompt only."),
+                temperature=0.8, max_tokens=1200, nonce=f"mut-{seed}-{it}")
 
         new_prompt = new_prompt.strip()
         if not new_prompt or len(new_prompt) < 20:
             history.append({"iter": it, "skipped": True, "strategy": strategy})
             continue
 
-        mb = _mb()
         ev = await evaluate_split(
             llm, agent_model=agent_model, judge_model=judge_model,
-            system_prompt=new_prompt, task=task, examples=mb,
-        )
-        cand = Candidate(
-            prompt=new_prompt, objective=ev.objective_mean,
-            gpa=ev.gpa_mean, iteration=it, strategy=strategy,
-        )
-        last_fail_eval = ev
-
-        # Update Pareto front
-        front = [c for c in front if not cand.dominates(c)]
-        if not any(c.dominates(cand) for c in front):
-            front.append(cand)
-        if cand.composite(w_obj) > best.composite(w_obj):
+            system_prompt=new_prompt, task=task, examples=_mb(), run_judge=run_judge)
+        cand = Candidate(prompt=new_prompt, objective=ev.objective_mean,
+                         gpa=ev.gpa_mean, iteration=it, strategy=strategy)
+        last_eval = ev
+        pool.append(cand)
+        if score(cand) > score(best):
             best = cand
+        history.append({"iter": it, "obj": cand.objective, "gpa": cand.gpa,
+                        "strategy": strategy})
+        log.append(f"    [opt:{mode}] iter {it:>2} {strategy:<10} obj={cand.objective:.3f} "
+                   f"gpa={cand.gpa:.3f} (best obj={best.objective:.3f})")
 
-        history.append({
-            "iter": it, "obj": cand.objective, "gpa": cand.gpa,
-            "composite": cand.composite(w_obj), "strategy": strategy,
-            "front_size": len(front),
-        })
-        log.append(
-            f"    [opt] iter {it:>2} {strategy:<8} "
-            f"obj={cand.objective:.3f} gpa={cand.gpa:.3f} "
-            f"comp={cand.composite(w_obj):.3f} (best={best.composite(w_obj):.3f})"
-        )
+    if mode == "tei":
+        front = [c for c in pool if not any(o.dominates(c) for o in pool)]
+    else:
+        front = sorted(pool, key=score, reverse=True)[:5]
 
     return {
+        "mode": mode,
         "best_prompt": best.prompt,
         "best_train_obj": best.objective,
         "best_train_gpa": best.gpa,

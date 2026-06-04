@@ -22,7 +22,7 @@ from datasets import load_dataset
 
 ROOT = Path(__file__).resolve().parent.parent
 TASKS_DIR = ROOT / "tasks"
-N_TRAIN, N_TEST = 15, 20
+N_TRAIN, N_TEST = 15, 30
 SEED = 7
 MAXLEN = 1200
 

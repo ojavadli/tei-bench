@@ -31,7 +31,7 @@ from teibench.scorers import _norm
 ROOT = Path(__file__).resolve().parent.parent
 TASKS_DIR = ROOT / "tasks"
 GEN_MODEL = "claude-sonnet-4-5"
-N_PER_LABEL = 7          # generate this many per label, keep validated ones
+N_PER_LABEL = 11         # generate this many per label, keep validated ones
 SEED = 11
 
 # task_id, industry, role, instruction, {label: definition}
@@ -218,13 +218,13 @@ async def build_one(llm, spec):
     # fill train first then test, round robin
     order = list(pools.keys())
     rr = 0
-    while sum(len(p) for p in pools.values()) and (len(train) < 15 or len(test) < 18):
+    while sum(len(p) for p in pools.values()) and (len(train) < 15 or len(test) < 24):
         lab = order[rr % len(order)]; rr += 1
         if pools[lab]:
             ex = {"query": pools[lab].pop(), "gold": lab}
             if len(train) < 15:
                 train.append(ex)
-            elif len(test) < 18:
+            elif len(test) < 24:
                 test.append(ex)
         if rr > 100000:
             break
