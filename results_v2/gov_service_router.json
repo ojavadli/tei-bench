@@ -1,0 +1,1288 @@
+{
+  "task_id": "gov_service_router",
+  "industry": "Government / Public Sector",
+  "metric": "classification",
+  "source": "Authored for TEI-Bench (Sonnet-generated, Sonnet-validated; kept only label-agreed examples).",
+  "is_public": false,
+  "n_train": 15,
+  "n_test": 24,
+  "agent_model": "claude-haiku-4-5",
+  "judge_model": "claude-sonnet-4-5",
+  "optimizer_model": "claude-sonnet-4-5",
+  "seed": 0,
+  "arms": {
+    "baseline": {
+      "objective_mean": 1.0,
+      "objective_ci95": [
+        1.0,
+        1.0
+      ],
+      "prompt": "You are a citizen-services router. Route the citizen's request to the correct government department. Classify into one of these categories: taxation, licensing, benefits, infrastructure, records, complaint.",
+      "examples": [
+        {
+          "query": "Can someone please come repair the sidewalk in front of 342 Washington Street? Several concrete slabs are cracked and lifted, creating a tripping hazard for people walking by.",
+          "gold": "infrastructure",
+          "output": "This is a request to repair public infrastructure (a sidewalk) that poses a safety hazard. The citizen is reporting a maintenance issue with municipal property that needs attention from the appropriate public works or infrastructure department.\n\nFINAL: infrastructure",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly routed the sidewalk repair request to 'infrastructure' with sound reasoning about public works maintenance, matching the reference answer exactly."
+          }
+        },
+        {
+          "query": "I'm looking for the official paperwork showing when my son was born here in 2015, as his school is requesting it.",
+          "gold": "records",
+          "output": "You need an official birth certificate for your son. This is a vital record that schools commonly request for enrollment verification.\n\nThis request should be routed to the government department that handles vital records and document issuance.\n\nFINAL: records",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly identified the request as needing vital records/birth certificate and routed it to 'records' matching the reference answer exactly, with sound reasoning about the document type and"
+          }
+        },
+        {
+          "query": "The staff member I spoke with yesterday was incredibly rude and dismissive when I asked a simple question about my application status. I expect better treatment from public servants.",
+          "gold": "complaint",
+          "output": "I understand your frustration. Being treated dismissively by a government staff member is a legitimate concern, and you have every right to expect professional and courteous service.\n\nThis is a complaint about the quality of service you received from a government employee. The appropriate channel for this is the complaint/feedback system, which allows citizens to formally document service issues and helps departments improve their staff conduct and customer service standards.\n\nFINAL: complaint",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly identified this as a complaint, provided sound reasoning about why it's a complaint rather than a service request, and delivered the exact answer matching the reference, though wit"
+          }
+        },
+        {
+          "query": "I made charitable donations throughout the year and want to make sure I'm claiming them correctly to reduce what I owe.",
+          "gold": "taxation",
+          "output": "The citizen is asking about how to properly claim charitable donations on their tax return to minimize their tax liability. This is clearly a taxation matter, as it involves:\n- Tax deductions\n- Reducing tax owed\n- Proper tax filing procedures\n\nFINAL: taxation",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly routed to 'taxation' with sound reasoning about tax deductions and liability, perfectly matching the reference answer with proper format."
+          }
+        },
+        {
+          "query": "I just bought a boat and need to know the process for getting it properly registered with the state before taking it out on the water.",
+          "gold": "licensing",
+          "output": "You're looking to register your boat with the state, which is an official documentation and permitting process. This falls under the licensing category, as boat registration is a form of license/permit that authorizes you to operate the vessel legally.\n\nYou'll typically need to provide proof of ownership, complete registration forms, and pay associated fees. The specific requirements vary by state, but this is handled by your state's Department of Motor Vehicles, Fish and Wildlife, or similar agency that manages recreational vessel licensing.\n\nFINAL: licensing",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly identified 'licensing' as the department, provided sound reasoning about boat registration being a licensing process, and delivered the answer in proper format with helpful context"
+          }
+        },
+        {
+          "query": "I'm a single parent with two young children and my income barely covers our basic needs. Are there any support programs that could help with food, childcare costs, or housing?",
+          "gold": "benefits",
+          "output": "I understand you're facing financial strain while caring for two young children. There are several government support programs that could help with your situation:\n\n**Food Assistance:** Programs like SNAP (Supplemental Nutrition Assistance Program) or local food banks can help reduce food costs.\n\n**Childcare Support:** Depending on your income level, you may qualify for subsidized childcare through your state's childcare assistance program, which can significantly reduce those expenses.\n\n**Housing Assistance:** There are programs like Section 8 housing vouchers or emergency rental assistance that help low-income families afford housing.\n\n**Other Support:** You might also qualify for programs like TANF (Temporary Assistance for Needy Families), WIC (Women, Infants, and Children), or utility assistance programs.\n\nThe specific programs available and your eligibility depend on your state, income level, and family composition. I recommend contacting your local social services office or visiting benefits.gov to explore what you qualify for.\n\nFINAL: benefits",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly routed to 'benefits' department, provided helpful context about relevant programs, and the final answer matches the reference exactly."
+          }
+        },
+        {
+          "query": "I need to verify the chain of title for a commercial building located downtown before finalizing a sale.",
+          "gold": "records",
+          "output": "The citizen is requesting verification of property ownership history (chain of title) for a commercial building. This is a records-related request, as it involves accessing and verifying official property documents and historical ownership records maintained by government agencies.\n\nFINAL: records",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly identified the request as records-related, provided sound reasoning about property ownership documentation, and delivered the exact answer matching the reference."
+          }
+        },
+        {
+          "query": "The website information is outdated and contradicts what I was told over the phone. This lack of coordination wastes everyone's time and creates unnecessary confusion.",
+          "gold": "complaint",
+          "output": "I understand your frustration. Inconsistent information between different government channels is a legitimate service issue that needs to be addressed.\n\nThis is a complaint about government service quality and coordination problems. The citizen is reporting a systemic issue where different departments or communication channels are providing conflicting information.\n\nFINAL: complaint",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly identified this as a complaint, provided sound reasoning about the service quality issue, and delivered the exact answer matching the reference with proper format."
+          }
+        },
+        {
+          "query": "How do I update my withholding information? I got married last month and want to make sure the right amount is being taken out going forward.",
+          "gold": "taxation",
+          "output": "You're asking about adjusting your tax withholding after a change in marital status. This is a tax administration matter that involves updating your W-4 form (or equivalent tax withholding documentation) with your employer or tax authority.\n\nThis request relates to how much income tax is withheld from your paychecks, which falls under tax administration and personal taxation matters.\n\nFINAL: taxation",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly routed the withholding update request to 'taxation', provided sound reasoning about W-4 forms and tax administration, and matched the reference answer exactly."
+          }
+        },
+        {
+          "query": "I'm a contractor and need to pull permits for electrical work I'll be doing on a residential property renovation next week.",
+          "gold": "licensing",
+          "output": "You need permits for electrical work on a residential property. This is a licensing/permitting matter that falls under government oversight of professional work and construction activities.\n\nFINAL: licensing",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly routed to 'licensing' with sound reasoning about permits and professional oversight, matching the reference answer exactly."
+          }
+        },
+        {
+          "query": "My unemployment claim was denied and I don't understand why. I was laid off through no fault of my own and I think there's been a mistake with my application.",
+          "gold": "benefits",
+          "output": "I understand your frustration. A denied unemployment claim when you were laid off involuntarily is concerning and worth investigating. This involves reviewing your application, understanding the denial reason, and potentially appealing the decision.\n\nThis request involves accessing and disputing a benefits determination, which falls under government benefits administration.\n\nFINAL: benefits",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly routed to 'benefits' matching the reference answer, provided sound reasoning about unemployment claims falling under benefits administration, and maintained proper format despite a"
+          }
+        },
+        {
+          "query": "I'm trying to get a copy of the deed for my grandmother's house that was transferred to me after she passed away.",
+          "gold": "records",
+          "output": "You need a copy of the property deed, which is a legal document that establishes ownership of real estate. This type of record is typically maintained by your local government's land records office, county clerk, or recorder of deeds office.\n\nThis is a straightforward records request - you'll want to contact your county or local government office that handles property records to obtain an official copy of the deed.\n\nFINAL: records",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly routed to 'records' department, provided sound reasoning about property deed maintenance, and the final answer matches the reference exactly."
+          }
+        },
+        {
+          "query": "I visited your downtown office today and waited for over three hours only to be told I was in the wrong line. The signage is confusing and staff weren't helpful at all.",
+          "gold": "complaint",
+          "output": "I understand your frustration. Waiting three hours only to be redirected is a poor experience, and unclear signage combined with unhelpful staff certainly warrants attention.\n\nThis is feedback about the quality of service and operations at a government office—specifically issues with signage, staff assistance, and overall customer service processes. This type of concern should be routed to the appropriate department so it can be documented and addressed.\n\nFINAL: complaint",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified this as a complaint, provided sound reasoning about service quality issues, and delivered the exact answer matching the reference, though the task only required routing "
+          }
+        },
+        {
+          "query": "Can you help me understand the property assessment on my home? The valuation seems too high and I think my annual bill is incorrect as a result.",
+          "gold": "taxation",
+          "output": "I understand your concern about your property assessment and the resulting bill. This involves two related but distinct issues:\n\n1. **Property Assessment/Valuation** - This is typically handled by your local assessor's office and falls under taxation matters, as property assessments directly determine your tax liability.\n\n2. **Bill Accuracy** - If you believe the bill itself contains calculation errors based on the assessment, this also relates to taxation.\n\nYour request is fundamentally about disputing a tax assessment and the resulting tax bill, which is a taxation matter. You would need to contact your local tax assessor's office or property tax department to:\n- Request a review of your property valuation\n- File a formal appeal if you believe the assessment is incorrect\n- Get clarification on how the assessment translates to your bill\n\nFINAL: taxation",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9675,
+            "rationale": "The agent correctly routed to 'taxation' with sound reasoning about property assessment and tax bills, though the task only required routing without the extensive explanation."
+          }
+        },
+        {
+          "query": "My driver's credential is about to expire and I need to schedule an appointment to get it renewed at the earliest available time.",
+          "gold": "licensing",
+          "output": "The citizen is requesting to renew their driver's license/credential, which is expiring soon. This is a licensing matter - they need to renew an official government-issued license document and schedule an appointment for the renewal process.\n\nFINAL: licensing",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly identified the request as a licensing matter, provided sound reasoning about why it belongs to that department, and delivered the exact correct answer matching the reference."
+          }
+        },
+        {
+          "query": "I lost my job three weeks ago and I'm struggling to make ends meet. I need to know what kind of financial assistance I might be eligible for while I look for new employment.",
+          "gold": "benefits",
+          "output": "I understand you're in a difficult situation. You're looking for information about financial assistance programs available to you during your period of unemployment. This could include unemployment benefits, emergency assistance programs, food assistance, housing support, or other social safety net programs that help people during job transitions.\n\nThis type of request falls under government benefits and support services.\n\nFINAL: benefits",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly routed to 'benefits' department, provided sound reasoning about unemployment assistance programs, maintained proper format with clear final answer, and matched the reference answer"
+          }
+        },
+        {
+          "query": "Where can I request a duplicate of my certificate of live birth? I lost my original and need it for my passport application.",
+          "gold": "records",
+          "output": "You need a duplicate certificate of live birth, which is an official vital record document. This type of request falls under vital records management, which is handled by the records department of government.\n\nFINAL: records",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly routed to 'records' with sound reasoning about vital records management, matching the reference answer perfectly."
+          }
+        },
+        {
+          "query": "Why does it take so long to get anything done at your agency? I submitted my paperwork two months ago and still haven't heard back. This bureaucracy is out of control.",
+          "gold": "complaint",
+          "output": "I understand your frustration with the delay. A two-month wait for a response is certainly longer than ideal, and it's reasonable to expect timely processing of your paperwork.\n\nHowever, I need to route your concern appropriately. Since you're expressing dissatisfaction with the service or process itself rather than requesting a specific service, this is best classified as a complaint about agency performance and responsiveness.\n\nFINAL: complaint",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly identified and routed the input as a 'complaint', matching the reference answer exactly, with sound reasoning about why this constitutes a complaint rather than a service request."
+          }
+        },
+        {
+          "query": "My employer didn't withhold the correct amount from my paychecks this year and now I owe a large sum. Can I set up a payment plan to pay this off over time?",
+          "gold": "taxation",
+          "output": "You're dealing with a tax withholding issue and need to arrange payment terms with the tax authority. This involves:\n\n1. Verifying the withholding error with your employer\n2. Filing your tax return to formally establish what you owe\n3. Contacting the tax authority to request an installment payment plan\n\nThe tax authority typically offers payment plan options for taxpayers who cannot pay their full liability at once. You'll need to work directly with them to set up the arrangement, which may involve fees and interest on the unpaid balance.\n\nFINAL: taxation",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly routed to 'taxation' matching the reference, provided sound contextual reasoning about tax withholding and payment plans, though the task only required routing without the addition"
+          }
+        },
+        {
+          "query": "I need to renew my food handler's certificate before it expires next month. What documents do I need to submit and where should I send them?",
+          "gold": "licensing",
+          "output": "A food handler's certificate is a professional credential that allows individuals to work in food service establishments. Renewing this certificate involves verification of your qualifications and compliance with food safety standards.\n\nThis request involves obtaining or renewing an official credential/permit that authorizes you to perform specific work. This falls under the licensing category, as food handler certificates are licenses issued by health or regulatory departments.\n\nFINAL: licensing",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly routed the request to 'licensing' with sound reasoning about credential renewal, matching the reference answer exactly despite including explanatory context."
+          }
+        },
+        {
+          "query": "I received a letter saying my assistance case is under review, but I don't know what that means or if I need to submit additional information. Can someone explain the process?",
+          "gold": "benefits",
+          "output": "The citizen is asking about their assistance case review process and what steps they may need to take. This involves understanding their benefits eligibility status and potentially providing documentation.\n\nThis request relates to government assistance programs and benefits administration, as they're inquiring about an ongoing case review for what appears to be a social assistance or welfare program.\n\nFINAL: benefits",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly routed to 'benefits' with sound reasoning about assistance case reviews, matching the reference answer exactly with proper format."
+          }
+        },
+        {
+          "query": "How do I obtain documentation proving ownership of the residential property I purchased last year on Maple Street?",
+          "gold": "records",
+          "output": "The citizen is requesting documentation that proves ownership of their residential property. This is a request for official records related to property ownership, such as a deed or title certificate.\n\nThis falls under the records category, as it involves obtaining official documentation from government records (typically a land registry or property records office).\n\nFINAL: records",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly identified the request as needing the records department, provided sound reasoning about property ownership documentation, and delivered the exact answer matching the reference."
+          }
+        },
+        {
+          "query": "I'm extremely dissatisfied with how my case was handled. The representative gave me incorrect information that caused me to miss an important deadline, and now I'm facing penalties.",
+          "gold": "complaint",
+          "output": "I understand your frustration. You've experienced poor service that resulted in real consequences for you. This situation involves both a service failure and the penalties you're now facing.\n\nSince your primary concern is addressing the mishandling of your case and the resulting penalties, this should be routed to the appropriate department to formally document and address the service error.\n\nFINAL: complaint",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly routed to 'complaint' matching the reference, provided sound reasoning about service failure and penalties, maintained proper format with clear final answer, and delivered accurate"
+          }
+        },
+        {
+          "query": "I sold my house this year and made a profit. Do I need to report this as income and if so, are there any deductions available for selling a primary residence?",
+          "gold": "taxation",
+          "output": "You're asking about capital gains from a home sale and potential tax treatment. This involves reporting income from the sale and understanding deductions or exclusions that may apply to primary residence sales.\n\nIn many jurisdictions, there are significant tax benefits for selling a primary residence (such as capital gains exclusions), but the rules vary by location and individual circumstances. You'll need guidance on:\n- Whether the gain is taxable\n- What exclusions or deductions apply\n- How to properly report it\n\nThis is clearly a taxation matter.\n\nFINAL: taxation",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9675,
+            "rationale": "The agent correctly routed to 'taxation' with sound reasoning about capital gains and tax reporting, though the explanatory content was more extensive than strictly necessary for a routing task."
+          }
+        }
+      ],
+      "gpa_mean": 0.9665624999999999,
+      "gpa_dims": {
+        "target_alignment": 0.9499999999999996,
+        "reasoning_soundness": 0.9183333333333331,
+        "execution_accuracy": 0.9979166666666667,
+        "output_integrity": 1.0
+      }
+    },
+    "random": {
+      "objective_mean": 1.0,
+      "objective_ci95": [
+        1.0,
+        1.0
+      ],
+      "prompt": "You are a citizen-services router. Route the citizen's request to the correct government department. Classify into one of these categories: taxation, licensing, benefits, infrastructure, records, complaint.",
+      "examples": [
+        {
+          "query": "Can someone please come repair the sidewalk in front of 342 Washington Street? Several concrete slabs are cracked and lifted, creating a tripping hazard for people walking by.",
+          "gold": "infrastructure",
+          "output": "This is a request to repair public infrastructure (a sidewalk) that poses a safety hazard. The citizen is reporting a maintenance issue with municipal property that needs attention from the appropriate public works or infrastructure department.\n\nFINAL: infrastructure",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I'm looking for the official paperwork showing when my son was born here in 2015, as his school is requesting it.",
+          "gold": "records",
+          "output": "You need an official birth certificate for your son. This is a vital record that schools commonly request for enrollment verification.\n\nThis request should be routed to the government department that handles vital records and document issuance.\n\nFINAL: records",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "The staff member I spoke with yesterday was incredibly rude and dismissive when I asked a simple question about my application status. I expect better treatment from public servants.",
+          "gold": "complaint",
+          "output": "I understand your frustration. Being treated dismissively by a government staff member is a legitimate concern, and you have every right to expect professional and courteous service.\n\nThis is a complaint about the quality of service you received from a government employee. The appropriate channel for this is the complaint/feedback system, which allows citizens to formally document service issues and helps departments improve their staff conduct and customer service standards.\n\nFINAL: complaint",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I made charitable donations throughout the year and want to make sure I'm claiming them correctly to reduce what I owe.",
+          "gold": "taxation",
+          "output": "The citizen is asking about how to properly claim charitable donations on their tax return to minimize their tax liability. This is clearly a taxation matter, as it involves:\n- Tax deductions\n- Reducing tax owed\n- Proper tax filing procedures\n\nFINAL: taxation",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I just bought a boat and need to know the process for getting it properly registered with the state before taking it out on the water.",
+          "gold": "licensing",
+          "output": "You're looking to register your boat with the state, which is an official documentation and permitting process. This falls under the licensing category, as boat registration is a form of license/permit that authorizes you to operate the vessel legally.\n\nYou'll typically need to provide proof of ownership, complete registration forms, and pay associated fees. The specific requirements vary by state, but this is handled by your state's Department of Motor Vehicles, Fish and Wildlife, or similar agency that manages recreational vessel licensing.\n\nFINAL: licensing",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I'm a single parent with two young children and my income barely covers our basic needs. Are there any support programs that could help with food, childcare costs, or housing?",
+          "gold": "benefits",
+          "output": "I understand you're facing financial strain while caring for two young children. There are several government support programs that could help with your situation:\n\n**Food Assistance:** Programs like SNAP (Supplemental Nutrition Assistance Program) or local food banks can help reduce food costs.\n\n**Childcare Support:** Depending on your income level, you may qualify for subsidized childcare through your state's childcare assistance program, which can significantly reduce those expenses.\n\n**Housing Assistance:** There are programs like Section 8 housing vouchers or emergency rental assistance that help low-income families afford housing.\n\n**Other Support:** You might also qualify for programs like TANF (Temporary Assistance for Needy Families), WIC (Women, Infants, and Children), or utility assistance programs.\n\nThe specific programs available and your eligibility depend on your state, income level, and family composition. I recommend contacting your local social services office or visiting benefits.gov to explore what you qualify for.\n\nFINAL: benefits",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I need to verify the chain of title for a commercial building located downtown before finalizing a sale.",
+          "gold": "records",
+          "output": "The citizen is requesting verification of property ownership history (chain of title) for a commercial building. This is a records-related request, as it involves accessing and verifying official property documents and historical ownership records maintained by government agencies.\n\nFINAL: records",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "The website information is outdated and contradicts what I was told over the phone. This lack of coordination wastes everyone's time and creates unnecessary confusion.",
+          "gold": "complaint",
+          "output": "I understand your frustration. Inconsistent information between different government channels is a legitimate service issue that needs to be addressed.\n\nThis is a complaint about government service quality and coordination problems. The citizen is reporting a systemic issue where different departments or communication channels are providing conflicting information.\n\nFINAL: complaint",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "How do I update my withholding information? I got married last month and want to make sure the right amount is being taken out going forward.",
+          "gold": "taxation",
+          "output": "You're asking about adjusting your tax withholding after a change in marital status. This is a tax administration matter that involves updating your W-4 form (or equivalent tax withholding documentation) with your employer or tax authority.\n\nThis request relates to how much income tax is withheld from your paychecks, which falls under tax administration and personal taxation matters.\n\nFINAL: taxation",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I'm a contractor and need to pull permits for electrical work I'll be doing on a residential property renovation next week.",
+          "gold": "licensing",
+          "output": "You need permits for electrical work on a residential property. This is a licensing/permitting matter that falls under government oversight of professional work and construction activities.\n\nFINAL: licensing",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "My unemployment claim was denied and I don't understand why. I was laid off through no fault of my own and I think there's been a mistake with my application.",
+          "gold": "benefits",
+          "output": "I understand your frustration. A denied unemployment claim when you were laid off involuntarily is concerning and worth investigating. This involves reviewing your application, understanding the denial reason, and potentially appealing the decision.\n\nThis request involves accessing and disputing a benefits determination, which falls under government benefits administration.\n\nFINAL: benefits",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I'm trying to get a copy of the deed for my grandmother's house that was transferred to me after she passed away.",
+          "gold": "records",
+          "output": "You need a copy of the property deed, which is a legal document that establishes ownership of real estate. This type of record is typically maintained by your local government's land records office, county clerk, or recorder of deeds office.\n\nThis is a straightforward records request - you'll want to contact your county or local government office that handles property records to obtain an official copy of the deed.\n\nFINAL: records",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I visited your downtown office today and waited for over three hours only to be told I was in the wrong line. The signage is confusing and staff weren't helpful at all.",
+          "gold": "complaint",
+          "output": "I understand your frustration. Waiting three hours only to be redirected is a poor experience, and unclear signage combined with unhelpful staff certainly warrants attention.\n\nThis is feedback about the quality of service and operations at a government office—specifically issues with signage, staff assistance, and overall customer service processes. This type of concern should be routed to the appropriate department so it can be documented and addressed.\n\nFINAL: complaint",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Can you help me understand the property assessment on my home? The valuation seems too high and I think my annual bill is incorrect as a result.",
+          "gold": "taxation",
+          "output": "I understand your concern about your property assessment and the resulting bill. This involves two related but distinct issues:\n\n1. **Property Assessment/Valuation** - This is typically handled by your local assessor's office and falls under taxation matters, as property assessments directly determine your tax liability.\n\n2. **Bill Accuracy** - If you believe the bill itself contains calculation errors based on the assessment, this also relates to taxation.\n\nYour request is fundamentally about disputing a tax assessment and the resulting tax bill, which is a taxation matter. You would need to contact your local tax assessor's office or property tax department to:\n- Request a review of your property valuation\n- File a formal appeal if you believe the assessment is incorrect\n- Get clarification on how the assessment translates to your bill\n\nFINAL: taxation",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "My driver's credential is about to expire and I need to schedule an appointment to get it renewed at the earliest available time.",
+          "gold": "licensing",
+          "output": "The citizen is requesting to renew their driver's license/credential, which is expiring soon. This is a licensing matter - they need to renew an official government-issued license document and schedule an appointment for the renewal process.\n\nFINAL: licensing",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I lost my job three weeks ago and I'm struggling to make ends meet. I need to know what kind of financial assistance I might be eligible for while I look for new employment.",
+          "gold": "benefits",
+          "output": "I understand you're in a difficult situation. You're looking for information about financial assistance programs available to you during your period of unemployment. This could include unemployment benefits, emergency assistance programs, food assistance, housing support, or other social safety net programs that help people during job transitions.\n\nThis type of request falls under government benefits and support services.\n\nFINAL: benefits",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Where can I request a duplicate of my certificate of live birth? I lost my original and need it for my passport application.",
+          "gold": "records",
+          "output": "You need a duplicate certificate of live birth, which is an official vital record document. This type of request falls under vital records management, which is handled by the records department of government.\n\nFINAL: records",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Why does it take so long to get anything done at your agency? I submitted my paperwork two months ago and still haven't heard back. This bureaucracy is out of control.",
+          "gold": "complaint",
+          "output": "I understand your frustration with the delay. A two-month wait for a response is certainly longer than ideal, and it's reasonable to expect timely processing of your paperwork.\n\nHowever, I need to route your concern appropriately. Since you're expressing dissatisfaction with the service or process itself rather than requesting a specific service, this is best classified as a complaint about agency performance and responsiveness.\n\nFINAL: complaint",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "My employer didn't withhold the correct amount from my paychecks this year and now I owe a large sum. Can I set up a payment plan to pay this off over time?",
+          "gold": "taxation",
+          "output": "You're dealing with a tax withholding issue and need to arrange payment terms with the tax authority. This involves:\n\n1. Verifying the withholding error with your employer\n2. Filing your tax return to formally establish what you owe\n3. Contacting the tax authority to request an installment payment plan\n\nThe tax authority typically offers payment plan options for taxpayers who cannot pay their full liability at once. You'll need to work directly with them to set up the arrangement, which may involve fees and interest on the unpaid balance.\n\nFINAL: taxation",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I need to renew my food handler's certificate before it expires next month. What documents do I need to submit and where should I send them?",
+          "gold": "licensing",
+          "output": "A food handler's certificate is a professional credential that allows individuals to work in food service establishments. Renewing this certificate involves verification of your qualifications and compliance with food safety standards.\n\nThis request involves obtaining or renewing an official credential/permit that authorizes you to perform specific work. This falls under the licensing category, as food handler certificates are licenses issued by health or regulatory departments.\n\nFINAL: licensing",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I received a letter saying my assistance case is under review, but I don't know what that means or if I need to submit additional information. Can someone explain the process?",
+          "gold": "benefits",
+          "output": "The citizen is asking about their assistance case review process and what steps they may need to take. This involves understanding their benefits eligibility status and potentially providing documentation.\n\nThis request relates to government assistance programs and benefits administration, as they're inquiring about an ongoing case review for what appears to be a social assistance or welfare program.\n\nFINAL: benefits",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "How do I obtain documentation proving ownership of the residential property I purchased last year on Maple Street?",
+          "gold": "records",
+          "output": "The citizen is requesting documentation that proves ownership of their residential property. This is a request for official records related to property ownership, such as a deed or title certificate.\n\nThis falls under the records category, as it involves obtaining official documentation from government records (typically a land registry or property records office).\n\nFINAL: records",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I'm extremely dissatisfied with how my case was handled. The representative gave me incorrect information that caused me to miss an important deadline, and now I'm facing penalties.",
+          "gold": "complaint",
+          "output": "I understand your frustration. You've experienced poor service that resulted in real consequences for you. This situation involves both a service failure and the penalties you're now facing.\n\nSince your primary concern is addressing the mishandling of your case and the resulting penalties, this should be routed to the appropriate department to formally document and address the service error.\n\nFINAL: complaint",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I sold my house this year and made a profit. Do I need to report this as income and if so, are there any deductions available for selling a primary residence?",
+          "gold": "taxation",
+          "output": "You're asking about capital gains from a home sale and potential tax treatment. This involves reporting income from the sale and understanding deductions or exclusions that may apply to primary residence sales.\n\nIn many jurisdictions, there are significant tax benefits for selling a primary residence (such as capital gains exclusions), but the rules vary by location and individual circumstances. You'll need guidance on:\n- Whether the gain is taxable\n- What exclusions or deductions apply\n- How to properly report it\n\nThis is clearly a taxation matter.\n\nFINAL: taxation",
+          "objective": 1.0,
+          "gpa": {}
+        }
+      ],
+      "optimization": {
+        "history": [
+          {
+            "iter": 0,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "baseline"
+          },
+          {
+            "iter": 1,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "paraphrase"
+          },
+          {
+            "iter": 2,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "paraphrase"
+          },
+          {
+            "iter": 3,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "paraphrase"
+          },
+          {
+            "iter": 4,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "paraphrase"
+          },
+          {
+            "iter": 5,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "paraphrase"
+          },
+          {
+            "iter": 6,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "paraphrase"
+          }
+        ],
+        "front": [
+          {
+            "obj": 1.0,
+            "gpa": 0.0,
+            "iter": 0,
+            "strategy": "baseline"
+          },
+          {
+            "obj": 1.0,
+            "gpa": 0.0,
+            "iter": 1,
+            "strategy": "paraphrase"
+          },
+          {
+            "obj": 1.0,
+            "gpa": 0.0,
+            "iter": 2,
+            "strategy": "paraphrase"
+          },
+          {
+            "obj": 1.0,
+            "gpa": 0.0,
+            "iter": 3,
+            "strategy": "paraphrase"
+          },
+          {
+            "obj": 1.0,
+            "gpa": 0.0,
+            "iter": 4,
+            "strategy": "paraphrase"
+          }
+        ]
+      }
+    },
+    "objective_reflection": {
+      "objective_mean": 1.0,
+      "objective_ci95": [
+        1.0,
+        1.0
+      ],
+      "prompt": "You are a citizen-services router. Route the citizen's request to the correct government department. Classify into one of these categories: taxation, licensing, benefits, infrastructure, records, complaint.",
+      "examples": [
+        {
+          "query": "Can someone please come repair the sidewalk in front of 342 Washington Street? Several concrete slabs are cracked and lifted, creating a tripping hazard for people walking by.",
+          "gold": "infrastructure",
+          "output": "This is a request to repair public infrastructure (a sidewalk) that poses a safety hazard. The citizen is reporting a maintenance issue with municipal property that needs attention from the appropriate public works or infrastructure department.\n\nFINAL: infrastructure",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I'm looking for the official paperwork showing when my son was born here in 2015, as his school is requesting it.",
+          "gold": "records",
+          "output": "You need an official birth certificate for your son. This is a vital record that schools commonly request for enrollment verification.\n\nThis request should be routed to the government department that handles vital records and document issuance.\n\nFINAL: records",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "The staff member I spoke with yesterday was incredibly rude and dismissive when I asked a simple question about my application status. I expect better treatment from public servants.",
+          "gold": "complaint",
+          "output": "I understand your frustration. Being treated dismissively by a government staff member is a legitimate concern, and you have every right to expect professional and courteous service.\n\nThis is a complaint about the quality of service you received from a government employee. The appropriate channel for this is the complaint/feedback system, which allows citizens to formally document service issues and helps departments improve their staff conduct and customer service standards.\n\nFINAL: complaint",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I made charitable donations throughout the year and want to make sure I'm claiming them correctly to reduce what I owe.",
+          "gold": "taxation",
+          "output": "The citizen is asking about how to properly claim charitable donations on their tax return to minimize their tax liability. This is clearly a taxation matter, as it involves:\n- Tax deductions\n- Reducing tax owed\n- Proper tax filing procedures\n\nFINAL: taxation",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I just bought a boat and need to know the process for getting it properly registered with the state before taking it out on the water.",
+          "gold": "licensing",
+          "output": "You're looking to register your boat with the state, which is an official documentation and permitting process. This falls under the licensing category, as boat registration is a form of license/permit that authorizes you to operate the vessel legally.\n\nYou'll typically need to provide proof of ownership, complete registration forms, and pay associated fees. The specific requirements vary by state, but this is handled by your state's Department of Motor Vehicles, Fish and Wildlife, or similar agency that manages recreational vessel licensing.\n\nFINAL: licensing",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I'm a single parent with two young children and my income barely covers our basic needs. Are there any support programs that could help with food, childcare costs, or housing?",
+          "gold": "benefits",
+          "output": "I understand you're facing financial strain while caring for two young children. There are several government support programs that could help with your situation:\n\n**Food Assistance:** Programs like SNAP (Supplemental Nutrition Assistance Program) or local food banks can help reduce food costs.\n\n**Childcare Support:** Depending on your income level, you may qualify for subsidized childcare through your state's childcare assistance program, which can significantly reduce those expenses.\n\n**Housing Assistance:** There are programs like Section 8 housing vouchers or emergency rental assistance that help low-income families afford housing.\n\n**Other Support:** You might also qualify for programs like TANF (Temporary Assistance for Needy Families), WIC (Women, Infants, and Children), or utility assistance programs.\n\nThe specific programs available and your eligibility depend on your state, income level, and family composition. I recommend contacting your local social services office or visiting benefits.gov to explore what you qualify for.\n\nFINAL: benefits",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I need to verify the chain of title for a commercial building located downtown before finalizing a sale.",
+          "gold": "records",
+          "output": "The citizen is requesting verification of property ownership history (chain of title) for a commercial building. This is a records-related request, as it involves accessing and verifying official property documents and historical ownership records maintained by government agencies.\n\nFINAL: records",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "The website information is outdated and contradicts what I was told over the phone. This lack of coordination wastes everyone's time and creates unnecessary confusion.",
+          "gold": "complaint",
+          "output": "I understand your frustration. Inconsistent information between different government channels is a legitimate service issue that needs to be addressed.\n\nThis is a complaint about government service quality and coordination problems. The citizen is reporting a systemic issue where different departments or communication channels are providing conflicting information.\n\nFINAL: complaint",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "How do I update my withholding information? I got married last month and want to make sure the right amount is being taken out going forward.",
+          "gold": "taxation",
+          "output": "You're asking about adjusting your tax withholding after a change in marital status. This is a tax administration matter that involves updating your W-4 form (or equivalent tax withholding documentation) with your employer or tax authority.\n\nThis request relates to how much income tax is withheld from your paychecks, which falls under tax administration and personal taxation matters.\n\nFINAL: taxation",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I'm a contractor and need to pull permits for electrical work I'll be doing on a residential property renovation next week.",
+          "gold": "licensing",
+          "output": "You need permits for electrical work on a residential property. This is a licensing/permitting matter that falls under government oversight of professional work and construction activities.\n\nFINAL: licensing",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "My unemployment claim was denied and I don't understand why. I was laid off through no fault of my own and I think there's been a mistake with my application.",
+          "gold": "benefits",
+          "output": "I understand your frustration. A denied unemployment claim when you were laid off involuntarily is concerning and worth investigating. This involves reviewing your application, understanding the denial reason, and potentially appealing the decision.\n\nThis request involves accessing and disputing a benefits determination, which falls under government benefits administration.\n\nFINAL: benefits",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I'm trying to get a copy of the deed for my grandmother's house that was transferred to me after she passed away.",
+          "gold": "records",
+          "output": "You need a copy of the property deed, which is a legal document that establishes ownership of real estate. This type of record is typically maintained by your local government's land records office, county clerk, or recorder of deeds office.\n\nThis is a straightforward records request - you'll want to contact your county or local government office that handles property records to obtain an official copy of the deed.\n\nFINAL: records",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I visited your downtown office today and waited for over three hours only to be told I was in the wrong line. The signage is confusing and staff weren't helpful at all.",
+          "gold": "complaint",
+          "output": "I understand your frustration. Waiting three hours only to be redirected is a poor experience, and unclear signage combined with unhelpful staff certainly warrants attention.\n\nThis is feedback about the quality of service and operations at a government office—specifically issues with signage, staff assistance, and overall customer service processes. This type of concern should be routed to the appropriate department so it can be documented and addressed.\n\nFINAL: complaint",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Can you help me understand the property assessment on my home? The valuation seems too high and I think my annual bill is incorrect as a result.",
+          "gold": "taxation",
+          "output": "I understand your concern about your property assessment and the resulting bill. This involves two related but distinct issues:\n\n1. **Property Assessment/Valuation** - This is typically handled by your local assessor's office and falls under taxation matters, as property assessments directly determine your tax liability.\n\n2. **Bill Accuracy** - If you believe the bill itself contains calculation errors based on the assessment, this also relates to taxation.\n\nYour request is fundamentally about disputing a tax assessment and the resulting tax bill, which is a taxation matter. You would need to contact your local tax assessor's office or property tax department to:\n- Request a review of your property valuation\n- File a formal appeal if you believe the assessment is incorrect\n- Get clarification on how the assessment translates to your bill\n\nFINAL: taxation",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "My driver's credential is about to expire and I need to schedule an appointment to get it renewed at the earliest available time.",
+          "gold": "licensing",
+          "output": "The citizen is requesting to renew their driver's license/credential, which is expiring soon. This is a licensing matter - they need to renew an official government-issued license document and schedule an appointment for the renewal process.\n\nFINAL: licensing",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I lost my job three weeks ago and I'm struggling to make ends meet. I need to know what kind of financial assistance I might be eligible for while I look for new employment.",
+          "gold": "benefits",
+          "output": "I understand you're in a difficult situation. You're looking for information about financial assistance programs available to you during your period of unemployment. This could include unemployment benefits, emergency assistance programs, food assistance, housing support, or other social safety net programs that help people during job transitions.\n\nThis type of request falls under government benefits and support services.\n\nFINAL: benefits",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Where can I request a duplicate of my certificate of live birth? I lost my original and need it for my passport application.",
+          "gold": "records",
+          "output": "You need a duplicate certificate of live birth, which is an official vital record document. This type of request falls under vital records management, which is handled by the records department of government.\n\nFINAL: records",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Why does it take so long to get anything done at your agency? I submitted my paperwork two months ago and still haven't heard back. This bureaucracy is out of control.",
+          "gold": "complaint",
+          "output": "I understand your frustration with the delay. A two-month wait for a response is certainly longer than ideal, and it's reasonable to expect timely processing of your paperwork.\n\nHowever, I need to route your concern appropriately. Since you're expressing dissatisfaction with the service or process itself rather than requesting a specific service, this is best classified as a complaint about agency performance and responsiveness.\n\nFINAL: complaint",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "My employer didn't withhold the correct amount from my paychecks this year and now I owe a large sum. Can I set up a payment plan to pay this off over time?",
+          "gold": "taxation",
+          "output": "You're dealing with a tax withholding issue and need to arrange payment terms with the tax authority. This involves:\n\n1. Verifying the withholding error with your employer\n2. Filing your tax return to formally establish what you owe\n3. Contacting the tax authority to request an installment payment plan\n\nThe tax authority typically offers payment plan options for taxpayers who cannot pay their full liability at once. You'll need to work directly with them to set up the arrangement, which may involve fees and interest on the unpaid balance.\n\nFINAL: taxation",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I need to renew my food handler's certificate before it expires next month. What documents do I need to submit and where should I send them?",
+          "gold": "licensing",
+          "output": "A food handler's certificate is a professional credential that allows individuals to work in food service establishments. Renewing this certificate involves verification of your qualifications and compliance with food safety standards.\n\nThis request involves obtaining or renewing an official credential/permit that authorizes you to perform specific work. This falls under the licensing category, as food handler certificates are licenses issued by health or regulatory departments.\n\nFINAL: licensing",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I received a letter saying my assistance case is under review, but I don't know what that means or if I need to submit additional information. Can someone explain the process?",
+          "gold": "benefits",
+          "output": "The citizen is asking about their assistance case review process and what steps they may need to take. This involves understanding their benefits eligibility status and potentially providing documentation.\n\nThis request relates to government assistance programs and benefits administration, as they're inquiring about an ongoing case review for what appears to be a social assistance or welfare program.\n\nFINAL: benefits",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "How do I obtain documentation proving ownership of the residential property I purchased last year on Maple Street?",
+          "gold": "records",
+          "output": "The citizen is requesting documentation that proves ownership of their residential property. This is a request for official records related to property ownership, such as a deed or title certificate.\n\nThis falls under the records category, as it involves obtaining official documentation from government records (typically a land registry or property records office).\n\nFINAL: records",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I'm extremely dissatisfied with how my case was handled. The representative gave me incorrect information that caused me to miss an important deadline, and now I'm facing penalties.",
+          "gold": "complaint",
+          "output": "I understand your frustration. You've experienced poor service that resulted in real consequences for you. This situation involves both a service failure and the penalties you're now facing.\n\nSince your primary concern is addressing the mishandling of your case and the resulting penalties, this should be routed to the appropriate department to formally document and address the service error.\n\nFINAL: complaint",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I sold my house this year and made a profit. Do I need to report this as income and if so, are there any deductions available for selling a primary residence?",
+          "gold": "taxation",
+          "output": "You're asking about capital gains from a home sale and potential tax treatment. This involves reporting income from the sale and understanding deductions or exclusions that may apply to primary residence sales.\n\nIn many jurisdictions, there are significant tax benefits for selling a primary residence (such as capital gains exclusions), but the rules vary by location and individual circumstances. You'll need guidance on:\n- Whether the gain is taxable\n- What exclusions or deductions apply\n- How to properly report it\n\nThis is clearly a taxation matter.\n\nFINAL: taxation",
+          "objective": 1.0,
+          "gpa": {}
+        }
+      ],
+      "optimization": {
+        "history": [
+          {
+            "iter": 0,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "baseline"
+          },
+          {
+            "iter": 1,
+            "obj": 0.9,
+            "gpa": 0.0,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 2,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 3,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 4,
+            "obj": 0.9,
+            "gpa": 0.0,
+            "strategy": "merge"
+          },
+          {
+            "iter": 5,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 6,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "mutation"
+          }
+        ],
+        "front": [
+          {
+            "obj": 1.0,
+            "gpa": 0.0,
+            "iter": 0,
+            "strategy": "baseline"
+          },
+          {
+            "obj": 1.0,
+            "gpa": 0.0,
+            "iter": 2,
+            "strategy": "mutation"
+          },
+          {
+            "obj": 1.0,
+            "gpa": 0.0,
+            "iter": 3,
+            "strategy": "mutation"
+          },
+          {
+            "obj": 1.0,
+            "gpa": 0.0,
+            "iter": 5,
+            "strategy": "mutation"
+          },
+          {
+            "obj": 1.0,
+            "gpa": 0.0,
+            "iter": 6,
+            "strategy": "mutation"
+          }
+        ]
+      }
+    },
+    "tei": {
+      "objective_mean": 1.0,
+      "objective_ci95": [
+        1.0,
+        1.0
+      ],
+      "prompt": "You are a citizen-services router. Your task is to classify each citizen request into exactly ONE of these categories: taxation, licensing, benefits, infrastructure, records, complaint.\n\n**Classification Rules:**\n\n**taxation** - Any request involving:\n- Filing tax returns (individual, business, estate, final returns) or obtaining tax forms\n- Tax payments, refunds, liabilities, or account balances\n- Tax deadlines, extensions, or filing requirements\n- Tax rates, deductions, calculations, or income reporting\n- Multi-state or multi-jurisdiction tax questions\n- Any correspondence about tax forms (W-2, 1099, return forms, etc.) even if just requesting copies\n- Key Rule: If a request involves tax forms, tax filings, or tax-related documents (even just obtaining copies), classify as taxation, not records\n\n**licensing** - Any request involving:\n- Applications, renewals, or questions about permits and licenses\n- Driver's licenses, business licenses, professional certifications, vehicle registration\n- Permits or authorization to conduct activities (construction, business operations, professional practice)\n- Regulatory approvals needed before starting projects or activities\n- License requirements or status inquiries\n\n**benefits** - Any request involving:\n- Eligibility for government assistance programs\n- Social services, welfare, unemployment, disability benefits, or pensions\n- Low-income family support or other assistance programs\n- Applying for or maintaining benefit programs\n\n**infrastructure** - Any request involving:\n- Roads, bridges, utilities, public transportation, or public facilities\n- Infrastructure maintenance, repairs, construction, or public works issues\n- Zoning matters\n\n**records** - Any request involving:\n- Vital records (birth certificates, death certificates, marriage certificates)\n- Property records, court records, or other official government-held documents\n- Obtaining copies of official documents NOT related to taxation\n- Key Rule: This category is for vital records and non-tax official documents only\n\n**complaint** - Any request involving:\n- Filing complaints, reporting violations, or expressing dissatisfaction with services\n- Reporting problems with government services or agencies\n- Formal complaints about officials, agencies, or service quality\n- Grievances about treatment or service delivery\n\n**Output Format:**\nRespond with ONLY the category name (one word, lowercase). \n\n**CRITICAL: Do NOT include any explanations, reasoning, analysis, or additional text in your response. Do NOT describe what the request is about. Do NOT justify your classification. Output ONLY the single category word and nothing else.**",
+      "examples": [
+        {
+          "query": "Can someone please come repair the sidewalk in front of 342 Washington Street? Several concrete slabs are cracked and lifted, creating a tripping hazard for people walking by.",
+          "gold": "infrastructure",
+          "output": "This request is about infrastructure maintenance and repair - specifically a public sidewalk that needs repair due to safety hazards.\n\nFINAL: infrastructure",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly identified the department as 'infrastructure', provided sound reasoning about sidewalk maintenance being an infrastructure issue, and delivered the answer in the expected format ma"
+          }
+        },
+        {
+          "query": "I'm looking for the official paperwork showing when my son was born here in 2015, as his school is requesting it.",
+          "gold": "records",
+          "output": "FINAL: records",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly routed the birth certificate request to 'records' department, matching the reference answer exactly with proper format and no extraneous content."
+          }
+        },
+        {
+          "query": "The staff member I spoke with yesterday was incredibly rude and dismissive when I asked a simple question about my application status. I expect better treatment from public servants.",
+          "gold": "complaint",
+          "output": "This is a complaint about the quality of service and treatment received from a government employee.\n\nFINAL: complaint",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly identified the input as a complaint, provided sound reasoning about service quality issues, and delivered the exact label matching the reference answer."
+          }
+        },
+        {
+          "query": "I made charitable donations throughout the year and want to make sure I'm claiming them correctly to reduce what I owe.",
+          "gold": "taxation",
+          "output": "FINAL: taxation",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 1.0,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 1.0,
+            "rationale": "The agent correctly routed a tax-related query about charitable donation deductions to the taxation department, matching the reference answer exactly with proper formatting."
+          }
+        },
+        {
+          "query": "I just bought a boat and need to know the process for getting it properly registered with the state before taking it out on the water.",
+          "gold": "licensing",
+          "output": "FINAL: licensing",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly routed the boat registration request to 'licensing', matching the reference answer exactly with proper format and no extraneous content."
+          }
+        },
+        {
+          "query": "I'm a single parent with two young children and my income barely covers our basic needs. Are there any support programs that could help with food, childcare costs, or housing?",
+          "gold": "benefits",
+          "output": "FINAL: benefits",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 1.0,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 1.0,
+            "rationale": "The agent correctly routed the citizen's request about support programs for food, childcare, and housing to 'benefits', matching the reference answer exactly with proper formatting."
+          }
+        },
+        {
+          "query": "I need to verify the chain of title for a commercial building located downtown before finalizing a sale.",
+          "gold": "records",
+          "output": "This request is about obtaining property records to verify ownership history and chain of title for a commercial building. This is a request for official government-held documents (property records) that are not related to taxation.\n\nFINAL: records",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly identified the request as needing property records, provided sound reasoning about chain of title verification, and delivered the exact answer matching the reference."
+          }
+        },
+        {
+          "query": "The website information is outdated and contradicts what I was told over the phone. This lack of coordination wastes everyone's time and creates unnecessary confusion.",
+          "gold": "complaint",
+          "output": "This is a complaint about government service quality and coordination issues between different communication channels.\n\nFINAL: complaint",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly identified and routed the citizen's frustration about outdated information and poor coordination as a complaint, matching the reference answer exactly with appropriate supporting e"
+          }
+        },
+        {
+          "query": "How do I update my withholding information? I got married last month and want to make sure the right amount is being taken out going forward.",
+          "gold": "taxation",
+          "output": "This request is about updating tax withholding information, which is directly related to tax payments and how much tax is being deducted from income. This falls under taxation matters.\n\nFINAL: taxation",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly routed the withholding update request to 'taxation' with sound reasoning about tax deductions, matching the reference answer perfectly."
+          }
+        },
+        {
+          "query": "I'm a contractor and need to pull permits for electrical work I'll be doing on a residential property renovation next week.",
+          "gold": "licensing",
+          "output": "FINAL: licensing",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly routed the permit request to 'licensing', matching the reference answer exactly with proper format and no extraneous content."
+          }
+        },
+        {
+          "query": "My unemployment claim was denied and I don't understand why. I was laid off through no fault of my own and I think there's been a mistake with my application.",
+          "gold": "benefits",
+          "output": "This is a request about unemployment benefits eligibility and a problem with a benefits application. The citizen is seeking to understand their benefits status and believes there may be an error in their claim processing.\n\nFINAL: benefits",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly routed to 'benefits' matching the reference answer, provided sound reasoning about unemployment benefits, and followed the required format with appropriate explanation."
+          }
+        },
+        {
+          "query": "I'm trying to get a copy of the deed for my grandmother's house that was transferred to me after she passed away.",
+          "gold": "records",
+          "output": "FINAL: records",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly routed the deed/property records request to 'records' department, matching the reference answer exactly with proper format."
+          }
+        },
+        {
+          "query": "I visited your downtown office today and waited for over three hours only to be told I was in the wrong line. The signage is confusing and staff weren't helpful at all.",
+          "gold": "complaint",
+          "output": "This is a complaint about government service delivery and treatment at a public office.\n\nFINAL: complaint",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly identified the input as a complaint, provided sound reasoning about service delivery issues, and delivered the exact label matching the reference answer."
+          }
+        },
+        {
+          "query": "Can you help me understand the property assessment on my home? The valuation seems too high and I think my annual bill is incorrect as a result.",
+          "gold": "taxation",
+          "output": "This request involves a property assessment and concerns about the resulting bill amount. The citizen is questioning the valuation of their property and believes their annual bill is incorrect.\n\nProperty assessments and valuations are typically part of property records and tax administration. However, the core issue here is about the property assessment value itself and the resulting bill calculation, which falls under taxation (property tax assessment and liability).\n\nFINAL: taxation",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly routed to 'taxation', provided sound reasoning about property assessment and tax administration, and delivered the exact answer matching the reference with proper format."
+          }
+        },
+        {
+          "query": "My driver's credential is about to expire and I need to schedule an appointment to get it renewed at the earliest available time.",
+          "gold": "licensing",
+          "output": "FINAL: licensing",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly routed the driver's credential renewal request to 'licensing', matching the reference answer exactly with proper format and no extraneous content."
+          }
+        },
+        {
+          "query": "I lost my job three weeks ago and I'm struggling to make ends meet. I need to know what kind of financial assistance I might be eligible for while I look for new employment.",
+          "gold": "benefits",
+          "output": "This request is about eligibility for government assistance programs due to job loss, which falls under benefits. The citizen is asking about financial assistance options available to them during unemployment.\n\nFINAL: benefits",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly routed to 'benefits' with sound reasoning about unemployment assistance, proper format, and perfect match to the reference answer."
+          }
+        },
+        {
+          "query": "Where can I request a duplicate of my certificate of live birth? I lost my original and need it for my passport application.",
+          "gold": "records",
+          "output": "FINAL: records",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly routed the birth certificate request to 'records' department, matching the reference answer exactly with proper format."
+          }
+        },
+        {
+          "query": "Why does it take so long to get anything done at your agency? I submitted my paperwork two months ago and still haven't heard back. This bureaucracy is out of control.",
+          "gold": "complaint",
+          "output": "FINAL: complaint",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly identified the input as a complaint and provided the exact label matching the reference answer with proper formatting."
+          }
+        },
+        {
+          "query": "My employer didn't withhold the correct amount from my paychecks this year and now I owe a large sum. Can I set up a payment plan to pay this off over time?",
+          "gold": "taxation",
+          "output": "This request involves a tax liability and payment arrangement for taxes owed. The citizen is asking about managing a tax debt through a payment plan, which is a taxation matter.\n\nFINAL: taxation",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly identified the request as a taxation matter, provided sound reasoning about tax liability and payment arrangements, and delivered the exact answer matching the reference."
+          }
+        },
+        {
+          "query": "I need to renew my food handler's certificate before it expires next month. What documents do I need to submit and where should I send them?",
+          "gold": "licensing",
+          "output": "FINAL: licensing",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 1.0,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 1.0,
+            "rationale": "The agent correctly routed the food handler's certificate renewal request to 'licensing', matching the reference answer exactly with proper format."
+          }
+        },
+        {
+          "query": "I received a letter saying my assistance case is under review, but I don't know what that means or if I need to submit additional information. Can someone explain the process?",
+          "gold": "benefits",
+          "output": "This request is about understanding the status and process of a government assistance case that is under review. The citizen is seeking clarification about their benefits program status and what actions they may need to take.\n\nFINAL: benefits",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly routed the assistance case inquiry to 'benefits' department, matching the reference answer exactly, with sound reasoning about the nature of the request despite adding explanatory "
+          }
+        },
+        {
+          "query": "How do I obtain documentation proving ownership of the residential property I purchased last year on Maple Street?",
+          "gold": "records",
+          "output": "FINAL: records",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly routed the property ownership documentation request to 'records' department, matching the reference answer exactly with proper format."
+          }
+        },
+        {
+          "query": "I'm extremely dissatisfied with how my case was handled. The representative gave me incorrect information that caused me to miss an important deadline, and now I'm facing penalties.",
+          "gold": "complaint",
+          "output": "This is a complaint about government service delivery and how a case was handled by a representative, resulting in incorrect information and missed deadlines.\n\nFINAL: complaint",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly identified the request as a complaint, matching the reference answer exactly, with sound reasoning about service delivery issues and proper formatting."
+          }
+        },
+        {
+          "query": "I sold my house this year and made a profit. Do I need to report this as income and if so, are there any deductions available for selling a primary residence?",
+          "gold": "taxation",
+          "output": "FINAL: taxation",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 1.0,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 1.0,
+            "rationale": "The agent correctly routed a question about capital gains tax and deductions on home sale profits to the taxation department, matching the reference answer exactly with proper formatting."
+          }
+        }
+      ],
+      "gpa_mean": 0.9749999999999999,
+      "gpa_dims": {
+        "target_alignment": 0.958333333333333,
+        "reasoning_soundness": 0.9416666666666664,
+        "execution_accuracy": 1.0,
+        "output_integrity": 1.0
+      },
+      "optimization": {
+        "history": [
+          {
+            "iter": 0,
+            "obj": 1.0,
+            "gpa": 0.96675,
+            "strategy": "baseline"
+          },
+          {
+            "iter": 1,
+            "obj": 0.9,
+            "gpa": 0.905,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 2,
+            "obj": 1.0,
+            "gpa": 0.96875,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 3,
+            "obj": 1.0,
+            "gpa": 0.96875,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 4,
+            "obj": 1.0,
+            "gpa": 0.9712500000000001,
+            "strategy": "merge"
+          },
+          {
+            "iter": 5,
+            "obj": 1.0,
+            "gpa": 0.97175,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 6,
+            "obj": 1.0,
+            "gpa": 0.96875,
+            "strategy": "mutation"
+          }
+        ],
+        "front": [
+          {
+            "obj": 1.0,
+            "gpa": 0.97175,
+            "iter": 5,
+            "strategy": "mutation"
+          }
+        ]
+      }
+    }
+  },
+  "duration_s": 271.4
+}

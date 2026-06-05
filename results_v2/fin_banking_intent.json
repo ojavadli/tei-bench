@@ -1,0 +1,910 @@
+{
+  "task_id": "fin_banking_intent",
+  "industry": "Finance / Banking",
+  "metric": "classification",
+  "source": "Authored for TEI-Bench; intent label space inspired by banking77 (CC-BY-4.0).",
+  "is_public": false,
+  "n_train": 15,
+  "n_test": 15,
+  "agent_model": "claude-haiku-4-5",
+  "judge_model": "claude-sonnet-4-5",
+  "optimizer_model": "claude-sonnet-4-5",
+  "seed": 0,
+  "arms": {
+    "baseline": {
+      "objective_mean": 1.0,
+      "objective_ci95": [
+        1.0,
+        1.0
+      ],
+      "prompt": "You are a banking assistant. Classify the customer message into one of these intents: card_arrival, card_lost, balance_inquiry, transfer_failed, atm_fee, exchange_rate, close_account, dispute_charge.",
+      "examples": [
+        {
+          "query": "There's a transaction on my statement I don't recognize and want reversed.",
+          "gold": "dispute_charge",
+          "output": "The customer is reporting an unrecognized transaction on their statement and wants it reversed. This is a request to dispute or challenge a charge that they don't believe they authorized or recognize.\n\nFINAL: dispute_charge",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the intent as 'dispute_charge', matching the reference answer exactly, with sound reasoning about the unrecognized transaction requiring reversal."
+          }
+        },
+        {
+          "query": "When will the replacement card get to my house?",
+          "gold": "card_arrival",
+          "output": "The customer is asking about when they will receive a replacement card at their address. This indicates they are inquiring about the arrival status of a card.\n\nFINAL: card_arrival",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the intent as 'card_arrival', provided sound reasoning about the customer's inquiry, and the output matches the reference answer perfectly."
+          }
+        },
+        {
+          "query": "Someone took my wallet with the card inside.",
+          "gold": "card_lost",
+          "output": "The customer is reporting that their wallet was stolen, which included their card. This indicates the card is lost or has been taken without authorization.\n\nFINAL: card_lost",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the intent as 'card_lost', provided sound reasoning about the stolen wallet scenario, and delivered the exact label format required."
+          }
+        },
+        {
+          "query": "What's my current balance?",
+          "gold": "balance_inquiry",
+          "output": "The customer is asking about their current account balance. This is a straightforward balance inquiry request.\n\nFINAL: balance_inquiry",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 1.0,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 1.0,
+            "rationale": "The agent correctly classified the message as 'balance_inquiry', matching the reference answer exactly, with sound reasoning and proper task execution."
+          }
+        },
+        {
+          "query": "My wire transfer was rejected — what happened?",
+          "gold": "transfer_failed",
+          "output": "The customer is reporting that their wire transfer was rejected and wants to understand the reason. This indicates a problem with a transfer transaction not going through successfully.\n\nThis falls under the transfer_failed intent, as the customer is experiencing an issue with a failed or rejected transfer.\n\nFINAL: transfer_failed",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the intent as 'transfer_failed', provided sound reasoning about the rejected wire transfer, and delivered the exact label format required, matching the reference answer "
+          }
+        },
+        {
+          "query": "I was surprised by a withdrawal fee on my last cash machine visit.",
+          "gold": "atm_fee",
+          "output": "The customer is reporting an unexpected fee charged when they used an ATM (cash machine). This is a complaint about an ATM fee that was applied to their account.\n\nFINAL: atm_fee",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the intent as 'atm_fee' matching the reference, provided sound reasoning about the unexpected ATM withdrawal fee, and delivered the answer in the required format with th"
+          }
+        },
+        {
+          "query": "Which exchange rate applies to my purchases in London?",
+          "gold": "exchange_rate",
+          "output": "The customer is asking about which exchange rate applies to their purchases made in London. This is a question about currency conversion rates for international transactions.\n\nFINAL: exchange_rate",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the intent as 'exchange_rate', provided sound reasoning about currency conversion for international transactions, and delivered the exact label required by the task."
+          }
+        },
+        {
+          "query": "Cancel my account entirely, I'm switching banks.",
+          "gold": "close_account",
+          "output": "The customer is requesting to close their bank account and switch to another financial institution. This is a clear request to terminate their account relationship.\n\nFINAL: close_account",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 1.0,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 1.0,
+            "rationale": "The agent correctly identified the intent as 'close_account', matching the reference answer exactly, with sound reasoning and proper task execution."
+          }
+        },
+        {
+          "query": "Dispute this charge — I did not authorize the $42 payment.",
+          "gold": "dispute_charge",
+          "output": "The customer is reporting an unauthorized charge of $42 that they did not authorize. This is a clear case of disputing a charge on their account.\n\nFINAL: dispute_charge",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the intent as 'dispute_charge' matching the reference, provided sound reasoning about the unauthorized charge, and delivered the answer in the required format with the c"
+          }
+        },
+        {
+          "query": "Has my card been mailed yet?",
+          "gold": "card_arrival",
+          "output": "The customer is asking about the status of their card delivery, specifically whether it has been sent/mailed to them. This is a question about card arrival.\n\nFINAL: card_arrival",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the intent as 'card_arrival', provided sound reasoning about card delivery status, and matched the reference answer exactly."
+          }
+        },
+        {
+          "query": "I can't find my card anywhere, I think it's gone.",
+          "gold": "card_lost",
+          "output": "The customer is expressing that they cannot locate their card and believe it is missing or lost. This clearly indicates a lost card situation.\n\nFINAL: card_lost",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 1.0,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 1.0,
+            "rationale": "The agent correctly classified the intent as 'card_lost', matching the reference answer exactly, with sound reasoning about the customer's statement of being unable to find their card."
+          }
+        },
+        {
+          "query": "Could you check the amount left in my savings?",
+          "gold": "balance_inquiry",
+          "output": "The customer is asking to check their account balance in their savings account. This is a straightforward balance inquiry request.\n\nFINAL: balance_inquiry",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.9,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified the intent as balance_inquiry matching the reference, with sound reasoning, though it included unnecessary explanation before the final classification."
+          }
+        },
+        {
+          "query": "The transfer to my own other account didn't complete.",
+          "gold": "transfer_failed",
+          "output": "The customer is reporting that a transfer between their own accounts failed to complete. This is clearly a transfer issue.\n\nFINAL: transfer_failed",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the intent as 'transfer_failed' matching the reference, with sound reasoning about the transfer failure, though added unnecessary explanation beyond the required single "
+          }
+        },
+        {
+          "query": "Why is there a surcharge from the ATM operator?",
+          "gold": "atm_fee",
+          "output": "The customer is asking about a charge they incurred from using an ATM, specifically questioning why there's a surcharge from the ATM operator. This is clearly related to fees charged when using ATMs.\n\nFINAL: atm_fee",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the intent as 'atm_fee' matching the reference, provided sound reasoning about ATM surcharges, followed the required format, and delivered an accurate answer without fab"
+          }
+        },
+        {
+          "query": "Tell me today's conversion rate for dollars to yen.",
+          "gold": "exchange_rate",
+          "output": "The customer is asking about the conversion rate between dollars and yen. This is a question about currency exchange rates.\n\nFINAL: exchange_rate",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly classified the intent as 'exchange_rate' matching the reference, with sound reasoning about currency conversion, though added unnecessary explanation beyond the required single lab"
+          }
+        }
+      ],
+      "gpa_mean": 0.9758333333333332,
+      "gpa_dims": {
+        "target_alignment": 0.9599999999999997,
+        "reasoning_soundness": 0.9546666666666664,
+        "execution_accuracy": 0.9886666666666667,
+        "output_integrity": 1.0
+      }
+    },
+    "random": {
+      "objective_mean": 1.0,
+      "objective_ci95": [
+        1.0,
+        1.0
+      ],
+      "prompt": "You are a banking assistant. Classify the customer message into one of these intents: card_arrival, card_lost, balance_inquiry, transfer_failed, atm_fee, exchange_rate, close_account, dispute_charge.",
+      "examples": [
+        {
+          "query": "There's a transaction on my statement I don't recognize and want reversed.",
+          "gold": "dispute_charge",
+          "output": "The customer is reporting an unrecognized transaction on their statement and wants it reversed. This is a request to dispute or challenge a charge that they don't believe they authorized or recognize.\n\nFINAL: dispute_charge",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "When will the replacement card get to my house?",
+          "gold": "card_arrival",
+          "output": "The customer is asking about when they will receive a replacement card at their address. This indicates they are inquiring about the arrival status of a card.\n\nFINAL: card_arrival",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Someone took my wallet with the card inside.",
+          "gold": "card_lost",
+          "output": "The customer is reporting that their wallet was stolen, which included their card. This indicates the card is lost or has been taken without authorization.\n\nFINAL: card_lost",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "What's my current balance?",
+          "gold": "balance_inquiry",
+          "output": "The customer is asking about their current account balance. This is a straightforward balance inquiry request.\n\nFINAL: balance_inquiry",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "My wire transfer was rejected — what happened?",
+          "gold": "transfer_failed",
+          "output": "The customer is reporting that their wire transfer was rejected and wants to understand the reason. This indicates a problem with a transfer transaction not going through successfully.\n\nThis falls under the transfer_failed intent, as the customer is experiencing an issue with a failed or rejected transfer.\n\nFINAL: transfer_failed",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I was surprised by a withdrawal fee on my last cash machine visit.",
+          "gold": "atm_fee",
+          "output": "The customer is reporting an unexpected fee charged when they used an ATM (cash machine). This is a complaint about an ATM fee that was applied to their account.\n\nFINAL: atm_fee",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Which exchange rate applies to my purchases in London?",
+          "gold": "exchange_rate",
+          "output": "The customer is asking about which exchange rate applies to their purchases made in London. This is a question about currency conversion rates for international transactions.\n\nFINAL: exchange_rate",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Cancel my account entirely, I'm switching banks.",
+          "gold": "close_account",
+          "output": "The customer is requesting to close their bank account and switch to another financial institution. This is a clear request to terminate their account relationship.\n\nFINAL: close_account",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Dispute this charge — I did not authorize the $42 payment.",
+          "gold": "dispute_charge",
+          "output": "The customer is reporting an unauthorized charge of $42 that they did not authorize. This is a clear case of disputing a charge on their account.\n\nFINAL: dispute_charge",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Has my card been mailed yet?",
+          "gold": "card_arrival",
+          "output": "The customer is asking about the status of their card delivery, specifically whether it has been sent/mailed to them. This is a question about card arrival.\n\nFINAL: card_arrival",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I can't find my card anywhere, I think it's gone.",
+          "gold": "card_lost",
+          "output": "The customer is expressing that they cannot locate their card and believe it is missing or lost. This clearly indicates a lost card situation.\n\nFINAL: card_lost",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Could you check the amount left in my savings?",
+          "gold": "balance_inquiry",
+          "output": "The customer is asking to check their account balance in their savings account. This is a straightforward balance inquiry request.\n\nFINAL: balance_inquiry",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "The transfer to my own other account didn't complete.",
+          "gold": "transfer_failed",
+          "output": "The customer is reporting that a transfer between their own accounts failed to complete. This is clearly a transfer issue.\n\nFINAL: transfer_failed",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Why is there a surcharge from the ATM operator?",
+          "gold": "atm_fee",
+          "output": "The customer is asking about a charge they incurred from using an ATM, specifically questioning why there's a surcharge from the ATM operator. This is clearly related to fees charged when using ATMs.\n\nFINAL: atm_fee",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Tell me today's conversion rate for dollars to yen.",
+          "gold": "exchange_rate",
+          "output": "The customer is asking about the conversion rate between dollars and yen. This is a question about currency exchange rates.\n\nFINAL: exchange_rate",
+          "objective": 1.0,
+          "gpa": {}
+        }
+      ],
+      "optimization": {
+        "history": [
+          {
+            "iter": 0,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "baseline"
+          },
+          {
+            "iter": 1,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "paraphrase"
+          },
+          {
+            "iter": 2,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "paraphrase"
+          },
+          {
+            "iter": 3,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "paraphrase"
+          },
+          {
+            "iter": 4,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "paraphrase"
+          },
+          {
+            "iter": 5,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "paraphrase"
+          },
+          {
+            "iter": 6,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "paraphrase"
+          }
+        ],
+        "front": [
+          {
+            "obj": 1.0,
+            "gpa": 0.0,
+            "iter": 0,
+            "strategy": "baseline"
+          },
+          {
+            "obj": 1.0,
+            "gpa": 0.0,
+            "iter": 1,
+            "strategy": "paraphrase"
+          },
+          {
+            "obj": 1.0,
+            "gpa": 0.0,
+            "iter": 2,
+            "strategy": "paraphrase"
+          },
+          {
+            "obj": 1.0,
+            "gpa": 0.0,
+            "iter": 3,
+            "strategy": "paraphrase"
+          },
+          {
+            "obj": 1.0,
+            "gpa": 0.0,
+            "iter": 4,
+            "strategy": "paraphrase"
+          }
+        ]
+      }
+    },
+    "objective_reflection": {
+      "objective_mean": 1.0,
+      "objective_ci95": [
+        1.0,
+        1.0
+      ],
+      "prompt": "You are a banking assistant. Classify the customer message into one of these intents: card_arrival, card_lost, balance_inquiry, transfer_failed, atm_fee, exchange_rate, close_account, dispute_charge.",
+      "examples": [
+        {
+          "query": "There's a transaction on my statement I don't recognize and want reversed.",
+          "gold": "dispute_charge",
+          "output": "The customer is reporting an unrecognized transaction on their statement and wants it reversed. This is a request to dispute or challenge a charge that they don't believe they authorized or recognize.\n\nFINAL: dispute_charge",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "When will the replacement card get to my house?",
+          "gold": "card_arrival",
+          "output": "The customer is asking about when they will receive a replacement card at their address. This indicates they are inquiring about the arrival status of a card.\n\nFINAL: card_arrival",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Someone took my wallet with the card inside.",
+          "gold": "card_lost",
+          "output": "The customer is reporting that their wallet was stolen, which included their card. This indicates the card is lost or has been taken without authorization.\n\nFINAL: card_lost",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "What's my current balance?",
+          "gold": "balance_inquiry",
+          "output": "The customer is asking about their current account balance. This is a straightforward balance inquiry request.\n\nFINAL: balance_inquiry",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "My wire transfer was rejected — what happened?",
+          "gold": "transfer_failed",
+          "output": "The customer is reporting that their wire transfer was rejected and wants to understand the reason. This indicates a problem with a transfer transaction not going through successfully.\n\nThis falls under the transfer_failed intent, as the customer is experiencing an issue with a failed or rejected transfer.\n\nFINAL: transfer_failed",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I was surprised by a withdrawal fee on my last cash machine visit.",
+          "gold": "atm_fee",
+          "output": "The customer is reporting an unexpected fee charged when they used an ATM (cash machine). This is a complaint about an ATM fee that was applied to their account.\n\nFINAL: atm_fee",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Which exchange rate applies to my purchases in London?",
+          "gold": "exchange_rate",
+          "output": "The customer is asking about which exchange rate applies to their purchases made in London. This is a question about currency conversion rates for international transactions.\n\nFINAL: exchange_rate",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Cancel my account entirely, I'm switching banks.",
+          "gold": "close_account",
+          "output": "The customer is requesting to close their bank account and switch to another financial institution. This is a clear request to terminate their account relationship.\n\nFINAL: close_account",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Dispute this charge — I did not authorize the $42 payment.",
+          "gold": "dispute_charge",
+          "output": "The customer is reporting an unauthorized charge of $42 that they did not authorize. This is a clear case of disputing a charge on their account.\n\nFINAL: dispute_charge",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Has my card been mailed yet?",
+          "gold": "card_arrival",
+          "output": "The customer is asking about the status of their card delivery, specifically whether it has been sent/mailed to them. This is a question about card arrival.\n\nFINAL: card_arrival",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I can't find my card anywhere, I think it's gone.",
+          "gold": "card_lost",
+          "output": "The customer is expressing that they cannot locate their card and believe it is missing or lost. This clearly indicates a lost card situation.\n\nFINAL: card_lost",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Could you check the amount left in my savings?",
+          "gold": "balance_inquiry",
+          "output": "The customer is asking to check their account balance in their savings account. This is a straightforward balance inquiry request.\n\nFINAL: balance_inquiry",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "The transfer to my own other account didn't complete.",
+          "gold": "transfer_failed",
+          "output": "The customer is reporting that a transfer between their own accounts failed to complete. This is clearly a transfer issue.\n\nFINAL: transfer_failed",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Why is there a surcharge from the ATM operator?",
+          "gold": "atm_fee",
+          "output": "The customer is asking about a charge they incurred from using an ATM, specifically questioning why there's a surcharge from the ATM operator. This is clearly related to fees charged when using ATMs.\n\nFINAL: atm_fee",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Tell me today's conversion rate for dollars to yen.",
+          "gold": "exchange_rate",
+          "output": "The customer is asking about the conversion rate between dollars and yen. This is a question about currency exchange rates.\n\nFINAL: exchange_rate",
+          "objective": 1.0,
+          "gpa": {}
+        }
+      ],
+      "optimization": {
+        "history": [
+          {
+            "iter": 0,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "baseline"
+          },
+          {
+            "iter": 1,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 2,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 3,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 4,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "merge"
+          },
+          {
+            "iter": 5,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 6,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "mutation"
+          }
+        ],
+        "front": [
+          {
+            "obj": 1.0,
+            "gpa": 0.0,
+            "iter": 0,
+            "strategy": "baseline"
+          },
+          {
+            "obj": 1.0,
+            "gpa": 0.0,
+            "iter": 1,
+            "strategy": "mutation"
+          },
+          {
+            "obj": 1.0,
+            "gpa": 0.0,
+            "iter": 2,
+            "strategy": "mutation"
+          },
+          {
+            "obj": 1.0,
+            "gpa": 0.0,
+            "iter": 3,
+            "strategy": "mutation"
+          },
+          {
+            "obj": 1.0,
+            "gpa": 0.0,
+            "iter": 4,
+            "strategy": "merge"
+          }
+        ]
+      }
+    },
+    "tei": {
+      "objective_mean": 1.0,
+      "objective_ci95": [
+        1.0,
+        1.0
+      ],
+      "prompt": "You are a banking intent classification system. Your task is to classify each customer message into exactly one intent label from the following list:\n\n- card_arrival: Questions about when a new/replacement card will arrive or has arrived\n- card_lost: Reporting a lost, misplaced, or stolen card\n- balance_inquiry: Asking about account balance or available funds\n- transfer_failed: Reporting that a money transfer or payment did not go through successfully\n- atm_fee: Questions or complaints about ATM fees or charges\n- exchange_rate: Questions about foreign exchange rates or currency conversion rates\n- close_account: Request to close or terminate an account\n- dispute_charge: Reporting unauthorized, incorrect, or fraudulent charges that need to be removed or investigated\n\nInstructions:\n1. Read the customer message carefully\n2. Identify the primary intent based on what the customer is asking for or reporting\n3. Output ONLY the intent label (e.g., \"dispute_charge\") with no explanation, reasoning, or additional text\n4. Do not include phrases like \"FINAL:\", \"The customer is...\", or any preamble - respond with only the label itself",
+      "examples": [
+        {
+          "query": "There's a transaction on my statement I don't recognize and want reversed.",
+          "gold": "dispute_charge",
+          "output": "The customer is reporting an unrecognized transaction on their statement that they want reversed. This is a case of a charge they don't recognize, which falls under disputing a charge.\n\nFINAL: dispute_charge",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the intent as 'dispute_charge', provided sound reasoning about the unrecognized transaction, and delivered the exact label format required, matching the reference answer"
+          }
+        },
+        {
+          "query": "When will the replacement card get to my house?",
+          "gold": "card_arrival",
+          "output": "The customer is asking about the arrival time of a replacement card they are expecting to receive.\n\nFINAL: card_arrival",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the intent as 'card_arrival' matching the reference, provided sound reasoning about the customer's question, and followed the task format properly."
+          }
+        },
+        {
+          "query": "Someone took my wallet with the card inside.",
+          "gold": "card_lost",
+          "output": "The customer is reporting that their wallet containing their card was taken, which means the card is lost or stolen.\n\nFINAL: card_lost",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the intent as 'card_lost', provided sound reasoning about the stolen wallet scenario, and delivered the exact label matching the reference answer."
+          }
+        },
+        {
+          "query": "What's my current balance?",
+          "gold": "balance_inquiry",
+          "output": "FINAL: balance_inquiry",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the balance question as 'balance_inquiry', matching the reference answer exactly with proper format and no extraneous content."
+          }
+        },
+        {
+          "query": "My wire transfer was rejected — what happened?",
+          "gold": "transfer_failed",
+          "output": "The customer is reporting that a wire transfer did not go through successfully and is asking for an explanation about why it was rejected.\n\nFINAL: transfer_failed",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the intent as 'transfer_failed', matching the reference answer exactly, with appropriate supporting explanation before delivering the required label."
+          }
+        },
+        {
+          "query": "I was surprised by a withdrawal fee on my last cash machine visit.",
+          "gold": "atm_fee",
+          "output": "The customer is reporting a charge related to using an ATM and is questioning or complaining about the fee that was applied.\n\nFINAL: atm_fee",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the intent as 'atm_fee' matching the reference, provided sound reasoning about the ATM fee complaint, and delivered the required single-label output in proper format."
+          }
+        },
+        {
+          "query": "Which exchange rate applies to my purchases in London?",
+          "gold": "exchange_rate",
+          "output": "The customer is asking about exchange rates that apply to their purchases made in a foreign currency (British pounds in London). This is a direct question about foreign exchange rates or currency conversion rates.\n\nFINAL: exchange_rate",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the intent as 'exchange_rate', provided sound reasoning about foreign currency purchases, and delivered the exact label format required."
+          }
+        },
+        {
+          "query": "Cancel my account entirely, I'm switching banks.",
+          "gold": "close_account",
+          "output": "The customer is requesting to close or terminate their account because they are switching to a different bank.\n\nFINAL: close_account",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 1.0,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 1.0,
+            "rationale": "The agent correctly identified the intent as 'close_account', matching the reference answer exactly, with sound reasoning about account termination."
+          }
+        },
+        {
+          "query": "Dispute this charge — I did not authorize the $42 payment.",
+          "gold": "dispute_charge",
+          "output": "The customer is reporting an unauthorized charge of $42 that they did not authorize and want disputed.\n\nFINAL: dispute_charge",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the intent as 'dispute_charge' matching the reference, provided sound reasoning about the unauthorized charge, and delivered the required single label in proper format."
+          }
+        },
+        {
+          "query": "Has my card been mailed yet?",
+          "gold": "card_arrival",
+          "output": "The customer is asking about the status of their card and whether it has been sent/mailed to them.\n\nFINAL: card_arrival",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the intent as 'card_arrival' matching the reference, provided sound reasoning about the customer's question, and followed the task format perfectly."
+          }
+        },
+        {
+          "query": "I can't find my card anywhere, I think it's gone.",
+          "gold": "card_lost",
+          "output": "The customer is reporting that they cannot locate their card and believe it is lost or missing.\n\nFINAL: card_lost",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly classified the intent as 'card_lost' matching the reference answer, with appropriate reasoning about the customer's situation, though the task only required the label itself."
+          }
+        },
+        {
+          "query": "Could you check the amount left in my savings?",
+          "gold": "balance_inquiry",
+          "output": "The customer is asking to check their account balance in their savings account.\n\nFINAL: balance_inquiry",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.9,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified the intent as balance_inquiry matching the reference, though it added unnecessary explanatory text before providing the required single label classification."
+          }
+        },
+        {
+          "query": "The transfer to my own other account didn't complete.",
+          "gold": "transfer_failed",
+          "output": "The customer is reporting that a money transfer between their own accounts failed to complete successfully.\n\nFINAL: transfer_failed",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the intent as 'transfer_failed', matching the reference answer exactly, with sound reasoning about the failed transfer between own accounts."
+          }
+        },
+        {
+          "query": "Why is there a surcharge from the ATM operator?",
+          "gold": "atm_fee",
+          "output": "The customer is asking about a charge or fee they incurred at an ATM, specifically questioning why there's a surcharge from the ATM operator.\n\nFINAL: atm_fee",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the intent as 'atm_fee' matching the reference, provided sound reasoning about the ATM surcharge question, and delivered the answer in proper format with appropriate exp"
+          }
+        },
+        {
+          "query": "Tell me today's conversion rate for dollars to yen.",
+          "gold": "exchange_rate",
+          "output": "The customer is asking about the current exchange rate between US dollars and Japanese yen.\n\nFINAL: exchange_rate",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the intent as 'exchange_rate' matching the reference answer, with appropriate reasoning and proper format despite including explanatory text before the final label."
+          }
+        }
+      ],
+      "gpa_mean": 0.9683333333333333,
+      "gpa_dims": {
+        "target_alignment": 0.953333333333333,
+        "reasoning_soundness": 0.93,
+        "execution_accuracy": 0.99,
+        "output_integrity": 1.0
+      },
+      "optimization": {
+        "history": [
+          {
+            "iter": 0,
+            "obj": 1.0,
+            "gpa": 0.97875,
+            "strategy": "baseline"
+          },
+          {
+            "iter": 1,
+            "obj": 1.0,
+            "gpa": 0.9775,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 2,
+            "obj": 1.0,
+            "gpa": 0.9737499999999999,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 3,
+            "obj": 1.0,
+            "gpa": 0.97875,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 4,
+            "obj": 1.0,
+            "gpa": 0.98,
+            "strategy": "merge"
+          },
+          {
+            "iter": 5,
+            "obj": 1.0,
+            "gpa": 0.9775,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 6,
+            "obj": 1.0,
+            "gpa": 0.9775,
+            "strategy": "mutation"
+          }
+        ],
+        "front": [
+          {
+            "obj": 1.0,
+            "gpa": 0.98,
+            "iter": 4,
+            "strategy": "merge"
+          }
+        ]
+      }
+    }
+  },
+  "duration_s": 128.1
+}

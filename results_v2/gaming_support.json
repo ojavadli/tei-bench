@@ -1,0 +1,1288 @@
+{
+  "task_id": "gaming_support",
+  "industry": "Gaming",
+  "metric": "classification",
+  "source": "Authored for TEI-Bench (Sonnet-generated, Sonnet-validated; kept only label-agreed examples).",
+  "is_public": false,
+  "n_train": 15,
+  "n_test": 24,
+  "agent_model": "claude-haiku-4-5",
+  "judge_model": "claude-sonnet-4-5",
+  "optimizer_model": "claude-sonnet-4-5",
+  "seed": 0,
+  "arms": {
+    "baseline": {
+      "objective_mean": 1.0,
+      "objective_ci95": [
+        1.0,
+        1.0
+      ],
+      "prompt": "You are a game player-support assistant. Classify the player's support ticket into a category. Classify into one of these categories: billing, bug, account, gameplay, toxicity_report, connectivity.",
+      "examples": [
+        {
+          "query": "I'm trying to figure out how the crafting system works. I have all the materials in my inventory but the combine button is greyed out. What am I missing?",
+          "gold": "gameplay",
+          "output": "The player is asking about the crafting system mechanics - specifically why they can't combine materials even though they have them in inventory. This is a question about how game systems work and what might be preventing an action.\n\nThis could be either a bug (if the combine button should be available but isn't) or a gameplay question (if there's a mechanic they don't understand). However, the core issue is that they're trying to understand game mechanics and troubleshoot why a feature isn't working as expected. This falls under gameplay support, as it relates to understanding and using game systems.\n\nFINAL: gameplay",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the ticket as 'gameplay', provided sound reasoning about the mechanics question, properly formatted the output with the required label, and the answer matches the refere"
+          }
+        },
+        {
+          "query": "There was someone in my squad earlier using a racist username and posting hate symbols in the team chat. Their tag was something like SS_Commander and they were making everyone uncomfortable.",
+          "gold": "toxicity_report",
+          "output": "This ticket describes a player reporting another player's offensive behavior, including a racist username and hate speech in team chat. This is clearly a report about player conduct and community standards violations.\n\nFINAL: toxicity_report",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 1.0,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 1.0,
+            "rationale": "The agent correctly identified the ticket as a toxicity report, provided sound reasoning about offensive behavior and community violations, and the final classification matches the reference answer ex"
+          }
+        },
+        {
+          "query": "Experiencing massive rubber-banding where my character teleports backward every few seconds. Makes it impossible to aim or move properly in any match.",
+          "gold": "connectivity",
+          "output": "The player is describing a technical issue where their character is experiencing rubber-banding (teleporting backward repeatedly), which prevents normal gameplay functionality. This is a network-related problem where the client and server are getting out of sync, causing the character position to jump around.\n\nThis is a connectivity issue - the rubber-banding effect is typically caused by lag, packet loss, or network synchronization problems between the player's client and the game server.\n\nFINAL: connectivity",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 1.0,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 1.0,
+            "rationale": "The agent correctly identified rubber-banding as a connectivity issue, provided sound technical reasoning about network synchronization problems, and delivered the exact classification matching the re"
+          }
+        },
+        {
+          "query": "The promotional discount code wasn't applied to my order but I was charged the full price. Can you honor the advertised discount?",
+          "gold": "billing",
+          "output": "The player is reporting that a promotional discount code failed to apply during checkout, resulting in being charged full price instead of the discounted amount. This is a financial transaction issue related to payment and pricing.\n\nFINAL: billing",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly classified the ticket as 'billing', provided sound reasoning about the financial/pricing nature of the issue, and the output matches the reference answer perfectly."
+          }
+        },
+        {
+          "query": "The character model keeps clipping through walls in the marketplace area, and sometimes I fall through the floor entirely and have to restart from my last save point.",
+          "gold": "bug",
+          "output": "This ticket describes technical issues where the player's character model is experiencing physics/collision problems - clipping through walls and falling through floors in a specific game area (marketplace). These are classic bug symptoms indicating glitches in the game's collision detection or physics system.\n\nFINAL: bug",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the ticket as 'bug', provided sound reasoning about collision/physics issues, stayed on-task, and matched the reference answer perfectly."
+          }
+        },
+        {
+          "query": "I forgot the email I used to register three years ago and now I can't reset my credentials. Is there any way to verify my identity through purchase history or something?",
+          "gold": "account",
+          "output": "The player is unable to access their account because they've forgotten the email address used during registration and cannot reset their credentials. They're asking about alternative identity verification methods using their purchase history.\n\nThis is clearly an account access and recovery issue, which falls under the account category.\n\nFINAL: account",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the ticket as 'account', provided sound reasoning about account access/recovery issues, and delivered the exact answer matching the reference with proper format."
+          }
+        },
+        {
+          "query": "Does the damage from poison effects stack if I apply multiple debuffs, or does it just refresh the duration?",
+          "gold": "gameplay",
+          "output": "This is a question about game mechanics regarding how poison damage works when multiple debuffs are applied. The player is asking whether poison effects accumulate or simply reset their timer.\n\nThis is a gameplay mechanics question - the player is seeking clarification on how a specific game system functions to better understand strategy and combat mechanics.\n\nFINAL: gameplay",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the ticket as 'gameplay', provided sound reasoning about game mechanics, followed the classification task format perfectly, and matched the reference answer exactly."
+          }
+        },
+        {
+          "query": "I was just in a match with someone named xXDarkSlayer99 who spent the entire game sending hateful messages in chat about my race and threatening me. This person needs to be banned immediately. I have screenshots if needed.",
+          "gold": "toxicity_report",
+          "output": "This ticket describes a player experiencing harassment and receiving hateful, threatening messages from another player during gameplay. The player is reporting abusive behavior and requesting action against the offending player.\n\nThis clearly falls under reporting toxic behavior from another player.\n\nFINAL: toxicity_report",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 1.0,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 1.0,
+            "rationale": "The agent correctly identified the ticket as a toxicity report, provided sound reasoning about harassment and abusive behavior, and delivered the exact classification matching the reference answer."
+          }
+        },
+        {
+          "query": "Unable to maintain a stable connection during peak hours. The game works fine in the morning but becomes a stuttering mess every evening between 6-10 PM.",
+          "gold": "connectivity",
+          "output": "The player is reporting issues with game performance that correlate with specific times of day. They describe connection instability during peak hours (6-10 PM) with stuttering, while the game runs smoothly at other times. This is a connectivity issue - the problem relates to network stability and connection quality rather than gameplay mechanics, bugs in the code, billing, account access, or toxicity.\n\nFINAL: connectivity",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9675,
+            "rationale": "The agent correctly classified the ticket as 'connectivity', provided sound reasoning linking time-based stuttering to network issues, and delivered the answer in the expected format matching the refe"
+          }
+        },
+        {
+          "query": "I'm trying to purchase the premium edition upgrade but my payment keeps getting declined even though my card has sufficient funds.",
+          "gold": "billing",
+          "output": "The player is reporting an issue with purchasing a premium edition upgrade where their payment is being declined despite having sufficient funds. This is clearly a payment/transaction issue.\n\nFINAL: billing",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the ticket as 'billing', provided sound reasoning about the payment issue, and the output matches the reference answer exactly."
+          }
+        },
+        {
+          "query": "My inventory shows I have 47 health potions but when I try to use them nothing happens and the count doesn't go down. They're completely unusable.",
+          "gold": "bug",
+          "output": "The player is reporting that health potions in their inventory are not functioning as expected - they cannot be used and the count doesn't decrease when attempting to use them. This is a malfunction with game mechanics/items, not related to account access, billing, toxicity, connectivity, or gameplay balance questions.\n\nFINAL: bug",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the ticket as 'bug', provided sound reasoning about item malfunction, and the output matches the reference answer perfectly."
+          }
+        },
+        {
+          "query": "I think my credentials were compromised because I'm getting emails about login attempts from Russia. I need to secure my profile immediately.",
+          "gold": "account",
+          "output": "The player is reporting unauthorized login attempts and concerns about account security. This is clearly an account security issue where they need help protecting their credentials and account access.\n\nFINAL: account",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the ticket as 'account', provided sound reasoning about security concerns, and delivered the exact answer matching the reference with proper format."
+          }
+        },
+        {
+          "query": "What's the difference between critical hits and headshot damage? Do they stack or is it one or the other?",
+          "gold": "gameplay",
+          "output": "This is a gameplay mechanics question about how different damage types interact in the game.\n\nThe player is asking for clarification on game mechanics - specifically whether critical hits and headshot damage are separate systems that can combine, or if they're mutually exclusive. This is a straightforward gameplay question seeking information about how the game works.\n\nFINAL: gameplay",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the ticket as 'gameplay', provided sound reasoning about why it's a mechanics question, and delivered the answer in the expected format matching the reference answer per"
+          }
+        },
+        {
+          "query": "During my last three games, a player called NightmareRush has been targeting me specifically with sexist insults and inappropriate comments. I feel very uncomfortable and don't want to encounter this person again.",
+          "gold": "toxicity_report",
+          "output": "This ticket describes a player engaging in abusive behavior toward another player, including sexist insults and harassment. The reporter is seeking action against the offending player for their toxic conduct.\n\nFINAL: toxicity_report",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the ticket as 'toxicity_report', matching the reference answer exactly, with sound reasoning about harassment and toxic conduct, though the explanatory preamble was unne"
+          }
+        },
+        {
+          "query": "I keep getting kicked out of matches every 5-10 minutes and it's ruining my ranked games. My internet connection is fine for everything else, but this game just won't stay stable.",
+          "gold": "connectivity",
+          "output": "The player is experiencing frequent disconnections during matches that are affecting their ranked gameplay. While they mention their internet connection is fine for other activities, the core issue is that they're being kicked out of the game itself.\n\nThis could potentially be a connectivity issue with the game's servers or their connection to them, or it could be a bug with the game's connection handling. However, given that:\n1. The problem is specific to this game\n2. It manifests as being kicked out of matches\n3. It's a stability/connection problem with the game itself\n\nThis is best classified as a connectivity issue, as it relates to the connection between the player and the game servers.\n\nFINAL: connectivity",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the ticket as 'connectivity', provided sound reasoning about disconnection patterns, properly formatted the output, and arrived at the exact correct answer matching the "
+          }
+        },
+        {
+          "query": "I bought 5000 gems but only 3000 appeared in my account. The full amount was withdrawn from my bank account though.",
+          "gold": "billing",
+          "output": "The player purchased 5000 gems but only received 3000 in their account, while the full payment was charged to their bank account. This is a discrepancy between payment and in-game currency received.\n\nThis is a billing issue - the player was charged the correct amount but did not receive the full quantity of gems they paid for.\n\nFINAL: billing",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the ticket as 'billing', provided sound reasoning about the payment-delivery discrepancy, and fully matched the reference answer with proper format."
+          }
+        },
+        {
+          "query": "My character animation is stuck in the crouching position even when I'm running and jumping. It looks ridiculous and I can't fix it even after reloading.",
+          "gold": "bug",
+          "output": "The player is reporting that their character's animation is stuck in a crouching position regardless of their actual movement state (running, jumping). This persists even after reloading, indicating it's not a temporary visual glitch but rather a persistent issue with the game's animation system.\n\nThis is a technical malfunction with the game's animation mechanics, which falls under the bug category.\n\nFINAL: bug",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the ticket as 'bug', provided sound reasoning about the persistent animation malfunction, addressed the task directly, and matched the reference answer perfectly."
+          }
+        },
+        {
+          "query": "I've been trying to log in for the past hour but it keeps saying my password is incorrect. I'm certain I'm using the right one. Can you help me get back into my profile?",
+          "gold": "account",
+          "output": "The player is reporting an issue with logging into their account. They're confident their password is correct but are being denied access. This could be related to either account access issues or a potential bug with the authentication system.\n\nHowever, the primary concern here is that the player cannot access their account profile, which is fundamentally an account management issue. This falls under account-related support rather than a technical bug, as the player needs help regaining access to their profile.\n\nFINAL: account",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the ticket as 'account', matching the reference answer, with sound reasoning about login/access issues being account-related, though the explanation was more verbose tha"
+          }
+        },
+        {
+          "query": "What's the maximum level for weapons? Mine is at level 15 and the upgrade option disappeared from the blacksmith menu.",
+          "gold": "gameplay",
+          "output": "The player is asking about weapon upgrade mechanics and why their upgrade option has disappeared at level 15. This is a question about game mechanics and how the progression system works.\n\nThis falls under the **gameplay** category, as it concerns understanding game features, mechanics, and progression systems.\n\nFINAL: gameplay",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the ticket as 'gameplay', provided sound reasoning about game mechanics and progression, and delivered the answer in the expected format matching the reference answer pe"
+          }
+        },
+        {
+          "query": "A player kept teamkilling me on purpose and laughing about it in voice comms while using ableist slurs. Username is ProGamer420 and this happened around 3pm today on the Desert Storm map.",
+          "gold": "toxicity_report",
+          "output": "This ticket describes a player engaging in intentional harmful behavior including teamkilling and using offensive language with discriminatory slurs. This is a report of player misconduct related to toxic behavior.\n\nFINAL: toxicity_report",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the ticket as 'toxicity_report', provided sound reasoning about the toxic behavior described, and the output matches the reference answer exactly."
+          }
+        },
+        {
+          "query": "Keep getting timeout errors when trying to load into multiplayer lobbies. Takes forever to connect and then half the time it just fails completely.",
+          "gold": "connectivity",
+          "output": "The player is experiencing issues with connecting to multiplayer lobbies, including timeout errors and connection failures. This is clearly a technical issue related to network connectivity rather than gameplay mechanics, account access, billing, bugs in game logic, or toxicity.\n\nFINAL: connectivity",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the ticket as 'connectivity', provided sound reasoning about network issues, and the output matches the reference answer perfectly."
+          }
+        },
+        {
+          "query": "My credit card shows a pending transaction from three days ago but I never received the in-game currency I paid for. Order number is #GX-4429-LP.",
+          "gold": "billing",
+          "output": "The player is reporting that they made a payment for in-game currency but did not receive the purchased items. This involves a financial transaction that didn't complete as expected.\n\nThis is a billing issue - the player paid money but didn't receive the corresponding in-game goods, and they're providing an order number for reference.\n\nFINAL: billing",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the ticket as 'billing', provided sound reasoning about the payment-goods mismatch, and fully addressed the classification task with accurate execution."
+          }
+        },
+        {
+          "query": "There's a visual glitch where enemy health bars stay on screen even after they're defeated, and after a few battles my entire screen is covered with floating red bars.",
+          "gold": "bug",
+          "output": "This is a technical issue where visual elements (enemy health bars) are not being properly removed from the display after enemies are defeated. This causes them to accumulate and clutter the screen over time.\n\nThis is clearly a software malfunction rather than a gameplay balance issue, account problem, billing concern, connectivity issue, or player conduct report.\n\nFINAL: bug",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the ticket as 'bug', provided sound reasoning about why it's a technical malfunction, and the output matches the reference answer perfectly."
+          }
+        },
+        {
+          "query": "I want to enable additional security features on my profile after hearing about recent hacking incidents. What options do you offer?",
+          "gold": "account",
+          "output": "The player is asking about security features and account protection options following concerns about hacking incidents. This is clearly related to account management and security settings rather than billing, bugs, gameplay issues, connectivity problems, or toxicity reports.\n\nFINAL: account",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the ticket as 'account', provided sound reasoning about security features and account management, and delivered the exact answer matching the reference."
+          }
+        }
+      ],
+      "gpa_mean": 0.9731249999999998,
+      "gpa_dims": {
+        "target_alignment": 0.9562499999999997,
+        "reasoning_soundness": 0.9391666666666664,
+        "execution_accuracy": 0.9970833333333333,
+        "output_integrity": 1.0
+      }
+    },
+    "random": {
+      "objective_mean": 1.0,
+      "objective_ci95": [
+        1.0,
+        1.0
+      ],
+      "prompt": "You are a game player-support assistant. Classify the player's support ticket into a category. Classify into one of these categories: billing, bug, account, gameplay, toxicity_report, connectivity.",
+      "examples": [
+        {
+          "query": "I'm trying to figure out how the crafting system works. I have all the materials in my inventory but the combine button is greyed out. What am I missing?",
+          "gold": "gameplay",
+          "output": "The player is asking about the crafting system mechanics - specifically why they can't combine materials even though they have them in inventory. This is a question about how game systems work and what might be preventing an action.\n\nThis could be either a bug (if the combine button should be available but isn't) or a gameplay question (if there's a mechanic they don't understand). However, the core issue is that they're trying to understand game mechanics and troubleshoot why a feature isn't working as expected. This falls under gameplay support, as it relates to understanding and using game systems.\n\nFINAL: gameplay",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "There was someone in my squad earlier using a racist username and posting hate symbols in the team chat. Their tag was something like SS_Commander and they were making everyone uncomfortable.",
+          "gold": "toxicity_report",
+          "output": "This ticket describes a player reporting another player's offensive behavior, including a racist username and hate speech in team chat. This is clearly a report about player conduct and community standards violations.\n\nFINAL: toxicity_report",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Experiencing massive rubber-banding where my character teleports backward every few seconds. Makes it impossible to aim or move properly in any match.",
+          "gold": "connectivity",
+          "output": "The player is describing a technical issue where their character is experiencing rubber-banding (teleporting backward repeatedly), which prevents normal gameplay functionality. This is a network-related problem where the client and server are getting out of sync, causing the character position to jump around.\n\nThis is a connectivity issue - the rubber-banding effect is typically caused by lag, packet loss, or network synchronization problems between the player's client and the game server.\n\nFINAL: connectivity",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "The promotional discount code wasn't applied to my order but I was charged the full price. Can you honor the advertised discount?",
+          "gold": "billing",
+          "output": "The player is reporting that a promotional discount code failed to apply during checkout, resulting in being charged full price instead of the discounted amount. This is a financial transaction issue related to payment and pricing.\n\nFINAL: billing",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "The character model keeps clipping through walls in the marketplace area, and sometimes I fall through the floor entirely and have to restart from my last save point.",
+          "gold": "bug",
+          "output": "This ticket describes technical issues where the player's character model is experiencing physics/collision problems - clipping through walls and falling through floors in a specific game area (marketplace). These are classic bug symptoms indicating glitches in the game's collision detection or physics system.\n\nFINAL: bug",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I forgot the email I used to register three years ago and now I can't reset my credentials. Is there any way to verify my identity through purchase history or something?",
+          "gold": "account",
+          "output": "The player is unable to access their account because they've forgotten the email address used during registration and cannot reset their credentials. They're asking about alternative identity verification methods using their purchase history.\n\nThis is clearly an account access and recovery issue, which falls under the account category.\n\nFINAL: account",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Does the damage from poison effects stack if I apply multiple debuffs, or does it just refresh the duration?",
+          "gold": "gameplay",
+          "output": "This is a question about game mechanics regarding how poison damage works when multiple debuffs are applied. The player is asking whether poison effects accumulate or simply reset their timer.\n\nThis is a gameplay mechanics question - the player is seeking clarification on how a specific game system functions to better understand strategy and combat mechanics.\n\nFINAL: gameplay",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I was just in a match with someone named xXDarkSlayer99 who spent the entire game sending hateful messages in chat about my race and threatening me. This person needs to be banned immediately. I have screenshots if needed.",
+          "gold": "toxicity_report",
+          "output": "This ticket describes a player experiencing harassment and receiving hateful, threatening messages from another player during gameplay. The player is reporting abusive behavior and requesting action against the offending player.\n\nThis clearly falls under reporting toxic behavior from another player.\n\nFINAL: toxicity_report",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Unable to maintain a stable connection during peak hours. The game works fine in the morning but becomes a stuttering mess every evening between 6-10 PM.",
+          "gold": "connectivity",
+          "output": "The player is reporting issues with game performance that correlate with specific times of day. They describe connection instability during peak hours (6-10 PM) with stuttering, while the game runs smoothly at other times. This is a connectivity issue - the problem relates to network stability and connection quality rather than gameplay mechanics, bugs in the code, billing, account access, or toxicity.\n\nFINAL: connectivity",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I'm trying to purchase the premium edition upgrade but my payment keeps getting declined even though my card has sufficient funds.",
+          "gold": "billing",
+          "output": "The player is reporting an issue with purchasing a premium edition upgrade where their payment is being declined despite having sufficient funds. This is clearly a payment/transaction issue.\n\nFINAL: billing",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "My inventory shows I have 47 health potions but when I try to use them nothing happens and the count doesn't go down. They're completely unusable.",
+          "gold": "bug",
+          "output": "The player is reporting that health potions in their inventory are not functioning as expected - they cannot be used and the count doesn't decrease when attempting to use them. This is a malfunction with game mechanics/items, not related to account access, billing, toxicity, connectivity, or gameplay balance questions.\n\nFINAL: bug",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I think my credentials were compromised because I'm getting emails about login attempts from Russia. I need to secure my profile immediately.",
+          "gold": "account",
+          "output": "The player is reporting unauthorized login attempts and concerns about account security. This is clearly an account security issue where they need help protecting their credentials and account access.\n\nFINAL: account",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "What's the difference between critical hits and headshot damage? Do they stack or is it one or the other?",
+          "gold": "gameplay",
+          "output": "This is a gameplay mechanics question about how different damage types interact in the game.\n\nThe player is asking for clarification on game mechanics - specifically whether critical hits and headshot damage are separate systems that can combine, or if they're mutually exclusive. This is a straightforward gameplay question seeking information about how the game works.\n\nFINAL: gameplay",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "During my last three games, a player called NightmareRush has been targeting me specifically with sexist insults and inappropriate comments. I feel very uncomfortable and don't want to encounter this person again.",
+          "gold": "toxicity_report",
+          "output": "This ticket describes a player engaging in abusive behavior toward another player, including sexist insults and harassment. The reporter is seeking action against the offending player for their toxic conduct.\n\nFINAL: toxicity_report",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I keep getting kicked out of matches every 5-10 minutes and it's ruining my ranked games. My internet connection is fine for everything else, but this game just won't stay stable.",
+          "gold": "connectivity",
+          "output": "The player is experiencing frequent disconnections during matches that are affecting their ranked gameplay. While they mention their internet connection is fine for other activities, the core issue is that they're being kicked out of the game itself.\n\nThis could potentially be a connectivity issue with the game's servers or their connection to them, or it could be a bug with the game's connection handling. However, given that:\n1. The problem is specific to this game\n2. It manifests as being kicked out of matches\n3. It's a stability/connection problem with the game itself\n\nThis is best classified as a connectivity issue, as it relates to the connection between the player and the game servers.\n\nFINAL: connectivity",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I bought 5000 gems but only 3000 appeared in my account. The full amount was withdrawn from my bank account though.",
+          "gold": "billing",
+          "output": "The player purchased 5000 gems but only received 3000 in their account, while the full payment was charged to their bank account. This is a discrepancy between payment and in-game currency received.\n\nThis is a billing issue - the player was charged the correct amount but did not receive the full quantity of gems they paid for.\n\nFINAL: billing",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "My character animation is stuck in the crouching position even when I'm running and jumping. It looks ridiculous and I can't fix it even after reloading.",
+          "gold": "bug",
+          "output": "The player is reporting that their character's animation is stuck in a crouching position regardless of their actual movement state (running, jumping). This persists even after reloading, indicating it's not a temporary visual glitch but rather a persistent issue with the game's animation system.\n\nThis is a technical malfunction with the game's animation mechanics, which falls under the bug category.\n\nFINAL: bug",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I've been trying to log in for the past hour but it keeps saying my password is incorrect. I'm certain I'm using the right one. Can you help me get back into my profile?",
+          "gold": "account",
+          "output": "The player is reporting an issue with logging into their account. They're confident their password is correct but are being denied access. This could be related to either account access issues or a potential bug with the authentication system.\n\nHowever, the primary concern here is that the player cannot access their account profile, which is fundamentally an account management issue. This falls under account-related support rather than a technical bug, as the player needs help regaining access to their profile.\n\nFINAL: account",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "What's the maximum level for weapons? Mine is at level 15 and the upgrade option disappeared from the blacksmith menu.",
+          "gold": "gameplay",
+          "output": "The player is asking about weapon upgrade mechanics and why their upgrade option has disappeared at level 15. This is a question about game mechanics and how the progression system works.\n\nThis falls under the **gameplay** category, as it concerns understanding game features, mechanics, and progression systems.\n\nFINAL: gameplay",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "A player kept teamkilling me on purpose and laughing about it in voice comms while using ableist slurs. Username is ProGamer420 and this happened around 3pm today on the Desert Storm map.",
+          "gold": "toxicity_report",
+          "output": "This ticket describes a player engaging in intentional harmful behavior including teamkilling and using offensive language with discriminatory slurs. This is a report of player misconduct related to toxic behavior.\n\nFINAL: toxicity_report",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Keep getting timeout errors when trying to load into multiplayer lobbies. Takes forever to connect and then half the time it just fails completely.",
+          "gold": "connectivity",
+          "output": "The player is experiencing issues with connecting to multiplayer lobbies, including timeout errors and connection failures. This is clearly a technical issue related to network connectivity rather than gameplay mechanics, account access, billing, bugs in game logic, or toxicity.\n\nFINAL: connectivity",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "My credit card shows a pending transaction from three days ago but I never received the in-game currency I paid for. Order number is #GX-4429-LP.",
+          "gold": "billing",
+          "output": "The player is reporting that they made a payment for in-game currency but did not receive the purchased items. This involves a financial transaction that didn't complete as expected.\n\nThis is a billing issue - the player paid money but didn't receive the corresponding in-game goods, and they're providing an order number for reference.\n\nFINAL: billing",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "There's a visual glitch where enemy health bars stay on screen even after they're defeated, and after a few battles my entire screen is covered with floating red bars.",
+          "gold": "bug",
+          "output": "This is a technical issue where visual elements (enemy health bars) are not being properly removed from the display after enemies are defeated. This causes them to accumulate and clutter the screen over time.\n\nThis is clearly a software malfunction rather than a gameplay balance issue, account problem, billing concern, connectivity issue, or player conduct report.\n\nFINAL: bug",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I want to enable additional security features on my profile after hearing about recent hacking incidents. What options do you offer?",
+          "gold": "account",
+          "output": "The player is asking about security features and account protection options following concerns about hacking incidents. This is clearly related to account management and security settings rather than billing, bugs, gameplay issues, connectivity problems, or toxicity reports.\n\nFINAL: account",
+          "objective": 1.0,
+          "gpa": {}
+        }
+      ],
+      "optimization": {
+        "history": [
+          {
+            "iter": 0,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "baseline"
+          },
+          {
+            "iter": 1,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "paraphrase"
+          },
+          {
+            "iter": 2,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "paraphrase"
+          },
+          {
+            "iter": 3,
+            "obj": 0.9,
+            "gpa": 0.0,
+            "strategy": "paraphrase"
+          },
+          {
+            "iter": 4,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "paraphrase"
+          },
+          {
+            "iter": 5,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "paraphrase"
+          },
+          {
+            "iter": 6,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "paraphrase"
+          }
+        ],
+        "front": [
+          {
+            "obj": 1.0,
+            "gpa": 0.0,
+            "iter": 0,
+            "strategy": "baseline"
+          },
+          {
+            "obj": 1.0,
+            "gpa": 0.0,
+            "iter": 1,
+            "strategy": "paraphrase"
+          },
+          {
+            "obj": 1.0,
+            "gpa": 0.0,
+            "iter": 2,
+            "strategy": "paraphrase"
+          },
+          {
+            "obj": 1.0,
+            "gpa": 0.0,
+            "iter": 4,
+            "strategy": "paraphrase"
+          },
+          {
+            "obj": 1.0,
+            "gpa": 0.0,
+            "iter": 5,
+            "strategy": "paraphrase"
+          }
+        ]
+      }
+    },
+    "objective_reflection": {
+      "objective_mean": 1.0,
+      "objective_ci95": [
+        1.0,
+        1.0
+      ],
+      "prompt": "You are a game player-support assistant. Classify the player's support ticket into a category. Classify into one of these categories: billing, bug, account, gameplay, toxicity_report, connectivity.",
+      "examples": [
+        {
+          "query": "I'm trying to figure out how the crafting system works. I have all the materials in my inventory but the combine button is greyed out. What am I missing?",
+          "gold": "gameplay",
+          "output": "The player is asking about the crafting system mechanics - specifically why they can't combine materials even though they have them in inventory. This is a question about how game systems work and what might be preventing an action.\n\nThis could be either a bug (if the combine button should be available but isn't) or a gameplay question (if there's a mechanic they don't understand). However, the core issue is that they're trying to understand game mechanics and troubleshoot why a feature isn't working as expected. This falls under gameplay support, as it relates to understanding and using game systems.\n\nFINAL: gameplay",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "There was someone in my squad earlier using a racist username and posting hate symbols in the team chat. Their tag was something like SS_Commander and they were making everyone uncomfortable.",
+          "gold": "toxicity_report",
+          "output": "This ticket describes a player reporting another player's offensive behavior, including a racist username and hate speech in team chat. This is clearly a report about player conduct and community standards violations.\n\nFINAL: toxicity_report",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Experiencing massive rubber-banding where my character teleports backward every few seconds. Makes it impossible to aim or move properly in any match.",
+          "gold": "connectivity",
+          "output": "The player is describing a technical issue where their character is experiencing rubber-banding (teleporting backward repeatedly), which prevents normal gameplay functionality. This is a network-related problem where the client and server are getting out of sync, causing the character position to jump around.\n\nThis is a connectivity issue - the rubber-banding effect is typically caused by lag, packet loss, or network synchronization problems between the player's client and the game server.\n\nFINAL: connectivity",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "The promotional discount code wasn't applied to my order but I was charged the full price. Can you honor the advertised discount?",
+          "gold": "billing",
+          "output": "The player is reporting that a promotional discount code failed to apply during checkout, resulting in being charged full price instead of the discounted amount. This is a financial transaction issue related to payment and pricing.\n\nFINAL: billing",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "The character model keeps clipping through walls in the marketplace area, and sometimes I fall through the floor entirely and have to restart from my last save point.",
+          "gold": "bug",
+          "output": "This ticket describes technical issues where the player's character model is experiencing physics/collision problems - clipping through walls and falling through floors in a specific game area (marketplace). These are classic bug symptoms indicating glitches in the game's collision detection or physics system.\n\nFINAL: bug",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I forgot the email I used to register three years ago and now I can't reset my credentials. Is there any way to verify my identity through purchase history or something?",
+          "gold": "account",
+          "output": "The player is unable to access their account because they've forgotten the email address used during registration and cannot reset their credentials. They're asking about alternative identity verification methods using their purchase history.\n\nThis is clearly an account access and recovery issue, which falls under the account category.\n\nFINAL: account",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Does the damage from poison effects stack if I apply multiple debuffs, or does it just refresh the duration?",
+          "gold": "gameplay",
+          "output": "This is a question about game mechanics regarding how poison damage works when multiple debuffs are applied. The player is asking whether poison effects accumulate or simply reset their timer.\n\nThis is a gameplay mechanics question - the player is seeking clarification on how a specific game system functions to better understand strategy and combat mechanics.\n\nFINAL: gameplay",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I was just in a match with someone named xXDarkSlayer99 who spent the entire game sending hateful messages in chat about my race and threatening me. This person needs to be banned immediately. I have screenshots if needed.",
+          "gold": "toxicity_report",
+          "output": "This ticket describes a player experiencing harassment and receiving hateful, threatening messages from another player during gameplay. The player is reporting abusive behavior and requesting action against the offending player.\n\nThis clearly falls under reporting toxic behavior from another player.\n\nFINAL: toxicity_report",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Unable to maintain a stable connection during peak hours. The game works fine in the morning but becomes a stuttering mess every evening between 6-10 PM.",
+          "gold": "connectivity",
+          "output": "The player is reporting issues with game performance that correlate with specific times of day. They describe connection instability during peak hours (6-10 PM) with stuttering, while the game runs smoothly at other times. This is a connectivity issue - the problem relates to network stability and connection quality rather than gameplay mechanics, bugs in the code, billing, account access, or toxicity.\n\nFINAL: connectivity",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I'm trying to purchase the premium edition upgrade but my payment keeps getting declined even though my card has sufficient funds.",
+          "gold": "billing",
+          "output": "The player is reporting an issue with purchasing a premium edition upgrade where their payment is being declined despite having sufficient funds. This is clearly a payment/transaction issue.\n\nFINAL: billing",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "My inventory shows I have 47 health potions but when I try to use them nothing happens and the count doesn't go down. They're completely unusable.",
+          "gold": "bug",
+          "output": "The player is reporting that health potions in their inventory are not functioning as expected - they cannot be used and the count doesn't decrease when attempting to use them. This is a malfunction with game mechanics/items, not related to account access, billing, toxicity, connectivity, or gameplay balance questions.\n\nFINAL: bug",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I think my credentials were compromised because I'm getting emails about login attempts from Russia. I need to secure my profile immediately.",
+          "gold": "account",
+          "output": "The player is reporting unauthorized login attempts and concerns about account security. This is clearly an account security issue where they need help protecting their credentials and account access.\n\nFINAL: account",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "What's the difference between critical hits and headshot damage? Do they stack or is it one or the other?",
+          "gold": "gameplay",
+          "output": "This is a gameplay mechanics question about how different damage types interact in the game.\n\nThe player is asking for clarification on game mechanics - specifically whether critical hits and headshot damage are separate systems that can combine, or if they're mutually exclusive. This is a straightforward gameplay question seeking information about how the game works.\n\nFINAL: gameplay",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "During my last three games, a player called NightmareRush has been targeting me specifically with sexist insults and inappropriate comments. I feel very uncomfortable and don't want to encounter this person again.",
+          "gold": "toxicity_report",
+          "output": "This ticket describes a player engaging in abusive behavior toward another player, including sexist insults and harassment. The reporter is seeking action against the offending player for their toxic conduct.\n\nFINAL: toxicity_report",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I keep getting kicked out of matches every 5-10 minutes and it's ruining my ranked games. My internet connection is fine for everything else, but this game just won't stay stable.",
+          "gold": "connectivity",
+          "output": "The player is experiencing frequent disconnections during matches that are affecting their ranked gameplay. While they mention their internet connection is fine for other activities, the core issue is that they're being kicked out of the game itself.\n\nThis could potentially be a connectivity issue with the game's servers or their connection to them, or it could be a bug with the game's connection handling. However, given that:\n1. The problem is specific to this game\n2. It manifests as being kicked out of matches\n3. It's a stability/connection problem with the game itself\n\nThis is best classified as a connectivity issue, as it relates to the connection between the player and the game servers.\n\nFINAL: connectivity",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I bought 5000 gems but only 3000 appeared in my account. The full amount was withdrawn from my bank account though.",
+          "gold": "billing",
+          "output": "The player purchased 5000 gems but only received 3000 in their account, while the full payment was charged to their bank account. This is a discrepancy between payment and in-game currency received.\n\nThis is a billing issue - the player was charged the correct amount but did not receive the full quantity of gems they paid for.\n\nFINAL: billing",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "My character animation is stuck in the crouching position even when I'm running and jumping. It looks ridiculous and I can't fix it even after reloading.",
+          "gold": "bug",
+          "output": "The player is reporting that their character's animation is stuck in a crouching position regardless of their actual movement state (running, jumping). This persists even after reloading, indicating it's not a temporary visual glitch but rather a persistent issue with the game's animation system.\n\nThis is a technical malfunction with the game's animation mechanics, which falls under the bug category.\n\nFINAL: bug",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I've been trying to log in for the past hour but it keeps saying my password is incorrect. I'm certain I'm using the right one. Can you help me get back into my profile?",
+          "gold": "account",
+          "output": "The player is reporting an issue with logging into their account. They're confident their password is correct but are being denied access. This could be related to either account access issues or a potential bug with the authentication system.\n\nHowever, the primary concern here is that the player cannot access their account profile, which is fundamentally an account management issue. This falls under account-related support rather than a technical bug, as the player needs help regaining access to their profile.\n\nFINAL: account",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "What's the maximum level for weapons? Mine is at level 15 and the upgrade option disappeared from the blacksmith menu.",
+          "gold": "gameplay",
+          "output": "The player is asking about weapon upgrade mechanics and why their upgrade option has disappeared at level 15. This is a question about game mechanics and how the progression system works.\n\nThis falls under the **gameplay** category, as it concerns understanding game features, mechanics, and progression systems.\n\nFINAL: gameplay",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "A player kept teamkilling me on purpose and laughing about it in voice comms while using ableist slurs. Username is ProGamer420 and this happened around 3pm today on the Desert Storm map.",
+          "gold": "toxicity_report",
+          "output": "This ticket describes a player engaging in intentional harmful behavior including teamkilling and using offensive language with discriminatory slurs. This is a report of player misconduct related to toxic behavior.\n\nFINAL: toxicity_report",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Keep getting timeout errors when trying to load into multiplayer lobbies. Takes forever to connect and then half the time it just fails completely.",
+          "gold": "connectivity",
+          "output": "The player is experiencing issues with connecting to multiplayer lobbies, including timeout errors and connection failures. This is clearly a technical issue related to network connectivity rather than gameplay mechanics, account access, billing, bugs in game logic, or toxicity.\n\nFINAL: connectivity",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "My credit card shows a pending transaction from three days ago but I never received the in-game currency I paid for. Order number is #GX-4429-LP.",
+          "gold": "billing",
+          "output": "The player is reporting that they made a payment for in-game currency but did not receive the purchased items. This involves a financial transaction that didn't complete as expected.\n\nThis is a billing issue - the player paid money but didn't receive the corresponding in-game goods, and they're providing an order number for reference.\n\nFINAL: billing",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "There's a visual glitch where enemy health bars stay on screen even after they're defeated, and after a few battles my entire screen is covered with floating red bars.",
+          "gold": "bug",
+          "output": "This is a technical issue where visual elements (enemy health bars) are not being properly removed from the display after enemies are defeated. This causes them to accumulate and clutter the screen over time.\n\nThis is clearly a software malfunction rather than a gameplay balance issue, account problem, billing concern, connectivity issue, or player conduct report.\n\nFINAL: bug",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "I want to enable additional security features on my profile after hearing about recent hacking incidents. What options do you offer?",
+          "gold": "account",
+          "output": "The player is asking about security features and account protection options following concerns about hacking incidents. This is clearly related to account management and security settings rather than billing, bugs, gameplay issues, connectivity problems, or toxicity reports.\n\nFINAL: account",
+          "objective": 1.0,
+          "gpa": {}
+        }
+      ],
+      "optimization": {
+        "history": [
+          {
+            "iter": 0,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "baseline"
+          },
+          {
+            "iter": 1,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 2,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 3,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 4,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "merge"
+          },
+          {
+            "iter": 5,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 6,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "mutation"
+          }
+        ],
+        "front": [
+          {
+            "obj": 1.0,
+            "gpa": 0.0,
+            "iter": 0,
+            "strategy": "baseline"
+          },
+          {
+            "obj": 1.0,
+            "gpa": 0.0,
+            "iter": 1,
+            "strategy": "mutation"
+          },
+          {
+            "obj": 1.0,
+            "gpa": 0.0,
+            "iter": 2,
+            "strategy": "mutation"
+          },
+          {
+            "obj": 1.0,
+            "gpa": 0.0,
+            "iter": 3,
+            "strategy": "mutation"
+          },
+          {
+            "obj": 1.0,
+            "gpa": 0.0,
+            "iter": 4,
+            "strategy": "merge"
+          }
+        ]
+      }
+    },
+    "tei": {
+      "objective_mean": 1.0,
+      "objective_ci95": [
+        1.0,
+        1.0
+      ],
+      "prompt": "You are a game player-support assistant. Classify the player's support ticket into exactly ONE of these categories: billing, bug, account, gameplay, toxicity_report, connectivity.\n\n**Category Definitions:**\n- **billing**: Payment issues, charges, refunds, purchases, subscriptions, in-game currency transactions\n- **bug**: Technical malfunctions, glitches, performance issues (frame drops, crashes, freezing), broken features, visual errors, unintended game behavior\n- **account**: Login problems, password resets, account access, account security, profile issues, account recovery, authentication method changes, linking/unlinking social media or external accounts\n- **gameplay**: Questions about game mechanics, controls, strategies, how to play, feature explanations, build advice, understanding game systems, how to execute moves or abilities\n- **toxicity_report**: Reports of harassment, abusive behavior, cheating, inappropriate conduct by other players, threats (including doxing, doxxing, or personal information threats)\n- **connectivity**: Network issues, server connection problems, matchmaking failures, unable to join sessions, disconnection errors, online multiplayer access issues, lag spikes, rubber-banding, position desync, players teleporting/jumping positions\n\n**Critical Distinctions:**\n- **Freezing with position jumps/teleporting** = connectivity (network lag), NOT bug\n- **Freezing alone without network symptoms** = bug (local performance issue)\n- **FPS drops from rendering** = bug\n- **Lag spikes, rubber-banding, desync** = connectivity\n- **Authentication/login method changes** = account\n- **Doxing threats or personal information threats** = toxicity_report\n- **How to perform moves/combos** = gameplay\n\n**Instructions:**\n1. Read the ticket carefully to identify the core issue\n2. Match it to the most appropriate category based on the definitions above\n3. Output ONLY the category name (one word, lowercase)\n4. Do NOT provide explanations, reasoning, analysis, or additional text of any kind\n5. Your response must be a single word: billing, bug, account, gameplay, toxicity_report, or connectivity",
+      "examples": [
+        {
+          "query": "I'm trying to figure out how the crafting system works. I have all the materials in my inventory but the combine button is greyed out. What am I missing?",
+          "gold": "gameplay",
+          "output": "The player is asking about how the crafting system works and why they can't combine materials despite having them. This is a question about understanding game mechanics and how to use a feature.\n\nFINAL: gameplay",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly classified the ticket as 'gameplay', provided sound reasoning about game mechanics, and the final answer perfectly matches the reference."
+          }
+        },
+        {
+          "query": "There was someone in my squad earlier using a racist username and posting hate symbols in the team chat. Their tag was something like SS_Commander and they were making everyone uncomfortable.",
+          "gold": "toxicity_report",
+          "output": "This is a report of abusive behavior and harassment by another player, including use of hate symbols and racist conduct in team chat. This falls under toxicity_report.\n\nFINAL: toxicity_report",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 0.5,
+            "aggregate": 0.85,
+            "rationale": "The agent correctly classified the ticket as 'toxicity_report', provided sound reasoning about hate symbols and racist conduct, and the output matches the reference answer exactly."
+          }
+        },
+        {
+          "query": "Experiencing massive rubber-banding where my character teleports backward every few seconds. Makes it impossible to aim or move properly in any match.",
+          "gold": "connectivity",
+          "output": "The player is describing rubber-banding and character teleportation, which are classic symptoms of network lag and position desynchronization between the client and server. This is a connectivity issue, not a local performance bug.\n\nFINAL: connectivity",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the ticket as 'connectivity', provided sound reasoning about network lag and desynchronization, and the output matches the reference answer perfectly."
+          }
+        },
+        {
+          "query": "The promotional discount code wasn't applied to my order but I was charged the full price. Can you honor the advertised discount?",
+          "gold": "billing",
+          "output": "The player is reporting that a promotional discount code failed to apply to their purchase, resulting in being charged full price instead of the discounted amount. This is a payment/billing issue involving a discount that should have been applied but wasn't.\n\nFINAL: billing",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the ticket as 'billing', provided sound reasoning about the discount/payment issue, and the final answer matches the reference exactly."
+          }
+        },
+        {
+          "query": "The character model keeps clipping through walls in the marketplace area, and sometimes I fall through the floor entirely and have to restart from my last save point.",
+          "gold": "bug",
+          "output": "The player is reporting a technical malfunction where character models are clipping through solid objects (walls) and falling through the floor. These are unintended game behaviors and broken physics/collision detection - classic bug symptoms. There's no mention of network lag, position desync, or connectivity issues that would cause rubber-banding or teleporting. This is a local performance/rendering issue.\n\nFINAL: bug",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9675,
+            "rationale": "The agent correctly classified the ticket as 'bug', provided sound reasoning about collision detection issues, and delivered the exact required answer with appropriate supporting analysis."
+          }
+        },
+        {
+          "query": "I forgot the email I used to register three years ago and now I can't reset my credentials. Is there any way to verify my identity through purchase history or something?",
+          "gold": "account",
+          "output": "The player is unable to access their account because they've forgotten their registration email and cannot reset their credentials. They're asking about alternative identity verification methods using purchase history.\n\nThis is clearly an account access and recovery issue.\n\nFINAL: account",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the ticket as 'account', matching the reference answer exactly, with sound reasoning about account access/recovery issues and proper task execution."
+          }
+        },
+        {
+          "query": "Does the damage from poison effects stack if I apply multiple debuffs, or does it just refresh the duration?",
+          "gold": "gameplay",
+          "output": "This is a question about game mechanics and how poison effects work in the game system.\n\nFINAL: gameplay",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly classified the ticket as 'gameplay', provided sound reasoning about game mechanics, followed the required format, and matched the reference answer perfectly."
+          }
+        },
+        {
+          "query": "I was just in a match with someone named xXDarkSlayer99 who spent the entire game sending hateful messages in chat about my race and threatening me. This person needs to be banned immediately. I have screenshots if needed.",
+          "gold": "toxicity_report",
+          "output": "This is a clear report of harassment and abusive behavior directed at the player, including hateful messages based on race and threats. This falls under the toxicity_report category.\n\nFINAL: toxicity_report",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 1.0,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 1.0,
+            "rationale": "The agent correctly identified the category as toxicity_report, provided sound reasoning about harassment and racial abuse, and the output matches the reference answer perfectly."
+          }
+        },
+        {
+          "query": "Unable to maintain a stable connection during peak hours. The game works fine in the morning but becomes a stuttering mess every evening between 6-10 PM.",
+          "gold": "connectivity",
+          "output": "The player is experiencing connection instability during specific times of day, with stuttering and performance degradation during peak hours. This is a network/server connectivity issue rather than a local performance bug, as it's time-dependent and affects the ability to maintain a stable connection to the game servers.\n\nFINAL: connectivity",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9675,
+            "rationale": "The agent correctly classified the ticket as 'connectivity', provided sound reasoning distinguishing network issues from local bugs, and fully addressed the classification task with proper format."
+          }
+        },
+        {
+          "query": "I'm trying to purchase the premium edition upgrade but my payment keeps getting declined even though my card has sufficient funds.",
+          "gold": "billing",
+          "output": "The player is reporting an issue with making a purchase - their payment is being declined despite having sufficient funds. This is a payment/billing issue.\n\nFINAL: billing",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the ticket as 'billing', provided sound reasoning about payment decline issues, and the final answer matches the reference exactly."
+          }
+        },
+        {
+          "query": "My inventory shows I have 47 health potions but when I try to use them nothing happens and the count doesn't go down. They're completely unusable.",
+          "gold": "bug",
+          "output": "The player is reporting that health potions in their inventory are not functioning - they cannot be used and the count doesn't decrease when attempting to use them. This is a broken feature/unintended game behavior where an item that should work is malfunctioning.\n\nThis is a technical malfunction with game functionality, not a gameplay question about how to use potions, not a connectivity issue, and not a billing/account issue.\n\nFINAL: bug",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 1.0,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 1.0,
+            "rationale": "The agent correctly classified the ticket as 'bug', provided sound reasoning about the malfunctioning game feature, and the final answer perfectly matches the reference answer."
+          }
+        },
+        {
+          "query": "I think my credentials were compromised because I'm getting emails about login attempts from Russia. I need to secure my profile immediately.",
+          "gold": "account",
+          "output": "The player is reporting unauthorized login attempts and concerns about account security. This is clearly an account access and security issue.\n\nFINAL: account",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the ticket as 'account', provided sound reasoning about security concerns, and the output matches the reference answer perfectly."
+          }
+        },
+        {
+          "query": "What's the difference between critical hits and headshot damage? Do they stack or is it one or the other?",
+          "gold": "gameplay",
+          "output": "The player is asking about game mechanics - specifically how two damage types (critical hits and headshot damage) interact with each other in the game system.\n\nThis is a question about understanding game mechanics and how features work together.\n\nFINAL: gameplay",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the ticket as 'gameplay', provided sound reasoning about game mechanics, followed the classification task format perfectly, and matched the reference answer exactly."
+          }
+        },
+        {
+          "query": "During my last three games, a player called NightmareRush has been targeting me specifically with sexist insults and inappropriate comments. I feel very uncomfortable and don't want to encounter this person again.",
+          "gold": "toxicity_report",
+          "output": "This is a report of harassment and abusive behavior from another player directed at you. The player is using sexist insults and inappropriate comments, which constitutes toxic conduct that should be addressed by the support team.\n\nFINAL: toxicity_report",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly classified the ticket as 'toxicity_report' matching the reference answer, provided sound reasoning about harassment and toxic conduct, and delivered the required classification in "
+          }
+        },
+        {
+          "query": "I keep getting kicked out of matches every 5-10 minutes and it's ruining my ranked games. My internet connection is fine for everything else, but this game just won't stay stable.",
+          "gold": "connectivity",
+          "output": "The player is experiencing repeated disconnections from matches during gameplay. While their internet connection appears stable for other applications, they're being kicked out of the game specifically every 5-10 minutes.\n\nThis is a connectivity issue - the problem involves being unable to maintain a stable connection to the game's servers/sessions, resulting in disconnection errors during multiplayer matches. This falls under network connection problems and matchmaking/session access failures.\n\nFINAL: connectivity",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9875,
+            "rationale": "The agent correctly classified the ticket as 'connectivity', provided sound reasoning about disconnection patterns and network issues, followed the required format, and matched the reference answer pe"
+          }
+        },
+        {
+          "query": "I bought 5000 gems but only 3000 appeared in my account. The full amount was withdrawn from my bank account though.",
+          "gold": "billing",
+          "output": "The player purchased in-game currency (gems) but received fewer gems than paid for, while the full payment was charged. This is a billing issue involving a purchase discrepancy and potential refund.\n\nFINAL: billing",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the ticket as 'billing', provided sound reasoning about the purchase discrepancy, stayed on-task, and matched the reference answer perfectly."
+          }
+        },
+        {
+          "query": "My character animation is stuck in the crouching position even when I'm running and jumping. It looks ridiculous and I can't fix it even after reloading.",
+          "gold": "bug",
+          "output": "The player is reporting a visual/animation glitch where their character model is stuck in a crouching animation despite performing other actions (running, jumping). This is a technical malfunction - an unintended game behavior where the animation system is not responding correctly to player input and state changes. The issue persists after reloading, indicating it's a local performance/rendering issue rather than a network connectivity problem.\n\nFINAL: bug",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9675,
+            "rationale": "The agent correctly classified the ticket as 'bug', provided sound reasoning about the animation glitch, and fully addressed the classification task with accurate execution."
+          }
+        },
+        {
+          "query": "I've been trying to log in for the past hour but it keeps saying my password is incorrect. I'm certain I'm using the right one. Can you help me get back into my profile?",
+          "gold": "account",
+          "output": "The player is unable to log in and suspects their password may be incorrect or there's an authentication issue preventing access to their account. This is clearly an account access problem.\n\nFINAL: account",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly classified the ticket as 'account', provided sound reasoning about the login/authentication issue, and delivered the exact answer matching the reference, though added explanatory t"
+          }
+        },
+        {
+          "query": "What's the maximum level for weapons? Mine is at level 15 and the upgrade option disappeared from the blacksmith menu.",
+          "gold": "gameplay",
+          "output": "The player is asking about game mechanics - specifically about weapon leveling caps and how the upgrade system works in the blacksmith menu. This is a question about understanding game systems and features.\n\nFINAL: gameplay",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the ticket as 'gameplay', provided sound reasoning about game mechanics and systems, and delivered the answer in the expected format matching the reference answer."
+          }
+        },
+        {
+          "query": "A player kept teamkilling me on purpose and laughing about it in voice comms while using ableist slurs. Username is ProGamer420 and this happened around 3pm today on the Desert Storm map.",
+          "gold": "toxicity_report",
+          "output": "This ticket describes a player engaging in intentional harmful behavior (teamkilling), abusive language (ableist slurs), and harassment. This is a report of toxic conduct by another player that needs to be investigated and actioned by the moderation team.\n\nFINAL: toxicity_report",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the ticket as 'toxicity_report' matching the reference answer, provided sound reasoning identifying the key toxic behaviors (teamkilling, slurs, harassment), and deliver"
+          }
+        },
+        {
+          "query": "Keep getting timeout errors when trying to load into multiplayer lobbies. Takes forever to connect and then half the time it just fails completely.",
+          "gold": "connectivity",
+          "output": "The player is experiencing timeout errors and connection failures when attempting to join multiplayer lobbies. This is a network/server connectivity issue - they cannot establish or maintain a connection to the multiplayer service.\n\nFINAL: connectivity",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 1.0,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 1.0,
+            "rationale": "The agent correctly classified the ticket as 'connectivity', provided sound reasoning about timeout/connection failures, and the final answer matches the reference exactly."
+          }
+        },
+        {
+          "query": "My credit card shows a pending transaction from three days ago but I never received the in-game currency I paid for. Order number is #GX-4429-LP.",
+          "gold": "billing",
+          "output": "The player is reporting that they made a payment (credit card charge) but did not receive the in-game currency they purchased. This is a billing issue involving a transaction problem and missing purchased goods.\n\nFINAL: billing",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the ticket as 'billing', provided sound reasoning about the payment/currency issue, and the final answer matches the reference perfectly."
+          }
+        },
+        {
+          "query": "There's a visual glitch where enemy health bars stay on screen even after they're defeated, and after a few battles my entire screen is covered with floating red bars.",
+          "gold": "bug",
+          "output": "The player is reporting a visual error where enemy health bars persist on screen after enemies are defeated, eventually covering the entire screen. This is a technical malfunction - a broken feature that displays incorrectly.\n\nThis is not a connectivity issue (no network/lag symptoms), not gameplay (not asking how to play), not account/billing/toxicity related.\n\nFINAL: bug",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the ticket as 'bug', provided sound reasoning about why it's a technical malfunction rather than other categories, and the final answer matches the reference exactly."
+          }
+        },
+        {
+          "query": "I want to enable additional security features on my profile after hearing about recent hacking incidents. What options do you offer?",
+          "gold": "account",
+          "output": "The player is asking about enabling additional security features on their profile and protecting their account from hacking. This is directly related to account security and profile protection.\n\nFINAL: account",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the ticket as 'account', provided sound reasoning about security features and profile protection, followed the required format, and matched the reference answer perfectl"
+          }
+        }
+      ],
+      "gpa_mean": 0.9667708333333331,
+      "gpa_dims": {
+        "target_alignment": 0.958333333333333,
+        "reasoning_soundness": 0.9379166666666664,
+        "execution_accuracy": 0.9916666666666667,
+        "output_integrity": 0.9791666666666666
+      },
+      "optimization": {
+        "history": [
+          {
+            "iter": 0,
+            "obj": 1.0,
+            "gpa": 0.968,
+            "strategy": "baseline"
+          },
+          {
+            "iter": 1,
+            "obj": 1.0,
+            "gpa": 0.96375,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 2,
+            "obj": 1.0,
+            "gpa": 0.97,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 3,
+            "obj": 1.0,
+            "gpa": 0.9724999999999999,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 4,
+            "obj": 1.0,
+            "gpa": 0.96925,
+            "strategy": "merge"
+          },
+          {
+            "iter": 5,
+            "obj": 1.0,
+            "gpa": 0.97,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 6,
+            "obj": 1.0,
+            "gpa": 0.97,
+            "strategy": "mutation"
+          }
+        ],
+        "front": [
+          {
+            "obj": 1.0,
+            "gpa": 0.9724999999999999,
+            "iter": 3,
+            "strategy": "mutation"
+          }
+        ]
+      }
+    }
+  },
+  "duration_s": 259.5
+}

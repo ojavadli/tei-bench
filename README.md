@@ -3,12 +3,17 @@
 A **controlled, held-out evaluation** of the Target–Evaluate–Improve (TEI) loop
 across **31 agentic tasks spanning 31 industries**.
 
-> 📄 **Read the full article:** [`ARTICLE.md`](ARTICLE.md) (figures, tables, references) ·
-> 📑 **arXiv manuscript:** [`paper/main.tex`](paper/main.tex) (compile guide: [`paper/HOWTO_COMPILE.md`](paper/HOWTO_COMPILE.md))
+> 📄 **Read the full article:** [`ARTICLE.md`](ARTICLE.md) · 📝 [`paper/TEI-Bench.docx`](paper/TEI-Bench.docx) · 📑 [`paper/main.tex`](paper/main.tex)
 >
-> **Headline result (held-out, n=31 paired):** objective accuracy **0.682 → 0.857**,
-> Δ = **+0.175**, 95% CI [+0.115, +0.237], paired *t* = 5.60, ***p* = 4.3×10⁻⁶**,
-> Cohen's *d_z* = 1.01 (23 win / 1 loss / 7 tie).
+> **Headline finding (v2, pre-registered `prereg-v2`, held-out, n=31, 4-arm ablation).** This is a
+> *cautionary / negative* result. Once the output-format confound is removed (universal `FINAL:`
+> answer contract) and a random-search baseline is added, the large gain seen under a naive scorer
+> (a v1 pilot reported +0.175, p≈4e-6) **collapses**: arm means are nearly tied — baseline **0.852**,
+> random **0.867**, objective-only-reflection **0.865**, TEI **0.867**. TEI does **not** significantly
+> beat the baseline (Δ=+0.015, p=0.41, Holm=1.0) and is **statistically indistinguishable from random
+> prompt search** (Δ=0.000, p=1.0). Conclusion: on single-turn classification with a competent baseline,
+> the marginal value of evaluation-guided prompt optimization is unproven and easily overstated by naive
+> scoring. The earlier v1 results are retained in `results/` for provenance; the corrected run is in `results_v2/`.
 
 TEI-Bench measures whether evaluation-guided, GEPA-style reflective prompt
 optimization (the "Improve" half of [tei-loop](https://github.com/ojavadli/tei-loop))
