@@ -1,0 +1,997 @@
+{
+  "task_id": "hospitality_review_stars",
+  "industry": "Hospitality",
+  "metric": "classification",
+  "source": "SetFit/yelp_review_full via HuggingFace (see dataset card for license).",
+  "is_public": true,
+  "n_train": 15,
+  "n_test": 30,
+  "agent_model": "claude-haiku-4-5",
+  "judge_model": "claude-sonnet-4-5",
+  "optimizer_model": "claude-sonnet-4-5",
+  "seed": 0,
+  "arms": {
+    "baseline": {
+      "objective_mean": 0.6666666666666666,
+      "objective_ci95": [
+        0.5,
+        0.8333333333333334
+      ],
+      "prompt": "You are a hospitality review-rating assistant. Predict the business review's star rating. Classify into one of these categories: 1 star, 2 star, 3 stars, 4 stars, 5 stars.",
+      "examples": [
+        {
+          "query": "I have been coming to this particular Filiberto's for a while now and the food and friendly service are consistently top notch. The bar is stocked with good tequila and they usually have something going on like karaoke in the evening to keep things interesting. It fills an interesting niche of taco shop fast food along with a nice bar that I didn't think would gel together but surprisingly does. Food and drink specials for the most part are also pretty great as well.",
+          "gold": "5 stars",
+          "output": "This review is clearly positive and enthusiastic. The customer highlights:\n\n- Consistent quality of food and service (\"consistently top notch\")\n- Friendly service\n- Well-stocked bar with good tequila\n- Entertainment options (karaoke)\n- Appreciation for the unique concept (taco shop + bar combination)\n- Good food and drink specials\n\nThe reviewer is a repeat customer (\"coming to this particular Filiberto's for a while now\") and expresses satisfaction with multiple aspects of the establishment. There are no complaints or negative points mentioned. The tone is appreciative and recommending.\n\nThis clearly warrants a 5-star rating.\n\nFINAL: 5 stars",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 1.0,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 1.0,
+            "rationale": "The agent correctly predicted 5 stars with sound reasoning that accurately identified all positive indicators in the review, addressed the exact task, and matched the reference answer perfectly."
+          }
+        },
+        {
+          "query": "With 500+ Reviews, Most of all it has been said but I will offer this:\\nFox Concepts Restaurants consistently pulls off a memorable, pleasant experience that is tasty, full of quality and will, occasionally, have a memorable service experience. \\nAll restaurants have their ups & downs, but Olive & Ivy is consistently good, innovative and the atmosphere is quite nice; inside or outside.\\nDrinks are tasty, Scallopini and Cannelloni are both just Yum! Never had a bad experience here.\\n\\nOverall Rating: 4.5 Stars\\nService: 4.1 Stars\\nFood: 4.6 Stars \\nQuality: 4.5 Stars\\nCleanliness: 4.2 Stars\\nValue: 3.9 Stars",
+          "gold": "4 stars",
+          "output": "This review is highly positive overall. The reviewer praises:\n\n- Consistent quality and memorable experiences\n- Innovative menu items (specifically praising Scallopini and Cannelloni)\n- Pleasant atmosphere (both indoor and outdoor)\n- Good drinks\n- Never had a bad experience\n\nThe reviewer's own detailed ratings show:\n- Food: 4.6 stars (excellent)\n- Quality: 4.5 stars (very good)\n- Service: 4.1 stars (good)\n- Cleanliness: 4.2 stars (good)\n- Value: 3.9 stars (acceptable, slightly lower)\n- Overall stated: 4.5 stars\n\nThe only minor criticism is the value rating at 3.9, suggesting prices are somewhat high, but this doesn't diminish the overall very positive sentiment. The reviewer explicitly states they've \"never had a bad experience\" and consistently recommends the restaurant.\n\nThis clearly warrants a 5-star rating, as the reviewer is expressing strong satisfaction with the establishment despite the slightly lower value score.\n\nFINAL: 5 stars",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.7,
+            "execution_accuracy": 1.0,
+            "output_integrity": 0.4,
+            "aggregate": 0.7625,
+            "rationale": "The agent correctly formatted the prediction and reasoned through the review systematically, but predicted 5 stars when the reference answer is 4 stars, and the reviewer's own stated overall rating wa"
+          }
+        },
+        {
+          "query": "Just sad\\nOrdered online paid on line when I arrived at the pick up time they told me that their fax machine ran out of paper and they did not get my order\\n\\nI am now sitting in the dining room writing this review on my phone \\n\\nNo attempt to make this right \\n\\nI hope the pizza is good",
+          "gold": "1 star",
+          "output": "This review describes a significant service failure. The customer:\n- Placed and paid for an online order\n- Arrived at the scheduled pickup time\n- Was told the order was never received due to a technical issue (fax machine out of paper)\n- Experienced no attempt by the restaurant to resolve the situation\n- Is now waiting, frustrated enough to write a negative review\n\nThe customer's tone is clearly disappointed and frustrated. While they haven't explicitly stated the pizza was bad, the phrase \"I hope the pizza is good\" suggests skepticism and that this experience has already soured their perception. The lack of any service recovery attempt (offering to expedite the order, provide a discount, etc.) makes this worse.\n\nThis is a clear operational failure with poor customer service recovery.\n\nFINAL: 1 star",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9875,
+            "rationale": "The agent correctly predicted 1 star with sound reasoning about service failure, proper format, and complete alignment with the reference answer."
+          }
+        },
+        {
+          "query": "Hmmmmm really just not sure about this place at all, went for a lunch and just wasn't impressed. I had the quesadilla with carnitas which was ok, we also got chicken wings and they were well awful! Cold, greasy and just not very good.\\n\\nThe search for good tex-mex goes on!",
+          "gold": "2 star",
+          "output": "The reviewer expresses clear dissatisfaction with their experience. While they found the quesadilla \"ok,\" they were notably disappointed with the chicken wings (described as \"well awful,\" cold, and greasy). The overall tone is negative - they state they \"just weren't impressed\" and are still searching for better tex-mex elsewhere.\n\nThe presence of one acceptable dish prevents this from being a 1-star review, but the significant complaints about quality and the overall lack of satisfaction point to a below-average experience.\n\nFINAL: 2 star",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9675,
+            "rationale": "The agent correctly predicted '2 star' matching the reference, provided sound reasoning about mixed-but-negative sentiment, followed the required format, and delivered an accurate answer without fabri"
+          }
+        },
+        {
+          "query": "Average food on a very limited menu. Service was barely adequate, and the prices were very over-priced. Location is convenient, but parking can be an issue. Seems to be very popular with the trendy high school crowd [something I shied away from even when I was in high school]...",
+          "gold": "3 stars",
+          "output": "This review contains multiple negative criticisms:\n- Food quality described as \"average\"\n- Menu is \"very limited\"\n- Service was \"barely adequate\"\n- Prices are \"very over-priced\"\n- Only positive note is convenient location, but parking is problematic\n- Negative comment about the clientele\n\nThe reviewer found little to recommend about the establishment. While they acknowledge the convenient location, the numerous complaints about core hospitality elements (food, service, pricing) and the overall tone of dissatisfaction indicate a poor experience. This pattern of criticisms across multiple dimensions points to a low rating.\n\nFINAL: 2 star",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 0.4,
+            "aggregate": 0.8125,
+            "rationale": "The agent correctly identified the task, provided sound reasoning about negative elements, and formatted properly, but predicted 2 stars when the correct answer is 3 stars—a substantive error that sig"
+          }
+        },
+        {
+          "query": "Best baseball/ softball park ever, I love the people that work there and play there everyone is like family. The beer is always good to have when your playing with friends great park.",
+          "gold": "5 stars",
+          "output": "This review is overwhelmingly positive. The reviewer expresses:\n- Strong enthusiasm (\"Best...ever\")\n- Appreciation for staff and community (\"love the people,\" \"like family\")\n- Satisfaction with amenities (beer quality)\n- Overall enjoyment of the experience\n\nThe tone is enthusiastic and complimentary throughout, with no complaints or negative aspects mentioned. This clearly indicates a highly satisfied customer.\n\nFINAL: 5 stars",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 1.0,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 1.0,
+            "rationale": "The agent correctly predicted 5 stars with sound reasoning based on the overwhelmingly positive review content, matching the reference answer perfectly."
+          }
+        },
+        {
+          "query": "Ive always loved walmart for the cheap prices and convenience. WALMART YAY!",
+          "gold": "4 stars",
+          "output": "This review expresses clear satisfaction with Walmart, highlighting two key positive aspects: affordable pricing and convenience. The enthusiastic tone (\"YAY!\") and statement of long-standing loyalty (\"I've always loved\") indicate a genuinely positive experience. There are no complaints or criticisms mentioned.\n\nHowever, the review is quite brief and doesn't provide specific details about recent experiences, product quality, customer service, or other factors that might warrant a perfect 5-star rating. It reads more as a general endorsement rather than a detailed account of an exceptional experience.\n\nThis level of enthusiasm and satisfaction, while not providing extensive detail, suggests a strong positive rating.\n\nFINAL: 5 stars",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.85,
+            "execution_accuracy": 1.0,
+            "output_integrity": 0.7,
+            "aggregate": 0.875,
+            "rationale": "The agent correctly formatted the prediction and provided sound reasoning about positive sentiment, but predicted 5 stars instead of the correct 4 stars, indicating a minor overestimation of enthusias"
+          }
+        },
+        {
+          "query": "I have been visiting Main Street Station Casino for a few years now, I usually go every week with a few friends, however, our recent experience with the parking attendant has allowed us to take our patronage elsewhere.\\nWe usually visit, gamble and buy some dinner/lunch at this casino, so when we visited on Sunday, we came purely for the buffet this time. The parking attendant (Philip) told us the parking would be comped if I visit the casino teller. I made sure of this before entering as I was visited with my parents fro our of state for the buffet (They dont like to gamble like us).\\nI took my ticket to get validated and they told me I had to pay for parking. I explained the situation to them and they said I would have to gamble to get free parking. I went back to Philip, and he was probably the most rudest person I have encountered this year! He said \\\"you people go too fast\\\" and \\\"you didn't listen properly\\\".\\nFirstly, this is EXTREMELY rude and very poor customer service, and secondly, I made an effort to clarifying the situation before I entered the parking lot. He closed the window in my face and started reading a newspaper.\\nI want you to know that your potential customer",
+          "gold": "1 star",
+          "output": "Based on this review, I can identify several key issues:\n\n**Negative factors:**\n- Miscommunication about parking validation policy (attendant said it would be comped, but casino required gambling)\n- Extremely rude behavior from parking attendant Philip (insulting tone, dismissive attitude)\n- Poor customer service (closing window in customer's face, ignoring them)\n- Loss of long-term customer loyalty (weekly visits, now taking business elsewhere)\n- The customer made a reasonable effort to clarify before entering\n\n**Mitigating factors:**\n- The review focuses on one bad interaction rather than the entire casino experience\n- The customer had been a loyal, regular patron for years\n- The buffet itself isn't criticized, only the parking/customer service issue\n\nThis is clearly a negative experience that resulted in the customer leaving and taking their business elsewhere. The rudeness and dismissiveness of the staff member, combined with the policy confusion and poor resolution, represents a significant service failure. However, since the complaint is primarily about one staff member and the parking situation rather than the core casino/buffet experience, this would likely be rated as a 2-star review—acknowledging that while the casino may have merit, the customer service failure was severe enough to drive away a loyal customer.\n\nFINAL: 2 star",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.75,
+            "reasoning_soundness": 0.7,
+            "execution_accuracy": 0.0,
+            "output_integrity": 0.0,
+            "aggregate": 0.3625,
+            "rationale": "The agent provided thorough analysis with sound reasoning about the negative experience, but predicted 2 stars when the correct answer is 1 star, making the final prediction incorrect despite reasonab"
+          }
+        },
+        {
+          "query": "Staff was ok except one. Went there during lunch hour and as we are getting ready to prepare our bowl. one of the members of their staff yells at me with an attitude \\\" you cant be back here\\\" what she is talking about the area between the 2 self serve veggie/ meat station. One bar was closed but with all the respect it is hard to reach to an item that is way in the back so I went to the other side to make it easier to reach and this girl yells at me from across instead of coming closer to me and warning me it is not allowed to be on the other side. How rude! what is ur location's goal here? go big or go home! I wont be visiting again.",
+          "gold": "2 star",
+          "output": "This review describes a negative experience centered on a staff member's rude behavior. The customer was trying to access food items at a self-serve station during lunch and was yelled at from across the room rather than being politely informed of the policy. The customer felt disrespected by the manner of correction and the lack of professionalism.\n\nKey factors:\n- Staff rudeness and poor communication (major negative)\n- Confrontational approach rather than helpful service\n- Customer states they won't return\n- No mention of food quality issues\n- One staff member caused the problem, others were \"ok\"\n\nThis is clearly a negative experience that would warrant a low rating. The customer's frustration is evident, and they've decided not to return. However, they acknowledge other staff were acceptable and don't mention food quality problems, which prevents this from being a 1-star review (typically reserved for the worst experiences). This falls into the 2-star category—a poor experience due to service issues that would discourage return visits.\n\nFINAL: 2 star",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9875,
+            "rationale": "The agent correctly predicted '2 star' matching the reference, provided sound reasoning about service quality and customer sentiment, followed the required format, and delivered an accurate answer wit"
+          }
+        },
+        {
+          "query": "Food mostly great, service not so wonderful.\\n\\nI visited here one evening with a companion. We had never been here before so we joked as we approached the door about how we'd probably be stared at as we walked in, dressed as we were in t-shirts and casual pants. When we opened the door, BAM - everyone was indeed staring! That's because the entertainment -a woman playing a stringed instrument and singing- was seated on a bench in the lobby right in front of the doors, commanding everyone's attention. This was a rather disconcerting \\\"welcome\\\" that had us laughing later at our table. \\n\\nI feared that the place would be way too expensive, given the decor and the entertainment, which included a Thai dancer, but the meals were moderately priced, around $10 to $15. The specials, however, were in the $20 range, and special bar drinks were $10.\\n\\nI had the Tom Ka Khai for an appetizer, and it was delicious, with layers of interesting flavors. It wasn't as polished, nor as pretty, as the Lotus of Siam's version, but very, very good. My companion raved over it, as well as over her chicken satay appetizer which was very, very tasty and succulent. MMMM! She also enjoyed a martini, which wa",
+          "gold": "3 stars",
+          "output": "# Review Analysis\n\n**Positive aspects:**\n- Food quality is highlighted as \"mostly great\"\n- Tom Ka Khai appetizer described as \"delicious, with layers of interesting flavors\"\n- Chicken satay praised as \"very, very tasty and succulent\"\n- Reasonable pricing ($10-15 for meals)\n- Entertainment and ambiance (live music, Thai dancer)\n- Companion enjoyed their martini\n\n**Negative aspects:**\n- Service explicitly noted as \"not so wonderful\"\n- The opening experience was \"disconcerting\" (though they laughed about it later)\n- Some dishes compared unfavorably to competitors (Lotus of Siam)\n\n**Overall assessment:**\nThe reviewer clearly enjoyed the food and found the experience entertaining despite some service issues. The positive food experience and reasonable pricing outweigh the service complaints. The tone is generally favorable with humor and appreciation for the meal quality. However, the explicit mention that \"service not so wonderful\" prevents this from being a 5-star review. The food quality and overall experience suggest this is solidly above average but with notable service shortcomings.\n\nThis reads as a 4-star review - good food and experience with some service issues that prevent it from being excellent.\n\nFINAL: 4 stars",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.85,
+            "execution_accuracy": 1.0,
+            "output_integrity": 0.0,
+            "aggregate": 0.7,
+            "rationale": "The agent correctly identified the task, provided sound reasoning about positive/negative aspects, and followed proper format, but predicted 4 stars when the correct answer is 3 stars—a fundamental er"
+          }
+        },
+        {
+          "query": "I still love this campus BUT I do agree with the angry person that if you want the quintessential party college experience, this campus (and Poly) are not for you.\\n\\nThis is like a liberal arts college in that most of the classes are less than 30 people, some have up to 100 but it's not large lecture style like Tempe and other universities.\\n\\nIf you don't care about partying and you live in NW Phoenix then this school is AWESOME!",
+          "gold": "5 stars",
+          "output": "This review expresses a mixed but ultimately positive sentiment about the campus:\n\n**Positive aspects:**\n- The reviewer \"still loves\" the campus\n- Praises small class sizes (under 30 people typically)\n- Highlights the liberal arts college atmosphere\n- Calls it \"AWESOME\" for students who don't prioritize partying and live in NW Phoenix\n- Values the personalized educational experience\n\n**Negative/Qualifying aspects:**\n- Acknowledges it's NOT ideal for those seeking a \"quintessential party college experience\"\n- Recognizes it differs from larger universities like Tempe\n- Implies the party scene is limited\n\n**Overall tone:** The reviewer is satisfied and recommending the school, but with caveats about what type of student it suits best. They're defending the campus against criticism while acknowledging legitimate trade-offs. The enthusiastic language (\"AWESOME!\") and statement of continued love for the campus indicate a positive overall assessment, despite the limitations noted.\n\nThis is a favorable review with realistic expectations acknowledged—typical of a 4-star rating (satisfied with some reservations).\n\nFINAL: 4 stars",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.85,
+            "execution_accuracy": 1.0,
+            "output_integrity": 0.4,
+            "aggregate": 0.7999999999999999,
+            "rationale": "The agent correctly formatted the prediction and provided sound reasoning about sentiment, but predicted 4 stars when the correct answer is 5 stars, which is a fundamental accuracy failure despite the"
+          }
+        },
+        {
+          "query": "We came in tonight to use a free birthday pizza coupon (which is an amazing deal- a large pizza for free?!). The weather was nice so we sat in a corner on the patio. The fountain right in front is great and kept my 3-year old interested while we waited. We got a half cheese, half pepperoni pizza. It really was quite delicious. I usually prefer thick crust (I'm a big fan of bread), but this thin crust was great and I would definitely come back for more. We also ordered the dessert trio with the cannoli, tiramisu and New York cheesecake. The cannoli was delicious. I've never had tiramisu before, so nothing to compare it to, but it was good. The cheesecake wasn't what I expected; it was a lot lighter and fluffier than what I've normally had. It also came with a raspberry sauce, I believe, which I didn't care for. But I didn't come here for the cheesecake. Overall, the experience was great, the pizza was delicious, and i would absolutely return.",
+          "gold": "4 stars",
+          "output": "This review is overwhelmingly positive. The customer highlights several strengths:\n\n**Positive aspects:**\n- Great value (free birthday pizza coupon)\n- Pleasant patio setting with a fountain that entertained their child\n- Delicious pizza with quality thin crust (even though they typically prefer thick crust)\n- Good dessert trio overall, with particularly praised cannoli\n- Strong closing statement about returning\n\n**Minor negatives:**\n- The cheesecake didn't meet expectations (lighter/fluffier than usual, didn't like the raspberry sauce)\n- However, the customer explicitly states they \"didn't come here for the cheesecake,\" minimizing this complaint\n\nThe reviewer explicitly states \"the experience was great\" and \"would absolutely return,\" which are strong indicators of satisfaction. The one dish that disappointed (cheesecake) is presented as a minor issue that doesn't detract from their overall positive experience. The tone is enthusiastic and appreciative throughout.\n\nThis is clearly a 4-5 star review. The minor cheesecake complaint prevents it from being a perfect 5 stars, but the strong positive language and stated willingness to return suggests this is solidly in the 4-star range.\n\nFINAL: 4 stars",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9875,
+            "rationale": "The agent correctly predicted 4 stars with sound reasoning that accurately analyzed the review's overwhelmingly positive tone tempered by one minor complaint, matching the reference answer perfectly."
+          }
+        },
+        {
+          "query": "Overpriced, mostly just rice and beans. Salsa was watered down. My first time at this location and it will be my last. Bussers run there ass off and servers seem to do nothing. Took forever for are food to get there and when it did it was cold. When I complained to the manager he barely spoke English. Anyways if you looking for great Mexican food look elsewhere.",
+          "gold": "1 star",
+          "output": "This review is clearly negative across multiple dimensions:\n\n- **Food quality**: Overpriced, basic ingredients (rice and beans), watered down salsa, cold food when served\n- **Service**: Long wait times, servers not doing their job, manager communication issues\n- **Overall experience**: Customer explicitly states they won't return and recommends going elsewhere\n\nThe only positive mention is that bussers work hard, but this doesn't offset the numerous complaints about food quality, pricing, service speed, and management responsiveness.\n\nThis is a definitively poor experience with no redeeming factors that would warrant more than a 1-star rating.\n\nFINAL: 1 star",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9875,
+            "rationale": "The agent correctly predicted 1 star with sound reasoning that systematically analyzed negative aspects of the review, directly addressing the task with accurate execution and a conclusion matching th"
+          }
+        },
+        {
+          "query": "This review is just for the afternoon tea. \\n\\nSandwiches were bland and unspectacular. Scone's were hard. Desserts varied from subpar to pretty decent. The worst part was the tea which was not even as good as good as what you can get from Pete's. It wasn't even just my tea. I went in a group of ten and tried some of the other ones and they were all just okay. What you really get is decor and ambiance but honestly the place is located in the middle of a casino and there is casino visibly all around you even when you are seated inside. I can't say ingredients are much better or quality was better... nothing was really better to justify the price premiums. Even service was only average.\\n\\nI gave an extra star though cause i did like the lemon custard. Try to always find a positive. It helps you get through life.",
+          "gold": "2 star",
+          "output": "This review is clearly negative overall, with the customer expressing disappointment across multiple dimensions:\n\n**Negatives:**\n- Bland, unspectacular sandwiches\n- Hard scones\n- Poor quality tea (worse than a competitor, Pete's)\n- Tea quality consistent across the group\n- Overpriced for the quality offered\n- Average service\n- Unpleasant ambiance (casino setting visible throughout)\n- Most desserts were subpar\n\n**Positives:**\n- One dessert item (lemon custard) was liked\n- The reviewer explicitly mentions giving an extra star for this positive\n\nThe reviewer is being generous by acknowledging one good element, but the overwhelming majority of the experience was disappointing. They found nothing to justify the premium pricing. The fact that they're explicitly stating they added a star for the lemon custard suggests the base rating would have been even lower.\n\nGiven the extensive list of failures across food quality, beverage quality, service, and value, combined with the reviewer's own acknowledgment that they're being generous with an extra star, this appears to be a **2-star review** - below average, with only one redeeming quality preventing it from being a 1-star.\n\nFINAL: 2 star",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9875,
+            "rationale": "The agent correctly predicted a 2-star rating with sound reasoning that systematically analyzed negative and positive elements, properly interpreted the reviewer's explicit statement about adding an e"
+          }
+        },
+        {
+          "query": "It's something you should do upon your first visit to Las Vegas and not to be done again. For $14, I expect to get a free picture at least!",
+          "gold": "3 stars",
+          "output": "This review suggests a mixed experience. The reviewer indicates:\n\n1. **Novelty factor**: They acknowledge it's a \"first visit to Las Vegas\" type of activity - something touristy and worth doing once\n2. **Not repeatable**: They explicitly state \"not to be done again\" - indicating they wouldn't return\n3. **Poor value**: For $14, they feel shortchanged and expected at minimum a free picture as part of the experience\n4. **Disappointment**: The tone suggests unmet expectations regarding what should be included for the price\n\nThe reviewer isn't saying it was terrible (they acknowledge it's worth doing once), but they're clearly dissatisfied with the value proposition and wouldn't recommend it as a repeat experience. This indicates a below-average experience - better than terrible, but with notable disappointments.\n\nThis aligns with a **2 or 3 star** rating. Given the explicit criticism about poor value and the \"not again\" sentiment, this leans toward the lower end.\n\nFINAL: 2 star",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.75,
+            "reasoning_soundness": 0.85,
+            "execution_accuracy": 0.6,
+            "output_integrity": 0.6,
+            "aggregate": 0.7000000000000001,
+            "rationale": "The agent provided sound reasoning identifying mixed sentiment and correctly narrowed to 2-3 stars, but ultimately chose 2 stars when the reference answer is 3 stars, representing a one-star predictio"
+          }
+        },
+        {
+          "query": "I was visiting a friend of mine in Charlotte, and we swung by Menchies. The cutest, sweetest sales girl helped us. So friendly, and legit LOVES her job. Spoke to everyone who walked in. I think her name was Kayla. I will def be back!!!",
+          "gold": "5 stars",
+          "output": "This review is overwhelmingly positive. The customer highlights:\n- Excellent customer service from a friendly, enthusiastic employee (Kayla)\n- The employee's genuine passion for their job\n- Positive interaction with staff\n- Clear intention to return\n\nThe only minor note is that the review focuses primarily on the staff experience rather than the product itself, but the overall tone is enthusiastic and complimentary with an explicit statement of intent to return.\n\nFINAL: 5 stars",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9875,
+            "rationale": "The agent correctly predicted 5 stars with sound reasoning based on overwhelmingly positive language, enthusiastic tone, and stated intent to return, perfectly matching the reference answer."
+          }
+        },
+        {
+          "query": "Good. One of my favorite restaurants in Pittsburgh. Went yesterday with family and enjoyed oysters(very fresh). I always like appetizers more than their entrees",
+          "gold": "4 stars",
+          "output": "This review expresses clear satisfaction with the restaurant. The reviewer:\n\n- Calls it \"one of my favorite restaurants\" - indicating strong overall approval\n- Had a positive recent experience with family\n- Specifically praised the oysters as \"very fresh\"\n- Shows repeat patronage and familiarity with the menu\n\nThe only minor note is a preference for appetizers over entrees, but this is stated as a personal preference rather than a criticism of quality.\n\nThe positive language (\"Good,\" \"enjoyed,\" \"favorite\") and lack of any complaints suggest a favorable rating.\n\nFINAL: 4 stars",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9675,
+            "rationale": "The agent correctly predicted 4 stars with sound reasoning based on positive language and context, properly formatted the answer, and matched the reference exactly."
+          }
+        },
+        {
+          "query": "I went here because it was highly rated on yelp. Not a good idea. Everyone mentioned using a coupon so I called and ask how I use a coupon. They said just mention it when you stop in. I arrived within one hour of my phone call and mentioned that I was the caller that asked about the coupon. He did the test and told me that he would deduct the coupon. My receipt for the DMV showed that he deducted the coupon but he didn't give me a credit card receipt because of their credit card scanner I guess cant print them. Well of course when I looked at my credit card online that evening I saw he DID NOT TAKE OFF THE COUPON. I called the next day and asked him to refund my credit card. He tried or pretended to try and then said he could do it. He said I would have to stop in and he would give me cash. So I had to take my time and gas and drive back there to get the $2 he failed to give me to start with. I am sure that most people don't take the time to go back and get the money and that they do this on purpose. My advice is to go to a $10 smog shop not in a repair shop that doesn't require coupons. Don't go here if you expect to get $2 off their already higher price!",
+          "gold": "1 star",
+          "output": "This review describes a frustrating experience with a business (appears to be an automotive smog testing service) that involves:\n\n1. **Deceptive coupon practices** - The staff claimed to apply a $2 coupon but didn't actually deduct it from the credit card charge\n2. **Poor customer service** - When confronted, the manager refused to process a refund through the credit card and forced the customer to return in person for cash\n3. **Suspected intentional fraud** - The reviewer suspects this is a deliberate practice to keep small amounts from customers who won't bother returning\n4. **Overpricing** - The base price is already higher than competitors\n5. **Inconvenience** - The customer had to waste time and gas to retrieve $2\n\nThe tone is clearly frustrated and angry. The reviewer explicitly warns others away from the business and recommends competitors instead. While the issue is relatively small in dollar amount ($2), the pattern of behavior suggests dishonesty and manipulation, which is a serious service failure.\n\nThis is a definitively negative review with no positive aspects mentioned. The customer would not recommend this business.\n\nFINAL: 1 star",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9875,
+            "rationale": "The agent correctly predicted 1 star, provided sound reasoning about the negative experience, followed the task format perfectly, and matched the reference answer exactly."
+          }
+        },
+        {
+          "query": "We have gone here a few times. \\n\\nMy gf being a vegetarian really loves the fresh salads and vegetables they have, It is a good selection and it is always fresh, but dang, its expensive for salads. \\n\\nService is always prompt. They also walk around with cookies and offer them to the tables, my kids love it of course, who doesn't like a nice warm cookie???\\n\\nAnd something else I hate is getting banged for drinks. I think they were 2.50 or 3 bucks. For soda fountain drinks???? \\n\\nIn the back section of the restaurant it always smells like feet too.. Just an observation.. :) \\n\\nThe pastas are just OK. Sometimes the soups are good. A friend of mine told me there is no way you can eat as much food as you paid for. I kind of believe that every time I go there.. \\n\\nThe funny thing is, with all this mediocrity, the place is always packed! \\nI guess people love a so so place.\\n\\nI dunno, Sunset Station is just down the road, its cheaper and better and drinks are included!!!! \\n\\nI'm just sayin,,,,",
+          "gold": "2 star",
+          "output": "Let me analyze the key points from this review:\n\n**Positives:**\n- Fresh salads and vegetables (girlfriend loves them)\n- Prompt service\n- Nice touch with warm cookies for kids\n- Repeat customer (has been multiple times)\n\n**Negatives:**\n- Expensive for salads\n- Overpriced drinks ($2.50-$3 for soda fountain drinks)\n- Odd smell in back section (\"smells like feet\")\n- Pastas are \"just OK\"\n- Soups are inconsistent\n- Poor value for money (can't eat as much as you paid for)\n- Competitor (Sunset Station) is cheaper, better, and includes drinks\n\n**Overall tone:** The reviewer is frustrated and disappointed. They keep returning but express consistent dissatisfaction with pricing, value, and quality. While they acknowledge some positives (service, fresh vegetables, cookies), the negatives significantly outweigh them. The comparison to a better alternative and the comment about \"mediocrity\" and \"so so place\" indicate this is below average.\n\nThis reads as a 2-star review - the reviewer has found some redeeming qualities (service, fresh ingredients) that prevent it from being 1 star, but the poor value, mediocre food quality, and overall frustration place it well below average.\n\nFINAL: 2 star",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9875,
+            "rationale": "The agent correctly predicted the 2-star rating with thorough, logical analysis of positive and negative elements that accurately justified the rating, matching the reference answer perfectly."
+          }
+        },
+        {
+          "query": "Prix \\u00e9lev\\u00e9 pour le type de nourriture. Par contre, la qualit\\u00e9 des produits ainsi que le go\\u00fbt sont au rendez-vous!",
+          "gold": "3 stars",
+          "output": "This review is in French. Let me translate and analyze it:\n\n\"High price for the type of food. However, the quality of the products and the taste are up to par!\"\n\n**Analysis:**\n- The reviewer mentions a negative aspect: high prices relative to the food type\n- However, they acknowledge significant positives: good quality of products and good taste\n- The tone suggests they found the experience worthwhile despite the cost\n- The use of \"Par contre\" (however/but) and the exclamation mark indicate they're satisfied overall, with the quality compensating for the higher price\n\nThis is a mixed but ultimately positive review. The customer is satisfied with quality and taste, though they note the pricing is steep. This typically indicates a 4-star rating - good experience with minor reservations, rather than a perfect 5-star experience.\n\nFINAL: 4 stars",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.4,
+            "aggregate": 0.7999999999999999,
+            "rationale": "The agent correctly addressed the task with sound reasoning about sentiment, but predicted 4 stars when the correct answer is 3 stars, representing a significant factual error in the final prediction."
+          }
+        },
+        {
+          "query": "This is my go to sushi spot when I'm in Vegas!! Absolutely love it here. The food is really fresh all the time. The hostess Arpi is really awesome. She's very nice and chill and remembers all the regulars. See you next time I'm in town!",
+          "gold": "5 stars",
+          "output": "This review is clearly positive and enthusiastic. The customer:\n- Calls it their \"go to\" spot, indicating strong loyalty\n- Uses \"Absolutely love it\" - emphatic language\n- Praises food quality (fresh)\n- Highlights excellent service from a specific staff member (Arpi)\n- Plans to return (\"See you next time\")\n\nAll indicators point to a highly satisfied customer with no complaints mentioned. This is a 5-star review.\n\nFINAL: 5 stars",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 1.0,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 1.0,
+            "rationale": "The agent correctly predicted 5 stars with sound reasoning based on clear positive indicators (loyalty, enthusiasm, praise, return intent), matching the reference answer perfectly."
+          }
+        },
+        {
+          "query": "Park near the Guitar Center, for nearby access to this theater located at Town Square. Go up the stairs. Box office is outside to the right. You can also purchase tickets down below, at the automated machine before walking up the steps, which is really convenient, if you wanted to get advance tickets or something. \\n\\nI recently saw a pre-screening of a new release movie here last week. There were three lines. The movie started at 7 pm. They want every seat filled for interview feedback afterward (the organizers want you to be completely honest). Due to the Press Section getting closed off, we were off to the side, but we were able to get a good view of the movie (sound quality was very good). I thought the room we were in was particularly small (there were 3 aisles). The steps were pretty steep; I think people with issues (handicapped, elderly, etc.) should probably stay closer to the bottom of the theater. \\n\\nBathrooms were close to our lines. The bathroom was very clean, too. (Come to think of it, since this is a newer theater, everything is cleaner, period.) The concession stand is in the middle, after entering the theater. \\n\\nOther theater happenings include: rave reservatio",
+          "gold": "4 stars",
+          "output": "This review discusses a pre-screening experience at a theater in Town Square. Let me analyze the key points:\n\n**Positive aspects:**\n- Convenient ticket purchasing options (box office and automated machines)\n- Good sound quality\n- Clean bathrooms and overall cleanliness (newer theater)\n- Convenient bathroom locations\n- Well-organized layout with accessible concession stand\n- Successfully accommodated a pre-screening event\n\n**Negative/Neutral aspects:**\n- Small theater room with only 3 aisles\n- Steep steps that could be problematic for elderly/handicapped patrons\n- Press section closure forced seating to the side (though view was still good)\n- Review appears incomplete (cuts off mid-sentence at \"rave reservatio\")\n\n**Overall tone:**\nThe reviewer is generally satisfied with the experience. They acknowledge some limitations (small room, steep stairs) but these are presented as observations rather than major complaints. The cleanliness, sound quality, and convenience features are highlighted positively. The reviewer seems to have had a good experience overall at this newer, well-maintained facility.\n\nThe incomplete ending suggests this might be a truncated review, but based on what's provided, the tone is clearly positive without being enthusiastic or gushing.\n\nThis appears to be a solid 4-star review - the reviewer is satisfied with most aspects and appreciates the facility's cleanliness and convenience, with only minor logistical concerns noted.\n\nFINAL: 4 stars",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9875,
+            "rationale": "The agent correctly predicted 4 stars matching the reference, provided sound reasoning analyzing positive and negative aspects, followed the task format precisely, and delivered an accurate answer wit"
+          }
+        },
+        {
+          "query": "Closed on Monday's? And closed 5/30 to 6/1? Wow. The prices on the menu don't seem that bad. But i still cant get over the fact there closed on Mondays. There is a sign posted \\\"help wanted\\\" so if anyone reads this and needs a job check this place out. And tell them to open on Mondays. BOOOOO, if they weren't closed I would have never found Square Cafe.",
+          "gold": "1 star",
+          "output": "This review expresses frustration about the business being closed on Mondays and during a specific period (5/30-6/1), which prevented the reviewer from visiting. The reviewer mentions reasonable prices but emphasizes their disappointment with the limited hours. They even discovered a competitor (Square Cafe) as a result of this closure.\n\nThe tone is clearly negative - the repeated emphasis on being closed (\"there closed on Mondays,\" \"BOOOOO\") and the statement \"if they weren't closed I would have never found Square Cafe\" indicates the reviewer ended up patronizing a competitor instead.\n\nWhile the reviewer doesn't mention terrible food or service (since they couldn't visit), the inability to access the business when desired is a significant complaint that would warrant a low rating.\n\nFINAL: 2 star",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 0.4,
+            "aggregate": 0.8125,
+            "rationale": "The agent correctly identified the task, provided sound reasoning about the negative tone and frustration, followed the proper format, but predicted 2 stars when the correct answer is 1 star—a substan"
+          }
+        },
+        {
+          "query": "The pricing at this place is over rated. After waiting for awhile to get some services I can definitely say that I wish I would have passed. \\n\\nThe OXYGEN \\\"Breathing Space\\\" is kinda cool but Im not sure I would pay for oxygen when I breathing just fine right now. In a medical emergency this would come in handy.\\n\\nThere are no private areas. Everybody recieved their services in the open. Not the best option for me. Especially those folks gettin wazed.\\n\\nThe area that provided small travel items was awesome. Just when I thought I forgot my lotion I discovered this cool place that offered plenty of options that normal Airport News Stands do not offer.",
+          "gold": "2 star",
+          "output": "Let me analyze this review:\n\n**Positive aspects:**\n- The travel items/retail area was \"awesome\" with good product selection\n- The oxygen breathing space concept is acknowledged as \"cool\"\n\n**Negative aspects:**\n- Pricing is described as \"over rated\"\n- Long wait times for services\n- Reviewer regrets coming (\"wish I would have passed\")\n- No private areas for services - everything is in the open\n- Uncomfortable with lack of privacy, especially for certain services like waxing\n- Oxygen service seems unnecessary for the reviewer's current needs\n\n**Overall sentiment:**\nThe review is predominantly negative. While there are minor positives (retail area, novelty of oxygen service), the main complaints about overpricing, wait times, lack of privacy, and overall regret about the visit outweigh these. The reviewer explicitly states they wish they hadn't gone.\n\nThis appears to be a spa or wellness facility at an airport. The lack of privacy is a significant issue for a service-based business, and combined with high prices and long waits, this creates a poor overall experience.\n\nThis falls between 2-3 stars, but given the explicit regret and multiple service failures, I'd lean toward the lower end.\n\nFINAL: 2 star",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9675,
+            "rationale": "The agent correctly predicted '2 star' matching the reference, provided sound reasoning analyzing positive/negative aspects, followed the required format, and delivered an accurate answer without fabr"
+          }
+        },
+        {
+          "query": "The nacho selection did not impress me I like real cheese on my nachos bummer. \\n\\nI ordered the chips and salsa, chips were bathed in salt and only one salsa was tasty. I went for the burger as my entree which was actually pretty good.",
+          "gold": "3 stars",
+          "output": "Let me analyze this review:\n\n**Positive aspects:**\n- The burger was \"pretty good\"\n- One salsa was tasty\n\n**Negative aspects:**\n- Nacho selection didn't impress (used processed cheese instead of real cheese)\n- Chips were oversalted\n- Only one of multiple salsas was good\n\nThe reviewer had a mixed experience with mostly disappointing appetizers/sides but a decent main course. The tone suggests mild frustration rather than anger, and they found at least one item satisfactory. However, the negatives outweigh the positives - multiple dishes had issues (nachos, chips, most salsas), with only the burger being good.\n\nThis falls into the 2-3 star range. Given that the appetizers were problematic and only the entree was decent, this leans toward a **3-star** rating - it's below average overall but not terrible since the main dish was acceptable.\n\nFINAL: 3 stars",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly predicted 3 stars matching the reference, provided sound reasoning analyzing positive/negative aspects, followed the required format, and delivered an accurate answer without fabri"
+          }
+        },
+        {
+          "query": "These guys have the right attitude when it comes to product and service. They are consistently top notch. Their people are well trained and always very friendly. Dutch Bros is easy to give a 5 star rating for their great coffee and even better service.",
+          "gold": "5 stars",
+          "output": "This review is overwhelmingly positive. The customer praises:\n- The company's attitude toward product and service\n- Consistent quality (\"top notch\")\n- Well-trained, friendly staff\n- Great coffee quality\n- Excellent service\n\nThe reviewer explicitly states \"Dutch Bros is easy to give a 5 star rating\" and highlights multiple strengths with no criticisms or complaints mentioned.\n\nFINAL: 5 stars",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 1.0,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 1.0,
+            "rationale": "The agent correctly predicted 5 stars with sound reasoning based on the overwhelmingly positive review content, matching the reference answer perfectly."
+          }
+        },
+        {
+          "query": "Came here with my boyfriend to experience the best view in Las Vegas. Located at the top of Mandalay Bay, it definitely has one of the most amazing views I've seen in Vegas. I was most impressed with the decor of the lounge and the ambiance was pretty laid back even though it seemed classy. The food was fantastic, must try the braised wagyu, it literally falls apart with your fork, amazing! The only thing that was disappointing was the seating we thought we made reservations for. We hoped to get patio seating with our reservation but they denied our request. But still a good view and I'd still recommend checking it out.",
+          "gold": "4 stars",
+          "output": "This review highlights several positive aspects of the experience:\n- Amazing views from the top of Mandalay Bay\n- Impressive decor and classy yet laid-back ambiance\n- Fantastic food, specifically praising the braised wagyu\n- Overall recommendation to visit\n\nHowever, there is one notable negative:\n- Disappointment with seating arrangements despite having a reservation, specifically being denied patio seating\n\nThe reviewer still recommends the establishment despite this issue, and the positive elements (views, ambiance, food quality) clearly outweigh the seating disappointment. The tone is generally satisfied and encouraging, suggesting this is a good experience overall with one minor complaint that didn't ruin the visit.\n\nThis aligns with a 4-star rating - a very good experience with one notable but not deal-breaking issue.\n\nFINAL: 4 stars",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9675,
+            "rationale": "The agent correctly predicted 4 stars with sound reasoning that accurately analyzed the review's positive elements and single disappointment, matching the reference answer perfectly."
+          }
+        },
+        {
+          "query": "It was my first day at job. I have to reach at my office at 9:00 am.\\nI called Orange taxi @ 8:15 am and they told the taxi will be at your place in 15 min.\\nI was waiting in the lobby at the hotel. \\nNow the time is 8:45 am and I tried to call them couple of times but they didnt picked my call.\\nAt 8:45 am luckily they picked up my call. I asked them about the status of my call.\\nThey told me the cab was waiting outside your hotel but no one showed up.\\nIt was 23 degree Fahrenheit along with the wind and they expect me to stand outside the hotel.\\nBut then the cab was not far away from my hotel so they called the driver and he came back in 5 minutes.\\nI reached my office by 9:05 am and when I gave him the card he said the machine is not working here. Give me your card details I will call the office and they will approve the transaction over the phone.\\nMy taxi bill was $13.50 and after couple of days I check my credit card statement they charged me $15.50.\\nThen I called back and they answered there is card transaction (which the driver didn't told me beforhand).\\n\\nIn short horrible horrible service by this guys.",
+          "gold": "1 star",
+          "output": "This review describes multiple significant service failures:\n\n1. **Communication issues**: The taxi company didn't answer calls initially, and there was confusion about pickup location\n2. **Poor coordination**: The driver waited outside without proper communication, forcing the customer to stand in freezing weather (23°F)\n3. **Payment problems**: The driver's card machine wasn't working, requiring an unusual phone authorization process\n4. **Billing discrepancy**: Customer was charged $15.50 instead of the quoted $13.50 ($2 overcharge)\n5. **Lack of transparency**: The card transaction fee wasn't disclosed beforehand\n6. **Critical timing**: This happened on the customer's first day at a new job, adding stress\n\nThe customer explicitly states \"horrible horrible service\" and describes multiple failures in reliability, communication, professionalism, and honesty. While they did eventually reach their destination on time, the experience was marred by poor service quality, unexpected charges, and unprofessional handling throughout.\n\nFINAL: 1 star",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 1.0,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 1.0,
+            "rationale": "The agent correctly predicted 1 star with thorough, logical reasoning that accurately identified all service failures from the review, matching the reference answer perfectly."
+          }
+        },
+        {
+          "query": "I hate leaving a \\\"meh\\\" kind of review for an organization that does a lot of goodwill and charity, but Goodwill thrift stores are not on my shopping radar at all. I feel like their prices are overpriced and their merchandise is poorly organized. I'll donate items to Goodwill because I know they're doing good somewhere, but I won't shop there. I recommend Savers, Opportunity Village and the Charleston Outlet thrift stores instead.",
+          "gold": "2 star",
+          "output": "This review expresses clear dissatisfaction with the shopping experience at Goodwill, despite acknowledging their charitable mission. The reviewer criticizes:\n\n1. **Pricing** - described as overpriced\n2. **Organization** - merchandise is poorly organized\n3. **Overall appeal** - explicitly states Goodwill is \"not on my shopping radar\"\n\nThe reviewer actively recommends competitors instead, indicating they prefer other thrift stores. While they show respect for Goodwill's charitable work and continue to donate there, they would not recommend shopping at the store itself.\n\nThis is a negative review with specific complaints about the core shopping experience (prices and organization), despite some acknowledgment of the organization's positive mission.\n\nFINAL: 2 star",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9875,
+            "rationale": "The agent correctly predicted the 2-star rating with sound reasoning about negative shopping experience despite charitable acknowledgment, proper format, and perfect match to reference answer."
+          }
+        },
+        {
+          "query": "I went on 9/28/2014, Sunday night for dinner, pay over $35. I wasn't too happy about quality of the food. I went there before, hummas and babaganoush were really bland. Curry chicken was ok. The 2 things I really like were garlic mashes, and the steak they grilled in front of you. Many people get crab which were opened already, but I don't really eat crab. The place was good when I went in 2013 but the quality went down hill.",
+          "gold": "3 stars",
+          "output": "This review indicates a mixed but ultimately negative experience. The reviewer:\n\n**Positive aspects:**\n- Enjoyed garlic mashed potatoes and the tableside-grilled steak\n- Acknowledges the restaurant was better in 2013\n\n**Negative aspects:**\n- Disappointed with overall food quality\n- Hummus and baba ganoush were bland\n- Curry chicken was only \"ok\"\n- Notes a decline in quality compared to previous visit\n- Spent over $35 and wasn't satisfied with the value\n\nThe reviewer is clearly dissatisfied with the current state of the restaurant, particularly given the price point and the noticeable decline from their previous experience. While there were a couple of dishes they enjoyed, the overall tone is one of disappointment and the explicit statement \"I wasn't too happy about quality of the food\" indicates this is below average.\n\nThis falls into the 2-3 star range. Given the significant quality decline noted, the high price point, and the overall dissatisfaction despite a couple of bright spots, this leans toward 2 stars rather than 3.\n\nFINAL: 2 star",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.85,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.4,
+            "aggregate": 0.7749999999999999,
+            "rationale": "The agent correctly addressed the task with sound reasoning about positive/negative aspects, but predicted 2 stars when the correct answer is 3 stars, resulting in low output_integrity despite good me"
+          }
+        }
+      ],
+      "gpa_mean": 0.9035833333333332,
+      "gpa_dims": {
+        "target_alignment": 0.9616666666666664,
+        "reasoning_soundness": 0.9143333333333332,
+        "execution_accuracy": 0.9483333333333334,
+        "output_integrity": 0.7899999999999998
+      }
+    },
+    "tei_v3": {
+      "objective_mean": 0.6666666666666666,
+      "objective_ci95": [
+        0.5,
+        0.8333333333333334
+      ],
+      "prompt": "You are a hospitality review-rating assistant. Predict the business review's star rating. Classify into one of these categories: 1 star, 2 star, 3 stars, 4 stars, 5 stars.",
+      "examples": [
+        {
+          "query": "I have been coming to this particular Filiberto's for a while now and the food and friendly service are consistently top notch. The bar is stocked with good tequila and they usually have something going on like karaoke in the evening to keep things interesting. It fills an interesting niche of taco shop fast food along with a nice bar that I didn't think would gel together but surprisingly does. Food and drink specials for the most part are also pretty great as well.",
+          "gold": "5 stars",
+          "output": "This review is clearly positive and enthusiastic. The customer highlights:\n\n- Consistent quality of food and service (\"consistently top notch\")\n- Friendly service\n- Well-stocked bar with good tequila\n- Entertainment options (karaoke)\n- Appreciation for the unique concept (taco shop + bar combination)\n- Good food and drink specials\n\nThe reviewer is a repeat customer (\"coming to this particular Filiberto's for a while now\") and expresses satisfaction with multiple aspects of the establishment. There are no complaints or negative points mentioned. The tone is appreciative and recommending.\n\nThis clearly warrants a 5-star rating.\n\nFINAL: 5 stars",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 1.0,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 1.0,
+            "rationale": "The agent correctly predicted 5 stars with sound reasoning that accurately identified all positive indicators in the review, addressed the exact task, and matched the reference answer perfectly."
+          }
+        },
+        {
+          "query": "With 500+ Reviews, Most of all it has been said but I will offer this:\\nFox Concepts Restaurants consistently pulls off a memorable, pleasant experience that is tasty, full of quality and will, occasionally, have a memorable service experience. \\nAll restaurants have their ups & downs, but Olive & Ivy is consistently good, innovative and the atmosphere is quite nice; inside or outside.\\nDrinks are tasty, Scallopini and Cannelloni are both just Yum! Never had a bad experience here.\\n\\nOverall Rating: 4.5 Stars\\nService: 4.1 Stars\\nFood: 4.6 Stars \\nQuality: 4.5 Stars\\nCleanliness: 4.2 Stars\\nValue: 3.9 Stars",
+          "gold": "4 stars",
+          "output": "This review is highly positive overall. The reviewer praises:\n\n- Consistent quality and memorable experiences\n- Innovative menu items (specifically praising Scallopini and Cannelloni)\n- Pleasant atmosphere (both indoor and outdoor)\n- Good drinks\n- Never had a bad experience\n\nThe reviewer's own detailed ratings show:\n- Food: 4.6 stars (excellent)\n- Quality: 4.5 stars (very good)\n- Service: 4.1 stars (good)\n- Cleanliness: 4.2 stars (good)\n- Value: 3.9 stars (acceptable, slightly lower)\n- Overall stated: 4.5 stars\n\nThe only minor criticism is the value rating at 3.9, suggesting prices are somewhat high, but this doesn't diminish the overall very positive sentiment. The reviewer explicitly states they've \"never had a bad experience\" and consistently recommends the restaurant.\n\nThis clearly warrants a 5-star rating, as the reviewer is expressing strong satisfaction with the establishment despite the slightly lower value score.\n\nFINAL: 5 stars",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.7,
+            "execution_accuracy": 1.0,
+            "output_integrity": 0.4,
+            "aggregate": 0.7625,
+            "rationale": "The agent correctly formatted the prediction and reasoned through the review systematically, but predicted 5 stars when the reference answer is 4 stars, and the reviewer's own stated overall rating wa"
+          }
+        },
+        {
+          "query": "Just sad\\nOrdered online paid on line when I arrived at the pick up time they told me that their fax machine ran out of paper and they did not get my order\\n\\nI am now sitting in the dining room writing this review on my phone \\n\\nNo attempt to make this right \\n\\nI hope the pizza is good",
+          "gold": "1 star",
+          "output": "This review describes a significant service failure. The customer:\n- Placed and paid for an online order\n- Arrived at the scheduled pickup time\n- Was told the order was never received due to a technical issue (fax machine out of paper)\n- Experienced no attempt by the restaurant to resolve the situation\n- Is now waiting, frustrated enough to write a negative review\n\nThe customer's tone is clearly disappointed and frustrated. While they haven't explicitly stated the pizza was bad, the phrase \"I hope the pizza is good\" suggests skepticism and that this experience has already soured their perception. The lack of any service recovery attempt (offering to expedite the order, provide a discount, etc.) makes this worse.\n\nThis is a clear operational failure with poor customer service recovery.\n\nFINAL: 1 star",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9875,
+            "rationale": "The agent correctly predicted 1 star with sound reasoning about service failure, proper format, and complete alignment with the reference answer."
+          }
+        },
+        {
+          "query": "Hmmmmm really just not sure about this place at all, went for a lunch and just wasn't impressed. I had the quesadilla with carnitas which was ok, we also got chicken wings and they were well awful! Cold, greasy and just not very good.\\n\\nThe search for good tex-mex goes on!",
+          "gold": "2 star",
+          "output": "The reviewer expresses clear dissatisfaction with their experience. While they found the quesadilla \"ok,\" they were notably disappointed with the chicken wings (described as \"well awful,\" cold, and greasy). The overall tone is negative - they state they \"just weren't impressed\" and are still searching for better tex-mex elsewhere.\n\nThe presence of one acceptable dish prevents this from being a 1-star review, but the significant complaints about quality and the overall lack of satisfaction point to a below-average experience.\n\nFINAL: 2 star",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9675,
+            "rationale": "The agent correctly predicted '2 star' matching the reference, provided sound reasoning about mixed-but-negative sentiment, followed the required format, and delivered an accurate answer without fabri"
+          }
+        },
+        {
+          "query": "Average food on a very limited menu. Service was barely adequate, and the prices were very over-priced. Location is convenient, but parking can be an issue. Seems to be very popular with the trendy high school crowd [something I shied away from even when I was in high school]...",
+          "gold": "3 stars",
+          "output": "This review contains multiple negative criticisms:\n- Food quality described as \"average\"\n- Menu is \"very limited\"\n- Service was \"barely adequate\"\n- Prices are \"very over-priced\"\n- Only positive note is convenient location, but parking is problematic\n- Negative comment about the clientele\n\nThe reviewer found little to recommend about the establishment. While they acknowledge the convenient location, the numerous complaints about core hospitality elements (food, service, pricing) and the overall tone of dissatisfaction indicate a poor experience. This pattern of criticisms across multiple dimensions points to a low rating.\n\nFINAL: 2 star",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 0.4,
+            "aggregate": 0.8125,
+            "rationale": "The agent correctly identified the task, provided sound reasoning about negative elements, and formatted properly, but predicted 2 stars when the correct answer is 3 stars—a substantive error that sig"
+          }
+        },
+        {
+          "query": "Best baseball/ softball park ever, I love the people that work there and play there everyone is like family. The beer is always good to have when your playing with friends great park.",
+          "gold": "5 stars",
+          "output": "This review is overwhelmingly positive. The reviewer expresses:\n- Strong enthusiasm (\"Best...ever\")\n- Appreciation for staff and community (\"love the people,\" \"like family\")\n- Satisfaction with amenities (beer quality)\n- Overall enjoyment of the experience\n\nThe tone is enthusiastic and complimentary throughout, with no complaints or negative aspects mentioned. This clearly indicates a highly satisfied customer.\n\nFINAL: 5 stars",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 1.0,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 1.0,
+            "rationale": "The agent correctly predicted 5 stars with sound reasoning based on the overwhelmingly positive review content, matching the reference answer perfectly."
+          }
+        },
+        {
+          "query": "Ive always loved walmart for the cheap prices and convenience. WALMART YAY!",
+          "gold": "4 stars",
+          "output": "This review expresses clear satisfaction with Walmart, highlighting two key positive aspects: affordable pricing and convenience. The enthusiastic tone (\"YAY!\") and statement of long-standing loyalty (\"I've always loved\") indicate a genuinely positive experience. There are no complaints or criticisms mentioned.\n\nHowever, the review is quite brief and doesn't provide specific details about recent experiences, product quality, customer service, or other factors that might warrant a perfect 5-star rating. It reads more as a general endorsement rather than a detailed account of an exceptional experience.\n\nThis level of enthusiasm and satisfaction, while not providing extensive detail, suggests a strong positive rating.\n\nFINAL: 5 stars",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.85,
+            "execution_accuracy": 1.0,
+            "output_integrity": 0.7,
+            "aggregate": 0.875,
+            "rationale": "The agent correctly formatted the prediction and provided sound reasoning about positive sentiment, but predicted 5 stars instead of the correct 4 stars, indicating a minor overestimation of enthusias"
+          }
+        },
+        {
+          "query": "I have been visiting Main Street Station Casino for a few years now, I usually go every week with a few friends, however, our recent experience with the parking attendant has allowed us to take our patronage elsewhere.\\nWe usually visit, gamble and buy some dinner/lunch at this casino, so when we visited on Sunday, we came purely for the buffet this time. The parking attendant (Philip) told us the parking would be comped if I visit the casino teller. I made sure of this before entering as I was visited with my parents fro our of state for the buffet (They dont like to gamble like us).\\nI took my ticket to get validated and they told me I had to pay for parking. I explained the situation to them and they said I would have to gamble to get free parking. I went back to Philip, and he was probably the most rudest person I have encountered this year! He said \\\"you people go too fast\\\" and \\\"you didn't listen properly\\\".\\nFirstly, this is EXTREMELY rude and very poor customer service, and secondly, I made an effort to clarifying the situation before I entered the parking lot. He closed the window in my face and started reading a newspaper.\\nI want you to know that your potential customer",
+          "gold": "1 star",
+          "output": "Based on this review, I can identify several key issues:\n\n**Negative factors:**\n- Miscommunication about parking validation policy (attendant said it would be comped, but casino required gambling)\n- Extremely rude behavior from parking attendant Philip (insulting tone, dismissive attitude)\n- Poor customer service (closing window in customer's face, ignoring them)\n- Loss of long-term customer loyalty (weekly visits, now taking business elsewhere)\n- The customer made a reasonable effort to clarify before entering\n\n**Mitigating factors:**\n- The review focuses on one bad interaction rather than the entire casino experience\n- The customer had been a loyal, regular patron for years\n- The buffet itself isn't criticized, only the parking/customer service issue\n\nThis is clearly a negative experience that resulted in the customer leaving and taking their business elsewhere. The rudeness and dismissiveness of the staff member, combined with the policy confusion and poor resolution, represents a significant service failure. However, since the complaint is primarily about one staff member and the parking situation rather than the core casino/buffet experience, this would likely be rated as a 2-star review—acknowledging that while the casino may have merit, the customer service failure was severe enough to drive away a loyal customer.\n\nFINAL: 2 star",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.75,
+            "reasoning_soundness": 0.7,
+            "execution_accuracy": 0.0,
+            "output_integrity": 0.0,
+            "aggregate": 0.3625,
+            "rationale": "The agent provided thorough analysis with sound reasoning about the negative experience, but predicted 2 stars when the correct answer is 1 star, making the final prediction incorrect despite reasonab"
+          }
+        },
+        {
+          "query": "Staff was ok except one. Went there during lunch hour and as we are getting ready to prepare our bowl. one of the members of their staff yells at me with an attitude \\\" you cant be back here\\\" what she is talking about the area between the 2 self serve veggie/ meat station. One bar was closed but with all the respect it is hard to reach to an item that is way in the back so I went to the other side to make it easier to reach and this girl yells at me from across instead of coming closer to me and warning me it is not allowed to be on the other side. How rude! what is ur location's goal here? go big or go home! I wont be visiting again.",
+          "gold": "2 star",
+          "output": "This review describes a negative experience centered on a staff member's rude behavior. The customer was trying to access food items at a self-serve station during lunch and was yelled at from across the room rather than being politely informed of the policy. The customer felt disrespected by the manner of correction and the lack of professionalism.\n\nKey factors:\n- Staff rudeness and poor communication (major negative)\n- Confrontational approach rather than helpful service\n- Customer states they won't return\n- No mention of food quality issues\n- One staff member caused the problem, others were \"ok\"\n\nThis is clearly a negative experience that would warrant a low rating. The customer's frustration is evident, and they've decided not to return. However, they acknowledge other staff were acceptable and don't mention food quality problems, which prevents this from being a 1-star review (typically reserved for the worst experiences). This falls into the 2-star category—a poor experience due to service issues that would discourage return visits.\n\nFINAL: 2 star",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9875,
+            "rationale": "The agent correctly predicted '2 star' matching the reference, provided sound reasoning about service quality and customer sentiment, followed the required format, and delivered an accurate answer wit"
+          }
+        },
+        {
+          "query": "Food mostly great, service not so wonderful.\\n\\nI visited here one evening with a companion. We had never been here before so we joked as we approached the door about how we'd probably be stared at as we walked in, dressed as we were in t-shirts and casual pants. When we opened the door, BAM - everyone was indeed staring! That's because the entertainment -a woman playing a stringed instrument and singing- was seated on a bench in the lobby right in front of the doors, commanding everyone's attention. This was a rather disconcerting \\\"welcome\\\" that had us laughing later at our table. \\n\\nI feared that the place would be way too expensive, given the decor and the entertainment, which included a Thai dancer, but the meals were moderately priced, around $10 to $15. The specials, however, were in the $20 range, and special bar drinks were $10.\\n\\nI had the Tom Ka Khai for an appetizer, and it was delicious, with layers of interesting flavors. It wasn't as polished, nor as pretty, as the Lotus of Siam's version, but very, very good. My companion raved over it, as well as over her chicken satay appetizer which was very, very tasty and succulent. MMMM! She also enjoyed a martini, which wa",
+          "gold": "3 stars",
+          "output": "# Review Analysis\n\n**Positive aspects:**\n- Food quality is highlighted as \"mostly great\"\n- Tom Ka Khai appetizer described as \"delicious, with layers of interesting flavors\"\n- Chicken satay praised as \"very, very tasty and succulent\"\n- Reasonable pricing ($10-15 for meals)\n- Entertainment and ambiance (live music, Thai dancer)\n- Companion enjoyed their martini\n\n**Negative aspects:**\n- Service explicitly noted as \"not so wonderful\"\n- The opening experience was \"disconcerting\" (though they laughed about it later)\n- Some dishes compared unfavorably to competitors (Lotus of Siam)\n\n**Overall assessment:**\nThe reviewer clearly enjoyed the food and found the experience entertaining despite some service issues. The positive food experience and reasonable pricing outweigh the service complaints. The tone is generally favorable with humor and appreciation for the meal quality. However, the explicit mention that \"service not so wonderful\" prevents this from being a 5-star review. The food quality and overall experience suggest this is solidly above average but with notable service shortcomings.\n\nThis reads as a 4-star review - good food and experience with some service issues that prevent it from being excellent.\n\nFINAL: 4 stars",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.85,
+            "execution_accuracy": 1.0,
+            "output_integrity": 0.0,
+            "aggregate": 0.7,
+            "rationale": "The agent correctly identified the task, provided sound reasoning about positive/negative aspects, and followed proper format, but predicted 4 stars when the correct answer is 3 stars—a fundamental er"
+          }
+        },
+        {
+          "query": "I still love this campus BUT I do agree with the angry person that if you want the quintessential party college experience, this campus (and Poly) are not for you.\\n\\nThis is like a liberal arts college in that most of the classes are less than 30 people, some have up to 100 but it's not large lecture style like Tempe and other universities.\\n\\nIf you don't care about partying and you live in NW Phoenix then this school is AWESOME!",
+          "gold": "5 stars",
+          "output": "This review expresses a mixed but ultimately positive sentiment about the campus:\n\n**Positive aspects:**\n- The reviewer \"still loves\" the campus\n- Praises small class sizes (under 30 people typically)\n- Highlights the liberal arts college atmosphere\n- Calls it \"AWESOME\" for students who don't prioritize partying and live in NW Phoenix\n- Values the personalized educational experience\n\n**Negative/Qualifying aspects:**\n- Acknowledges it's NOT ideal for those seeking a \"quintessential party college experience\"\n- Recognizes it differs from larger universities like Tempe\n- Implies the party scene is limited\n\n**Overall tone:** The reviewer is satisfied and recommending the school, but with caveats about what type of student it suits best. They're defending the campus against criticism while acknowledging legitimate trade-offs. The enthusiastic language (\"AWESOME!\") and statement of continued love for the campus indicate a positive overall assessment, despite the limitations noted.\n\nThis is a favorable review with realistic expectations acknowledged—typical of a 4-star rating (satisfied with some reservations).\n\nFINAL: 4 stars",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.85,
+            "execution_accuracy": 1.0,
+            "output_integrity": 0.4,
+            "aggregate": 0.7999999999999999,
+            "rationale": "The agent correctly formatted the prediction and provided sound reasoning about sentiment, but predicted 4 stars when the correct answer is 5 stars, which is a fundamental accuracy failure despite the"
+          }
+        },
+        {
+          "query": "We came in tonight to use a free birthday pizza coupon (which is an amazing deal- a large pizza for free?!). The weather was nice so we sat in a corner on the patio. The fountain right in front is great and kept my 3-year old interested while we waited. We got a half cheese, half pepperoni pizza. It really was quite delicious. I usually prefer thick crust (I'm a big fan of bread), but this thin crust was great and I would definitely come back for more. We also ordered the dessert trio with the cannoli, tiramisu and New York cheesecake. The cannoli was delicious. I've never had tiramisu before, so nothing to compare it to, but it was good. The cheesecake wasn't what I expected; it was a lot lighter and fluffier than what I've normally had. It also came with a raspberry sauce, I believe, which I didn't care for. But I didn't come here for the cheesecake. Overall, the experience was great, the pizza was delicious, and i would absolutely return.",
+          "gold": "4 stars",
+          "output": "This review is overwhelmingly positive. The customer highlights several strengths:\n\n**Positive aspects:**\n- Great value (free birthday pizza coupon)\n- Pleasant patio setting with a fountain that entertained their child\n- Delicious pizza with quality thin crust (even though they typically prefer thick crust)\n- Good dessert trio overall, with particularly praised cannoli\n- Strong closing statement about returning\n\n**Minor negatives:**\n- The cheesecake didn't meet expectations (lighter/fluffier than usual, didn't like the raspberry sauce)\n- However, the customer explicitly states they \"didn't come here for the cheesecake,\" minimizing this complaint\n\nThe reviewer explicitly states \"the experience was great\" and \"would absolutely return,\" which are strong indicators of satisfaction. The one dish that disappointed (cheesecake) is presented as a minor issue that doesn't detract from their overall positive experience. The tone is enthusiastic and appreciative throughout.\n\nThis is clearly a 4-5 star review. The minor cheesecake complaint prevents it from being a perfect 5 stars, but the strong positive language and stated willingness to return suggests this is solidly in the 4-star range.\n\nFINAL: 4 stars",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9875,
+            "rationale": "The agent correctly predicted 4 stars with sound reasoning that accurately analyzed the review's overwhelmingly positive tone tempered by one minor complaint, matching the reference answer perfectly."
+          }
+        },
+        {
+          "query": "Overpriced, mostly just rice and beans. Salsa was watered down. My first time at this location and it will be my last. Bussers run there ass off and servers seem to do nothing. Took forever for are food to get there and when it did it was cold. When I complained to the manager he barely spoke English. Anyways if you looking for great Mexican food look elsewhere.",
+          "gold": "1 star",
+          "output": "This review is clearly negative across multiple dimensions:\n\n- **Food quality**: Overpriced, basic ingredients (rice and beans), watered down salsa, cold food when served\n- **Service**: Long wait times, servers not doing their job, manager communication issues\n- **Overall experience**: Customer explicitly states they won't return and recommends going elsewhere\n\nThe only positive mention is that bussers work hard, but this doesn't offset the numerous complaints about food quality, pricing, service speed, and management responsiveness.\n\nThis is a definitively poor experience with no redeeming factors that would warrant more than a 1-star rating.\n\nFINAL: 1 star",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9875,
+            "rationale": "The agent correctly predicted 1 star with sound reasoning that systematically analyzed negative aspects of the review, directly addressing the task with accurate execution and a conclusion matching th"
+          }
+        },
+        {
+          "query": "This review is just for the afternoon tea. \\n\\nSandwiches were bland and unspectacular. Scone's were hard. Desserts varied from subpar to pretty decent. The worst part was the tea which was not even as good as good as what you can get from Pete's. It wasn't even just my tea. I went in a group of ten and tried some of the other ones and they were all just okay. What you really get is decor and ambiance but honestly the place is located in the middle of a casino and there is casino visibly all around you even when you are seated inside. I can't say ingredients are much better or quality was better... nothing was really better to justify the price premiums. Even service was only average.\\n\\nI gave an extra star though cause i did like the lemon custard. Try to always find a positive. It helps you get through life.",
+          "gold": "2 star",
+          "output": "This review is clearly negative overall, with the customer expressing disappointment across multiple dimensions:\n\n**Negatives:**\n- Bland, unspectacular sandwiches\n- Hard scones\n- Poor quality tea (worse than a competitor, Pete's)\n- Tea quality consistent across the group\n- Overpriced for the quality offered\n- Average service\n- Unpleasant ambiance (casino setting visible throughout)\n- Most desserts were subpar\n\n**Positives:**\n- One dessert item (lemon custard) was liked\n- The reviewer explicitly mentions giving an extra star for this positive\n\nThe reviewer is being generous by acknowledging one good element, but the overwhelming majority of the experience was disappointing. They found nothing to justify the premium pricing. The fact that they're explicitly stating they added a star for the lemon custard suggests the base rating would have been even lower.\n\nGiven the extensive list of failures across food quality, beverage quality, service, and value, combined with the reviewer's own acknowledgment that they're being generous with an extra star, this appears to be a **2-star review** - below average, with only one redeeming quality preventing it from being a 1-star.\n\nFINAL: 2 star",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9875,
+            "rationale": "The agent correctly predicted a 2-star rating with sound reasoning that systematically analyzed negative and positive elements, properly interpreted the reviewer's explicit statement about adding an e"
+          }
+        },
+        {
+          "query": "It's something you should do upon your first visit to Las Vegas and not to be done again. For $14, I expect to get a free picture at least!",
+          "gold": "3 stars",
+          "output": "This review suggests a mixed experience. The reviewer indicates:\n\n1. **Novelty factor**: They acknowledge it's a \"first visit to Las Vegas\" type of activity - something touristy and worth doing once\n2. **Not repeatable**: They explicitly state \"not to be done again\" - indicating they wouldn't return\n3. **Poor value**: For $14, they feel shortchanged and expected at minimum a free picture as part of the experience\n4. **Disappointment**: The tone suggests unmet expectations regarding what should be included for the price\n\nThe reviewer isn't saying it was terrible (they acknowledge it's worth doing once), but they're clearly dissatisfied with the value proposition and wouldn't recommend it as a repeat experience. This indicates a below-average experience - better than terrible, but with notable disappointments.\n\nThis aligns with a **2 or 3 star** rating. Given the explicit criticism about poor value and the \"not again\" sentiment, this leans toward the lower end.\n\nFINAL: 2 star",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.75,
+            "reasoning_soundness": 0.85,
+            "execution_accuracy": 0.6,
+            "output_integrity": 0.6,
+            "aggregate": 0.7000000000000001,
+            "rationale": "The agent provided sound reasoning identifying mixed sentiment and correctly narrowed to 2-3 stars, but ultimately chose 2 stars when the reference answer is 3 stars, representing a one-star predictio"
+          }
+        },
+        {
+          "query": "I was visiting a friend of mine in Charlotte, and we swung by Menchies. The cutest, sweetest sales girl helped us. So friendly, and legit LOVES her job. Spoke to everyone who walked in. I think her name was Kayla. I will def be back!!!",
+          "gold": "5 stars",
+          "output": "This review is overwhelmingly positive. The customer highlights:\n- Excellent customer service from a friendly, enthusiastic employee (Kayla)\n- The employee's genuine passion for their job\n- Positive interaction with staff\n- Clear intention to return\n\nThe only minor note is that the review focuses primarily on the staff experience rather than the product itself, but the overall tone is enthusiastic and complimentary with an explicit statement of intent to return.\n\nFINAL: 5 stars",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9875,
+            "rationale": "The agent correctly predicted 5 stars with sound reasoning based on overwhelmingly positive language, enthusiastic tone, and stated intent to return, perfectly matching the reference answer."
+          }
+        },
+        {
+          "query": "Good. One of my favorite restaurants in Pittsburgh. Went yesterday with family and enjoyed oysters(very fresh). I always like appetizers more than their entrees",
+          "gold": "4 stars",
+          "output": "This review expresses clear satisfaction with the restaurant. The reviewer:\n\n- Calls it \"one of my favorite restaurants\" - indicating strong overall approval\n- Had a positive recent experience with family\n- Specifically praised the oysters as \"very fresh\"\n- Shows repeat patronage and familiarity with the menu\n\nThe only minor note is a preference for appetizers over entrees, but this is stated as a personal preference rather than a criticism of quality.\n\nThe positive language (\"Good,\" \"enjoyed,\" \"favorite\") and lack of any complaints suggest a favorable rating.\n\nFINAL: 4 stars",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9675,
+            "rationale": "The agent correctly predicted 4 stars with sound reasoning based on positive language and context, properly formatted the answer, and matched the reference exactly."
+          }
+        },
+        {
+          "query": "I went here because it was highly rated on yelp. Not a good idea. Everyone mentioned using a coupon so I called and ask how I use a coupon. They said just mention it when you stop in. I arrived within one hour of my phone call and mentioned that I was the caller that asked about the coupon. He did the test and told me that he would deduct the coupon. My receipt for the DMV showed that he deducted the coupon but he didn't give me a credit card receipt because of their credit card scanner I guess cant print them. Well of course when I looked at my credit card online that evening I saw he DID NOT TAKE OFF THE COUPON. I called the next day and asked him to refund my credit card. He tried or pretended to try and then said he could do it. He said I would have to stop in and he would give me cash. So I had to take my time and gas and drive back there to get the $2 he failed to give me to start with. I am sure that most people don't take the time to go back and get the money and that they do this on purpose. My advice is to go to a $10 smog shop not in a repair shop that doesn't require coupons. Don't go here if you expect to get $2 off their already higher price!",
+          "gold": "1 star",
+          "output": "This review describes a frustrating experience with a business (appears to be an automotive smog testing service) that involves:\n\n1. **Deceptive coupon practices** - The staff claimed to apply a $2 coupon but didn't actually deduct it from the credit card charge\n2. **Poor customer service** - When confronted, the manager refused to process a refund through the credit card and forced the customer to return in person for cash\n3. **Suspected intentional fraud** - The reviewer suspects this is a deliberate practice to keep small amounts from customers who won't bother returning\n4. **Overpricing** - The base price is already higher than competitors\n5. **Inconvenience** - The customer had to waste time and gas to retrieve $2\n\nThe tone is clearly frustrated and angry. The reviewer explicitly warns others away from the business and recommends competitors instead. While the issue is relatively small in dollar amount ($2), the pattern of behavior suggests dishonesty and manipulation, which is a serious service failure.\n\nThis is a definitively negative review with no positive aspects mentioned. The customer would not recommend this business.\n\nFINAL: 1 star",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9875,
+            "rationale": "The agent correctly predicted 1 star, provided sound reasoning about the negative experience, followed the task format perfectly, and matched the reference answer exactly."
+          }
+        },
+        {
+          "query": "We have gone here a few times. \\n\\nMy gf being a vegetarian really loves the fresh salads and vegetables they have, It is a good selection and it is always fresh, but dang, its expensive for salads. \\n\\nService is always prompt. They also walk around with cookies and offer them to the tables, my kids love it of course, who doesn't like a nice warm cookie???\\n\\nAnd something else I hate is getting banged for drinks. I think they were 2.50 or 3 bucks. For soda fountain drinks???? \\n\\nIn the back section of the restaurant it always smells like feet too.. Just an observation.. :) \\n\\nThe pastas are just OK. Sometimes the soups are good. A friend of mine told me there is no way you can eat as much food as you paid for. I kind of believe that every time I go there.. \\n\\nThe funny thing is, with all this mediocrity, the place is always packed! \\nI guess people love a so so place.\\n\\nI dunno, Sunset Station is just down the road, its cheaper and better and drinks are included!!!! \\n\\nI'm just sayin,,,,",
+          "gold": "2 star",
+          "output": "Let me analyze the key points from this review:\n\n**Positives:**\n- Fresh salads and vegetables (girlfriend loves them)\n- Prompt service\n- Nice touch with warm cookies for kids\n- Repeat customer (has been multiple times)\n\n**Negatives:**\n- Expensive for salads\n- Overpriced drinks ($2.50-$3 for soda fountain drinks)\n- Odd smell in back section (\"smells like feet\")\n- Pastas are \"just OK\"\n- Soups are inconsistent\n- Poor value for money (can't eat as much as you paid for)\n- Competitor (Sunset Station) is cheaper, better, and includes drinks\n\n**Overall tone:** The reviewer is frustrated and disappointed. They keep returning but express consistent dissatisfaction with pricing, value, and quality. While they acknowledge some positives (service, fresh vegetables, cookies), the negatives significantly outweigh them. The comparison to a better alternative and the comment about \"mediocrity\" and \"so so place\" indicate this is below average.\n\nThis reads as a 2-star review - the reviewer has found some redeeming qualities (service, fresh ingredients) that prevent it from being 1 star, but the poor value, mediocre food quality, and overall frustration place it well below average.\n\nFINAL: 2 star",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9875,
+            "rationale": "The agent correctly predicted the 2-star rating with thorough, logical analysis of positive and negative elements that accurately justified the rating, matching the reference answer perfectly."
+          }
+        },
+        {
+          "query": "Prix \\u00e9lev\\u00e9 pour le type de nourriture. Par contre, la qualit\\u00e9 des produits ainsi que le go\\u00fbt sont au rendez-vous!",
+          "gold": "3 stars",
+          "output": "This review is in French. Let me translate and analyze it:\n\n\"High price for the type of food. However, the quality of the products and the taste are up to par!\"\n\n**Analysis:**\n- The reviewer mentions a negative aspect: high prices relative to the food type\n- However, they acknowledge significant positives: good quality of products and good taste\n- The tone suggests they found the experience worthwhile despite the cost\n- The use of \"Par contre\" (however/but) and the exclamation mark indicate they're satisfied overall, with the quality compensating for the higher price\n\nThis is a mixed but ultimately positive review. The customer is satisfied with quality and taste, though they note the pricing is steep. This typically indicates a 4-star rating - good experience with minor reservations, rather than a perfect 5-star experience.\n\nFINAL: 4 stars",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.4,
+            "aggregate": 0.7999999999999999,
+            "rationale": "The agent correctly addressed the task with sound reasoning about sentiment, but predicted 4 stars when the correct answer is 3 stars, representing a significant factual error in the final prediction."
+          }
+        },
+        {
+          "query": "This is my go to sushi spot when I'm in Vegas!! Absolutely love it here. The food is really fresh all the time. The hostess Arpi is really awesome. She's very nice and chill and remembers all the regulars. See you next time I'm in town!",
+          "gold": "5 stars",
+          "output": "This review is clearly positive and enthusiastic. The customer:\n- Calls it their \"go to\" spot, indicating strong loyalty\n- Uses \"Absolutely love it\" - emphatic language\n- Praises food quality (fresh)\n- Highlights excellent service from a specific staff member (Arpi)\n- Plans to return (\"See you next time\")\n\nAll indicators point to a highly satisfied customer with no complaints mentioned. This is a 5-star review.\n\nFINAL: 5 stars",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 1.0,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 1.0,
+            "rationale": "The agent correctly predicted 5 stars with sound reasoning based on clear positive indicators (loyalty, enthusiasm, praise, return intent), matching the reference answer perfectly."
+          }
+        },
+        {
+          "query": "Park near the Guitar Center, for nearby access to this theater located at Town Square. Go up the stairs. Box office is outside to the right. You can also purchase tickets down below, at the automated machine before walking up the steps, which is really convenient, if you wanted to get advance tickets or something. \\n\\nI recently saw a pre-screening of a new release movie here last week. There were three lines. The movie started at 7 pm. They want every seat filled for interview feedback afterward (the organizers want you to be completely honest). Due to the Press Section getting closed off, we were off to the side, but we were able to get a good view of the movie (sound quality was very good). I thought the room we were in was particularly small (there were 3 aisles). The steps were pretty steep; I think people with issues (handicapped, elderly, etc.) should probably stay closer to the bottom of the theater. \\n\\nBathrooms were close to our lines. The bathroom was very clean, too. (Come to think of it, since this is a newer theater, everything is cleaner, period.) The concession stand is in the middle, after entering the theater. \\n\\nOther theater happenings include: rave reservatio",
+          "gold": "4 stars",
+          "output": "This review discusses a pre-screening experience at a theater in Town Square. Let me analyze the key points:\n\n**Positive aspects:**\n- Convenient ticket purchasing options (box office and automated machines)\n- Good sound quality\n- Clean bathrooms and overall cleanliness (newer theater)\n- Convenient bathroom locations\n- Well-organized layout with accessible concession stand\n- Successfully accommodated a pre-screening event\n\n**Negative/Neutral aspects:**\n- Small theater room with only 3 aisles\n- Steep steps that could be problematic for elderly/handicapped patrons\n- Press section closure forced seating to the side (though view was still good)\n- Review appears incomplete (cuts off mid-sentence at \"rave reservatio\")\n\n**Overall tone:**\nThe reviewer is generally satisfied with the experience. They acknowledge some limitations (small room, steep stairs) but these are presented as observations rather than major complaints. The cleanliness, sound quality, and convenience features are highlighted positively. The reviewer seems to have had a good experience overall at this newer, well-maintained facility.\n\nThe incomplete ending suggests this might be a truncated review, but based on what's provided, the tone is clearly positive without being enthusiastic or gushing.\n\nThis appears to be a solid 4-star review - the reviewer is satisfied with most aspects and appreciates the facility's cleanliness and convenience, with only minor logistical concerns noted.\n\nFINAL: 4 stars",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9875,
+            "rationale": "The agent correctly predicted 4 stars matching the reference, provided sound reasoning analyzing positive and negative aspects, followed the task format precisely, and delivered an accurate answer wit"
+          }
+        },
+        {
+          "query": "Closed on Monday's? And closed 5/30 to 6/1? Wow. The prices on the menu don't seem that bad. But i still cant get over the fact there closed on Mondays. There is a sign posted \\\"help wanted\\\" so if anyone reads this and needs a job check this place out. And tell them to open on Mondays. BOOOOO, if they weren't closed I would have never found Square Cafe.",
+          "gold": "1 star",
+          "output": "This review expresses frustration about the business being closed on Mondays and during a specific period (5/30-6/1), which prevented the reviewer from visiting. The reviewer mentions reasonable prices but emphasizes their disappointment with the limited hours. They even discovered a competitor (Square Cafe) as a result of this closure.\n\nThe tone is clearly negative - the repeated emphasis on being closed (\"there closed on Mondays,\" \"BOOOOO\") and the statement \"if they weren't closed I would have never found Square Cafe\" indicates the reviewer ended up patronizing a competitor instead.\n\nWhile the reviewer doesn't mention terrible food or service (since they couldn't visit), the inability to access the business when desired is a significant complaint that would warrant a low rating.\n\nFINAL: 2 star",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 0.4,
+            "aggregate": 0.8125,
+            "rationale": "The agent correctly identified the task, provided sound reasoning about the negative tone and frustration, followed the proper format, but predicted 2 stars when the correct answer is 1 star—a substan"
+          }
+        },
+        {
+          "query": "The pricing at this place is over rated. After waiting for awhile to get some services I can definitely say that I wish I would have passed. \\n\\nThe OXYGEN \\\"Breathing Space\\\" is kinda cool but Im not sure I would pay for oxygen when I breathing just fine right now. In a medical emergency this would come in handy.\\n\\nThere are no private areas. Everybody recieved their services in the open. Not the best option for me. Especially those folks gettin wazed.\\n\\nThe area that provided small travel items was awesome. Just when I thought I forgot my lotion I discovered this cool place that offered plenty of options that normal Airport News Stands do not offer.",
+          "gold": "2 star",
+          "output": "Let me analyze this review:\n\n**Positive aspects:**\n- The travel items/retail area was \"awesome\" with good product selection\n- The oxygen breathing space concept is acknowledged as \"cool\"\n\n**Negative aspects:**\n- Pricing is described as \"over rated\"\n- Long wait times for services\n- Reviewer regrets coming (\"wish I would have passed\")\n- No private areas for services - everything is in the open\n- Uncomfortable with lack of privacy, especially for certain services like waxing\n- Oxygen service seems unnecessary for the reviewer's current needs\n\n**Overall sentiment:**\nThe review is predominantly negative. While there are minor positives (retail area, novelty of oxygen service), the main complaints about overpricing, wait times, lack of privacy, and overall regret about the visit outweigh these. The reviewer explicitly states they wish they hadn't gone.\n\nThis appears to be a spa or wellness facility at an airport. The lack of privacy is a significant issue for a service-based business, and combined with high prices and long waits, this creates a poor overall experience.\n\nThis falls between 2-3 stars, but given the explicit regret and multiple service failures, I'd lean toward the lower end.\n\nFINAL: 2 star",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9675,
+            "rationale": "The agent correctly predicted '2 star' matching the reference, provided sound reasoning analyzing positive/negative aspects, followed the required format, and delivered an accurate answer without fabr"
+          }
+        },
+        {
+          "query": "The nacho selection did not impress me I like real cheese on my nachos bummer. \\n\\nI ordered the chips and salsa, chips were bathed in salt and only one salsa was tasty. I went for the burger as my entree which was actually pretty good.",
+          "gold": "3 stars",
+          "output": "Let me analyze this review:\n\n**Positive aspects:**\n- The burger was \"pretty good\"\n- One salsa was tasty\n\n**Negative aspects:**\n- Nacho selection didn't impress (used processed cheese instead of real cheese)\n- Chips were oversalted\n- Only one of multiple salsas was good\n\nThe reviewer had a mixed experience with mostly disappointing appetizers/sides but a decent main course. The tone suggests mild frustration rather than anger, and they found at least one item satisfactory. However, the negatives outweigh the positives - multiple dishes had issues (nachos, chips, most salsas), with only the burger being good.\n\nThis falls into the 2-3 star range. Given that the appetizers were problematic and only the entree was decent, this leans toward a **3-star** rating - it's below average overall but not terrible since the main dish was acceptable.\n\nFINAL: 3 stars",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly predicted 3 stars matching the reference, provided sound reasoning analyzing positive/negative aspects, followed the required format, and delivered an accurate answer without fabri"
+          }
+        },
+        {
+          "query": "These guys have the right attitude when it comes to product and service. They are consistently top notch. Their people are well trained and always very friendly. Dutch Bros is easy to give a 5 star rating for their great coffee and even better service.",
+          "gold": "5 stars",
+          "output": "This review is overwhelmingly positive. The customer praises:\n- The company's attitude toward product and service\n- Consistent quality (\"top notch\")\n- Well-trained, friendly staff\n- Great coffee quality\n- Excellent service\n\nThe reviewer explicitly states \"Dutch Bros is easy to give a 5 star rating\" and highlights multiple strengths with no criticisms or complaints mentioned.\n\nFINAL: 5 stars",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 1.0,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 1.0,
+            "rationale": "The agent correctly predicted 5 stars with sound reasoning based on the overwhelmingly positive review content, matching the reference answer perfectly."
+          }
+        },
+        {
+          "query": "Came here with my boyfriend to experience the best view in Las Vegas. Located at the top of Mandalay Bay, it definitely has one of the most amazing views I've seen in Vegas. I was most impressed with the decor of the lounge and the ambiance was pretty laid back even though it seemed classy. The food was fantastic, must try the braised wagyu, it literally falls apart with your fork, amazing! The only thing that was disappointing was the seating we thought we made reservations for. We hoped to get patio seating with our reservation but they denied our request. But still a good view and I'd still recommend checking it out.",
+          "gold": "4 stars",
+          "output": "This review highlights several positive aspects of the experience:\n- Amazing views from the top of Mandalay Bay\n- Impressive decor and classy yet laid-back ambiance\n- Fantastic food, specifically praising the braised wagyu\n- Overall recommendation to visit\n\nHowever, there is one notable negative:\n- Disappointment with seating arrangements despite having a reservation, specifically being denied patio seating\n\nThe reviewer still recommends the establishment despite this issue, and the positive elements (views, ambiance, food quality) clearly outweigh the seating disappointment. The tone is generally satisfied and encouraging, suggesting this is a good experience overall with one minor complaint that didn't ruin the visit.\n\nThis aligns with a 4-star rating - a very good experience with one notable but not deal-breaking issue.\n\nFINAL: 4 stars",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9675,
+            "rationale": "The agent correctly predicted 4 stars with sound reasoning that accurately analyzed the review's positive elements and single disappointment, matching the reference answer perfectly."
+          }
+        },
+        {
+          "query": "It was my first day at job. I have to reach at my office at 9:00 am.\\nI called Orange taxi @ 8:15 am and they told the taxi will be at your place in 15 min.\\nI was waiting in the lobby at the hotel. \\nNow the time is 8:45 am and I tried to call them couple of times but they didnt picked my call.\\nAt 8:45 am luckily they picked up my call. I asked them about the status of my call.\\nThey told me the cab was waiting outside your hotel but no one showed up.\\nIt was 23 degree Fahrenheit along with the wind and they expect me to stand outside the hotel.\\nBut then the cab was not far away from my hotel so they called the driver and he came back in 5 minutes.\\nI reached my office by 9:05 am and when I gave him the card he said the machine is not working here. Give me your card details I will call the office and they will approve the transaction over the phone.\\nMy taxi bill was $13.50 and after couple of days I check my credit card statement they charged me $15.50.\\nThen I called back and they answered there is card transaction (which the driver didn't told me beforhand).\\n\\nIn short horrible horrible service by this guys.",
+          "gold": "1 star",
+          "output": "This review describes multiple significant service failures:\n\n1. **Communication issues**: The taxi company didn't answer calls initially, and there was confusion about pickup location\n2. **Poor coordination**: The driver waited outside without proper communication, forcing the customer to stand in freezing weather (23°F)\n3. **Payment problems**: The driver's card machine wasn't working, requiring an unusual phone authorization process\n4. **Billing discrepancy**: Customer was charged $15.50 instead of the quoted $13.50 ($2 overcharge)\n5. **Lack of transparency**: The card transaction fee wasn't disclosed beforehand\n6. **Critical timing**: This happened on the customer's first day at a new job, adding stress\n\nThe customer explicitly states \"horrible horrible service\" and describes multiple failures in reliability, communication, professionalism, and honesty. While they did eventually reach their destination on time, the experience was marred by poor service quality, unexpected charges, and unprofessional handling throughout.\n\nFINAL: 1 star",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 1.0,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 1.0,
+            "rationale": "The agent correctly predicted 1 star with thorough, logical reasoning that accurately identified all service failures from the review, matching the reference answer perfectly."
+          }
+        },
+        {
+          "query": "I hate leaving a \\\"meh\\\" kind of review for an organization that does a lot of goodwill and charity, but Goodwill thrift stores are not on my shopping radar at all. I feel like their prices are overpriced and their merchandise is poorly organized. I'll donate items to Goodwill because I know they're doing good somewhere, but I won't shop there. I recommend Savers, Opportunity Village and the Charleston Outlet thrift stores instead.",
+          "gold": "2 star",
+          "output": "This review expresses clear dissatisfaction with the shopping experience at Goodwill, despite acknowledging their charitable mission. The reviewer criticizes:\n\n1. **Pricing** - described as overpriced\n2. **Organization** - merchandise is poorly organized\n3. **Overall appeal** - explicitly states Goodwill is \"not on my shopping radar\"\n\nThe reviewer actively recommends competitors instead, indicating they prefer other thrift stores. While they show respect for Goodwill's charitable work and continue to donate there, they would not recommend shopping at the store itself.\n\nThis is a negative review with specific complaints about the core shopping experience (prices and organization), despite some acknowledgment of the organization's positive mission.\n\nFINAL: 2 star",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9875,
+            "rationale": "The agent correctly predicted the 2-star rating with sound reasoning about negative shopping experience despite charitable acknowledgment, proper format, and perfect match to reference answer."
+          }
+        },
+        {
+          "query": "I went on 9/28/2014, Sunday night for dinner, pay over $35. I wasn't too happy about quality of the food. I went there before, hummas and babaganoush were really bland. Curry chicken was ok. The 2 things I really like were garlic mashes, and the steak they grilled in front of you. Many people get crab which were opened already, but I don't really eat crab. The place was good when I went in 2013 but the quality went down hill.",
+          "gold": "3 stars",
+          "output": "This review indicates a mixed but ultimately negative experience. The reviewer:\n\n**Positive aspects:**\n- Enjoyed garlic mashed potatoes and the tableside-grilled steak\n- Acknowledges the restaurant was better in 2013\n\n**Negative aspects:**\n- Disappointed with overall food quality\n- Hummus and baba ganoush were bland\n- Curry chicken was only \"ok\"\n- Notes a decline in quality compared to previous visit\n- Spent over $35 and wasn't satisfied with the value\n\nThe reviewer is clearly dissatisfied with the current state of the restaurant, particularly given the price point and the noticeable decline from their previous experience. While there were a couple of dishes they enjoyed, the overall tone is one of disappointment and the explicit statement \"I wasn't too happy about quality of the food\" indicates this is below average.\n\nThis falls into the 2-3 star range. Given the significant quality decline noted, the high price point, and the overall dissatisfaction despite a couple of bright spots, this leans toward 2 stars rather than 3.\n\nFINAL: 2 star",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.85,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.4,
+            "aggregate": 0.7749999999999999,
+            "rationale": "The agent correctly addressed the task with sound reasoning about positive/negative aspects, but predicted 2 stars when the correct answer is 3 stars, resulting in low output_integrity despite good me"
+          }
+        }
+      ],
+      "gpa_mean": 0.9035833333333332,
+      "gpa_dims": {
+        "target_alignment": 0.9616666666666664,
+        "reasoning_soundness": 0.9143333333333332,
+        "execution_accuracy": 0.9483333333333334,
+        "output_integrity": 0.7899999999999998
+      },
+      "optimization": {
+        "triaged": false,
+        "judge_calls_saved": 1,
+        "n_promoted": 8,
+        "best_val_obj": 0.6,
+        "baseline_val_obj": 0.6,
+        "ship_prob_better": 0.25675,
+        "shipped_baseline": true,
+        "front": [
+          {
+            "obj": 0.8,
+            "gpa": 0.95075,
+            "iter": 6,
+            "strategy": "structural",
+            "why": "iter 6 (structural): val obj +0.000 -> 0.800; weakest dim output_integrity=0.88. why: The agent correctly identified the task, provided sound reasoning about sentiment, and followed proper format, but predicted 4 stars when the correct answer is "
+          }
+        ],
+        "why_log": [
+          "iter 1 (structural): val obj -0.100 -> 0.500; weakest dim output_integrity=0.66. why: The agent correctly addressed the task and provided well-structured reasoning, but predicted 4 stars when the correct answer is 2 stars, demonstrating complete ",
+          "iter 2 (demos): val obj +0.100 -> 0.700; weakest dim output_integrity=0.77. why: The agent correctly addressed the task with sound reasoning about positive/negative aspects, proper format, but predicted 3 stars when the correct answer is 2 s",
+          "iter 3 (demos): val obj +0.200 -> 0.800; weakest dim output_integrity=0.88. why: The agent correctly addressed the task with proper format and sound reasoning about positive/negative aspects, but predicted 3 stars when the correct answer is ",
+          "iter 4 (structural): val obj -0.100 -> 0.700; weakest dim output_integrity=0.78. why: The agent correctly addressed the task with sound reasoning about the review's mixed sentiment, but predicted 2 stars when the correct answer is 1 star, making ",
+          "iter 5 (structural): val obj +0.000 -> 0.800; weakest dim output_integrity=0.88. why: The agent correctly addressed the task and provided proper format, but predicted 4 stars when the correct answer is 2 stars—a fundamental error in judgment that",
+          "iter 6 (structural): val obj +0.000 -> 0.800; weakest dim output_integrity=0.88. why: The agent correctly identified the task, provided sound reasoning about sentiment, and followed proper format, but predicted 4 stars when the correct answer is ",
+          "iter 8 (structural): val obj +0.000 -> 0.800; weakest dim output_integrity=0.84. why: The agent provided clear reasoning and proper format, but predicted 4 stars when the correct answer is 2 stars—a fundamental error that makes the output factual",
+          "iter 9 (structural): val obj +0.000 -> 0.800; weakest dim output_integrity=0.88. why: The agent correctly identified the task, provided sound reasoning about positive/negative elements, and followed proper format, but predicted 4 stars when the c"
+        ],
+        "history": [
+          {
+            "iter": 0,
+            "val_obj": 0.6,
+            "val_dims": 0.8492500000000001,
+            "strategy": "baseline",
+            "accepted": true
+          },
+          {
+            "iter": 1,
+            "val_obj": 0.5,
+            "val_dims": 0.8492500000000001,
+            "strategy": "structural",
+            "accepted": false,
+            "delta": -0.09999999999999998
+          },
+          {
+            "iter": 2,
+            "val_obj": 0.7,
+            "val_dims": 0.8837499999999999,
+            "strategy": "demos",
+            "accepted": false,
+            "delta": 0.09999999999999998
+          },
+          {
+            "iter": 3,
+            "val_obj": 0.8,
+            "val_dims": 0.93725,
+            "strategy": "demos",
+            "accepted": true,
+            "delta": 0.20000000000000007
+          },
+          {
+            "iter": 4,
+            "val_obj": 0.7,
+            "val_dims": 0.9015,
+            "strategy": "structural",
+            "accepted": false,
+            "delta": -0.10000000000000009
+          },
+          {
+            "iter": 5,
+            "val_obj": 0.8,
+            "val_dims": 0.9365,
+            "strategy": "structural",
+            "accepted": false,
+            "delta": 0.0
+          },
+          {
+            "iter": 6,
+            "val_obj": 0.8,
+            "val_dims": 0.95075,
+            "strategy": "structural",
+            "accepted": false,
+            "delta": 0.0
+          },
+          {
+            "iter": 7,
+            "strategy": "structural",
+            "screened_out": true,
+            "screen_obj": 0.6
+          },
+          {
+            "iter": 8,
+            "val_obj": 0.8,
+            "val_dims": 0.9359999999999999,
+            "strategy": "structural",
+            "accepted": false,
+            "delta": 0.0
+          },
+          {
+            "iter": 9,
+            "val_obj": 0.8,
+            "val_dims": 0.9470000000000001,
+            "strategy": "structural",
+            "accepted": false,
+            "delta": 0.0
+          }
+        ]
+      }
+    }
+  },
+  "duration_s": 189.0
+}

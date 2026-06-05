@@ -1,0 +1,805 @@
+{
+  "task_id": "manufacturing_qa",
+  "industry": "Manufacturing",
+  "metric": "classification",
+  "source": "Authored for TEI-Bench (Sonnet-generated, Sonnet-validated; kept only label-agreed examples).",
+  "is_public": false,
+  "n_train": 15,
+  "n_test": 24,
+  "agent_model": "claude-haiku-4-5",
+  "judge_model": "claude-sonnet-4-5",
+  "optimizer_model": "claude-sonnet-4-5",
+  "seed": 0,
+  "arms": {
+    "baseline": {
+      "objective_mean": 1.0,
+      "objective_ci95": [
+        1.0,
+        1.0
+      ],
+      "prompt": "You are a quality-assurance defect classifier. Classify the inspection note into a defect category. Classify into one of these categories: surface, dimensional, assembly, electrical, material, labeling.",
+      "examples": [
+        {
+          "query": "Continuity test failed on pin 7 to ground connection; multimeter shows open circuit where specification requires less than 0.5 ohms resistance.",
+          "gold": "electrical",
+          "output": "The inspection note describes a continuity test failure where a pin-to-ground connection shows an open circuit (infinite resistance) instead of the required less than 0.5 ohms. This is a failure in electrical connectivity and function.\n\nThis defect relates to the electrical performance of the product - specifically a broken or missing electrical connection that prevents proper current flow.\n\nFINAL: electrical",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the defect as 'electrical', provided sound reasoning about the continuity failure, and fully addressed the classification task with accurate execution."
+          }
+        },
+        {
+          "query": "Incoming inspection detected that the metal sheets have a galvanized finish rather than the cold-rolled steel specified. This will affect subsequent welding operations.",
+          "gold": "material",
+          "output": "The inspection note identifies that the material received does not match the specification - galvanized finish instead of cold-rolled steel. This is a deviation in the material itself, not in its dimensions, surface quality (beyond the finish type), assembly, electrical properties, or labeling.\n\nThe fact that this material choice will affect downstream welding operations confirms this is a material specification issue rather than a surface defect or other category.\n\nFINAL: material",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the defect as 'material', provided sound reasoning distinguishing it from other categories, followed the required format, and matched the reference answer exactly."
+          }
+        },
+        {
+          "query": "Warning decal regarding voltage requirements is completely absent from the rear panel where it should be located per safety standards.",
+          "gold": "labeling",
+          "output": "This inspection note describes a missing warning decal that should be present on the product. The decal is specifically related to voltage requirements and safety labeling.\n\nThis is a **labeling** defect because:\n- It involves a missing warning label/decal\n- The issue is about required safety information that should be displayed on the product\n- It relates to documentation and marking requirements, not physical damage, dimensions, assembly integrity, electrical function, or material composition\n\nFINAL: labeling",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the missing voltage warning decal as a 'labeling' defect with sound reasoning about safety markings, matching the reference answer perfectly."
+          }
+        },
+        {
+          "query": "Small pit marks and bubbling present in the painted surface near the mounting bracket, suggesting contamination during application process.",
+          "gold": "surface",
+          "output": "The inspection note describes visible defects on the painted surface: pit marks and bubbling. These are surface finish issues that occurred during the painting/application process due to contamination.\n\nThis is clearly a surface defect - it involves the finish quality of the painted coating rather than structural dimensions, assembly integrity, electrical function, material composition, or labeling.\n\nFINAL: surface",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the defect as 'surface', provided sound reasoning about paint finish issues, and the output matches the reference answer exactly."
+          }
+        },
+        {
+          "query": "Bore diameter came in at 25.45mm, needs to be 25.00mm with +0.02/-0.00 tolerance per blueprint",
+          "gold": "dimensional",
+          "output": "The inspection note indicates that the bore diameter measurement (25.45mm) exceeds the specified tolerance range of 25.00mm +0.02/-0.00mm (acceptable range: 25.00-25.02mm). This is a deviation from the required dimensional specification.\n\nFINAL: dimensional",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 1.0,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the defect as 'dimensional' with sound reasoning about tolerance violation, though added explanatory context beyond the minimal classification required."
+          }
+        },
+        {
+          "query": "Left wheel attached backwards with tread pattern facing wrong direction. Vehicle pulls slightly during operation.",
+          "gold": "assembly",
+          "output": "This defect involves a wheel that has been installed in the incorrect orientation, with the tread pattern facing the wrong direction. This is a problem with how components are put together rather than a defect in the material, dimensions, surface finish, electrical function, or labeling of the parts themselves.\n\nThe incorrect attachment of the wheel is an assembly issue - specifically, the wheel was not properly oriented during installation.\n\nFINAL: assembly",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the defect as 'assembly' with sound reasoning that distinguished assembly issues from other defect types, matching the reference answer perfectly."
+          }
+        },
+        {
+          "query": "Relay coil does not energize when control signal applied; measured coil resistance of 2.1 megohms indicates open winding where 120 ohms expected.",
+          "gold": "electrical",
+          "output": "The inspection note describes a relay coil that fails to energize when a control signal is applied. The root cause is identified as an open winding in the coil, evidenced by the measured resistance of 2.1 megohms versus the expected 120 ohms.\n\nThis is a defect in the electrical properties of the component - specifically, the coil winding has an internal break or discontinuity that prevents current flow. This is not a surface defect (no visible damage mentioned), not dimensional (measurements are within spec), not assembly (the coil itself is defective), not material composition, and not labeling.\n\nFINAL: electrical",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the defect as 'electrical' with sound reasoning about open winding and resistance measurements, perfectly matching the reference answer."
+          }
+        },
+        {
+          "query": "The component appears to be fabricated from a lower-grade alloy than specified in the engineering drawing. Hardness testing confirms values below the required threshold for 316 stainless steel.",
+          "gold": "material",
+          "output": "This inspection note describes a defect where the actual material used does not meet the specified material requirements. The hardness testing confirms that the component is made from a lower-grade alloy than what was called for in the engineering drawing, indicating a material composition or quality issue rather than a problem with dimensions, surface finish, assembly, electrical properties, or labeling.\n\nFINAL: material",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the defect as 'material' with sound reasoning about alloy grade and hardness testing, matching the reference answer perfectly."
+          }
+        },
+        {
+          "query": "Size indicator on the garment tag states XL but the actual measurements correspond to a medium according to the size chart.",
+          "gold": "labeling",
+          "output": "This defect involves a mismatch between what is labeled on the garment tag (XL) and the actual physical dimensions of the garment (which measure as medium). \n\nThis is a labeling issue because the problem is with the incorrect size designation printed on the tag, not with the actual dimensions of the garment itself being wrong.\n\nFINAL: labeling",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly classified the defect as 'labeling', provided sound reasoning distinguishing tag error from manufacturing error, and delivered the answer in the expected format matching the refere"
+          }
+        },
+        {
+          "query": "The anodized finish shows discoloration and uneven patches across approximately 30% of the visible exterior, particularly concentrated near welded joints.",
+          "gold": "surface",
+          "output": "This defect involves the anodized coating on the exterior surface showing discoloration and uneven patches. While the issue is related to welded joints (which could suggest an assembly concern), the primary defect manifestation is the visual quality and appearance of the surface finish itself - specifically the anodized layer.\n\nThe discoloration and uneven patches are surface-level quality issues affecting the coating appearance and uniformity, not structural assembly problems or dimensional concerns.\n\nFINAL: surface",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9675,
+            "rationale": "The agent correctly classified the defect as 'surface', provided sound reasoning distinguishing surface finish issues from assembly concerns, and delivered the exact answer matching the reference."
+          }
+        },
+        {
+          "query": "Wall thickness measured at 2.1mm in three locations, minimum required is 2.5mm per engineering standard",
+          "gold": "dimensional",
+          "output": "This inspection note describes measurements of wall thickness that fall below the engineering specification requirement. The wall thickness of 2.1mm is consistently below the minimum required 2.5mm across multiple measurement locations.\n\nThis is a dimensional defect - it involves a measurable physical dimension (wall thickness) that does not meet the specified tolerance or requirement.\n\nFINAL: dimensional",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly classified the defect as 'dimensional' with sound reasoning about wall thickness measurements falling below specification, matching the reference answer perfectly."
+          }
+        },
+        {
+          "query": "Heat sink mounted without thermal paste application between CPU and cooling surface. Direct metal-to-metal contact observed.",
+          "gold": "assembly",
+          "output": "This defect involves improper assembly of the heat sink component. The thermal paste, which is a critical interface material for heat transfer, was not applied between the CPU and the cooling surface. This is an assembly process failure - the heat sink was mounted incorrectly without the required thermal interface material being applied during assembly.\n\nWhile this could tangentially relate to material (missing thermal paste), the core issue is that the assembly procedure was not followed correctly.\n\nFINAL: assembly",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly classified the defect as 'assembly', provided sound reasoning about why it's an assembly issue rather than a material issue, and the final answer matches the reference perfectly."
+          }
+        },
+        {
+          "query": "Short circuit detected between phase conductors during hi-pot testing at 1500V; insulation breakdown occurred in the transformer winding section.",
+          "gold": "electrical",
+          "output": "This defect involves a failure of electrical insulation integrity during high-potential (hi-pot) testing, resulting in a short circuit between phase conductors. The insulation breakdown in the transformer winding section is a fundamental electrical failure - the component cannot safely conduct electricity as designed due to compromised insulation.\n\nWhile this could theoretically relate to material quality (insulation material defect) or assembly (improper winding), the core issue is classified as an electrical defect because it represents a failure of electrical function and safety performance.\n\nFINAL: electrical",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the defect as 'electrical', provided sound reasoning about insulation failure and electrical safety, addressed the task directly, and matched the reference answer perfec"
+          }
+        },
+        {
+          "query": "Tensile strength testing shows the wire fails at 180 MPa, well below the 250 MPa minimum for Grade A copper. Chemical analysis suggests impurities exceed acceptable limits.",
+          "gold": "material",
+          "output": "This inspection note describes a material property defect. The tensile strength test reveals the wire fails below specification (180 MPa vs. 250 MPa minimum), and chemical analysis indicates impurities exceed acceptable limits. Both findings point to a material composition or quality issue rather than surface damage, dimensional variance, assembly problems, electrical performance, or labeling errors.\n\nFINAL: material",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the defect as 'material' with sound reasoning about tensile strength and impurities, matching the reference answer exactly."
+          }
+        },
+        {
+          "query": "The product identification sticker shows an incorrect part number that doesn't match the manufacturing specifications or the purchase order documentation.",
+          "gold": "labeling",
+          "output": "This defect involves incorrect information on the product identification sticker. The sticker displays a part number that doesn't align with the manufacturing specifications or purchase order documentation.\n\nThis is a labeling issue because:\n- The problem is with the product identification sticker (a label)\n- The sticker contains incorrect information (wrong part number)\n- The defect affects product identification and documentation accuracy\n\nFINAL: labeling",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the defect as 'labeling', provided sound reasoning about why it's a labeling issue, and the output matches the reference answer perfectly despite including additional ex"
+          }
+        },
+        {
+          "query": "Powder coating appears thin and inconsistent, with several areas showing a mottled appearance and reduced coverage allowing substrate to show through.",
+          "gold": "surface",
+          "output": "This defect describes a coating application issue where the powder coating layer is not uniform in thickness and coverage. The thin, inconsistent application with mottled appearance and substrate showing through are all characteristics of a surface finish problem rather than issues with dimensions, assembly, electrical function, material composition, or labeling.\n\nFINAL: surface",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the defect as 'surface', provided sound reasoning about coating uniformity issues, and delivered the answer in the expected format with accurate justification."
+          }
+        },
+        {
+          "query": "CMM inspection reveals 0.35mm deviation from true position on bolt circle, exceeds GD&T callout of 0.20mm",
+          "gold": "dimensional",
+          "output": "The inspection note describes a geometric dimensioning and tolerancing (GD&T) deviation where the bolt circle's true position exceeds the specified tolerance by 0.15mm (0.35mm actual vs 0.20mm allowed).\n\nThis is a deviation in the geometric positioning and dimensional accuracy of a feature, which falls under dimensional defects. True position is a dimensional control that specifies where a feature should be located relative to a datum reference frame.\n\nFINAL: dimensional",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly classified the defect as 'dimensional' with sound reasoning about GD&T true position tolerances, though the task only required the classification itself without extended explanatio"
+          }
+        },
+        {
+          "query": "Screw missing from bottom left corner of housing unit. Three mounting points secured but fourth hole empty.",
+          "gold": "assembly",
+          "output": "This defect involves a missing fastener (screw) that should be securing the housing unit at one of its mounting points. The issue affects the structural assembly of the product, as one of four mounting points is not properly secured.\n\nThis is an assembly defect because it involves a missing component that is part of the assembly process - specifically, a fastener that should be installed at a designated mounting location.\n\nFINAL: assembly",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the defect as 'assembly', provided sound reasoning about why a missing screw constitutes an assembly defect, and delivered the answer in the expected format with clear j"
+          }
+        },
+        {
+          "query": "Insulation resistance test between chassis and live conductors reads 0.8 megohms; requirement specifies minimum 2 megohms for safety compliance.",
+          "gold": "electrical",
+          "output": "This inspection note describes a failure in electrical safety testing. The insulation resistance measurement (0.8 MΩ) falls significantly below the required minimum specification (2 MΩ) between the chassis and live conductors.\n\nThis is a clear electrical defect, as it relates to:\n- Electrical safety performance\n- Insulation integrity testing\n- Failure to meet electrical safety compliance requirements\n\nFINAL: electrical",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly classified the defect as 'electrical' with sound reasoning about insulation resistance and safety compliance, though the task only required the category label without extensive exp"
+          }
+        },
+        {
+          "query": "The plastic housing exhibits stress cracking under standard load conditions, indicating use of recycled or degraded polycarbonate instead of virgin material as contracted.",
+          "gold": "material",
+          "output": "The inspection note describes a material quality issue where the plastic housing is experiencing stress cracking due to the use of recycled or degraded polycarbonate instead of the contracted virgin material. This is fundamentally a problem with the material itself—its composition and quality—rather than how it was assembled, its dimensions, surface finish, electrical properties, or labeling.\n\nFINAL: material",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the defect as 'material', provided sound reasoning about material composition versus other defect types, and the output matches the reference answer exactly."
+          }
+        },
+        {
+          "query": "QR code sticker is placed upside down on the bottom of the unit, making it difficult to scan during inventory processing.",
+          "gold": "labeling",
+          "output": "The inspection note describes a QR code sticker that is oriented incorrectly (upside down) on the product. This is an issue with how the label/marking is applied to the unit.\n\nThis defect relates to the placement and orientation of labeling on the product, which affects its functionality during inventory processing.\n\nFINAL: labeling",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the defect as 'labeling', provided sound reasoning about label orientation and placement, and delivered the answer in the expected format with complete accuracy matching"
+          }
+        },
+        {
+          "query": "The protective clear coat exhibits orange peel texture in several areas near the handle grip, affecting the smoothness of the finish.",
+          "gold": "surface",
+          "output": "The inspection note describes a surface finish defect where the clear coat has an orange peel texture (a common coating defect characterized by a bumpy, uneven surface resembling orange skin) in specific areas of the product.\n\nThis is clearly a surface quality issue - it relates to the finish and appearance of the protective coating rather than structural integrity, dimensions, assembly, electrical function, material composition, or labeling.\n\nFINAL: surface",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the defect as 'surface', provided sound reasoning about coating texture issues, and delivered the exact answer matching the reference with proper explanation."
+          }
+        },
+        {
+          "query": "Measured shaft diameter at 15.23mm, specification calls for 15.00mm ±0.15mm, exceeds upper tolerance limit by 0.08mm",
+          "gold": "dimensional",
+          "output": "The inspection note describes a measurement of a shaft diameter that exceeds the specified tolerance range. The shaft measures 15.23mm when the specification allows 15.00mm ±0.15mm (acceptable range: 14.85mm to 15.15mm). This is a deviation in the physical dimensions of the part.\n\nFINAL: dimensional",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly classified the defect as 'dimensional', provided sound reasoning about tolerance exceedance, and delivered the exact answer matching the reference with proper explanation."
+          }
+        },
+        {
+          "query": "Two identical components installed where specification calls for mirror-image pair. Both marked as right-hand version.",
+          "gold": "assembly",
+          "output": "This is a defect where two identical right-hand components were installed in positions that require mirror-image (left-hand and right-hand) components according to the specification. This represents an incorrect assembly configuration.\n\nThe issue is not about the physical condition of the components themselves (surface), their measurements (dimensional), electrical function, material composition, or labeling accuracy. Rather, it's about how the components were assembled together - the wrong orientation/configuration was used during assembly.\n\nFINAL: assembly",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the defect as 'assembly', provided sound reasoning explaining why other categories don't apply, and the final answer matches the reference exactly."
+          }
+        }
+      ],
+      "gpa_mean": 0.965625,
+      "gpa_dims": {
+        "target_alignment": 0.9499999999999996,
+        "reasoning_soundness": 0.9341666666666666,
+        "execution_accuracy": 0.9804166666666666,
+        "output_integrity": 0.9979166666666667
+      }
+    },
+    "tei_v3": {
+      "objective_mean": 1.0,
+      "objective_ci95": [
+        1.0,
+        1.0
+      ],
+      "prompt": "You are a quality-assurance defect classifier. Classify the inspection note into a defect category. Classify into one of these categories: surface, dimensional, assembly, electrical, material, labeling.",
+      "examples": [
+        {
+          "query": "Continuity test failed on pin 7 to ground connection; multimeter shows open circuit where specification requires less than 0.5 ohms resistance.",
+          "gold": "electrical",
+          "output": "The inspection note describes a continuity test failure where a pin-to-ground connection shows an open circuit (infinite resistance) instead of the required less than 0.5 ohms. This is a failure in electrical connectivity and function.\n\nThis defect relates to the electrical performance of the product - specifically a broken or missing electrical connection that prevents proper current flow.\n\nFINAL: electrical",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the defect as 'electrical', provided sound reasoning about the continuity failure, and fully addressed the classification task with accurate execution."
+          }
+        },
+        {
+          "query": "Incoming inspection detected that the metal sheets have a galvanized finish rather than the cold-rolled steel specified. This will affect subsequent welding operations.",
+          "gold": "material",
+          "output": "The inspection note identifies that the material received does not match the specification - galvanized finish instead of cold-rolled steel. This is a deviation in the material itself, not in its dimensions, surface quality (beyond the finish type), assembly, electrical properties, or labeling.\n\nThe fact that this material choice will affect downstream welding operations confirms this is a material specification issue rather than a surface defect or other category.\n\nFINAL: material",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the defect as 'material', provided sound reasoning distinguishing it from other categories, followed the required format, and matched the reference answer exactly."
+          }
+        },
+        {
+          "query": "Warning decal regarding voltage requirements is completely absent from the rear panel where it should be located per safety standards.",
+          "gold": "labeling",
+          "output": "This inspection note describes a missing warning decal that should be present on the product. The decal is specifically related to voltage requirements and safety labeling.\n\nThis is a **labeling** defect because:\n- It involves a missing warning label/decal\n- The issue is about required safety information that should be displayed on the product\n- It relates to documentation and marking requirements, not physical damage, dimensions, assembly integrity, electrical function, or material composition\n\nFINAL: labeling",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the missing voltage warning decal as a 'labeling' defect with sound reasoning about safety markings, matching the reference answer perfectly."
+          }
+        },
+        {
+          "query": "Small pit marks and bubbling present in the painted surface near the mounting bracket, suggesting contamination during application process.",
+          "gold": "surface",
+          "output": "The inspection note describes visible defects on the painted surface: pit marks and bubbling. These are surface finish issues that occurred during the painting/application process due to contamination.\n\nThis is clearly a surface defect - it involves the finish quality of the painted coating rather than structural dimensions, assembly integrity, electrical function, material composition, or labeling.\n\nFINAL: surface",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the defect as 'surface', provided sound reasoning about paint finish issues, and the output matches the reference answer exactly."
+          }
+        },
+        {
+          "query": "Bore diameter came in at 25.45mm, needs to be 25.00mm with +0.02/-0.00 tolerance per blueprint",
+          "gold": "dimensional",
+          "output": "The inspection note indicates that the bore diameter measurement (25.45mm) exceeds the specified tolerance range of 25.00mm +0.02/-0.00mm (acceptable range: 25.00-25.02mm). This is a deviation from the required dimensional specification.\n\nFINAL: dimensional",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 1.0,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the defect as 'dimensional' with sound reasoning about tolerance violation, though added explanatory context beyond the minimal classification required."
+          }
+        },
+        {
+          "query": "Left wheel attached backwards with tread pattern facing wrong direction. Vehicle pulls slightly during operation.",
+          "gold": "assembly",
+          "output": "This defect involves a wheel that has been installed in the incorrect orientation, with the tread pattern facing the wrong direction. This is a problem with how components are put together rather than a defect in the material, dimensions, surface finish, electrical function, or labeling of the parts themselves.\n\nThe incorrect attachment of the wheel is an assembly issue - specifically, the wheel was not properly oriented during installation.\n\nFINAL: assembly",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the defect as 'assembly' with sound reasoning that distinguished assembly issues from other defect types, matching the reference answer perfectly."
+          }
+        },
+        {
+          "query": "Relay coil does not energize when control signal applied; measured coil resistance of 2.1 megohms indicates open winding where 120 ohms expected.",
+          "gold": "electrical",
+          "output": "The inspection note describes a relay coil that fails to energize when a control signal is applied. The root cause is identified as an open winding in the coil, evidenced by the measured resistance of 2.1 megohms versus the expected 120 ohms.\n\nThis is a defect in the electrical properties of the component - specifically, the coil winding has an internal break or discontinuity that prevents current flow. This is not a surface defect (no visible damage mentioned), not dimensional (measurements are within spec), not assembly (the coil itself is defective), not material composition, and not labeling.\n\nFINAL: electrical",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the defect as 'electrical' with sound reasoning about open winding and resistance measurements, perfectly matching the reference answer."
+          }
+        },
+        {
+          "query": "The component appears to be fabricated from a lower-grade alloy than specified in the engineering drawing. Hardness testing confirms values below the required threshold for 316 stainless steel.",
+          "gold": "material",
+          "output": "This inspection note describes a defect where the actual material used does not meet the specified material requirements. The hardness testing confirms that the component is made from a lower-grade alloy than what was called for in the engineering drawing, indicating a material composition or quality issue rather than a problem with dimensions, surface finish, assembly, electrical properties, or labeling.\n\nFINAL: material",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the defect as 'material' with sound reasoning about alloy grade and hardness testing, matching the reference answer perfectly."
+          }
+        },
+        {
+          "query": "Size indicator on the garment tag states XL but the actual measurements correspond to a medium according to the size chart.",
+          "gold": "labeling",
+          "output": "This defect involves a mismatch between what is labeled on the garment tag (XL) and the actual physical dimensions of the garment (which measure as medium). \n\nThis is a labeling issue because the problem is with the incorrect size designation printed on the tag, not with the actual dimensions of the garment itself being wrong.\n\nFINAL: labeling",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly classified the defect as 'labeling', provided sound reasoning distinguishing tag error from manufacturing error, and delivered the answer in the expected format matching the refere"
+          }
+        },
+        {
+          "query": "The anodized finish shows discoloration and uneven patches across approximately 30% of the visible exterior, particularly concentrated near welded joints.",
+          "gold": "surface",
+          "output": "This defect involves the anodized coating on the exterior surface showing discoloration and uneven patches. While the issue is related to welded joints (which could suggest an assembly concern), the primary defect manifestation is the visual quality and appearance of the surface finish itself - specifically the anodized layer.\n\nThe discoloration and uneven patches are surface-level quality issues affecting the coating appearance and uniformity, not structural assembly problems or dimensional concerns.\n\nFINAL: surface",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9675,
+            "rationale": "The agent correctly classified the defect as 'surface', provided sound reasoning distinguishing surface finish issues from assembly concerns, and delivered the exact answer matching the reference."
+          }
+        },
+        {
+          "query": "Wall thickness measured at 2.1mm in three locations, minimum required is 2.5mm per engineering standard",
+          "gold": "dimensional",
+          "output": "This inspection note describes measurements of wall thickness that fall below the engineering specification requirement. The wall thickness of 2.1mm is consistently below the minimum required 2.5mm across multiple measurement locations.\n\nThis is a dimensional defect - it involves a measurable physical dimension (wall thickness) that does not meet the specified tolerance or requirement.\n\nFINAL: dimensional",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly classified the defect as 'dimensional' with sound reasoning about wall thickness measurements falling below specification, matching the reference answer perfectly."
+          }
+        },
+        {
+          "query": "Heat sink mounted without thermal paste application between CPU and cooling surface. Direct metal-to-metal contact observed.",
+          "gold": "assembly",
+          "output": "This defect involves improper assembly of the heat sink component. The thermal paste, which is a critical interface material for heat transfer, was not applied between the CPU and the cooling surface. This is an assembly process failure - the heat sink was mounted incorrectly without the required thermal interface material being applied during assembly.\n\nWhile this could tangentially relate to material (missing thermal paste), the core issue is that the assembly procedure was not followed correctly.\n\nFINAL: assembly",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly classified the defect as 'assembly', provided sound reasoning about why it's an assembly issue rather than a material issue, and the final answer matches the reference perfectly."
+          }
+        },
+        {
+          "query": "Short circuit detected between phase conductors during hi-pot testing at 1500V; insulation breakdown occurred in the transformer winding section.",
+          "gold": "electrical",
+          "output": "This defect involves a failure of electrical insulation integrity during high-potential (hi-pot) testing, resulting in a short circuit between phase conductors. The insulation breakdown in the transformer winding section is a fundamental electrical failure - the component cannot safely conduct electricity as designed due to compromised insulation.\n\nWhile this could theoretically relate to material quality (insulation material defect) or assembly (improper winding), the core issue is classified as an electrical defect because it represents a failure of electrical function and safety performance.\n\nFINAL: electrical",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the defect as 'electrical', provided sound reasoning about insulation failure and electrical safety, addressed the task directly, and matched the reference answer perfec"
+          }
+        },
+        {
+          "query": "Tensile strength testing shows the wire fails at 180 MPa, well below the 250 MPa minimum for Grade A copper. Chemical analysis suggests impurities exceed acceptable limits.",
+          "gold": "material",
+          "output": "This inspection note describes a material property defect. The tensile strength test reveals the wire fails below specification (180 MPa vs. 250 MPa minimum), and chemical analysis indicates impurities exceed acceptable limits. Both findings point to a material composition or quality issue rather than surface damage, dimensional variance, assembly problems, electrical performance, or labeling errors.\n\nFINAL: material",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the defect as 'material' with sound reasoning about tensile strength and impurities, matching the reference answer exactly."
+          }
+        },
+        {
+          "query": "The product identification sticker shows an incorrect part number that doesn't match the manufacturing specifications or the purchase order documentation.",
+          "gold": "labeling",
+          "output": "This defect involves incorrect information on the product identification sticker. The sticker displays a part number that doesn't align with the manufacturing specifications or purchase order documentation.\n\nThis is a labeling issue because:\n- The problem is with the product identification sticker (a label)\n- The sticker contains incorrect information (wrong part number)\n- The defect affects product identification and documentation accuracy\n\nFINAL: labeling",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the defect as 'labeling', provided sound reasoning about why it's a labeling issue, and the output matches the reference answer perfectly despite including additional ex"
+          }
+        },
+        {
+          "query": "Powder coating appears thin and inconsistent, with several areas showing a mottled appearance and reduced coverage allowing substrate to show through.",
+          "gold": "surface",
+          "output": "This defect describes a coating application issue where the powder coating layer is not uniform in thickness and coverage. The thin, inconsistent application with mottled appearance and substrate showing through are all characteristics of a surface finish problem rather than issues with dimensions, assembly, electrical function, material composition, or labeling.\n\nFINAL: surface",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the defect as 'surface', provided sound reasoning about coating uniformity issues, and delivered the answer in the expected format with accurate justification."
+          }
+        },
+        {
+          "query": "CMM inspection reveals 0.35mm deviation from true position on bolt circle, exceeds GD&T callout of 0.20mm",
+          "gold": "dimensional",
+          "output": "The inspection note describes a geometric dimensioning and tolerancing (GD&T) deviation where the bolt circle's true position exceeds the specified tolerance by 0.15mm (0.35mm actual vs 0.20mm allowed).\n\nThis is a deviation in the geometric positioning and dimensional accuracy of a feature, which falls under dimensional defects. True position is a dimensional control that specifies where a feature should be located relative to a datum reference frame.\n\nFINAL: dimensional",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly classified the defect as 'dimensional' with sound reasoning about GD&T true position tolerances, though the task only required the classification itself without extended explanatio"
+          }
+        },
+        {
+          "query": "Screw missing from bottom left corner of housing unit. Three mounting points secured but fourth hole empty.",
+          "gold": "assembly",
+          "output": "This defect involves a missing fastener (screw) that should be securing the housing unit at one of its mounting points. The issue affects the structural assembly of the product, as one of four mounting points is not properly secured.\n\nThis is an assembly defect because it involves a missing component that is part of the assembly process - specifically, a fastener that should be installed at a designated mounting location.\n\nFINAL: assembly",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the defect as 'assembly', provided sound reasoning about why a missing screw constitutes an assembly defect, and delivered the answer in the expected format with clear j"
+          }
+        },
+        {
+          "query": "Insulation resistance test between chassis and live conductors reads 0.8 megohms; requirement specifies minimum 2 megohms for safety compliance.",
+          "gold": "electrical",
+          "output": "This inspection note describes a failure in electrical safety testing. The insulation resistance measurement (0.8 MΩ) falls significantly below the required minimum specification (2 MΩ) between the chassis and live conductors.\n\nThis is a clear electrical defect, as it relates to:\n- Electrical safety performance\n- Insulation integrity testing\n- Failure to meet electrical safety compliance requirements\n\nFINAL: electrical",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly classified the defect as 'electrical' with sound reasoning about insulation resistance and safety compliance, though the task only required the category label without extensive exp"
+          }
+        },
+        {
+          "query": "The plastic housing exhibits stress cracking under standard load conditions, indicating use of recycled or degraded polycarbonate instead of virgin material as contracted.",
+          "gold": "material",
+          "output": "The inspection note describes a material quality issue where the plastic housing is experiencing stress cracking due to the use of recycled or degraded polycarbonate instead of the contracted virgin material. This is fundamentally a problem with the material itself—its composition and quality—rather than how it was assembled, its dimensions, surface finish, electrical properties, or labeling.\n\nFINAL: material",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the defect as 'material', provided sound reasoning about material composition versus other defect types, and the output matches the reference answer exactly."
+          }
+        },
+        {
+          "query": "QR code sticker is placed upside down on the bottom of the unit, making it difficult to scan during inventory processing.",
+          "gold": "labeling",
+          "output": "The inspection note describes a QR code sticker that is oriented incorrectly (upside down) on the product. This is an issue with how the label/marking is applied to the unit.\n\nThis defect relates to the placement and orientation of labeling on the product, which affects its functionality during inventory processing.\n\nFINAL: labeling",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the defect as 'labeling', provided sound reasoning about label orientation and placement, and delivered the answer in the expected format with complete accuracy matching"
+          }
+        },
+        {
+          "query": "The protective clear coat exhibits orange peel texture in several areas near the handle grip, affecting the smoothness of the finish.",
+          "gold": "surface",
+          "output": "The inspection note describes a surface finish defect where the clear coat has an orange peel texture (a common coating defect characterized by a bumpy, uneven surface resembling orange skin) in specific areas of the product.\n\nThis is clearly a surface quality issue - it relates to the finish and appearance of the protective coating rather than structural integrity, dimensions, assembly, electrical function, material composition, or labeling.\n\nFINAL: surface",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the defect as 'surface', provided sound reasoning about coating texture issues, and delivered the exact answer matching the reference with proper explanation."
+          }
+        },
+        {
+          "query": "Measured shaft diameter at 15.23mm, specification calls for 15.00mm ±0.15mm, exceeds upper tolerance limit by 0.08mm",
+          "gold": "dimensional",
+          "output": "The inspection note describes a measurement of a shaft diameter that exceeds the specified tolerance range. The shaft measures 15.23mm when the specification allows 15.00mm ±0.15mm (acceptable range: 14.85mm to 15.15mm). This is a deviation in the physical dimensions of the part.\n\nFINAL: dimensional",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly classified the defect as 'dimensional', provided sound reasoning about tolerance exceedance, and delivered the exact answer matching the reference with proper explanation."
+          }
+        },
+        {
+          "query": "Two identical components installed where specification calls for mirror-image pair. Both marked as right-hand version.",
+          "gold": "assembly",
+          "output": "This is a defect where two identical right-hand components were installed in positions that require mirror-image (left-hand and right-hand) components according to the specification. This represents an incorrect assembly configuration.\n\nThe issue is not about the physical condition of the components themselves (surface), their measurements (dimensional), electrical function, material composition, or labeling accuracy. Rather, it's about how the components were assembled together - the wrong orientation/configuration was used during assembly.\n\nFINAL: assembly",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the defect as 'assembly', provided sound reasoning explaining why other categories don't apply, and the final answer matches the reference exactly."
+          }
+        }
+      ],
+      "gpa_mean": 0.965625,
+      "gpa_dims": {
+        "target_alignment": 0.9499999999999996,
+        "reasoning_soundness": 0.9341666666666666,
+        "execution_accuracy": 0.9804166666666666,
+        "output_integrity": 0.9979166666666667
+      },
+      "optimization": {
+        "triaged": false,
+        "judge_calls_saved": 0,
+        "n_promoted": 6,
+        "best_val_obj": 0.9,
+        "baseline_val_obj": 0.9,
+        "ship_prob_better": 0.50275,
+        "shipped_baseline": true,
+        "front": [
+          {
+            "obj": 1.0,
+            "gpa": 0.97,
+            "iter": 3,
+            "strategy": "demos",
+            "why": "iter 3 (demos): val obj +0.000 -> 1.000; weakest dim reasoning=0.95. why: format/decision-rule miss."
+          }
+        ],
+        "why_log": [
+          "iter 1 (structural): val obj +0.100 -> 1.000; weakest dim reasoning=0.93. why: format/decision-rule miss.",
+          "iter 2 (demos): val obj +0.000 -> 1.000; weakest dim reasoning=0.93. why: format/decision-rule miss.",
+          "iter 3 (demos): val obj +0.000 -> 1.000; weakest dim reasoning=0.95. why: format/decision-rule miss.",
+          "iter 4 (structural): val obj +0.000 -> 1.000; weakest dim reasoning=0.94. why: format/decision-rule miss.",
+          "iter 5 (structural): val obj +0.000 -> 1.000; weakest dim reasoning=0.93. why: format/decision-rule miss.",
+          "iter 6 (structural): val obj +0.000 -> 1.000; weakest dim reasoning=0.94. why: format/decision-rule miss."
+        ],
+        "history": [
+          {
+            "iter": 0,
+            "val_obj": 0.9,
+            "val_dims": 0.9482499999999999,
+            "strategy": "baseline",
+            "accepted": true
+          },
+          {
+            "iter": 1,
+            "val_obj": 1.0,
+            "val_dims": 0.96625,
+            "strategy": "structural",
+            "accepted": true,
+            "delta": 0.09999999999999998
+          },
+          {
+            "iter": 2,
+            "val_obj": 1.0,
+            "val_dims": 0.9675,
+            "strategy": "demos",
+            "accepted": false,
+            "delta": 0.0
+          },
+          {
+            "iter": 3,
+            "val_obj": 1.0,
+            "val_dims": 0.97,
+            "strategy": "demos",
+            "accepted": false,
+            "delta": 0.0
+          },
+          {
+            "iter": 4,
+            "val_obj": 1.0,
+            "val_dims": 0.96875,
+            "strategy": "structural",
+            "accepted": false,
+            "delta": 0.0
+          },
+          {
+            "iter": 5,
+            "val_obj": 1.0,
+            "val_dims": 0.9624999999999999,
+            "strategy": "structural",
+            "accepted": false,
+            "delta": 0.0
+          },
+          {
+            "iter": 6,
+            "val_obj": 1.0,
+            "val_dims": 0.9675,
+            "strategy": "structural",
+            "accepted": false,
+            "delta": 0.0
+          }
+        ]
+      }
+    }
+  },
+  "duration_s": 96.9
+}

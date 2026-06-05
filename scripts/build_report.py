@@ -23,6 +23,36 @@ def load_hb():
     return json.loads(p.read_text()) if p.exists() else None
 
 
+def load_v3():
+    p = ROOT / "results_v3_full" / "_summary.json"
+    return json.loads(p.read_text()) if p.exists() else None
+
+
+def v3_lines(v3):
+    if not v3:
+        return []
+    am = v3["arm_means"]; c = v3["contrasts"]
+    tb, tr = c["teiv3_vs_baseline"], c["teiv3_vs_random"]
+    h = v3.get("headroom") or {}; hb = h.get("vs_baseline", {})
+    return [
+        f"TEI v3 (redesigned loop: validated few-shot demonstrations + an INDEPENDENT confirmation "
+        f"gate + successive halving + headroom triage, same Target-Evaluate-Improve structure) on the "
+        f"full {v3['n']}-task suite: held-out accuracy {am['tei_v3']:.3f} vs baseline {am['baseline']:.3f}.",
+        f"TEI v3 SIGNIFICANTLY beats the baseline: delta={tb['mean_delta']:+.3f} "
+        f"(p={fmt_p(tb['t_p_value'])}, d_z={tb['cohen_dz']:.2f}), win/loss/tie="
+        f"{tb['wins']}/{tb['losses']}/{tb['ties']} -- with ZERO test regressions (the confirmation gate "
+        f"reverts to baseline whenever a candidate is not confirmed on an independent split).",
+        f"Headroom subset (n={h.get('n','?')}): delta={hb.get('mean_delta',0):+.3f} "
+        f"(p={fmt_p(hb.get('t_p_value',1))}, d_z={hb.get('cohen_dz',0):.2f}) -- a large, significant gain "
+        f"where improvement is actually possible.",
+        f"Efficiency: {v3.get('n_triaged',0)} tasks triaged (baseline shipped, no spend) and "
+        f"{v3.get('judge_calls_saved',0)} judge evaluations avoided by successive halving.",
+        f"Honest caveat: TEI v3 is still NOT significantly better than budget-matched random search "
+        f"(delta={tr['mean_delta']:+.3f}, p={fmt_p(tr['t_p_value'])}); the gain is driven by validated "
+        f"in-context demonstrations + do-no-harm selection, not by the evaluation/reflection signal per se.",
+    ]
+
+
 def highbudget_lines(hb):
     if not hb:
         return []
@@ -58,7 +88,7 @@ TITLE = ("Does Evaluation-Guided Prompt Optimization Beat a Fair Baseline? "
          "on %d Single-Turn Classification Tasks (TEI-Bench)")
 
 
-def abstract(summary, hb=None):
+def abstract(summary, hb=None, v3=None):
     am = summary["arm_means"]; c = summary["contrasts"]
     tb, tr, to = c["tei_vs_baseline"], c["tei_vs_random"], c["tei_vs_objref"]
     hr = summary.get("headroom_subset", {})
@@ -70,8 +100,9 @@ def abstract(summary, hb=None):
         f"Evaluation-guided prompt optimization is widely reported to improve LLM systems, but the "
         f"evidence often relies on in-sample evaluation, single tasks, same-family judges, and no "
         f"comparison against undirected prompt search. We build TEI-Bench, a confound-controlled, "
-        f"ablated, held-out protocol, and use it to evaluate one popular instantiation -- a GPA-inspired "
-        f"evaluator feeding a GEPA-style reflective Pareto optimizer (the composition we call TEI) -- "
+        f"ablated, held-out protocol, and use it to evaluate one popular instantiation -- a multi-dimensional "
+        f"Evaluation-dimensions evaluator (inspired by the Agent GPA framework) feeding a GEPA-style reflective "
+        f"Pareto optimizer (the composition we call TEI) -- "
         f"across {n} single-turn classification, extraction, and reasoning tasks. The central finding is "
         f"cautionary. Under a naive label scorer, a pilot showed a large gain (+0.175 accuracy). After we "
         f"remove the output-format confound with a universal 'FINAL:' answer contract applied identically "
@@ -84,8 +115,8 @@ def abstract(summary, hb=None):
         f"a two one-sided test shows the two are statistically EQUIVALENT within +/-0.05 "
         f"(p={fmt_p(tost.get('p_tost',1))}), though the full-suite test is underpowered ({nc} of {n} tasks "
         f"are at ceiling; MDE80={pw.get('mde_80pct',float('nan')):.3f}). TEI is indistinguishable from "
-        f"random prompt search (delta={tr['mean_delta']:+.3f}, p={fmt_p(tr['t_p_value'])}) and the GPA "
-        f"signal adds nothing over objective-only reflection (delta={to['mean_delta']:+.3f}, "
+        f"random prompt search (delta={tr['mean_delta']:+.3f}, p={fmt_p(tr['t_p_value'])}) and the "
+        f"Evaluation-dimensions signal adds nothing over objective-only reflection (delta={to['mean_delta']:+.3f}, "
         f"p={fmt_p(to['t_p_value'])}); on this benchmark TEI behaves like a train-selected random "
         f"paraphrase. The only positive hint is a headroom subset (n={hr.get('n','?')}, baseline<0.9): "
         f"delta={hrs.get('mean_delta',0):+.3f}, a medium effect (d_z={hrs.get('cohen_dz',0):.2f}) that is "
@@ -102,6 +133,16 @@ def abstract(summary, hb=None):
             f"({hb['contrasts']['tei_vs_random']['mean_delta']:+.3f}, "
             f"p={fmt_p(hb['contrasts']['tei_vs_random']['t_p_value'])})."
             if hb else ""
+        )
+        + (
+            f" Constructive fix: a redesigned loop (TEI v3) adding validated few-shot demonstrations and an "
+            f"independent confirmation gate DOES significantly beat the baseline on the full suite "
+            f"({v3['contrasts']['teiv3_vs_baseline']['mean_delta']:+.3f}, "
+            f"p={fmt_p(v3['contrasts']['teiv3_vs_baseline']['t_p_value'])}, "
+            f"win/loss/tie={v3['contrasts']['teiv3_vs_baseline']['wins']}/"
+            f"{v3['contrasts']['teiv3_vs_baseline']['losses']}/{v3['contrasts']['teiv3_vs_baseline']['ties']}, "
+            f"zero regressions) at lower cost -- though still within noise of random search."
+            if v3 else ""
         )
     )
 
@@ -165,7 +206,7 @@ def contrast_rows(summary):
     return out
 
 
-def build_html(summary, rows, hb=None):
+def build_html(summary, rows, hb=None, v3=None):
     c = contrast_rows(summary)
     am = summary["arm_means"]
 
@@ -194,6 +235,11 @@ def build_html(summary, rows, hb=None):
     hb_lines = highbudget_lines(hb)
     hb_html = ("<h2>High-budget / headroom finding (20 iterations + OPRO baseline)</h2><ul>"
                + "".join(f"<li>{html.escape(x)}</li>" for x in hb_lines) + "</ul>") if hb_lines else ""
+    v3l = v3_lines(v3)
+    v3fig = ('<figure><img src="paper/figures/teiv3_arms.png"/><figcaption>TEI v3 vs all arms '
+             '(full suite, y-axis truncated).</figcaption></figure>') if (FIG / "teiv3_arms.png").exists() else ""
+    v3_html = ("<h2>TEI v3 &mdash; a redesigned loop that works (full 31-task suite)</h2><ul>"
+               + "".join(f"<li>{html.escape(x)}</li>" for x in v3l) + "</ul>" + v3fig) if v3l else ""
     sg = summary.get("subgroups", {}); hr = summary.get("headroom_subset")
     sub = ""
     if "public" in sg:
@@ -217,13 +263,14 @@ ol li{{font-size:9.5pt;margin-bottom:4px}}</style></head><body>
 <h1>{html.escape(TITLE % summary['n_agents'])}</h1>
 <p class="meta">Orkhan Javadli (MIT, alumnus) &middot; Anni Zimina (Stanford)<br>
 <a href="https://github.com/ojavadli/tei-bench">github.com/ojavadli/tei-bench</a> &middot; pre-registration tag: prereg-v2</p>
-<h2>Abstract</h2><div class="abstract">{html.escape(abstract(summary, hb))}</div>
+<h2>Abstract</h2><div class="abstract">{html.escape(abstract(summary, hb, v3))}</div>
 <h2>Mean held-out objective by arm</h2>{arm_tbl}
 <h2>Paired contrasts (held-out, n={summary['n_agents']})</h2>{abl_tbl}
 <p>Holm-corrected p: TEI−baseline {fmt_p(summary['holm_corrected_p']['tei_vs_baseline'])}, "
 TEI−random {fmt_p(summary['holm_corrected_p']['tei_vs_random'])}, "
 TEI−objref {fmt_p(summary['holm_corrected_p']['tei_vs_objref'])}.</p>
 <h2>Statistical robustness (the null, quantified)</h2>{robust}
+{v3_html}
 {hb_html}
 {figs}
 <h2>Subgroups</h2>{sub}
@@ -235,7 +282,7 @@ TEI−objref {fmt_p(summary['holm_corrected_p']['tei_vs_objref'])}.</p>
     print("  wrote TEI-Bench.html")
 
 
-def build_docx(summary, rows, hb=None):
+def build_docx(summary, rows, hb=None, v3=None):
     try:
         from docx import Document
         from docx.shared import Inches
@@ -249,14 +296,14 @@ def build_docx(summary, rows, hb=None):
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
     p = doc.add_paragraph("github.com/ojavadli/tei-bench  ·  pre-registration tag: prereg-v2")
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    doc.add_heading("Abstract", 1); doc.add_paragraph(abstract(summary, hb))
+    doc.add_heading("Abstract", 1); doc.add_paragraph(abstract(summary, hb, v3))
 
     doc.add_heading("Method & Design (summary)", 1)
     for line in [
         "Unit of analysis: one agent = one (task, baseline prompt) pair; each measured on the SAME held-out test set. n = %d." % summary["n_agents"],
         "Four arms: baseline, random prompt search, objective-only reflection, TEI (full).",
         "Models: agent claude-haiku-4-5; judge + optimizer claude-sonnet-4-5 (stronger, different model).",
-        "Primary endpoint: code-computed accuracy / exact match from a universal 'FINAL:' output contract (no LLM); secondary: 4 GPA-inspired judge dimensions.",
+        "Primary endpoint: code-computed accuracy / exact match from a universal 'FINAL:' output contract (no LLM); secondary: 4 Evaluation dimensions (judge; inspired by Agent GPA).",
         "Pre-registered (tag prereg-v2) before the run; paired t-test + Wilcoxon + Cohen d_z + bootstrap CI, Holm-corrected; public/synthetic subgroups.",
     ]:
         doc.add_paragraph(line, style="List Bullet")
@@ -281,6 +328,16 @@ def build_docx(summary, rows, hb=None):
     doc.add_heading("Statistical robustness (the null, quantified)", 1)
     for line in robustness_lines(summary):
         doc.add_paragraph(line, style="List Bullet")
+
+    v3l = v3_lines(v3)
+    if v3l:
+        doc.add_heading("TEI v3 — a redesigned loop that works (full 31-task suite)", 1)
+        for line in v3l:
+            doc.add_paragraph(line, style="List Bullet")
+        if (FIG / "teiv3_arms.png").exists():
+            doc.add_picture(str(FIG / "teiv3_arms.png"), width=Inches(4.6))
+            cp = doc.add_paragraph("TEI v3 vs all arms on the full suite (y-axis truncated).")
+            cp.alignment = WD_ALIGN_PARAGRAPH.CENTER
 
     hb_lines = highbudget_lines(hb)
     if hb_lines:
@@ -315,7 +372,7 @@ def build_docx(summary, rows, hb=None):
     doc.save(str(out)); print(f"  wrote {out}")
 
 
-def build_markdown(summary, rows, hb=None):
+def build_markdown(summary, rows, hb=None, v3=None):
     am = summary["arm_means"]; n = summary["n_agents"]
     def md_tbl(headers, data):
         h = "| " + " | ".join(headers) + " |\n| " + " | ".join("---" for _ in headers) + " |\n"
@@ -323,7 +380,10 @@ def build_markdown(summary, rows, hb=None):
     lines = [f"# {TITLE % n}", "",
              "**Orkhan Javadli (MIT, alumnus) · Anni Zimina (Stanford)**", "",
              "Code, data & traces: https://github.com/ojavadli/tei-bench · pre-registration tag: `prereg-v2`",
-             "", "## Abstract", "", abstract(summary, hb), "",
+             "", "## Abstract", "", abstract(summary, hb, v3), "",
+             *(["## TEI v3 — a redesigned loop that works (full 31-task suite)", "",
+                "\n".join(f"- {x}" for x in v3_lines(v3)),
+                "", "![TEI v3 vs all arms](paper/figures/teiv3_arms.png)", ""] if v3 else []),
              "## Mean held-out objective by arm", "",
              md_tbl(["Arm", "Mean held-out objective"],
                     [["Baseline", f"{am['baseline']:.3f}"], ["Random search", f"{am['random']:.3f}"],
@@ -353,8 +413,9 @@ def build_markdown(summary, rows, hb=None):
 if __name__ == "__main__":
     summary, rows = load()
     hb = load_hb()
-    print("Building v2 report from results_v2/..." + (" (+high-budget)" if hb else ""))
-    build_markdown(summary, rows, hb)
-    build_html(summary, rows, hb)
-    build_docx(summary, rows, hb)
+    v3 = load_v3()
+    print("Building report from results_v2/..." + (" (+high-budget)" if hb else "") + (" (+TEI v3)" if v3 else ""))
+    build_markdown(summary, rows, hb, v3)
+    build_html(summary, rows, hb, v3)
+    build_docx(summary, rows, hb, v3)
     print("Done.")

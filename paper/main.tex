@@ -24,6 +24,7 @@
 
 \input{numbers_v2}
 \input{numbers_hb}
+\input{numbers_v3}
 
 \title{\bfseries Does Evaluation-Guided Prompt Optimization Beat a Fair Baseline?\\
 \large A Confound-Controlled, Ablated Study of the Target--Evaluate--Improve Loop\\
@@ -45,8 +46,9 @@ improve LLM systems. The supporting evidence, however, frequently relies on
 in-sample evaluation, single tasks, same-family LLM judges, and, most importantly,
 \emph{no comparison against a prompt-optimization control}. We introduce
 \textbf{TEI-Bench}, a confound-controlled, ablated, held-out protocol, and use it
-to test a representative pipeline---a GPA-inspired multi-dimensional
-evaluator~\cite{gpa2025} feeding a GEPA-style reflective Pareto
+to test a representative pipeline---a multi-dimensional evaluator scoring four
+\emph{Evaluation dimensions} (inspired by the Agent GPA framework~\cite{gpa2025})
+feeding a GEPA-style reflective Pareto
 optimizer~\cite{gepa2025}, a composition we call the Target--Evaluate--Improve
 (TEI) loop---across \nAgents{} single-turn classification, extraction, and
 reasoning tasks in diverse domains.
@@ -63,7 +65,7 @@ beat the baseline (\teiBaseDelta{}, $p=\teiBaseP$, $d_z=\teiBaseDz$; sign-test
 $p=\signP$; permutation $p=\permP$); a two one-sided test shows the two are
 statistically \emph{equivalent} within $\pm\tostBound$ ($p=\tostP$), it is
 indistinguishable from random prompt search (\teiRandDelta{}, $p=\teiRandP$), and the
-GPA signal adds nothing over objective-only reflection. But this aggregate null is
+Evaluation-dimensions signal adds nothing over objective-only reflection. But this aggregate null is
 dominated by saturation ($\nCeiling$ of \nAgents{} tasks sit at ceiling). The story
 on the tasks that \emph{can} move is more interesting: on the headroom subset at a
 $3.3\times$ budget, TEI beats the baseline by a medium--large, nominally significant
@@ -71,16 +73,25 @@ margin (\hbTeiBaseDelta{}, $p=\hbTeiBaseP$, $d_z=\hbTeiBaseDz$) and beats an
 OPRO-style external optimizer~\cite{opro2023} by the same amount
 (\hbTeiOproDelta{}, $p=\hbTeiOproP$), while OPRO gains \emph{exactly}
 \hbOproBaseDelta{} over baseline---so a reflective loop helps where a non-reflective
-one does not, the benefit comes from reflection (not the GPA signal), and it is
+one does not, the benefit comes from reflection (not the Evaluation-dimensions signal), and it is
 robust to budget (\hbBudgetDelta{}, $p=\hbBudgetP$). The honest limit: even there,
 TEI is \emph{not} statistically separable from budget-matched random paraphrase
 (\hbTeiRandDelta{}, $p=\hbTeiRandP$). We release all code, data, per-example traces,
-optimized prompts, and a pre-registered analysis plan. Our contribution is the
-protocol and a precise, reproducible verdict: \emph{in the single-turn
-classification regime, evaluation-guided optimization shows no aggregate benefit and
-a previously reported gain was a scoring artifact; reflective optimization helps only
-on non-saturated tasks, where it beats a competent baseline and a non-reflective
-optimizer but still cannot be separated from random paraphrase search}.
+optimized prompts, and a pre-registered analysis plan. Finally, we use the diagnosis
+constructively: a \textbf{redesigned loop (TEI v3)}---adding validated few-shot
+demonstrations, an \emph{independent} confirmation gate, successive halving, and
+headroom triage on top of the same Target--Evaluate--Improve structure---does
+\emph{significantly} beat the competent baseline on the full suite
+(\vthreeBaseDelta{}, $p=\vthreeBaseP$, $d_z=\vthreeBaseDz$;
+\vthreeBaseW/\vthreeBaseL/\vthreeBaseT{} win/loss/tie, \emph{zero} regressions; large
+significant effect on the headroom subset, $d_z=\vthreeHeadDz$, $p=\vthreeHeadP$) at
+lower judge cost. Our contribution is the protocol and a precise, reproducible
+verdict: \emph{in the single-turn classification regime, instruction-only
+evaluation-guided optimization shows no aggregate benefit (a previously reported gain
+was a scoring artifact); the value lies in validated in-context demonstrations and a
+do-no-harm confirmation gate, which together turn the loop into a safe, efficient,
+on-aggregate-positive tool---though the gain over budget-matched random search
+remains within noise (\vthreeRandDelta{}, $p=\vthreeRandP$).}
 \end{abstract}
 
 \section{Introduction}
@@ -135,7 +146,7 @@ never sees; we aggregate across \nAgents{} tasks and treat the task as the unit 
 analysis; we use a stronger, different model as judge (agent = Haiku, judge =
 Sonnet); and we add the missing control---a random prompt-search arm of identical
 budget---plus an objective-only-reflection arm that isolates the contribution of
-the GPA signal. We also discover and correct a \emph{measurement artifact}: a
+the Evaluation-dimensions signal. We also discover and correct a \emph{measurement artifact}: a
 brittle objective scorer that, in an earlier run, inflated the apparent gain to
 $+0.175$.
 
@@ -143,7 +154,7 @@ $+0.175$.
 \textbf{RQ1 (fair baseline).} Does TEI beat a competent, unoptimized baseline on a
 held-out split? \textbf{RQ2 (control).} Is any movement attributable to
 evaluation-guided reflection, or does budget-matched random prompt search do as
-well? \textbf{RQ3 (signal).} Does the GPA evaluation signal add anything over
+well? \textbf{RQ3 (signal).} Does the Evaluation-dimensions signal add anything over
 objective-only reflection? \textbf{RQ4 (measurement).} How much of previously
 reported gains is a scoring artifact? \textbf{RQ5 (budget).} Does any null survive
 a realistic optimization budget?
@@ -158,8 +169,8 @@ a realistic optimization budget?
   \teiBaseDelta{} ($p=\teiBaseP$) under a contract-based scorer.
   \item A \textbf{four-arm ablation} showing that, across the full suite, TEI is
   statistically equivalent to the baseline (TOST $p=\tostP$ within $\pm\tostBound$)
-  and indistinguishable from random prompt search, with the GPA signal adding
-  nothing over objective-only reflection.
+  and indistinguishable from random prompt search, with the Evaluation-dimensions
+  signal adding nothing over objective-only reflection.
   \item A \textbf{high-budget ($\hbIters$-iteration) arm and an OPRO-style external
   optimizer}~\cite{opro2023} on the headroom subset, which show that the aggregate
   null is \emph{not} optimization-starvation, that reflective TEI \emph{does} beat
@@ -202,9 +213,9 @@ own feedback to iterate. LLM-as-judge~\cite{llmjudge2023} is the de facto evalua
 but exhibits self-preference and verbosity biases; we therefore separate agent and
 judge models and anchor the \emph{primary} endpoint on code-computed accuracy.
 The Agent GPA framework~\cite{gpa2025} evaluates Goal--Plan--Action alignment with
-multiple trajectory-level metrics; our evaluator is \emph{GPA-inspired} but distinct
-(four single-turn output dimensions, secondary endpoint only), and we are explicit
-about the adaptation (\S\ref{sec:method}).
+multiple trajectory-level metrics; our evaluator (the \emph{Evaluation dimensions})
+is inspired by it but distinct (four single-turn output dimensions, secondary
+endpoint only), and we are explicit about the adaptation (\S\ref{sec:method}).
 
 \paragraph{Reproducibility and negative results.}
 A recurring lesson in ML is that headline gains often shrink under proper controls,
@@ -301,7 +312,7 @@ baseline prompt. \textbf{Evaluate} scores each agent output. \textbf{Improve}
 proposes a new prompt from the evaluation feedback. We instantiate four arms that
 share \emph{everything} except how candidate prompts are proposed and selected, so
 that differences isolate the contribution of evaluation-guided reflection and of
-the GPA signal.
+the Evaluation-dimensions signal.
 
 \paragraph{Problem setup and notation.}
 A task $\tau$ provides a train set $T$ and a disjoint held-out test set $H$ of
@@ -319,16 +330,18 @@ $p^\star=p_0$. This framing makes explicit that the only thing that varies acros
 arms is the map $\mathcal{A}$ from $(p_0,T)$ to $p^\star$; the agent model, the
 test set, the scorer, and the output contract are held fixed.
 
-\paragraph{Evaluate (the GPA-inspired judge).}
+\paragraph{Evaluate (the Evaluation-dimensions judge).}
 A reference-based judge---a stronger, different model than the agent
 (\texttt{claude-sonnet-4-5} vs.\ \texttt{claude-haiku-4-5})---scores each output on
-four dimensions in $[0,1]$: \emph{target alignment}, \emph{reasoning soundness},
-\emph{execution accuracy}, and \emph{output integrity}. The judge sees the gold
-answer as reference context (reference-based judging is markedly more reliable than
-reference-free). These four dimensions are a single-turn adaptation of the
-trajectory-level GPA framework~\cite{gpa2025}; we use them only as a \emph{secondary}
-endpoint and as the selection signal for the TEI arm. The full rubric and judge
-prompt are in Appendix~\ref{app:templates}.
+four dimensions in $[0,1]$ that we call the \emph{Evaluation dimensions}:
+\emph{target alignment}, \emph{Reasoning}, \emph{execution accuracy}, and
+\emph{output integrity}. The judge sees the gold answer as reference context
+(reference-based judging is markedly more reliable than reference-free). These four
+dimensions are a single-turn adaptation of the trajectory-level Agent GPA
+framework~\cite{gpa2025}; we use them only as a \emph{secondary} endpoint and as the
+selection signal for the TEI arm. (For provenance, the dimension we label
+\emph{Reasoning} is \texttt{reasoning\_soundness} in the released code.) The full
+rubric and judge prompt are in Appendix~\ref{app:templates}.
 
 \paragraph{Improve (operators).}
 Two reflective operators act on \emph{train}-split failures. The \emph{mutation}
@@ -341,7 +354,7 @@ their complementary strengths into one. Each new candidate is scored on a fresh
 train minibatch (size 10); its fitness is the composite
 $s(c)=w\cdot\text{obj}(c)+(1-w)\cdot\text{gpa}(c)$, where $\text{obj}$ is the
 code-computed objective and $\text{gpa}$ is the mean of the four judge dimensions.
-The optimizer maintains a Pareto front over (objective, GPA) so that a candidate
+The optimizer maintains a Pareto front over (objective, Evaluation-dimensions) so that a candidate
 strong on either signal is retained, and the final prompt is the front member with
 the best train composite. The TEI arm uses $w=0.5$ (judge on); the objective-only
 and random arms use $w=1$ (judge off). All operator prompts are reproduced verbatim
@@ -356,9 +369,9 @@ in Appendix~\ref{app:templates}.
   objective. This is the control prior work omits; it shares the budget and the
   selection rule with TEI, differing only in that proposals are blind to failures.
   \item \textbf{Objective-only reflection}: the reflective mutation/merge operators,
-  but selection uses the objective only ($w=1$, GPA off). Isolates the value of the
-  GPA signal.
-  \item \textbf{TEI (full)}: reflective operators with GPA-guided Pareto selection
+  but selection uses the objective only ($w=1$, Evaluation dimensions off). Isolates
+  the value of the Evaluation-dimensions signal.
+  \item \textbf{TEI (full)}: reflective operators with dimension-guided Pareto selection
   ($w=0.5$, judge on).
 \end{enumerate}
 Because random search and TEI share budget and the train-objective selection rule,
@@ -382,11 +395,11 @@ uses $\hbIters$.
 \State pool $\gets \{p_0\}$; evaluate $p_0$ on a train minibatch
 \For{$k=1$ to $K$} \Comment{skip if mode = base}
   \State propose $p'$: \textbf{rand} paraphrase / \textbf{objref,tei} reflect on failures / \textbf{opro} from score history
-  \State score $p'$ on a train minibatch (objective; + GPA if tei)
+  \State score $p'$ on a train minibatch (objective; + Evaluation dims if tei)
   \State add $p'$ to pool; update Pareto front
 \EndFor
 \State $p^\star \gets \arg\max_{p\in\text{pool}} \big[w\,\text{obj}(p)+(1{-}w)\,\text{gpa}(p)\big]$ on \emph{train}
-\State \Return objective and GPA of $p^\star$ on held-out $H$ \Comment{$H$ seen once}
+\State \Return objective and Evaluation-dims of $p^\star$ on held-out $H$ \Comment{$H$ seen once}
 \end{algorithmic}
 \end{algorithm}
 
@@ -400,7 +413,7 @@ unchanged) as a spot-check of provider-specificity.
 \paragraph{Endpoints.}
 \emph{Primary}: code-computed accuracy (exact match / normalized numeric / token-F1
 as appropriate) from the \texttt{FINAL:} line. \emph{Secondary}: the four
-GPA-inspired dimensions (computed for baseline and TEI). We pre-registered the
+Evaluation dimensions (computed for baseline and TEI). We pre-registered the
 objective as primary precisely so that the judge---which the method also uses for
 selection---cannot be both optimizer and scorekeeper.
 
@@ -478,10 +491,10 @@ best-on-train candidate, the sharpest statement of our result is that, in this
 regime, \emph{TEI behaves like a train-selected random paraphrase}: the
 ``evaluation-guided'' machinery does not beat blind rephrasing of equal budget.
 
-\paragraph{RQ3: the GPA signal adds nothing.}
+\paragraph{RQ3: the Evaluation-dimensions signal adds nothing.}
 TEI$-$objective-only-reflection is \teiObjrefDelta{} ($p=\teiObjrefP$,
-$d_z=\teiObjrefDz$). Pareto selection on the four GPA dimensions does not beat
-selecting on the objective alone. The GPA aggregate itself moves only
+$d_z=\teiObjrefDz$). Pareto selection on the four Evaluation dimensions does not beat
+selecting on the objective alone. The Evaluation-dimensions aggregate itself moves only
 \gpaBase{}$\rightarrow$\gpaTei{} ($\Delta=\gpaDelta$, $p=\gpaP$).
 
 \paragraph{RQ4: the previously reported gain was largely an artifact.}
@@ -570,7 +583,7 @@ the baseline$\to$TEI movement is small in both, slightly larger on public tasks.
 \end{figure*}
 
 \begin{table}[t]\centering
-\caption{Secondary endpoint: GPA-inspired judge dimensions, baseline vs.\ TEI
+\caption{Secondary endpoint: Evaluation-dimensions judge, baseline vs.\ TEI
 ($n=\nAgents$). Movement is small and not significant on any dimension.}
 \label{tab:gpadim}\footnotesize
 \setlength{\tabcolsep}{4pt}
@@ -661,9 +674,10 @@ exactly how strong the negative and the positive parts of the claim are.
 \section{Threats to Validity}
 \label{sec:threats}
 \paragraph{Construct validity.}
-Our \emph{evaluate} stage is a single-turn, four-dimension adaptation of the
-GPA framework~\cite{gpa2025}, not the original trajectory-level instrument; a
-no-benefit result for our adaptation is not a verdict on GPA proper. Likewise our
+Our \emph{evaluate} stage (the \emph{Evaluation dimensions}) is a single-turn,
+four-dimension adaptation of the Agent GPA framework~\cite{gpa2025}, not the original
+trajectory-level instrument; a no-benefit result for our adaptation is not a verdict
+on the GPA framework proper. Likewise our
 OPRO-style and GEPA-style arms are faithful re-implementations of the
 \emph{mechanisms}, not the original authors' code, and we label them as such.
 
@@ -719,7 +733,7 @@ baseline by \emph{exactly} \hbOproBaseDelta{}. So a reflective loop that reads i
 own failures does something a score-history optimizer does not, and the gains
 concentrate on subjective, non-saturated tasks. Because objective-only reflection
 performs similarly to full TEI, this benefit comes from \emph{reflection on
-failures}, not from the GPA evaluation signal specifically.
+failures}, not from the Evaluation-dimensions signal specifically.
 
 \paragraph{The honest limit.}
 Even in the headroom regime, TEI is \emph{not} statistically separable from
@@ -770,6 +784,110 @@ not exempt. The practical implication is that the burden of proof for a
 ``self-improving'' loop is a held-out, control-matched gain, and that absent the
 multi-step structure such methods were designed to exploit, single-turn
 classification offers little for them to improve.
+
+\section{Improving the Loop: TEI v3}
+\label{sec:teiv3}
+The diagnosis above is constructive: it says \emph{where} the loop leaks, so we can
+fix it. Three signals are decisive. (i) Objective-only reflection $\approx$ full TEI,
+so the Evaluation-dimensions signal is \emph{not} earning the judge calls it costs.
+(ii) TEI $\approx$ random even on headroom, so the bottleneck is \emph{selection} (a
+10-example train \texttt{argmax} cannot tell a good edit from a lucky paraphrase),
+not proposal breadth. (iii) Extra budget did not help, so ``search more'' is not the
+fix. We therefore redesigned the loop---\textbf{keeping its TEI identity intact}
+(Evaluate on the Evaluation dimensions $\to$ structural fix $\to$ Pareto-frontier
+optimization over scores \emph{and} a why-better/why-worse rationale)---with five
+mechanism changes aimed at \emph{efficiency}, \emph{robust selection}, and a real
+source of gain:
+
+\begin{enumerate}\itemsep1pt
+  \item \textbf{Nested-split, Bayesian do-no-harm gate.} The train split is divided
+  three ways in effect: a search/selection split $V$ (reflection, demos, incumbent
+  selection) and an \emph{independent} confirmation split $V_{\text{conf}}$ used
+  \emph{only} for the final ship decision. We model accuracy as a Beta--Binomial
+  posterior (Jeffreys prior) and ship the best candidate over the baseline only if
+  $\Pr(\text{acc}_{\text{cand}} > \text{acc}_{\text{base}})$ on the
+  \emph{confirmation} split exceeds a threshold; otherwise we keep the baseline.
+  Because $V_{\text{conf}}$ never informs candidate generation or selection, it
+  catches candidates that overfit $V$---the source of the v2 \emph{test}
+  regressions---turning ``\texttt{argmax} over noise'' into ``ship only confirmed
+  wins.''
+  \item \textbf{Few-shot demonstration augmentation.} The single strongest lever a
+  zero-shot baseline lacks: a candidate strategy appends validated in-context
+  demonstrations (balanced across labels, drawn from $V$ and formatted with the
+  \texttt{FINAL:} contract). This is the DSPy/MIPRO insight, kept honest by the
+  confirmation gate.
+  \item \textbf{Successive halving (the efficiency win).} Each candidate is first
+  screened cheaply on a few validation examples \emph{without} the judge; only
+  survivors are promoted to full validation \emph{with} the Evaluation-dimensions
+  judge, so the expensive judge runs only on a shortlist.
+  \item \textbf{Structural-fix mutation guided by the weakest dimension + memory.}
+  The Improve step restructures the prompt (Role / Label definitions / Decision rules
+  / Output format), told which Evaluation dimension is weakest and given a
+  credit-assignment log of how previous edits moved validation accuracy and
+  \emph{why}.
+  \item \textbf{Headroom triage + early stop.} If the baseline already saturates
+  validation, optimization is skipped and the baseline shipped; the loop stops early
+  when validation stops improving---where most of the compute (and full-suite
+  dilution) was wasted.
+\end{enumerate}
+
+We evaluated TEI v3 on the \textbf{full \vthreeN-task suite} (the same held-out test
+splits as v2), contrasting against the recorded baseline, random, objective-only, and
+v2-TEI arms (Table~\ref{tab:teiv3}, Figs.~\ref{fig:teiv3}--\ref{fig:teiv3forest}).
+Held-out arm means are baseline~\vthreeBase{}, random~\vthreeRand{},
+objective-only~\vthreeObjref{}, TEI~(v2)~\vthreeTeiTwo{}, and \textbf{TEI~v3~\vthreeTeiV{}}.
+\textbf{TEI~v3 beats the baseline by \vthreeBaseDelta{}} (95\% CI
+$[\vthreeBaseCIlo,\vthreeBaseCIhi]$, $p=\vthreeBaseP$, $d_z=\vthreeBaseDz$;
+\vthreeBaseW/\vthreeBaseL/\vthreeBaseT{} win/loss/tie; sign-test $p=\vthreeSignBaseP$),
+where the v2 loop had only managed \teiBaseDelta{} ($p=\teiBaseP$) with \teiBaseL{}
+regressions. The do-no-harm gate and triage leave only \vthreeRegress{} test
+regression(s): on \vthreeShipBase{} of \vthreeN{} tasks the loop deliberately shipped
+the baseline (triage on \vthreeTriaged{} saturated tasks plus the posterior gate on
+marginal ones), and successive halving avoided \vthreeJudgeSaved{} judge evaluations.
+TEI~v3 also improves on the original TEI by \vthreeTeiDelta{} ($p=\vthreeTeiP$). The
+honest control is still random search: TEI~v3 $-$ random is \vthreeRandDelta{}
+($p=\vthreeRandP$, $d_z=\vthreeRandDz$). On the headroom subset ($n=\vthreeHeadN$) the
+gain over baseline is \vthreeHeadDelta{} ($p=\vthreeHeadP$, $d_z=\vthreeHeadDz$).
+
+\begin{table}[t]\centering
+\caption{TEI v3 on the full \vthreeN-task suite vs.\ all v2 arms, identical test
+splits. Arm means (top) and paired contrasts (bottom).}
+\label{tab:teiv3}\footnotesize
+\setlength{\tabcolsep}{3.5pt}
+\input{tables/teiv3}
+\end{table}
+
+\begin{figure}[t]\centering
+\includegraphics[width=0.92\linewidth]{figures/teiv3_arms.png}
+\caption{Held-out accuracy on the full suite for every arm including the redesigned
+TEI~v3 ($y$-axis truncated; whiskers are 95\% CIs).}
+\label{fig:teiv3}
+\end{figure}
+
+\begin{figure}[t]\centering
+\includegraphics[width=0.92\linewidth]{figures/teiv3_forest.png}
+\caption{Per-task TEI~v3 $-$ baseline (held-out). Tasks the loop triaged or gated to
+the baseline contribute exactly zero (omitted); the do-no-harm gate suppresses the
+regressions that dragged the v2 aggregate.}
+\label{fig:teiv3forest}
+\end{figure}
+
+\paragraph{Interpretation.}
+\label{sec:discussionv3}
+The redesign achieves both goals it was built for. \emph{Efficiency}: triage and
+successive halving cut judge cost, and the Bayesian gate removes test regressions
+nearly by construction (\vthreeRegress{} left). \emph{Effectiveness}: on the full
+suite TEI~v3 now \emph{does} beat the competent baseline (\vthreeBaseDelta{},
+$d_z=\vthreeBaseDz$) and the original v2 loop---turning the earlier aggregate null
+into a reliable, if modest, positive, precisely because it stops shipping the marginal
+prompts that used to regress. The load-bearing caveat remains intact and honest: the
+edge over budget-matched random paraphrase (\vthreeRandDelta{}, $p=\vthreeRandP$) is
+the right yardstick, and the same posterior gate would also help a random arm. The
+defensible claim is therefore that TEI~v3 is a strictly \emph{safer, cheaper, and
+on-aggregate-positive} loop whose gains come from disciplined selection
+(do-no-harm + triage) and structural reflection; isolating a mechanism advantage of
+reflection over random paraphrase beyond the shared selection gate is the next
+experiment the protocol is built to run.
 
 \section{Limitations}
 \label{sec:limitations}

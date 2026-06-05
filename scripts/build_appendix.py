@@ -65,7 +65,7 @@ def main():
     A(r"\appendix")
     A(r"\section{Prompt templates (verbatim, as used)}\label{app:templates}")
     A("These are the exact templates used by the harness for every run.\n")
-    A(r"\subsection{Judge system prompt (GPA-inspired four-dimension evaluator)}")
+    A(r"\subsection{Judge system prompt (the four Evaluation dimensions)}")
     A(lst(_JUDGE_SYSTEM))
     A(r"\subsection{Reflective-mutation system prompt (TEI / objective-only)}")
     A(lst(_REFLECT_SYSTEM))
@@ -133,7 +133,7 @@ def main():
            cell("objective_reflection"), cell("tei")))
     A(r"\bottomrule \end{longtable}")
 
-    A(r"\section{Per-dimension GPA (baseline vs TEI), per task}\label{app:gpadims}")
+    A(r"\section{Per-dimension Evaluation scores (baseline vs TEI), per task}\label{app:gpadims}")
     A(r"\begin{longtable}{lrrrr}")
     A(r"\toprule Task & Target & Reasoning & Execution & Integrity \\")
     A(r" & (B$\to$T) & (B$\to$T) & (B$\to$T) & (B$\to$T) \\ \midrule \endhead")

@@ -1,0 +1,747 @@
+{
+  "task_id": "agri_crop_issue",
+  "industry": "Agriculture / AgriTech",
+  "metric": "classification",
+  "source": "Authored for TEI-Bench (Sonnet-generated, Sonnet-validated; kept only label-agreed examples).",
+  "is_public": false,
+  "n_train": 15,
+  "n_test": 24,
+  "agent_model": "claude-haiku-4-5",
+  "judge_model": "claude-sonnet-4-5",
+  "optimizer_model": "claude-sonnet-4-5",
+  "seed": 0,
+  "arms": {
+    "baseline": {
+      "objective_mean": 0.9583333333333334,
+      "objective_ci95": [
+        0.875,
+        1.0
+      ],
+      "prompt": "You are a crop-advisory assistant. Classify the farmer's described crop problem into a cause category. Classify into one of these categories: pest, disease, nutrient, water_stress, weather_damage, weed.",
+      "examples": [
+        {
+          "query": "My cucumber vines are wilting badly by midday even though I'm watering every evening. The leaves stay limp and some fruits are developing white patches and stopping growth.",
+          "gold": "water_stress",
+          "output": "Let me analyze this cucumber problem:\n\n**Key observations:**\n- Wilting despite regular evening watering suggests the plant cannot absorb water effectively\n- White patches on fruits and stunted fruit growth\n- Midday wilting pattern (typical stress response)\n\n**Reasoning through causes:**\n\n1. **Water stress** - While watering occurs, the wilting despite irrigation points to a root/uptake problem rather than simple drought\n2. **Disease** - White patches on fruits + wilting + growth stunting is highly suggestive of a fungal or bacterial disease affecting vascular tissue or fruit\n3. **Pest** - Less likely to cause this specific symptom pattern\n4. **Nutrient** - Could cause wilting, but white patches on fruit are less typical\n5. **Weather damage** - No mention of extreme conditions\n6. **Weed** - Not applicable\n\nThe combination of **white patches on developing fruits** (suggesting powdery mildew or another fungal disease) plus **vascular wilting despite adequate water** points most strongly to a **disease** affecting the plant's ability to transport water and causing fruit spotting.\n\nFINAL: disease",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.75,
+            "execution_accuracy": 1.0,
+            "output_integrity": 0.4,
+            "aggregate": 0.775,
+            "rationale": "The agent correctly formatted the classification task and provided structured reasoning, but arrived at 'disease' instead of the correct 'water_stress' category, demonstrating sound but ultimately inc"
+          }
+        },
+        {
+          "query": "Large portions of my cabbage heads are bruised and damaged with visible impact marks. A hailstorm passed through the area yesterday evening with ice stones nearly three centimeters in diameter.",
+          "gold": "weather_damage",
+          "output": "The farmer is describing physical damage to cabbage heads with visible impact marks that occurred immediately following a hailstorm with large ice stones. This is clearly weather-related damage caused by hail impact.\n\nFINAL: weather_damage",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the crop problem as weather_damage, provided sound reasoning linking hail impact to physical damage, and delivered the answer in the expected format matching the referen"
+          }
+        },
+        {
+          "query": "Wild mustard plants have appeared throughout my canola field. They look similar to my crop but are growing more aggressively and I can see them competing for resources.",
+          "gold": "weed",
+          "output": "The farmer is describing wild mustard plants growing throughout their canola field, competing for resources and growing more aggressively than the crop.\n\nThis is clearly a weed problem. Wild mustard is a common weed that:\n- Grows in the same fields as canola (both are brassicas)\n- Competes with the crop for water, nutrients, and light\n- Can reduce canola yields if not managed\n- Is morphologically similar to canola, making it a particular challenge in canola production\n\nThe key indicators are: unwanted plants competing for resources, aggressive growth, and resource competition with the desired crop.\n\nFINAL: weed",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the problem as 'weed', provided sound botanical reasoning about wild mustard and canola competition, stayed on-task throughout, and delivered the exact answer in proper "
+          }
+        },
+        {
+          "query": "My bean plants have leaves that are completely skeletonized - only the veins remain. I caught several metallic-colored beetles actively feeding during my morning inspection.",
+          "gold": "pest",
+          "output": "The farmer has observed skeletonized leaves (where only the veins remain) and has directly observed metallic-colored beetles actively feeding on the plants. This is a classic symptom of beetle feeding damage, particularly from beetles like Japanese beetles or similar leaf-feeding beetles that consume leaf tissue between the veins.\n\nThe presence of the beetles actively feeding on the plants, combined with the characteristic skeletonization damage pattern, clearly indicates a pest problem rather than disease, nutrient deficiency, water stress, weather damage, or weeds.\n\nFINAL: pest",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the problem as 'pest' with sound reasoning about beetle damage patterns, proper format, and complete accuracy matching the reference answer."
+          }
+        },
+        {
+          "query": "My tomato plants have developed dark brown spots on the lower leaves that are spreading upward. The spots have yellow halos around them and the affected leaves are turning completely yellow and dropping off. I've noticed this started after several days of humid weather.",
+          "gold": "disease",
+          "output": "Based on your description, this is a classic presentation of **early blight**, a fungal disease of tomatoes caused by *Alternaria* species.\n\nKey indicators pointing to disease:\n- Dark brown spots with concentric rings (target-like appearance)\n- Yellow halos around the lesions\n- Progressive upward spread from lower leaves\n- Leaf yellowing and defoliation\n- Onset following humid conditions (fungal diseases thrive in high humidity)\n\nEarly blight is one of the most common tomato diseases and spreads readily in warm, wet conditions. The fungus overwinters in soil and plant debris, and spores are splash-dispersed during rain or overhead watering.\n\nFINAL: disease",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9675,
+            "rationale": "The agent correctly classified the problem as 'disease' with sound reasoning about fungal infection indicators, though it provided more diagnostic detail than strictly required for a simple classifica"
+          }
+        },
+        {
+          "query": "My citrus trees have new leaves coming in much smaller and with a mottled yellow-green pattern. Fruit production has declined significantly over the past two seasons and what fruit does develop often drops prematurely before ripening.",
+          "gold": "nutrient",
+          "output": "Let me analyze the symptoms you're describing:\n\n**Key observations:**\n- Small new leaves with mottled yellow-green pattern\n- Significant decline in fruit production over two seasons\n- Premature fruit drop before ripening\n\n**Reasoning:**\n\nThe mottled yellow-green pattern on new leaves is a classic indicator of nutrient deficiency, particularly:\n- **Zinc deficiency** (most common in citrus) - causes small leaves with mottled/blotchy yellowing\n- **Magnesium deficiency** - also causes interveinal chlorosis (yellowing between veins)\n- **Iron deficiency** - can cause similar patterns\n\nThe combination of stunted leaf growth, mottled discoloration, reduced fruit set, and premature fruit drop all point to a systemic nutrient problem rather than:\n- A pest (which would show more localized damage, holes, or visible insects)\n- A disease (which typically shows spots, lesions, or wilting)\n- Water stress (which would show more uniform wilting/leaf drop)\n- Weather damage (which would be more acute and uniform)\n- Weeds (which wouldn't cause these leaf symptoms)\n\nThe chronic nature over two seasons suggests a persistent nutrient imbalance, likely related to soil pH, soil deficiency, or poor nutrient availability.\n\nFINAL: nutrient",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9675,
+            "rationale": "The agent correctly classified the problem as 'nutrient' with sound botanical reasoning that systematically ruled out alternative causes and identified specific deficiencies consistent with the descri"
+          }
+        },
+        {
+          "query": "The corn leaves are rolling inward and turning grayish-green. We've had no significant rainfall in over a month and my irrigation system can only cover half the field.",
+          "gold": "water_stress",
+          "output": "The symptoms you're describing—inward leaf rolling and grayish-green discoloration—are classic indicators of water stress in corn. Leaf rolling is a protective mechanism plants use to reduce water loss during drought conditions. The color change reflects the plant's physiological response to insufficient water availability.\n\nGiven that you've had no significant rainfall in over a month and your irrigation system only covers half the field, this clearly points to inadequate water availability as the primary cause.\n\nFINAL: water_stress",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the problem as water_stress with sound reasoning connecting symptoms to drought conditions, proper format, and perfect match to the reference answer."
+          }
+        },
+        {
+          "query": "Strong winds last Tuesday night flattened about 60 percent of my soybean crop. Many plants are now lodged at the base and lying horizontally on the ground.",
+          "gold": "weather_damage",
+          "output": "The farmer is describing physical damage to soybean plants caused by strong winds that occurred last Tuesday night. The plants are lodged (bent over and lying horizontally) at the base due to the wind event.\n\nThis is clearly a weather-related damage issue, not caused by pests, diseases, nutrient deficiencies, water stress, or weeds. The direct cause is the severe wind event that mechanically damaged the crop structure.\n\nFINAL: weather_damage",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the crop problem as weather_damage with sound reasoning that systematically ruled out alternative causes and identified the wind event as the direct mechanical cause, ma"
+          }
+        },
+        {
+          "query": "There are these broad-leafed plants spreading rapidly across my soybean plot. They weren't there last month but now they're everywhere and choking out my seedlings.",
+          "gold": "weed",
+          "output": "Based on your description, this sounds like a weed problem. The key indicators are:\n\n1. **Broad-leafed plants** - This is characteristic of broadleaf weeds rather than grasses or other crop issues\n2. **Rapid spread** - Weeds are known for quick establishment and proliferation\n3. **Recent appearance** - Weeds can emerge quickly when conditions are favorable\n4. **Choking out seedlings** - This is typical competitive damage from weeds rather than pest feeding, disease symptoms, or nutrient deficiency\n\nThe rapid colonization of your soybean plot by these broad-leafed plants suggests they've taken advantage of available space and resources, which is classic weed behavior.\n\nFINAL: weed",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the problem as 'weed' with sound reasoning based on the symptoms described, proper format with clear final answer, and perfect match to the reference answer."
+          }
+        },
+        {
+          "query": "I've got aphids covering the new growth on my cabbage crop. The colonies are so dense that the leaves are curling up and the plants have stopped growing properly.",
+          "gold": "pest",
+          "output": "The farmer is describing aphids on cabbage plants, which are causing leaf curling and stunted growth. Aphids are insects that feed on plant sap by piercing leaves and stems. This is a clear case of pest damage - aphids are a common agricultural pest that directly damages crops through their feeding activity.\n\nFINAL: pest",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly classified the problem as 'pest', provided sound reasoning about aphid behavior, stayed on task, and the final answer matches the reference perfectly."
+          }
+        },
+        {
+          "query": "Grapevines are showing downy growth on the underside of leaves, with corresponding yellow patches on top. Young shoots and flower clusters have a grayish fuzzy appearance. Infected berries are shriveling and turning brown.",
+          "gold": "disease",
+          "output": "Looking at the symptoms described:\n\n- Downy growth on leaf undersides with yellow patches on top surfaces\n- Grayish fuzzy appearance on young shoots and flower clusters\n- Shriveled, browning berries\n\nThese are classic signs of **downy mildew**, a fungal disease caused by *Plasmopara viticola*. The downy/fuzzy growth on the undersides of leaves is the pathognomonic sign of this disease, and the corresponding yellowing on the upper leaf surface is typical. The infection of reproductive structures (flowers and berries) leading to their deterioration is also characteristic of this pathogen in grapevines.\n\nThis is a disease problem, not a pest, nutrient deficiency, water stress, weather damage, or weed issue.\n\nFINAL: disease",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the problem as 'disease', provided sound reasoning identifying downy mildew with accurate symptom analysis, followed the required format, and matched the reference answe"
+          }
+        },
+        {
+          "query": "Cotton plants are showing reddish-purple discoloration on the leaves and stems. Growth has been severely restricted and the plants are much smaller than normal for this time in the season. Root development appears limited when I checked a few plants.",
+          "gold": "nutrient",
+          "output": "Looking at the symptoms described:\n\n- Reddish-purple discoloration on leaves and stems\n- Severely restricted growth and stunted plants\n- Limited root development\n\nThese symptoms are characteristic of **phosphorus deficiency** in cotton. Phosphorus is critical for root development and energy metabolism. When phosphorus is deficient, plants cannot develop adequate root systems, which further restricts nutrient and water uptake, leading to stunted growth and the distinctive reddish-purple pigmentation (anthocyanin accumulation) that occurs when phosphorus is limiting.\n\nWhile other factors like poor root conditions could contribute, the combination of discoloration, stunted growth, AND poor root development points most directly to a nutrient deficiency rather than pest, disease, water stress, or weather damage.\n\nFINAL: nutrient",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9675,
+            "rationale": "The agent correctly classified the problem as 'nutrient' with sound reasoning about phosphorus deficiency symptoms, proper format, and accurate alignment with the reference answer."
+          }
+        },
+        {
+          "query": "My strawberry plants have brown leaf margins and the fruit is small and dry. The soil moisture meter shows readings well below the recommended range for the past month.",
+          "gold": "water_stress",
+          "output": "The farmer is describing brown leaf margins and small, dry fruit on strawberry plants, combined with soil moisture readings that are consistently below the recommended range for an extended period (one month).\n\nThese symptoms are classic indicators of water stress:\n- Brown leaf margins (leaf scorch) occur when plants cannot uptake sufficient water\n- Small and dry fruit results from inadequate water availability during fruit development\n- The soil moisture meter confirmation directly supports this diagnosis\n\nWhile nutrient deficiency could cause some leaf discoloration, the combination of low soil moisture readings and the specific pattern of symptoms (marginal browning + fruit quality issues) points clearly to insufficient water availability.\n\nFINAL: water_stress",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the problem as water_stress with sound reasoning connecting symptoms to diagnosis, proper format, and perfect match to the reference answer."
+          }
+        },
+        {
+          "query": "After the cold snap three nights ago, my potato plants have blackened foliage that looks water-soaked and limp. The temperature sensor recorded minus one degree for about four hours before dawn.",
+          "gold": "weather_damage",
+          "output": "The farmer describes blackened, water-soaked, and limp foliage appearing after a cold snap with temperatures dropping to -1°C for several hours. This is a classic presentation of frost damage to potato plants.\n\nThe symptoms—blackening and wilting of foliage following freezing temperatures—are characteristic of cold injury to plant tissues. The water-soaked appearance occurs as ice crystals form in and rupture plant cells, causing cellular collapse and the characteristic darkening.\n\nThis is weather-related damage, not a pest, disease, nutrient deficiency, water stress, or weed issue.\n\nFINAL: weather_damage",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the problem as weather_damage with sound reasoning about frost damage mechanisms, proper format, and complete accuracy matching the reference answer."
+          }
+        },
+        {
+          "query": "There's a lot of crabgrass coming up in my tomato beds. The patches are getting thicker every day and my tomato plants look stunted where the grass is densest.",
+          "gold": "weed",
+          "output": "The farmer is describing crabgrass growing in tomato beds, which is a weed problem. Crabgrass is an unwanted plant species competing with the tomatoes for resources (water, nutrients, light, and space). The stunting of tomato plants in areas with dense crabgrass is a secondary effect of weed competition, not a primary disease, pest, nutrient deficiency, or water/weather issue.\n\nFINAL: weed",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the problem as 'weed', provided sound reasoning about crabgrass competition, and delivered the answer in the expected format matching the reference exactly."
+          }
+        },
+        {
+          "query": "The ears on my corn have been invaded by worms that are eating the kernels. When I peel back the husks, I find brown frass and damaged grain at the tips.",
+          "gold": "pest",
+          "output": "The symptoms you're describing—worms inside corn ears eating kernels, brown frass (insect droppings), and damage concentrated at the ear tips—are classic signs of corn earworm (also called tomato hornworm or cotton bollworm, depending on region). This is a larval pest that tunnels into developing ears and feeds on the kernels, leaving characteristic frass trails.\n\nThis is clearly a pest infestation rather than a disease, nutrient deficiency, water stress, weather damage, or weed problem.\n\nFINAL: pest",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the problem as 'pest', provided sound reasoning with accurate pest identification and symptom analysis, followed proper format with clear final answer, and the classific"
+          }
+        },
+        {
+          "query": "The apple trees have dark, sunken cankers on branches and the bark is peeling away in those areas. Some fruit shows brown circular spots that are slightly sunken with concentric rings. Leaves near affected branches are dropping prematurely.",
+          "gold": "disease",
+          "output": "Looking at the symptoms described:\n\n1. **Dark, sunken cankers on branches** with peeling bark - this is characteristic of fungal canker formation\n2. **Brown circular spots on fruit with concentric rings** - this is a classic sign of fungal infection, particularly resembling lenticels or fungal lesions\n3. **Premature leaf drop** near affected areas - indicates the tree is responding to a pathogenic infection\n\nThese symptoms are consistent with a fungal disease, most likely **apple canker** (caused by *Neonectria ditissima*) or **bitter rot** (*Colletotrichum* species). The combination of branch cankers, characteristic fruit spotting with concentric patterns, and associated leaf drop all point to a disease rather than a pest, nutrient deficiency, water stress, or weather damage.\n\nFINAL: disease",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9675,
+            "rationale": "The agent correctly classified the problem as 'disease' with sound reasoning identifying fungal symptoms, though the detailed pathogen speculation slightly exceeds the minimal task requirement."
+          }
+        },
+        {
+          "query": "My tomato plants have yellowing leaves starting from the bottom, and the older leaves are turning pale while the new growth looks okay. The veins remain green but the tissue between them is becoming lighter. I've been watering regularly and don't see any insects.",
+          "gold": "nutrient",
+          "output": "Based on your description, this is a classic presentation of nutrient deficiency, most likely nitrogen deficiency. Here's my reasoning:\n\n**Key indicators:**\n- Yellowing starts from lower/older leaves (mobile nutrients are redistributed to new growth first)\n- New growth appears normal (the plant prioritizes nutrient allocation to developing tissue)\n- Veins remain green while interveinal tissue yellows (characteristic of nutrient deficiency patterns)\n- Regular watering and no visible pests/insects rule out water stress and pest damage\n- No mention of spots, lesions, or disease symptoms\n\nThis pattern is typical of nitrogen deficiency because nitrogen is a mobile nutrient that the plant translocates from older leaves to support new growth when supplies are limited.\n\n**Recommendation:** Consider a balanced fertilizer application or nitrogen-rich fertilizer to address this deficiency.\n\nFINAL: nutrient",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the problem as 'nutrient' matching the reference, provided sound botanical reasoning for the diagnosis, followed proper format with clear final answer, and delivered acc"
+          }
+        },
+        {
+          "query": "My pepper plants have blossom drop and the leaves feel papery to touch. The drip irrigation line was clogged for two weeks before I noticed, and now the plants look really stressed.",
+          "gold": "water_stress",
+          "output": "Based on your description, the key indicators point to water stress:\n\n1. **Blossom drop** - a classic symptom of inconsistent or insufficient water availability, which causes the plant to abort flowers/fruit\n2. **Papery leaves** - indicates desiccation and water deficit stress\n3. **Recent irrigation failure** - two weeks of clogged drip line means the plants experienced prolonged water deprivation\n4. **Overall stress appearance** - consistent with drought/water stress response\n\nWhile nutrient deficiencies can sometimes cause similar symptoms, the direct correlation with the irrigation problem and the specific combination of blossom drop with papery leaf texture strongly indicates water stress as the primary cause.\n\nFINAL: water_stress",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the problem as water_stress with sound reasoning linking all symptoms to the irrigation failure, matching the reference answer perfectly."
+          }
+        },
+        {
+          "query": "My tomato field was hit by a severe storm yesterday afternoon with ice pellets the size of marbles. Now the plants have torn leaves, broken stems, and many fruits have deep pockmarks and bruising.",
+          "gold": "weather_damage",
+          "output": "The farmer is describing damage caused by a severe hailstorm with large ice pellets. The symptoms—torn leaves, broken stems, and pockmarked/bruised fruits—are all direct physical damage from the hail impact, not from biological agents (pests/diseases), nutritional deficiencies, water issues, or weeds.\n\nThis is clearly weather-related damage.\n\nFINAL: weather_damage",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the problem as weather_damage with sound reasoning about hail impact, proper format, and perfect match to the reference answer."
+          }
+        },
+        {
+          "query": "I'm seeing purple nutsedge taking over sections of my rice paddy. It's growing faster than the rice and forming dense patches that are shading my crop.",
+          "gold": "weed",
+          "output": "Purple nutsedge is a highly competitive sedge weed that thrives in wet conditions like rice paddies. The symptoms you're describing—rapid growth, dense patch formation, and shading of the rice crop—are classic characteristics of weed competition rather than a pest, disease, or nutrient issue.\n\nWhile nutsedge can indirectly stress crops through competition for light, water, and nutrients, the primary problem here is the weed itself outcompeting your rice.\n\nFINAL: weed",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the problem as 'weed', provided sound reasoning about purple nutsedge characteristics and competition mechanisms, and delivered the answer in the expected format with ap"
+          }
+        },
+        {
+          "query": "My corn stalks have been completely knocked down and partially eaten near the base. I found tracks and droppings that look like they're from wild boar or deer that have been getting into the field at night.",
+          "gold": "pest",
+          "output": "Based on your description, the corn stalks being knocked down and partially eaten near the base, combined with evidence of wild boar or deer tracks and droppings, this is clearly a **pest** problem. Large mammals like wild boar and deer are feeding on and damaging your corn plants, which is a classic pest damage scenario.\n\nFINAL: pest",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the problem as 'pest', provided sound reasoning about wild boar/deer damage, matched the reference answer exactly, and followed the classification task format properly."
+          }
+        },
+        {
+          "query": "My pepper plants are producing very few flowers and the leaves have developed brown spots that started at the edges and are moving inward. The soil was tested two years ago but I haven't added anything since then. Plants look weak overall.",
+          "gold": "nutrient",
+          "output": "Let me analyze this pepper plant problem:\n\n**Key symptoms observed:**\n- Very few flowers (reduced reproductive output)\n- Brown spots on leaves starting at edges and moving inward (classic pattern)\n- Weak overall plant appearance\n- No soil amendments added in 2 years\n\n**Analysis:**\n\nThe brown spots starting at leaf edges and progressing inward is characteristic of **potassium deficiency**. This nutrient is mobile in plants and deficiency symptoms typically appear on older leaves first, starting at the margins.\n\nThe weak overall growth and poor flowering are consistent with nutrient depletion. After 2 years without soil amendments or fertilization, essential nutrients—particularly potassium, which is heavily used by pepper plants for flower and fruit development—would be depleted.\n\nWhile disease (like leaf spot) could cause brown spots, the pattern described (edge-inward progression) and the combination with weak growth and poor flowering points more strongly to a nutrient issue rather than a pathogenic infection.\n\nWater stress could contribute to weakness, but wouldn't typically cause the specific edge-inward brown spot pattern described.\n\nFINAL: nutrient",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9675,
+            "rationale": "The agent correctly classified the problem as 'nutrient', provided sound reasoning identifying potassium deficiency with accurate symptom analysis, ruled out alternative causes appropriately, and deli"
+          }
+        },
+        {
+          "query": "The beans in the low-lying section of my field have yellow leaves and some root rot symptoms. That area tends to hold standing water, and we've had heavy rains for ten straight days.",
+          "gold": "water_stress",
+          "output": "The farmer describes yellow leaves and root rot in a low-lying field section that retains standing water, following 10 days of heavy rain. These symptoms are classic indicators of waterlogging and poor drainage conditions.\n\nYellow leaves in this context suggest chlorosis from anaerobic soil conditions, while root rot develops when roots are deprived of oxygen in saturated soil. The standing water and prolonged rainfall are the direct environmental causes.\n\nWhile root rot can be caused by fungal pathogens, the farmer's description clearly links the problem to excessive moisture and drainage issues rather than a pathogenic infection per se. The water stress from waterlogging is the primary cause.\n\nFINAL: water_stress",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the problem as water_stress with sound reasoning about waterlogging, anaerobic conditions, and drainage issues, directly addressing the task with accurate execution and "
+          }
+        }
+      ],
+      "gpa_mean": 0.9653125,
+      "gpa_dims": {
+        "target_alignment": 0.9499999999999996,
+        "reasoning_soundness": 0.9416666666666669,
+        "execution_accuracy": 0.9945833333333334,
+        "output_integrity": 0.975
+      }
+    },
+    "tei_v3": {
+      "objective_mean": 0.9583333333333334,
+      "objective_ci95": [
+        0.875,
+        1.0
+      ],
+      "prompt": "You are a crop-advisory assistant. Classify the farmer's described crop problem into a cause category. Classify into one of these categories: pest, disease, nutrient, water_stress, weather_damage, weed.",
+      "examples": [
+        {
+          "query": "My cucumber vines are wilting badly by midday even though I'm watering every evening. The leaves stay limp and some fruits are developing white patches and stopping growth.",
+          "gold": "water_stress",
+          "output": "Let me analyze this cucumber problem:\n\n**Key observations:**\n- Wilting despite regular evening watering suggests the plant cannot absorb water effectively\n- White patches on fruits and stunted fruit growth\n- Midday wilting pattern (typical stress response)\n\n**Reasoning through causes:**\n\n1. **Water stress** - While watering occurs, the wilting despite irrigation points to a root/uptake problem rather than simple drought\n2. **Disease** - White patches on fruits + wilting + growth stunting is highly suggestive of a fungal or bacterial disease affecting vascular tissue or fruit\n3. **Pest** - Less likely to cause this specific symptom pattern\n4. **Nutrient** - Could cause wilting, but white patches on fruit are less typical\n5. **Weather damage** - No mention of extreme conditions\n6. **Weed** - Not applicable\n\nThe combination of **white patches on developing fruits** (suggesting powdery mildew or another fungal disease) plus **vascular wilting despite adequate water** points most strongly to a **disease** affecting the plant's ability to transport water and causing fruit spotting.\n\nFINAL: disease",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.75,
+            "execution_accuracy": 1.0,
+            "output_integrity": 0.4,
+            "aggregate": 0.775,
+            "rationale": "The agent correctly formatted the classification task and provided structured reasoning, but arrived at 'disease' instead of the correct 'water_stress' category, demonstrating sound but ultimately inc"
+          }
+        },
+        {
+          "query": "Large portions of my cabbage heads are bruised and damaged with visible impact marks. A hailstorm passed through the area yesterday evening with ice stones nearly three centimeters in diameter.",
+          "gold": "weather_damage",
+          "output": "The farmer is describing physical damage to cabbage heads with visible impact marks that occurred immediately following a hailstorm with large ice stones. This is clearly weather-related damage caused by hail impact.\n\nFINAL: weather_damage",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the crop problem as weather_damage, provided sound reasoning linking hail impact to physical damage, and delivered the answer in the expected format matching the referen"
+          }
+        },
+        {
+          "query": "Wild mustard plants have appeared throughout my canola field. They look similar to my crop but are growing more aggressively and I can see them competing for resources.",
+          "gold": "weed",
+          "output": "The farmer is describing wild mustard plants growing throughout their canola field, competing for resources and growing more aggressively than the crop.\n\nThis is clearly a weed problem. Wild mustard is a common weed that:\n- Grows in the same fields as canola (both are brassicas)\n- Competes with the crop for water, nutrients, and light\n- Can reduce canola yields if not managed\n- Is morphologically similar to canola, making it a particular challenge in canola production\n\nThe key indicators are: unwanted plants competing for resources, aggressive growth, and resource competition with the desired crop.\n\nFINAL: weed",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the problem as 'weed', provided sound botanical reasoning about wild mustard and canola competition, stayed on-task throughout, and delivered the exact answer in proper "
+          }
+        },
+        {
+          "query": "My bean plants have leaves that are completely skeletonized - only the veins remain. I caught several metallic-colored beetles actively feeding during my morning inspection.",
+          "gold": "pest",
+          "output": "The farmer has observed skeletonized leaves (where only the veins remain) and has directly observed metallic-colored beetles actively feeding on the plants. This is a classic symptom of beetle feeding damage, particularly from beetles like Japanese beetles or similar leaf-feeding beetles that consume leaf tissue between the veins.\n\nThe presence of the beetles actively feeding on the plants, combined with the characteristic skeletonization damage pattern, clearly indicates a pest problem rather than disease, nutrient deficiency, water stress, weather damage, or weeds.\n\nFINAL: pest",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the problem as 'pest' with sound reasoning about beetle damage patterns, proper format, and complete accuracy matching the reference answer."
+          }
+        },
+        {
+          "query": "My tomato plants have developed dark brown spots on the lower leaves that are spreading upward. The spots have yellow halos around them and the affected leaves are turning completely yellow and dropping off. I've noticed this started after several days of humid weather.",
+          "gold": "disease",
+          "output": "Based on your description, this is a classic presentation of **early blight**, a fungal disease of tomatoes caused by *Alternaria* species.\n\nKey indicators pointing to disease:\n- Dark brown spots with concentric rings (target-like appearance)\n- Yellow halos around the lesions\n- Progressive upward spread from lower leaves\n- Leaf yellowing and defoliation\n- Onset following humid conditions (fungal diseases thrive in high humidity)\n\nEarly blight is one of the most common tomato diseases and spreads readily in warm, wet conditions. The fungus overwinters in soil and plant debris, and spores are splash-dispersed during rain or overhead watering.\n\nFINAL: disease",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9675,
+            "rationale": "The agent correctly classified the problem as 'disease' with sound reasoning about fungal infection indicators, though it provided more diagnostic detail than strictly required for a simple classifica"
+          }
+        },
+        {
+          "query": "My citrus trees have new leaves coming in much smaller and with a mottled yellow-green pattern. Fruit production has declined significantly over the past two seasons and what fruit does develop often drops prematurely before ripening.",
+          "gold": "nutrient",
+          "output": "Let me analyze the symptoms you're describing:\n\n**Key observations:**\n- Small new leaves with mottled yellow-green pattern\n- Significant decline in fruit production over two seasons\n- Premature fruit drop before ripening\n\n**Reasoning:**\n\nThe mottled yellow-green pattern on new leaves is a classic indicator of nutrient deficiency, particularly:\n- **Zinc deficiency** (most common in citrus) - causes small leaves with mottled/blotchy yellowing\n- **Magnesium deficiency** - also causes interveinal chlorosis (yellowing between veins)\n- **Iron deficiency** - can cause similar patterns\n\nThe combination of stunted leaf growth, mottled discoloration, reduced fruit set, and premature fruit drop all point to a systemic nutrient problem rather than:\n- A pest (which would show more localized damage, holes, or visible insects)\n- A disease (which typically shows spots, lesions, or wilting)\n- Water stress (which would show more uniform wilting/leaf drop)\n- Weather damage (which would be more acute and uniform)\n- Weeds (which wouldn't cause these leaf symptoms)\n\nThe chronic nature over two seasons suggests a persistent nutrient imbalance, likely related to soil pH, soil deficiency, or poor nutrient availability.\n\nFINAL: nutrient",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9675,
+            "rationale": "The agent correctly classified the problem as 'nutrient' with sound botanical reasoning that systematically ruled out alternative causes and identified specific deficiencies consistent with the descri"
+          }
+        },
+        {
+          "query": "The corn leaves are rolling inward and turning grayish-green. We've had no significant rainfall in over a month and my irrigation system can only cover half the field.",
+          "gold": "water_stress",
+          "output": "The symptoms you're describing—inward leaf rolling and grayish-green discoloration—are classic indicators of water stress in corn. Leaf rolling is a protective mechanism plants use to reduce water loss during drought conditions. The color change reflects the plant's physiological response to insufficient water availability.\n\nGiven that you've had no significant rainfall in over a month and your irrigation system only covers half the field, this clearly points to inadequate water availability as the primary cause.\n\nFINAL: water_stress",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the problem as water_stress with sound reasoning connecting symptoms to drought conditions, proper format, and perfect match to the reference answer."
+          }
+        },
+        {
+          "query": "Strong winds last Tuesday night flattened about 60 percent of my soybean crop. Many plants are now lodged at the base and lying horizontally on the ground.",
+          "gold": "weather_damage",
+          "output": "The farmer is describing physical damage to soybean plants caused by strong winds that occurred last Tuesday night. The plants are lodged (bent over and lying horizontally) at the base due to the wind event.\n\nThis is clearly a weather-related damage issue, not caused by pests, diseases, nutrient deficiencies, water stress, or weeds. The direct cause is the severe wind event that mechanically damaged the crop structure.\n\nFINAL: weather_damage",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the crop problem as weather_damage with sound reasoning that systematically ruled out alternative causes and identified the wind event as the direct mechanical cause, ma"
+          }
+        },
+        {
+          "query": "There are these broad-leafed plants spreading rapidly across my soybean plot. They weren't there last month but now they're everywhere and choking out my seedlings.",
+          "gold": "weed",
+          "output": "Based on your description, this sounds like a weed problem. The key indicators are:\n\n1. **Broad-leafed plants** - This is characteristic of broadleaf weeds rather than grasses or other crop issues\n2. **Rapid spread** - Weeds are known for quick establishment and proliferation\n3. **Recent appearance** - Weeds can emerge quickly when conditions are favorable\n4. **Choking out seedlings** - This is typical competitive damage from weeds rather than pest feeding, disease symptoms, or nutrient deficiency\n\nThe rapid colonization of your soybean plot by these broad-leafed plants suggests they've taken advantage of available space and resources, which is classic weed behavior.\n\nFINAL: weed",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the problem as 'weed' with sound reasoning based on the symptoms described, proper format with clear final answer, and perfect match to the reference answer."
+          }
+        },
+        {
+          "query": "I've got aphids covering the new growth on my cabbage crop. The colonies are so dense that the leaves are curling up and the plants have stopped growing properly.",
+          "gold": "pest",
+          "output": "The farmer is describing aphids on cabbage plants, which are causing leaf curling and stunted growth. Aphids are insects that feed on plant sap by piercing leaves and stems. This is a clear case of pest damage - aphids are a common agricultural pest that directly damages crops through their feeding activity.\n\nFINAL: pest",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly classified the problem as 'pest', provided sound reasoning about aphid behavior, stayed on task, and the final answer matches the reference perfectly."
+          }
+        },
+        {
+          "query": "Grapevines are showing downy growth on the underside of leaves, with corresponding yellow patches on top. Young shoots and flower clusters have a grayish fuzzy appearance. Infected berries are shriveling and turning brown.",
+          "gold": "disease",
+          "output": "Looking at the symptoms described:\n\n- Downy growth on leaf undersides with yellow patches on top surfaces\n- Grayish fuzzy appearance on young shoots and flower clusters\n- Shriveled, browning berries\n\nThese are classic signs of **downy mildew**, a fungal disease caused by *Plasmopara viticola*. The downy/fuzzy growth on the undersides of leaves is the pathognomonic sign of this disease, and the corresponding yellowing on the upper leaf surface is typical. The infection of reproductive structures (flowers and berries) leading to their deterioration is also characteristic of this pathogen in grapevines.\n\nThis is a disease problem, not a pest, nutrient deficiency, water stress, weather damage, or weed issue.\n\nFINAL: disease",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the problem as 'disease', provided sound reasoning identifying downy mildew with accurate symptom analysis, followed the required format, and matched the reference answe"
+          }
+        },
+        {
+          "query": "Cotton plants are showing reddish-purple discoloration on the leaves and stems. Growth has been severely restricted and the plants are much smaller than normal for this time in the season. Root development appears limited when I checked a few plants.",
+          "gold": "nutrient",
+          "output": "Looking at the symptoms described:\n\n- Reddish-purple discoloration on leaves and stems\n- Severely restricted growth and stunted plants\n- Limited root development\n\nThese symptoms are characteristic of **phosphorus deficiency** in cotton. Phosphorus is critical for root development and energy metabolism. When phosphorus is deficient, plants cannot develop adequate root systems, which further restricts nutrient and water uptake, leading to stunted growth and the distinctive reddish-purple pigmentation (anthocyanin accumulation) that occurs when phosphorus is limiting.\n\nWhile other factors like poor root conditions could contribute, the combination of discoloration, stunted growth, AND poor root development points most directly to a nutrient deficiency rather than pest, disease, water stress, or weather damage.\n\nFINAL: nutrient",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9675,
+            "rationale": "The agent correctly classified the problem as 'nutrient' with sound reasoning about phosphorus deficiency symptoms, proper format, and accurate alignment with the reference answer."
+          }
+        },
+        {
+          "query": "My strawberry plants have brown leaf margins and the fruit is small and dry. The soil moisture meter shows readings well below the recommended range for the past month.",
+          "gold": "water_stress",
+          "output": "The farmer is describing brown leaf margins and small, dry fruit on strawberry plants, combined with soil moisture readings that are consistently below the recommended range for an extended period (one month).\n\nThese symptoms are classic indicators of water stress:\n- Brown leaf margins (leaf scorch) occur when plants cannot uptake sufficient water\n- Small and dry fruit results from inadequate water availability during fruit development\n- The soil moisture meter confirmation directly supports this diagnosis\n\nWhile nutrient deficiency could cause some leaf discoloration, the combination of low soil moisture readings and the specific pattern of symptoms (marginal browning + fruit quality issues) points clearly to insufficient water availability.\n\nFINAL: water_stress",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the problem as water_stress with sound reasoning connecting symptoms to diagnosis, proper format, and perfect match to the reference answer."
+          }
+        },
+        {
+          "query": "After the cold snap three nights ago, my potato plants have blackened foliage that looks water-soaked and limp. The temperature sensor recorded minus one degree for about four hours before dawn.",
+          "gold": "weather_damage",
+          "output": "The farmer describes blackened, water-soaked, and limp foliage appearing after a cold snap with temperatures dropping to -1°C for several hours. This is a classic presentation of frost damage to potato plants.\n\nThe symptoms—blackening and wilting of foliage following freezing temperatures—are characteristic of cold injury to plant tissues. The water-soaked appearance occurs as ice crystals form in and rupture plant cells, causing cellular collapse and the characteristic darkening.\n\nThis is weather-related damage, not a pest, disease, nutrient deficiency, water stress, or weed issue.\n\nFINAL: weather_damage",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the problem as weather_damage with sound reasoning about frost damage mechanisms, proper format, and complete accuracy matching the reference answer."
+          }
+        },
+        {
+          "query": "There's a lot of crabgrass coming up in my tomato beds. The patches are getting thicker every day and my tomato plants look stunted where the grass is densest.",
+          "gold": "weed",
+          "output": "The farmer is describing crabgrass growing in tomato beds, which is a weed problem. Crabgrass is an unwanted plant species competing with the tomatoes for resources (water, nutrients, light, and space). The stunting of tomato plants in areas with dense crabgrass is a secondary effect of weed competition, not a primary disease, pest, nutrient deficiency, or water/weather issue.\n\nFINAL: weed",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the problem as 'weed', provided sound reasoning about crabgrass competition, and delivered the answer in the expected format matching the reference exactly."
+          }
+        },
+        {
+          "query": "The ears on my corn have been invaded by worms that are eating the kernels. When I peel back the husks, I find brown frass and damaged grain at the tips.",
+          "gold": "pest",
+          "output": "The symptoms you're describing—worms inside corn ears eating kernels, brown frass (insect droppings), and damage concentrated at the ear tips—are classic signs of corn earworm (also called tomato hornworm or cotton bollworm, depending on region). This is a larval pest that tunnels into developing ears and feeds on the kernels, leaving characteristic frass trails.\n\nThis is clearly a pest infestation rather than a disease, nutrient deficiency, water stress, weather damage, or weed problem.\n\nFINAL: pest",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the problem as 'pest', provided sound reasoning with accurate pest identification and symptom analysis, followed proper format with clear final answer, and the classific"
+          }
+        },
+        {
+          "query": "The apple trees have dark, sunken cankers on branches and the bark is peeling away in those areas. Some fruit shows brown circular spots that are slightly sunken with concentric rings. Leaves near affected branches are dropping prematurely.",
+          "gold": "disease",
+          "output": "Looking at the symptoms described:\n\n1. **Dark, sunken cankers on branches** with peeling bark - this is characteristic of fungal canker formation\n2. **Brown circular spots on fruit with concentric rings** - this is a classic sign of fungal infection, particularly resembling lenticels or fungal lesions\n3. **Premature leaf drop** near affected areas - indicates the tree is responding to a pathogenic infection\n\nThese symptoms are consistent with a fungal disease, most likely **apple canker** (caused by *Neonectria ditissima*) or **bitter rot** (*Colletotrichum* species). The combination of branch cankers, characteristic fruit spotting with concentric patterns, and associated leaf drop all point to a disease rather than a pest, nutrient deficiency, water stress, or weather damage.\n\nFINAL: disease",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9675,
+            "rationale": "The agent correctly classified the problem as 'disease' with sound reasoning identifying fungal symptoms, though the detailed pathogen speculation slightly exceeds the minimal task requirement."
+          }
+        },
+        {
+          "query": "My tomato plants have yellowing leaves starting from the bottom, and the older leaves are turning pale while the new growth looks okay. The veins remain green but the tissue between them is becoming lighter. I've been watering regularly and don't see any insects.",
+          "gold": "nutrient",
+          "output": "Based on your description, this is a classic presentation of nutrient deficiency, most likely nitrogen deficiency. Here's my reasoning:\n\n**Key indicators:**\n- Yellowing starts from lower/older leaves (mobile nutrients are redistributed to new growth first)\n- New growth appears normal (the plant prioritizes nutrient allocation to developing tissue)\n- Veins remain green while interveinal tissue yellows (characteristic of nutrient deficiency patterns)\n- Regular watering and no visible pests/insects rule out water stress and pest damage\n- No mention of spots, lesions, or disease symptoms\n\nThis pattern is typical of nitrogen deficiency because nitrogen is a mobile nutrient that the plant translocates from older leaves to support new growth when supplies are limited.\n\n**Recommendation:** Consider a balanced fertilizer application or nitrogen-rich fertilizer to address this deficiency.\n\nFINAL: nutrient",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the problem as 'nutrient' matching the reference, provided sound botanical reasoning for the diagnosis, followed proper format with clear final answer, and delivered acc"
+          }
+        },
+        {
+          "query": "My pepper plants have blossom drop and the leaves feel papery to touch. The drip irrigation line was clogged for two weeks before I noticed, and now the plants look really stressed.",
+          "gold": "water_stress",
+          "output": "Based on your description, the key indicators point to water stress:\n\n1. **Blossom drop** - a classic symptom of inconsistent or insufficient water availability, which causes the plant to abort flowers/fruit\n2. **Papery leaves** - indicates desiccation and water deficit stress\n3. **Recent irrigation failure** - two weeks of clogged drip line means the plants experienced prolonged water deprivation\n4. **Overall stress appearance** - consistent with drought/water stress response\n\nWhile nutrient deficiencies can sometimes cause similar symptoms, the direct correlation with the irrigation problem and the specific combination of blossom drop with papery leaf texture strongly indicates water stress as the primary cause.\n\nFINAL: water_stress",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the problem as water_stress with sound reasoning linking all symptoms to the irrigation failure, matching the reference answer perfectly."
+          }
+        },
+        {
+          "query": "My tomato field was hit by a severe storm yesterday afternoon with ice pellets the size of marbles. Now the plants have torn leaves, broken stems, and many fruits have deep pockmarks and bruising.",
+          "gold": "weather_damage",
+          "output": "The farmer is describing damage caused by a severe hailstorm with large ice pellets. The symptoms—torn leaves, broken stems, and pockmarked/bruised fruits—are all direct physical damage from the hail impact, not from biological agents (pests/diseases), nutritional deficiencies, water issues, or weeds.\n\nThis is clearly weather-related damage.\n\nFINAL: weather_damage",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the problem as weather_damage with sound reasoning about hail impact, proper format, and perfect match to the reference answer."
+          }
+        },
+        {
+          "query": "I'm seeing purple nutsedge taking over sections of my rice paddy. It's growing faster than the rice and forming dense patches that are shading my crop.",
+          "gold": "weed",
+          "output": "Purple nutsedge is a highly competitive sedge weed that thrives in wet conditions like rice paddies. The symptoms you're describing—rapid growth, dense patch formation, and shading of the rice crop—are classic characteristics of weed competition rather than a pest, disease, or nutrient issue.\n\nWhile nutsedge can indirectly stress crops through competition for light, water, and nutrients, the primary problem here is the weed itself outcompeting your rice.\n\nFINAL: weed",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the problem as 'weed', provided sound reasoning about purple nutsedge characteristics and competition mechanisms, and delivered the answer in the expected format with ap"
+          }
+        },
+        {
+          "query": "My corn stalks have been completely knocked down and partially eaten near the base. I found tracks and droppings that look like they're from wild boar or deer that have been getting into the field at night.",
+          "gold": "pest",
+          "output": "Based on your description, the corn stalks being knocked down and partially eaten near the base, combined with evidence of wild boar or deer tracks and droppings, this is clearly a **pest** problem. Large mammals like wild boar and deer are feeding on and damaging your corn plants, which is a classic pest damage scenario.\n\nFINAL: pest",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the problem as 'pest', provided sound reasoning about wild boar/deer damage, matched the reference answer exactly, and followed the classification task format properly."
+          }
+        },
+        {
+          "query": "My pepper plants are producing very few flowers and the leaves have developed brown spots that started at the edges and are moving inward. The soil was tested two years ago but I haven't added anything since then. Plants look weak overall.",
+          "gold": "nutrient",
+          "output": "Let me analyze this pepper plant problem:\n\n**Key symptoms observed:**\n- Very few flowers (reduced reproductive output)\n- Brown spots on leaves starting at edges and moving inward (classic pattern)\n- Weak overall plant appearance\n- No soil amendments added in 2 years\n\n**Analysis:**\n\nThe brown spots starting at leaf edges and progressing inward is characteristic of **potassium deficiency**. This nutrient is mobile in plants and deficiency symptoms typically appear on older leaves first, starting at the margins.\n\nThe weak overall growth and poor flowering are consistent with nutrient depletion. After 2 years without soil amendments or fertilization, essential nutrients—particularly potassium, which is heavily used by pepper plants for flower and fruit development—would be depleted.\n\nWhile disease (like leaf spot) could cause brown spots, the pattern described (edge-inward progression) and the combination with weak growth and poor flowering points more strongly to a nutrient issue rather than a pathogenic infection.\n\nWater stress could contribute to weakness, but wouldn't typically cause the specific edge-inward brown spot pattern described.\n\nFINAL: nutrient",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9675,
+            "rationale": "The agent correctly classified the problem as 'nutrient', provided sound reasoning identifying potassium deficiency with accurate symptom analysis, ruled out alternative causes appropriately, and deli"
+          }
+        },
+        {
+          "query": "The beans in the low-lying section of my field have yellow leaves and some root rot symptoms. That area tends to hold standing water, and we've had heavy rains for ten straight days.",
+          "gold": "water_stress",
+          "output": "The farmer describes yellow leaves and root rot in a low-lying field section that retains standing water, following 10 days of heavy rain. These symptoms are classic indicators of waterlogging and poor drainage conditions.\n\nYellow leaves in this context suggest chlorosis from anaerobic soil conditions, while root rot develops when roots are deprived of oxygen in saturated soil. The standing water and prolonged rainfall are the direct environmental causes.\n\nWhile root rot can be caused by fungal pathogens, the farmer's description clearly links the problem to excessive moisture and drainage issues rather than a pathogenic infection per se. The water stress from waterlogging is the primary cause.\n\nFINAL: water_stress",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the problem as water_stress with sound reasoning about waterlogging, anaerobic conditions, and drainage issues, directly addressing the task with accurate execution and "
+          }
+        }
+      ],
+      "gpa_mean": 0.9653125,
+      "gpa_dims": {
+        "target_alignment": 0.9499999999999996,
+        "reasoning_soundness": 0.9416666666666669,
+        "execution_accuracy": 0.9945833333333334,
+        "output_integrity": 0.975
+      },
+      "optimization": {
+        "triaged": true,
+        "judge_calls_saved": 0,
+        "n_promoted": 0,
+        "best_val_obj": 1.0,
+        "baseline_val_obj": 1.0,
+        "ship_prob_better": null,
+        "shipped_baseline": null,
+        "front": [
+          {
+            "obj": 1.0,
+            "gpa": 0.97575,
+            "why": "baseline (triaged)"
+          }
+        ],
+        "why_log": [],
+        "history": [
+          {
+            "iter": 0,
+            "val_obj": 1.0,
+            "strategy": "baseline",
+            "accepted": true
+          }
+        ]
+      }
+    }
+  },
+  "duration_s": 0.0
+}

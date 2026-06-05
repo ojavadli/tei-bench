@@ -205,10 +205,10 @@ def main():
     pa += [r"\bottomrule", r"\end{tabular}"]
     (TAB / "per_agent_v2.tex").write_text("\n".join(pa), encoding="utf-8")
 
-    DIM_LABEL = {"target_alignment": "Target alignment", "reasoning_soundness": "Reasoning soundness",
+    DIM_LABEL = {"target_alignment": "Target alignment", "reasoning_soundness": "Reasoning",
                  "execution_accuracy": "Execution accuracy", "output_integrity": "Output integrity"}
     gd = [r"\begin{tabular}{lrrrr}", r"\toprule",
-          r"GPA dimension & Baseline & TEI & $\Delta$ & $p$ \\", r"\midrule"]
+          r"Evaluation dimension & Baseline & TEI & $\Delta$ & $p$ \\", r"\midrule"]
     for d in DIMENSIONS:
         s = dim_stats[d]
         gd.append(f"{DIM_LABEL.get(d, d)} & {s['mean_before']:.3f} & {s['mean_after']:.3f} & "

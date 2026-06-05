@@ -30,7 +30,7 @@ not single-task.
 | Safeguard | What we do |
 |---|---|
 | **Held-out test** | TEI optimizes only on the train split; every reported number is on unseen test inputs. |
-| **Objective primary endpoint** | Accuracy / exact-match computed in *code* (no LLM). The four GPA dimensions are *secondary*. |
+| **Objective primary endpoint** | Accuracy / exact-match computed in *code* (no LLM). The four **Evaluation dimensions** (judge; inspired by Agent GPA) are *secondary*. |
 | **Judge ≠ agent** | Agent = `claude-haiku-4-5`; judge + optimizer = `claude-sonnet-4-5` (stronger, different model → no self-preference). |
 | **Fair baselines** | Baseline prompts include the label set; TEI must earn gains via format/disambiguation/decision rules. |
 | **Difficulty calibration** | Tasks span 2–20 classes; pre-registered headroom-subset analysis (baseline < 0.9). |
@@ -40,7 +40,7 @@ not single-task.
 ## Layout
 
 ```
-teibench/         # the harness (LLM layer, GPA judge, scorers, optimizer w/ tei|objref|random|opro modes, stats)
+teibench/         # the harness (LLM layer, Evaluation-dimensions judge, scorers, optimizer w/ tei|objref|random|opro|tei_v3 modes, stats)
 tasks/            # 31 task datasets (committed JSON: train/test gold)
 results_v2/       # PRIMARY corrected run: per-arm records (every prompt, output trace, score) + summary + CSV
 results_v2_gpt/   # cross-provider spot-check (agent = gpt-4o-mini)
