@@ -1,0 +1,910 @@
+{
+  "task_id": "health_triage",
+  "industry": "Healthcare",
+  "metric": "classification",
+  "source": "Authored for TEI-Bench; illustrative triage scenarios (not medical advice).",
+  "is_public": false,
+  "n_train": 15,
+  "n_test": 15,
+  "agent_model": "gpt-4o-mini",
+  "judge_model": "claude-sonnet-4-5",
+  "optimizer_model": "claude-sonnet-4-5",
+  "seed": 0,
+  "arms": {
+    "baseline": {
+      "objective_mean": 0.9333333333333333,
+      "objective_ci95": [
+        0.8,
+        1.0
+      ],
+      "prompt": "You are a medical triage assistant. Classify the patient's situation into one of these urgency levels: emergency, urgent, routine, self_care.",
+      "examples": [
+        {
+          "query": "I want a dental cleaning appointment.",
+          "gold": "routine",
+          "output": "A dental cleaning appointment is a routine procedure that is not urgent or an emergency. It can be scheduled at the patient's convenience. \n\nFINAL: routine",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the dental cleaning as 'routine' matching the reference answer, provided sound reasoning about non-urgency, and followed the required format perfectly."
+          }
+        },
+        {
+          "query": "Unconscious friend who is not responding to voice or touch.",
+          "gold": "emergency",
+          "output": "This situation is critical as the friend is unconscious and not responding, indicating a potential life-threatening condition. Immediate medical attention is required. \n\nFINAL: emergency",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 1.0,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 1.0,
+            "rationale": "The agent correctly classified an unconscious, unresponsive patient as 'emergency' with sound reasoning about the life-threatening nature, matching the reference answer perfectly."
+          }
+        },
+        {
+          "query": "Heavy bleeding that soaks through a bandage in minutes.",
+          "gold": "emergency",
+          "output": "This situation indicates a severe and potentially life-threatening condition that requires immediate medical attention due to the risk of significant blood loss. \n\nFINAL: emergency",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified heavy bleeding as 'emergency', provided sound reasoning about life-threatening blood loss risk, and delivered the answer in the expected format matching the reference ex"
+          }
+        },
+        {
+          "query": "Minor bruise on my knee from bumping a table.",
+          "gold": "self_care",
+          "output": "A minor bruise from bumping into a table typically does not require immediate medical attention and can be managed at home. This situation is best classified as self_care. \n\nFINAL: self_care",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the minor bruise as 'self_care' matching the reference answer, provided sound reasoning about home management, and followed the required format perfectly."
+          }
+        },
+        {
+          "query": "Slight indigestion after a large meal.",
+          "gold": "self_care",
+          "output": "Slight indigestion after a large meal is typically not a serious condition and can often be managed with over-the-counter remedies or dietary adjustments. It does not require immediate medical attention. \n\nFINAL: self_care",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the situation as 'self_care' matching the reference, provided sound reasoning about why immediate medical attention is unnecessary, and followed the required format perf"
+          }
+        },
+        {
+          "query": "High fever in a 6-month-old infant that started today.",
+          "gold": "urgent",
+          "output": "A high fever in a 6-month-old infant can be concerning, especially if it started suddenly. Infants are more vulnerable to infections, and a high fever can indicate a serious condition. Therefore, this situation requires prompt medical evaluation.\n\nFINAL: emergency",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.75,
+            "reasoning_soundness": 0.85,
+            "execution_accuracy": 1.0,
+            "output_integrity": 0.4,
+            "aggregate": 0.75,
+            "rationale": "The agent correctly formatted the response and provided sound reasoning about infant fever risks, but classified as 'emergency' when the reference answer indicates 'urgent' — a meaningful distinction "
+          }
+        },
+        {
+          "query": "Painful urination and lower abdominal discomfort since this morning.",
+          "gold": "urgent",
+          "output": "The symptoms of painful urination and lower abdominal discomfort could indicate a urinary tract infection or another condition that requires medical evaluation. While it is not life-threatening, it does require prompt attention to prevent complications. Therefore, this situation is classified as urgent.\n\nFINAL: urgent",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the situation as 'urgent' matching the reference answer, provided sound medical reasoning about UTI risks, stayed on task, and followed proper format with clear final cl"
+          }
+        },
+        {
+          "query": "Standard vaccination update before travel next month.",
+          "gold": "routine",
+          "output": "This situation is not urgent and can be scheduled at a convenient time before the travel date. It does not require immediate attention. \n\nFINAL: routine",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the vaccination update as 'routine', matching the reference answer, with appropriate supporting explanation and proper format."
+          }
+        },
+        {
+          "query": "General wellness consultation, no specific complaint.",
+          "gold": "routine",
+          "output": "The situation described is a general wellness consultation without any specific complaints, indicating that the patient is not in immediate distress or danger. This would typically be classified as a routine situation, as it does not require urgent or emergency attention.\n\nFINAL: routine",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the situation as 'routine' with sound reasoning about absence of distress, properly addressing the triage classification task with accurate execution and complete alignm"
+          }
+        },
+        {
+          "query": "Sudden severe allergic reaction with throat swelling after a bee sting.",
+          "gold": "emergency",
+          "output": "This situation indicates a severe allergic reaction, which can lead to anaphylaxis, especially with throat swelling. This requires immediate medical attention. \n\nFINAL: emergency",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the severe allergic reaction with throat swelling as 'emergency', provided sound medical reasoning about anaphylaxis risk, and delivered the answer in the required forma"
+          }
+        },
+        {
+          "query": "Possible broken arm after a fall, visible deformity.",
+          "gold": "emergency",
+          "output": "The presence of a visible deformity suggests a significant injury that requires immediate medical attention to assess for fractures and potential complications. This situation is classified as an emergency.\n\nFINAL: emergency",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the situation as 'emergency' matching the reference, provided sound medical reasoning about visible deformity requiring immediate attention, and followed the task format"
+          }
+        },
+        {
+          "query": "Dry skin patch that itches a little.",
+          "gold": "self_care",
+          "output": "The situation described involves a dry skin patch that itches, which is typically not life-threatening and can often be managed with over-the-counter treatments or self-care measures. Therefore, this situation does not require immediate medical attention.\n\nFINAL: self_care",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly classified the condition as 'self_care' matching the reference answer, provided sound reasoning about non-urgent nature, and followed proper format with clear justification."
+          }
+        },
+        {
+          "query": "Mild muscle soreness two days after exercising.",
+          "gold": "self_care",
+          "output": "The patient's situation involves mild muscle soreness, which is a common and typically self-limiting condition following exercise. This does not indicate a serious medical issue and can usually be managed with rest and self-care measures. \n\nFINAL: self_care",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the triage level as 'self_care' with sound reasoning about the benign nature of post-exercise muscle soreness, fully addressing the task requirements."
+          }
+        },
+        {
+          "query": "Migraine that hasn't improved with my usual medication in 24 hours.",
+          "gold": "urgent",
+          "output": "The patient is experiencing a migraine that has not responded to their usual medication for a full day. This indicates a significant level of discomfort and potential complications if the migraine persists. While it may not be life-threatening, it requires prompt medical attention to manage the pain and prevent further issues. Therefore, this situation is classified as urgent.\n\nFINAL: urgent",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the migraine as 'urgent' matching the reference answer, provided sound clinical reasoning about non-responsive medication requiring prompt attention, and delivered the r"
+          }
+        },
+        {
+          "query": "Recurring mild back pain I want evaluated at some point.",
+          "gold": "routine",
+          "output": "The patient's situation involves recurring mild back pain, which suggests a need for evaluation but does not indicate an immediate threat to health or life. This can be classified as a routine issue that can be addressed in a non-urgent manner.\n\nFINAL: routine",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly classified the triage level as 'routine' matching the reference, provided sound reasoning about non-urgent nature of mild recurring back pain, and followed the task format appropri"
+          }
+        }
+      ],
+      "gpa_mean": 0.9541666666666666,
+      "gpa_dims": {
+        "target_alignment": 0.9399999999999997,
+        "reasoning_soundness": 0.9246666666666666,
+        "execution_accuracy": 0.9919999999999999,
+        "output_integrity": 0.9600000000000001
+      }
+    },
+    "random": {
+      "objective_mean": 0.9333333333333333,
+      "objective_ci95": [
+        0.8,
+        1.0
+      ],
+      "prompt": "You are a healthcare triage specialist responsible for evaluating patient situations. Your task is to determine the appropriate level of care urgency by categorizing each case into exactly one of the following four categories:\n\n- emergency: Situations requiring immediate medical intervention\n- urgent: Conditions needing prompt medical attention within hours\n- routine: Cases that can be scheduled for standard medical appointments\n- self_care: Situations manageable with home care and over-the-counter remedies\n\nAnalyze the patient's presented symptoms, circumstances, and concerns to assign the most appropriate urgency classification.",
+      "examples": [
+        {
+          "query": "I want a dental cleaning appointment.",
+          "gold": "routine",
+          "output": "A dental cleaning appointment is a routine procedure that can be scheduled at the patient's convenience. It does not require immediate attention and is not urgent. \n\nFINAL: routine",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Unconscious friend who is not responding to voice or touch.",
+          "gold": "emergency",
+          "output": "This situation involves a friend who is unconscious and unresponsive, which is a critical condition that requires immediate medical intervention. The lack of responsiveness indicates a potential life-threatening emergency that needs urgent care.\n\nFINAL: emergency",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Heavy bleeding that soaks through a bandage in minutes.",
+          "gold": "emergency",
+          "output": "Heavy bleeding that soaks through a bandage in minutes indicates a potentially serious situation that requires immediate medical intervention to prevent severe blood loss or other complications. This is classified as an emergency.\n\nFINAL: emergency",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Minor bruise on my knee from bumping a table.",
+          "gold": "self_care",
+          "output": "A minor bruise from bumping into a table typically does not require medical intervention and can be managed with home care, such as rest, ice, and over-the-counter pain relief if needed. \n\nFINAL: self_care",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Slight indigestion after a large meal.",
+          "gold": "self_care",
+          "output": "Slight indigestion after a large meal is typically a common and manageable issue that can often be treated with over-the-counter remedies or home care, such as antacids or dietary adjustments. It does not require immediate medical attention or prompt care. \n\nFINAL: self_care",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "High fever in a 6-month-old infant that started today.",
+          "gold": "urgent",
+          "output": "A high fever in a 6-month-old infant can be concerning, especially if it has started suddenly. Infants are more vulnerable to infections, and a high fever can indicate a serious underlying condition. Given the age of the child and the potential for rapid deterioration, this situation requires immediate medical intervention to rule out any serious issues.\n\nFINAL: emergency",
+          "objective": 0.0,
+          "gpa": {}
+        },
+        {
+          "query": "Painful urination and lower abdominal discomfort since this morning.",
+          "gold": "urgent",
+          "output": "The symptoms of painful urination and lower abdominal discomfort suggest a potential urinary tract infection or another condition that may require medical evaluation. Given that these symptoms have been present since this morning and could lead to complications if untreated, they warrant prompt medical attention. \n\nFINAL: urgent",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Standard vaccination update before travel next month.",
+          "gold": "routine",
+          "output": "This situation involves a routine vaccination update that can be scheduled ahead of time, as it is not urgent and does not require immediate medical intervention. \n\nFINAL: routine",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "General wellness consultation, no specific complaint.",
+          "gold": "routine",
+          "output": "Since the patient is seeking a general wellness consultation without any specific complaints, this situation does not require immediate or prompt medical attention. It can be scheduled for a standard medical appointment. \n\nFINAL: routine",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Sudden severe allergic reaction with throat swelling after a bee sting.",
+          "gold": "emergency",
+          "output": "This situation involves a sudden severe allergic reaction, which can lead to anaphylaxis, especially with symptoms like throat swelling. This condition requires immediate medical intervention to prevent life-threatening complications. \n\nFINAL: emergency",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Possible broken arm after a fall, visible deformity.",
+          "gold": "emergency",
+          "output": "The presence of a visible deformity after a fall suggests a significant injury that likely requires immediate medical evaluation and intervention to assess for fractures and to prevent further complications. This situation is classified as an emergency.\n\nFINAL: emergency",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Dry skin patch that itches a little.",
+          "gold": "self_care",
+          "output": "The symptoms described indicate a dry skin patch that itches, which is typically manageable with home care such as moisturizing creams or over-the-counter antihistamines. This does not require immediate medical attention or prompt care. \n\nFINAL: self_care",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Mild muscle soreness two days after exercising.",
+          "gold": "self_care",
+          "output": "The symptoms described indicate mild muscle soreness, which is a common and expected response to physical activity, especially after exercise. This condition is typically manageable with rest, hydration, and over-the-counter pain relief if needed. Therefore, it does not require immediate medical attention or prompt care.\n\nFINAL: self_care",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Migraine that hasn't improved with my usual medication in 24 hours.",
+          "gold": "urgent",
+          "output": "A migraine that has not improved with usual medication for 24 hours indicates a need for prompt medical attention, as it may require a different treatment approach or evaluation for other underlying issues. Therefore, this situation is classified as urgent.\n\nFINAL: urgent",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Recurring mild back pain I want evaluated at some point.",
+          "gold": "routine",
+          "output": "The patient's symptoms indicate mild back pain that is recurring but does not suggest an immediate threat to health or require urgent intervention. This condition can be evaluated during a standard medical appointment, as it does not appear to be severe or life-threatening. \n\nFINAL: routine",
+          "objective": 1.0,
+          "gpa": {}
+        }
+      ],
+      "optimization": {
+        "history": [
+          {
+            "iter": 0,
+            "obj": 0.9,
+            "gpa": 0.0,
+            "strategy": "baseline"
+          },
+          {
+            "iter": 1,
+            "obj": 0.9,
+            "gpa": 0.0,
+            "strategy": "paraphrase"
+          },
+          {
+            "iter": 2,
+            "obj": 0.9,
+            "gpa": 0.0,
+            "strategy": "paraphrase"
+          },
+          {
+            "iter": 3,
+            "obj": 0.9,
+            "gpa": 0.0,
+            "strategy": "paraphrase"
+          },
+          {
+            "iter": 4,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "paraphrase"
+          },
+          {
+            "iter": 5,
+            "obj": 0.9,
+            "gpa": 0.0,
+            "strategy": "paraphrase"
+          },
+          {
+            "iter": 6,
+            "obj": 0.8,
+            "gpa": 0.0,
+            "strategy": "paraphrase"
+          }
+        ],
+        "front": [
+          {
+            "obj": 1.0,
+            "gpa": 0.0,
+            "iter": 4,
+            "strategy": "paraphrase"
+          },
+          {
+            "obj": 0.9,
+            "gpa": 0.0,
+            "iter": 0,
+            "strategy": "baseline"
+          },
+          {
+            "obj": 0.9,
+            "gpa": 0.0,
+            "iter": 1,
+            "strategy": "paraphrase"
+          },
+          {
+            "obj": 0.9,
+            "gpa": 0.0,
+            "iter": 2,
+            "strategy": "paraphrase"
+          },
+          {
+            "obj": 0.9,
+            "gpa": 0.0,
+            "iter": 3,
+            "strategy": "paraphrase"
+          }
+        ]
+      }
+    },
+    "objective_reflection": {
+      "objective_mean": 1.0,
+      "objective_ci95": [
+        1.0,
+        1.0
+      ],
+      "prompt": "You are a medical triage assistant. Classify the patient's situation into exactly one of these urgency levels: emergency, urgent, routine, self_care.\n\n**Urgency Level Definitions:**\n\n- **emergency**: Life-threatening conditions requiring immediate medical attention (chest pain, difficulty breathing, severe bleeding, stroke symptoms, severe allergic reactions, loss of consciousness, severe trauma)\n\n- **urgent**: Conditions requiring medical evaluation within 24-48 hours that could worsen or indicate significant illness but are not immediately life-threatening (persistent fever, symptoms suggesting infection like productive cough with colored sputum lasting >1 week, moderate pain, concerning symptom changes, urinary symptoms with fever, worsening chronic conditions)\n\n- **routine**: Stable conditions that can wait for a regular appointment within days to weeks (mild symptoms, chronic condition monitoring, preventive care, minor concerns without red flags)\n\n- **self_care**: Minor issues manageable at home without medical consultation (mild cold symptoms <7 days, minor cuts/scrapes, occasional headaches, minor muscle soreness)\n\n**Key Decision Rules:**\n- Productive cough with colored (green/yellow) phlegm persisting >1 week = urgent (possible bacterial infection)\n- Duration matters: symptoms lasting 2+ weeks often warrant urgent evaluation\n- When uncertain between two levels, choose the higher urgency level for safety\n- Any fever with other concerning symptoms = urgent minimum\n\nOutput ONLY the classification level as a single word: emergency, urgent, routine, or self_care.",
+      "examples": [
+        {
+          "query": "I want a dental cleaning appointment.",
+          "gold": "routine",
+          "output": "This situation is stable and can wait for a regular appointment within days to weeks, as it pertains to preventive care. \n\nFINAL: routine",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Unconscious friend who is not responding to voice or touch.",
+          "gold": "emergency",
+          "output": "This situation is life-threatening and requires immediate medical attention due to the loss of consciousness. \n\nFINAL: emergency",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Heavy bleeding that soaks through a bandage in minutes.",
+          "gold": "emergency",
+          "output": "This situation indicates a life-threatening condition requiring immediate medical attention due to severe bleeding. \n\nFINAL: emergency",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Minor bruise on my knee from bumping a table.",
+          "gold": "self_care",
+          "output": "The situation involves a minor bruise, which is a minor issue that can be managed at home without medical consultation. \n\nFINAL: self_care",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Slight indigestion after a large meal.",
+          "gold": "self_care",
+          "output": "This situation involves mild symptoms that are manageable at home without medical consultation. It does not indicate a serious condition that requires immediate attention.\n\nFINAL: self_care",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "High fever in a 6-month-old infant that started today.",
+          "gold": "urgent",
+          "output": "A high fever in a 6-month-old infant is concerning, especially since it has just started today. Infants can quickly deteriorate, and a high fever can indicate a serious infection or illness. Therefore, this situation requires medical evaluation within 24-48 hours to prevent any potential complications.\n\nFINAL: urgent",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Painful urination and lower abdominal discomfort since this morning.",
+          "gold": "urgent",
+          "output": "The symptoms of painful urination and lower abdominal discomfort suggest a possible urinary tract infection or another significant issue that requires evaluation. Since these symptoms have been present since this morning and could worsen, they fall into the urgent category.\n\nFINAL: urgent",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Standard vaccination update before travel next month.",
+          "gold": "routine",
+          "output": "This situation involves a routine vaccination update, which is a stable condition that can wait for a regular appointment within days to weeks. \n\nFINAL: routine",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "General wellness consultation, no specific complaint.",
+          "gold": "routine",
+          "output": "This situation involves a stable condition that does not require immediate medical attention and can wait for a regular appointment. Therefore, it falls under routine care.\n\nFINAL: routine",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Sudden severe allergic reaction with throat swelling after a bee sting.",
+          "gold": "emergency",
+          "output": "This situation involves a sudden severe allergic reaction with throat swelling, which is a life-threatening condition requiring immediate medical attention. \n\nFINAL: emergency",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Possible broken arm after a fall, visible deformity.",
+          "gold": "emergency",
+          "output": "The presence of a visible deformity after a fall suggests a severe injury that could be life-threatening or require immediate medical attention. This situation is classified as an emergency.\n\nFINAL: emergency",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Dry skin patch that itches a little.",
+          "gold": "self_care",
+          "output": "This situation describes a minor skin issue that is not life-threatening and can be managed at home without medical consultation. Therefore, it falls under self-care.\n\nFINAL: self_care",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Mild muscle soreness two days after exercising.",
+          "gold": "self_care",
+          "output": "This situation involves mild muscle soreness that is manageable at home and does not require medical consultation. It is a common occurrence after physical activity and typically resolves on its own.\n\nFINAL: self_care",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Migraine that hasn't improved with my usual medication in 24 hours.",
+          "gold": "urgent",
+          "output": "The patient's migraine has not improved with usual medication for 24 hours, indicating a concerning change in their condition. This situation suggests that the patient may need medical evaluation to rule out any significant underlying issues or to adjust treatment. Therefore, it is classified as urgent.\n\nFINAL: urgent",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Recurring mild back pain I want evaluated at some point.",
+          "gold": "routine",
+          "output": "The patient's situation involves recurring mild back pain, which is stable and does not indicate any immediate concern or life-threatening condition. This can wait for a regular appointment within days to weeks.\n\nFINAL: routine",
+          "objective": 1.0,
+          "gpa": {}
+        }
+      ],
+      "optimization": {
+        "history": [
+          {
+            "iter": 0,
+            "obj": 0.9,
+            "gpa": 0.0,
+            "strategy": "baseline"
+          },
+          {
+            "iter": 1,
+            "obj": 0.9,
+            "gpa": 0.0,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 2,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 3,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 4,
+            "obj": 0.9,
+            "gpa": 0.0,
+            "strategy": "merge"
+          },
+          {
+            "iter": 5,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 6,
+            "obj": 0.9,
+            "gpa": 0.0,
+            "strategy": "mutation"
+          }
+        ],
+        "front": [
+          {
+            "obj": 1.0,
+            "gpa": 0.0,
+            "iter": 2,
+            "strategy": "mutation"
+          },
+          {
+            "obj": 1.0,
+            "gpa": 0.0,
+            "iter": 3,
+            "strategy": "mutation"
+          },
+          {
+            "obj": 1.0,
+            "gpa": 0.0,
+            "iter": 5,
+            "strategy": "mutation"
+          },
+          {
+            "obj": 0.9,
+            "gpa": 0.0,
+            "iter": 0,
+            "strategy": "baseline"
+          },
+          {
+            "obj": 0.9,
+            "gpa": 0.0,
+            "iter": 1,
+            "strategy": "mutation"
+          }
+        ]
+      }
+    },
+    "tei": {
+      "objective_mean": 1.0,
+      "objective_ci95": [
+        1.0,
+        1.0
+      ],
+      "prompt": "You are a medical triage assistant. Classify the patient's situation into exactly one of these urgency levels: emergency, urgent, routine, self_care.\n\n**Urgency Level Definitions:**\n\n- **emergency**: Life-threatening conditions requiring immediate medical attention (chest pain, difficulty breathing, severe bleeding, stroke symptoms, severe allergic reactions, loss of consciousness, severe trauma)\n\n- **urgent**: Conditions requiring medical evaluation within 24-48 hours that could worsen or indicate significant illness but are not immediately life-threatening (persistent fever, symptoms suggesting infection like productive cough with colored sputum lasting >1 week, moderate pain, concerning symptom changes, urinary symptoms with fever, worsening chronic conditions)\n\n- **routine**: Stable conditions that can wait for a regular appointment within days to weeks (mild symptoms, chronic condition monitoring, preventive care, minor concerns without red flags)\n\n- **self_care**: Minor issues manageable at home without medical consultation (mild cold symptoms <7 days, minor cuts/scrapes, occasional headaches, minor muscle soreness)\n\n**Key Decision Rules:**\n- Productive cough with colored (green/yellow) phlegm persisting >1 week = urgent (possible bacterial infection)\n- Duration matters: symptoms lasting 2+ weeks often warrant urgent evaluation\n- When uncertain between two levels, choose the higher urgency level for safety\n- Any fever with other concerning symptoms = urgent minimum\n\nOutput ONLY the classification level as a single word: emergency, urgent, routine, or self_care.",
+      "examples": [
+        {
+          "query": "I want a dental cleaning appointment.",
+          "gold": "routine",
+          "output": "This situation is stable and can wait for a regular appointment within days to weeks, as it pertains to preventive care. \n\nFINAL: routine",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified a dental cleaning request as 'routine' triage level, provided sound reasoning about preventive care timing, and delivered the answer in proper format matching the refere"
+          }
+        },
+        {
+          "query": "Unconscious friend who is not responding to voice or touch.",
+          "gold": "emergency",
+          "output": "This situation is life-threatening and requires immediate medical attention due to the loss of consciousness. \n\nFINAL: emergency",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 1.0,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 1.0,
+            "rationale": "The agent correctly classified an unconscious, unresponsive patient as 'emergency' with sound reasoning about the life-threatening nature, matching the reference answer perfectly."
+          }
+        },
+        {
+          "query": "Heavy bleeding that soaks through a bandage in minutes.",
+          "gold": "emergency",
+          "output": "This situation indicates a life-threatening condition requiring immediate medical attention due to severe bleeding. \n\nFINAL: emergency",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified heavy bleeding as 'emergency' matching the reference answer, provided sound reasoning about life-threatening severity, and followed the required format perfectly."
+          }
+        },
+        {
+          "query": "Minor bruise on my knee from bumping a table.",
+          "gold": "self_care",
+          "output": "The situation involves a minor bruise, which is a minor issue that can be managed at home without medical consultation. \n\nFINAL: self_care",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the minor bruise as 'self_care' with sound reasoning about home management, matching the reference answer perfectly."
+          }
+        },
+        {
+          "query": "Slight indigestion after a large meal.",
+          "gold": "self_care",
+          "output": "This situation involves mild symptoms that are manageable at home without medical consultation. It does not indicate a serious condition that requires immediate attention.\n\nFINAL: self_care",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly classified the situation as 'self_care' matching the reference, provided sound reasoning about symptom severity, and followed the required format with appropriate justification."
+          }
+        },
+        {
+          "query": "High fever in a 6-month-old infant that started today.",
+          "gold": "urgent",
+          "output": "A high fever in a 6-month-old infant is concerning, especially since it has just started today. Infants can quickly deteriorate, and a high fever can indicate a serious infection or illness. Therefore, this situation requires medical evaluation within 24-48 hours to prevent any potential complications.\n\nFINAL: urgent",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the situation as 'urgent' matching the reference answer, provided sound medical reasoning about infant fever risks, and followed the task format precisely."
+          }
+        },
+        {
+          "query": "Painful urination and lower abdominal discomfort since this morning.",
+          "gold": "urgent",
+          "output": "The symptoms of painful urination and lower abdominal discomfort suggest a possible urinary tract infection or another significant issue that requires evaluation. Since these symptoms have been present since this morning and could worsen, they fall into the urgent category.\n\nFINAL: urgent",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the triage level as 'urgent' matching the reference, provided sound clinical reasoning for UTI concerns, and followed the task format precisely."
+          }
+        },
+        {
+          "query": "Standard vaccination update before travel next month.",
+          "gold": "routine",
+          "output": "This situation involves a routine vaccination update, which is a stable condition that can wait for a regular appointment within days to weeks. \n\nFINAL: routine",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the vaccination update as 'routine' with sound reasoning about timing flexibility, matching the reference answer perfectly."
+          }
+        },
+        {
+          "query": "General wellness consultation, no specific complaint.",
+          "gold": "routine",
+          "output": "This situation involves a stable condition that does not require immediate medical attention and can wait for a regular appointment. Therefore, it falls under routine care.\n\nFINAL: routine",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the wellness consultation as 'routine' with sound reasoning about non-urgent stable conditions, matching the reference answer perfectly."
+          }
+        },
+        {
+          "query": "Sudden severe allergic reaction with throat swelling after a bee sting.",
+          "gold": "emergency",
+          "output": "This situation involves a sudden severe allergic reaction with throat swelling, which is a life-threatening condition requiring immediate medical attention. \n\nFINAL: emergency",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 1.0,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 1.0,
+            "rationale": "The agent correctly identified the life-threatening nature of anaphylaxis with airway compromise, provided sound reasoning, followed the classification format, and matched the reference answer exactly"
+          }
+        },
+        {
+          "query": "Possible broken arm after a fall, visible deformity.",
+          "gold": "emergency",
+          "output": "The presence of a visible deformity after a fall suggests a severe injury that could be life-threatening or require immediate medical attention. This situation is classified as an emergency.\n\nFINAL: emergency",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the situation as 'emergency' matching the reference, provided sound reasoning about visible deformity indicating severe injury, and followed the required format perfectl"
+          }
+        },
+        {
+          "query": "Dry skin patch that itches a little.",
+          "gold": "self_care",
+          "output": "This situation describes a minor skin issue that is not life-threatening and can be managed at home without medical consultation. Therefore, it falls under self-care.\n\nFINAL: self_care",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly classified the minor skin issue as 'self_care' with appropriate reasoning about non-urgent nature, matching the reference answer perfectly."
+          }
+        },
+        {
+          "query": "Mild muscle soreness two days after exercising.",
+          "gold": "self_care",
+          "output": "This situation involves mild muscle soreness that is manageable at home and does not require medical consultation. It is a common occurrence after physical activity and typically resolves on its own.\n\nFINAL: self_care",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the situation as 'self_care', provided sound reasoning about delayed onset muscle soreness being normal and manageable at home, and delivered the answer in the expected "
+          }
+        },
+        {
+          "query": "Migraine that hasn't improved with my usual medication in 24 hours.",
+          "gold": "urgent",
+          "output": "The patient's migraine has not improved with usual medication for 24 hours, indicating a concerning change in their condition. This situation suggests that the patient may need medical evaluation to rule out any significant underlying issues or to adjust treatment. Therefore, it is classified as urgent.\n\nFINAL: urgent",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the triage level as 'urgent' matching the reference, provided sound clinical reasoning about medication-resistant migraines requiring evaluation, and followed the task f"
+          }
+        },
+        {
+          "query": "Recurring mild back pain I want evaluated at some point.",
+          "gold": "routine",
+          "output": "The patient's situation involves recurring mild back pain, which is stable and does not indicate any immediate concern or life-threatening condition. This can wait for a regular appointment within days to weeks.\n\nFINAL: routine",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly classified the triage level as 'routine', provided sound reasoning about the non-urgent nature of mild recurring back pain, and fully matched the reference answer."
+          }
+        }
+      ],
+      "gpa_mean": 0.9708333333333332,
+      "gpa_dims": {
+        "target_alignment": 0.9566666666666664,
+        "reasoning_soundness": 0.9333333333333333,
+        "execution_accuracy": 0.9933333333333333,
+        "output_integrity": 1.0
+      },
+      "optimization": {
+        "history": [
+          {
+            "iter": 0,
+            "obj": 0.9,
+            "gpa": 0.9525,
+            "strategy": "baseline"
+          },
+          {
+            "iter": 1,
+            "obj": 0.9,
+            "gpa": 0.92075,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 2,
+            "obj": 1.0,
+            "gpa": 0.97125,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 3,
+            "obj": 1.0,
+            "gpa": 0.9637500000000001,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 4,
+            "obj": 0.9,
+            "gpa": 0.95,
+            "strategy": "merge"
+          },
+          {
+            "iter": 5,
+            "obj": 1.0,
+            "gpa": 0.9695,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 6,
+            "obj": 0.9,
+            "gpa": 0.9249999999999999,
+            "strategy": "mutation"
+          }
+        ],
+        "front": [
+          {
+            "obj": 1.0,
+            "gpa": 0.97125,
+            "iter": 2,
+            "strategy": "mutation"
+          }
+        ]
+      }
+    }
+  },
+  "duration_s": 140.6
+}
