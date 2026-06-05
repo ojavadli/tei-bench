@@ -65,7 +65,7 @@ async def eval_arm(llm, *, agent_model, system_prompt, task, run_judge):
     return rec
 
 
-async def run_task(llm, task, *, agent_model, num_iterations, minibatch, seed, log):
+async def run_task(llm, task, *, agent_model, num_iterations, minibatch, seed, log, modes):
     t0 = time.time()
     arms = {}
     # baseline (judge on)
@@ -74,7 +74,7 @@ async def run_task(llm, task, *, agent_model, num_iterations, minibatch, seed, l
         task=task, run_judge=True)
     log.append(f"  [{task.task_id}] baseline obj={arms['baseline']['objective_mean']:.3f}")
     # optimization arms
-    for mode in ("random", "objective_reflection", "tei"):
+    for mode in modes:
         opt = await optimize(
             llm, agent_model=agent_model, judge_model=JUDGE_MODEL, optimizer_model=OPT_MODEL,
             task=task, baseline_prompt=task.baseline_prompt, train=task.train,
@@ -102,6 +102,7 @@ async def main():
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--agent-model", default="claude-haiku-4-5")
     ap.add_argument("--only", nargs="*", default=None)
+    ap.add_argument("--modes", nargs="*", default=["random", "objective_reflection", "tei"])
     ap.add_argument("--results-dir", default="results_v2")
     args = ap.parse_args()
 
@@ -124,15 +125,12 @@ async def main():
         log = []
         rec = await run_task(llm, task, agent_model=args.agent_model,
                              num_iterations=args.iterations, minibatch=args.minibatch,
-                             seed=args.seed, log=log)
+                             seed=args.seed, log=log, modes=args.modes)
         out_path.write_text(json.dumps(rec, indent=2, ensure_ascii=False), encoding="utf-8")
         a = rec["arms"]
-        print(f"[{i}/{len(tasks)}] {task.task_id:<28} "
-              f"base={a['baseline']['objective_mean']:.3f} "
-              f"rand={a['random']['objective_mean']:.3f} "
-              f"objref={a['objective_reflection']['objective_mean']:.3f} "
-              f"tei={a['tei']['objective_mean']:.3f}  "
-              f"[{usage.report()}]", flush=True)
+        summ = "  ".join(f"{k[:6]}={a[k]['objective_mean']:.3f}"
+                         for k in (["baseline"] + args.modes))
+        print(f"[{i}/{len(tasks)}] {task.task_id:<28} {summ}  [{usage.report()}]", flush=True)
 
     print(f"\nDONE {len(tasks)} tasks in {(time.time()-t0)/60:.1f} min | {usage.report()}", flush=True)
 

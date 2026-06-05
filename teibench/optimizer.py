@@ -63,6 +63,13 @@ restructure, rephrase, and lightly expand instructions, but you are NOT given an
 information about which examples the agent got wrong. Return ONLY the rewritten
 system prompt text, nothing else."""
 
+_OPRO_SYSTEM = """You are an optimizer that improves a task's SYSTEM PROMPT. You are
+shown previously-tried system prompts together with their training scores, ordered
+from lowest to highest score. Reason about what distinguishes higher-scoring prompts
+and write a NEW system prompt that is likely to score even higher. You are NOT shown
+specific failing examples. Return ONLY the new system prompt text, nothing else.
+(This follows the OPRO 'LLM as optimizer' meta-prompt of Yang et al., 2023.)"""
+
 
 def _failures(split_eval, k: int = 4) -> list:
     fails = sorted(split_eval.examples, key=lambda r: r.objective)
@@ -85,7 +92,7 @@ async def optimize(
     log: Optional[list] = None,
 ) -> dict:
     """Optimize the prompt on the train split under the given ablation mode."""
-    assert mode in ("tei", "objective_reflection", "random")
+    assert mode in ("tei", "objective_reflection", "random", "opro")
     rng = random.Random(seed)
     log = log if log is not None else []
     run_judge = (mode == "tei")
@@ -109,10 +116,22 @@ async def optimize(
     for it in range(1, num_iterations + 1):
         if mode == "random":
             strategy = "paraphrase"
+        elif mode == "opro":
+            strategy = "opro"
         else:
             strategy = "merge" if (len(pool) >= 2 and rng.random() < 0.3) else "mutation"
 
-        if strategy == "paraphrase":
+        if strategy == "opro":
+            ranked = sorted(pool, key=lambda c: c.objective)[-6:]
+            hist = "\n\n".join(
+                f"[train score {c.objective:.2f}] SYSTEM PROMPT:\n{c.prompt}" for c in ranked)
+            new_prompt = await llm.complete(
+                model=optimizer_model, system=_OPRO_SYSTEM,
+                user=(f"TASK: {task.instruction}\n\nPrevious system prompts and their "
+                      f"training scores, lowest to highest:\n\n{hist}\n\n"
+                      f"Write a new system prompt likely to score higher. Return only the prompt."),
+                temperature=0.9, max_tokens=1200, nonce=f"opro-{seed}-{it}")
+        elif strategy == "paraphrase":
             src = rng.choice(pool)
             new_prompt = await llm.complete(
                 model=optimizer_model, system=_PARAPHRASE_SYSTEM,

@@ -1,234 +1,851 @@
-\documentclass[11pt]{article}
-\usepackage[margin=1in]{geometry}
+\documentclass[10pt,twocolumn]{article}
+\usepackage[margin=0.78in]{geometry}
 \usepackage{booktabs}
 \usepackage{graphicx}
 \usepackage{amsmath,amssymb}
 \usepackage{xcolor}
 \usepackage{authblk}
+\usepackage{balance}
+\usepackage{microtype}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{longtable}
+\usepackage{listings}
 \usepackage[numbers,sort&compress]{natbib}
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
 
-\input{numbers_v2}
+\lstset{basicstyle=\ttfamily\scriptsize,breaklines=true,breakatwhitespace=false,
+  columns=fullflexible,keepspaces=true,frame=single,framesep=2pt,rulecolor=\color{gray!50},
+  xleftmargin=3pt,xrightmargin=3pt,aboveskip=5pt,belowskip=5pt,showstringspaces=false,
+  postbreak=\mbox{\textcolor{gray}{$\hookrightarrow$}\space}}
 
-\title{\textbf{Do Evaluation-Guided Prompt Optimizers Beat a Fair Baseline?\\
-A Confound-Controlled, Ablated Study Across \nAgents{} Tasks (TEI-Bench)}}
+\renewcommand{\arraystretch}{1.08}
+\setlength{\columnsep}{0.28in}
+
+\input{numbers_v2}
+\input{numbers_hb}
+
+\title{\bfseries Does Evaluation-Guided Prompt Optimization Beat a Fair Baseline?\\
+\large A Confound-Controlled, Ablated Study of the Target--Evaluate--Improve Loop\\
+on \nAgents{} Single-Turn Classification Tasks (TEI-Bench)}
 
 \author[1]{Orkhan Javadli}
 \author[2]{Anni Zimina}
 \affil[1]{Massachusetts Institute of Technology (alumnus)}
 \affil[2]{Stanford University}
-\date{\today}
+\date{\today\\[2pt]\small Code, data, traces, prompts, pre-registration: \url{https://github.com/ojavadli/tei-bench}}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-Evaluation-guided prompt optimization is widely reported to improve agentic LLM
-systems, but the supporting evidence often relies on in-sample evaluation,
-single tasks, same-family LLM judges, and --- critically --- no comparison
-against a prompt-optimization control. We build \textbf{TEI-Bench}, a controlled,
-ablated, held-out protocol, and use it to test a representative pipeline
-(a GPA-inspired multi-dimensional evaluator~\cite{gpa2025} feeding a GEPA-style
-reflective Pareto optimizer~\cite{gepa2025}; we call the composition TEI) across
-\nAgents{} tasks in diverse domains. We find that the apparent benefit of such
-optimization is \emph{largely a measurement artifact}. Under a naive
-label-extraction scorer, the same pipeline appeared to lift objective accuracy by
-$+0.175$ ($p<10^{-5}$) in an earlier (v1) run; but with a confound-free objective
-endpoint (a universal \texttt{FINAL:} output contract read identically across all
-conditions) and a four-arm ablation, the effect collapses. Mean held-out accuracy
-is baseline~\armBase{}, random prompt search~\armRand{}, objective-only
-reflection~\armObjref{}, and full TEI~\armTei{}. \textbf{TEI does not significantly
-beat the baseline} (\teiBaseDelta{}, $t=\teiBaseT$, $p=\teiBaseP$, $d_z=\teiBaseDz$;
-Holm $p=\holmTeiBaseP$; \teiBaseW/\teiBaseL/\teiBaseTie{} win/loss/tie), is
-\textbf{statistically indistinguishable from undirected random prompt search}
-(\teiRandDelta{}, $p=\teiRandP$), and gains nothing from the GPA signal over
-objective-only reflection (\teiObjrefDelta{}, $p=\teiObjrefP$). A small headroom
-subset ($n=\headN$) is the only place with a positive hint (\headDelta{}). We
-release all code, data, per-example traces, optimized prompts, and a
-pre-registered (tag \texttt{prereg-v2}) analysis plan. Our contribution is the
-protocol and the cautionary finding: \emph{confound control and an
-ablation against random search are necessary to make prompt-optimization claims
-credible.}
+\noindent Evaluation-guided prompt optimization---evaluate an agent on structured
+signals, then rewrite its prompt to fix observed failures---is widely reported to
+improve LLM systems. The supporting evidence, however, frequently relies on
+in-sample evaluation, single tasks, same-family LLM judges, and, most importantly,
+\emph{no comparison against a prompt-optimization control}. We introduce
+\textbf{TEI-Bench}, a confound-controlled, ablated, held-out protocol, and use it
+to test a representative pipeline---a GPA-inspired multi-dimensional
+evaluator~\cite{gpa2025} feeding a GEPA-style reflective Pareto
+optimizer~\cite{gepa2025}, a composition we call the Target--Evaluate--Improve
+(TEI) loop---across \nAgents{} single-turn classification, extraction, and
+reasoning tasks in diverse domains.
+
+Our headline finding is that the apparent benefit of such optimization is, in this
+regime, \emph{largely a measurement artifact}. Under a naive label-extraction
+scorer the same pipeline appeared to lift held-out accuracy by $+0.175$
+($p<10^{-5}$) in an earlier run; with a confound-free objective endpoint (a
+universal \texttt{FINAL:} output contract read identically across all conditions)
+and a four-arm ablation, the effect collapses. Mean held-out accuracy is
+baseline~\armBase{}, random prompt search~\armRand{}, objective-only
+reflection~\armObjref{}, and full TEI~\armTei{}. Across the full suite TEI does not
+beat the baseline (\teiBaseDelta{}, $p=\teiBaseP$, $d_z=\teiBaseDz$; sign-test
+$p=\signP$; permutation $p=\permP$); a two one-sided test shows the two are
+statistically \emph{equivalent} within $\pm\tostBound$ ($p=\tostP$), it is
+indistinguishable from random prompt search (\teiRandDelta{}, $p=\teiRandP$), and the
+GPA signal adds nothing over objective-only reflection. But this aggregate null is
+dominated by saturation ($\nCeiling$ of \nAgents{} tasks sit at ceiling). The story
+on the tasks that \emph{can} move is more interesting: on the headroom subset at a
+$3.3\times$ budget, TEI beats the baseline by a medium--large, nominally significant
+margin (\hbTeiBaseDelta{}, $p=\hbTeiBaseP$, $d_z=\hbTeiBaseDz$) and beats an
+OPRO-style external optimizer~\cite{opro2023} by the same amount
+(\hbTeiOproDelta{}, $p=\hbTeiOproP$), while OPRO gains \emph{exactly}
+\hbOproBaseDelta{} over baseline---so a reflective loop helps where a non-reflective
+one does not, the benefit comes from reflection (not the GPA signal), and it is
+robust to budget (\hbBudgetDelta{}, $p=\hbBudgetP$). The honest limit: even there,
+TEI is \emph{not} statistically separable from budget-matched random paraphrase
+(\hbTeiRandDelta{}, $p=\hbTeiRandP$). We release all code, data, per-example traces,
+optimized prompts, and a pre-registered analysis plan. Our contribution is the
+protocol and a precise, reproducible verdict: \emph{in the single-turn
+classification regime, evaluation-guided optimization shows no aggregate benefit and
+a previously reported gain was a scoring artifact; reflective optimization helps only
+on non-saturated tasks, where it beats a competent baseline and a non-reflective
+optimizer but still cannot be separated from random paraphrase search}.
 \end{abstract}
 
 \section{Introduction}
-Automated, evaluation-guided prompt optimization is an attractive idea: evaluate
-an agent on structured signals, then rewrite its prompt to fix observed failures.
-It draws on multi-dimensional agent evaluation~\cite{gpa2025} and reflective,
-Pareto-based prompt optimization~\cite{gepa2025}, within the program-optimization
-view of DSPy~\cite{dspy2023,mipro2024}. We study a concrete composition --- a
-GPA-inspired four-dimension evaluator feeding a GEPA-style optimizer, which we
-call the \emph{Target--Evaluate--Improve (TEI)} loop --- and ask a deliberately
-skeptical question: \emph{under fair measurement, does it actually help?}
+\label{sec:intro}
+Large language model (LLM) ``agents''---models wrapped in a system prompt and a
+fixed scaffold---are increasingly tuned not by gradient descent on weights but by
+rewriting their natural-language instructions. A popular recipe is the
+\emph{evaluation-guided} loop: run the agent, score it on structured signals (an
+LLM judge, a rubric, or unit-test-like checks), feed those scores and failures back
+to an optimizer model, and have it propose a better prompt. Variants of this idea
+appear under many names---APE~\cite{ape2022}, OPRO~\cite{opro2023},
+DSPy/MIPRO~\cite{dspy2023,mipro2024}, TextGrad~\cite{textgrad2024}, and
+GEPA~\cite{gepa2025}---and the reported gains are often large.
 
-This question matters because demonstrations of such loops routinely (a) evaluate
-on the examples used for optimization, (b) use one task, (c) score with a
-same-family judge~\cite{llmjudge2023}, and (d) compare only against an
-unoptimized prompt. We show that these choices --- especially (a) a brittle
-objective scorer and (d) the missing control --- can manufacture a large,
-significant-looking gain where none robustly exists.
+We study a concrete, representative composition. An evaluator inspired by the Agent
+GPA framework~\cite{gpa2025} scores each agent output on four single-turn
+dimensions; a GEPA-style~\cite{gepa2025} reflective optimizer then proposes prompt
+edits on a Pareto front of those signals. We call the composition the
+\emph{Target--Evaluate--Improve (TEI)} loop. Our question is deliberately
+skeptical:
+
+\begin{quote}\itshape
+Under fair measurement and an honest control, does evaluation-guided prompt
+optimization actually beat an unoptimized but competent baseline on single-turn
+classification-style tasks?
+\end{quote}
+
+The stakes are practical. Teams increasingly adopt ``self-improving'' agent loops on
+the strength of compelling single-task demos, and downstream tooling, blog posts,
+and product claims propagate the implied gains. But a demo that reports a large
+improvement on the same examples it optimized on, scored by a judge from the same
+model family, against an un-tuned prompt, is consistent with both a real effect and
+no effect at all. Distinguishing the two is not a matter of taste; it requires a
+held-out split, a budget-matched control, and a scorer that cannot be gamed by
+formatting. When we built exactly that apparatus, the first thing it revealed was
+that our \emph{own} earlier positive result ($+0.175$) was largely an artifact---a
+cautionary data point about how easily such loops can be oversold.
+
+This matters because public demonstrations of such loops routinely make four
+choices that each, on its own, can manufacture an illusion of improvement:
+(a) they evaluate on the very examples used to drive optimization (in-sample);
+(b) they study a single task, so variance masquerades as signal;
+(c) they score with a judge from the same model family as the agent, which is
+known to exhibit self-preference~\cite{llmjudge2023}; and most decisively
+(d) they compare the optimized prompt only against an \emph{unoptimized} prompt,
+never against a budget-matched prompt-perturbation control. If \emph{any} prompt
+edit of equal budget produces the same movement, the ``evaluation-guided'' part is
+doing no work.
+
+We make the four choices the other way. We hold out a test split that the optimizer
+never sees; we aggregate across \nAgents{} tasks and treat the task as the unit of
+analysis; we use a stronger, different model as judge (agent = Haiku, judge =
+Sonnet); and we add the missing control---a random prompt-search arm of identical
+budget---plus an objective-only-reflection arm that isolates the contribution of
+the GPA signal. We also discover and correct a \emph{measurement artifact}: a
+brittle objective scorer that, in an earlier run, inflated the apparent gain to
+$+0.175$.
+
+\paragraph{Research questions.}
+\textbf{RQ1 (fair baseline).} Does TEI beat a competent, unoptimized baseline on a
+held-out split? \textbf{RQ2 (control).} Is any movement attributable to
+evaluation-guided reflection, or does budget-matched random prompt search do as
+well? \textbf{RQ3 (signal).} Does the GPA evaluation signal add anything over
+objective-only reflection? \textbf{RQ4 (measurement).} How much of previously
+reported gains is a scoring artifact? \textbf{RQ5 (budget).} Does any null survive
+a realistic optimization budget?
 
 \paragraph{Contributions.}
-\begin{enumerate}
-  \item \textbf{TEI-Bench}: a controlled, ablated, held-out protocol and a suite
-  of \nAgents{} tasks across diverse domains, with committed splits and a
-  confound-free objective endpoint.
+\begin{enumerate}\itemsep1pt
+  \item \textbf{TEI-Bench}, a confound-controlled, ablated, held-out protocol with a
+  suite of \nAgents{} single-turn tasks across diverse domains, committed splits,
+  and a confound-free objective endpoint (the \texttt{FINAL:} contract).
   \item A \textbf{demonstration that a scoring artifact inflates results}: the
-  same pipeline shows $+0.175$ ($p<10^{-5}$) under a naive label scorer but
-  \teiBaseDelta{} ($p=\teiBaseP$) under a \texttt{FINAL:}-contract scorer.
-  \item A \textbf{four-arm ablation} showing the optimizer is indistinguishable
-  from random prompt search of equal budget, and that the GPA signal adds nothing.
-  \item A \textbf{full open release} with a pre-registered analysis plan.
+  identical pipeline shows $+0.175$ ($p<10^{-5}$) under a naive label scorer but
+  \teiBaseDelta{} ($p=\teiBaseP$) under a contract-based scorer.
+  \item A \textbf{four-arm ablation} showing that, across the full suite, TEI is
+  statistically equivalent to the baseline (TOST $p=\tostP$ within $\pm\tostBound$)
+  and indistinguishable from random prompt search, with the GPA signal adding
+  nothing over objective-only reflection.
+  \item A \textbf{high-budget ($\hbIters$-iteration) arm and an OPRO-style external
+  optimizer}~\cite{opro2023} on the headroom subset, which show that the aggregate
+  null is \emph{not} optimization-starvation, that reflective TEI \emph{does} beat
+  both the baseline (\hbTeiBaseDelta{}, $d_z=\hbTeiBaseDz$) and the non-reflective
+  OPRO optimizer (which gains nothing) on non-saturated tasks, yet \emph{still}
+  cannot be separated from budget-matched random paraphrase (\hbTeiRandDelta{},
+  $p=\hbTeiRandP$).
+  \item A \textbf{statistical-rigor package} for null results (equivalence/TOST,
+  sign and permutation tests, power and minimum-detectable-effect) and a
+  \textbf{full open release} with a pre-registered analysis plan.
 \end{enumerate}
 
 \section{Related Work}
-APE~\cite{ape2022}, OPRO~\cite{opro2023}, DSPy~\cite{dspy2023},
-MIPROv2~\cite{mipro2024}, TextGrad~\cite{textgrad2024}, and GEPA~\cite{gepa2025}
-optimize prompts/programs; Self-Refine~\cite{selfrefine2023} and
-Reflexion~\cite{reflexion2023} use self-feedback; LLM-as-judge~\cite{llmjudge2023}
-is the standard but biased evaluator. The Agent GPA framework~\cite{gpa2025}
-evaluates Goal--Plan--Action alignment with five metrics (Goal Fulfillment,
-Logical Consistency, Execution Efficiency, Plan Quality, Plan Adherence). Our
-evaluator is \emph{GPA-inspired} but distinct: four single-turn output
-dimensions, used only as a secondary endpoint. Our emphasis on a random-search
-control and confound-free scoring follows the broader reproducibility literature
-on overclaimed ML gains.
+\label{sec:related}
+\paragraph{Prompt and program optimization.}
+Automated prompt optimization has a fast-growing toolbox. APE~\cite{ape2022}
+generates instruction candidates with an LLM and selects by scoring on a held-in
+set. OPRO~\cite{opro2023} casts the LLM itself as the optimizer: shown a trajectory
+of (instruction, score) pairs, it proposes higher-scoring instructions, iterating on
+its own meta-prompt. DSPy~\cite{dspy2023} reframes LLM pipelines as declarative
+programs whose prompts and demonstrations are \emph{compiled} rather than hand-tuned;
+MIPROv2~\cite{mipro2024} jointly searches instructions and few-shot demonstrations
+with a Bayesian surrogate over a proposal space. TextGrad~\cite{textgrad2024}
+backpropagates natural-language ``gradients''---textual critiques---through a
+multi-component pipeline. GEPA~\cite{gepa2025} adds \emph{reflective} natural-language
+diagnosis of execution traces and maintains a Pareto frontier of candidate prompts,
+reporting strong sample efficiency relative to RL on \emph{multi-step} agentic tasks.
+Our TEI arm is a GEPA-style reflective loop, and we add an OPRO-style arm as a
+recognizable external comparator (both are faithful re-implementations of the
+\emph{mechanisms}, run inside our harness, not the original code). Crucially, our
+regime is \emph{single-turn}: there is no multi-step trajectory of tool calls and
+intermediate states to reflect over, which is exactly where GEPA's design leverage
+lies. We therefore read our result as a statement about the single-turn
+classification regime, not a refutation of these methods in the settings they target
+(\S\ref{sec:threats}, \S\ref{sec:limitations}).
+
+\paragraph{Self-feedback and evaluation.}
+Self-Refine~\cite{selfrefine2023} and Reflexion~\cite{reflexion2023} use a model's
+own feedback to iterate. LLM-as-judge~\cite{llmjudge2023} is the de facto evaluator
+but exhibits self-preference and verbosity biases; we therefore separate agent and
+judge models and anchor the \emph{primary} endpoint on code-computed accuracy.
+The Agent GPA framework~\cite{gpa2025} evaluates Goal--Plan--Action alignment with
+multiple trajectory-level metrics; our evaluator is \emph{GPA-inspired} but distinct
+(four single-turn output dimensions, secondary endpoint only), and we are explicit
+about the adaptation (\S\ref{sec:method}).
+
+\paragraph{Reproducibility and negative results.}
+A recurring lesson in ML is that headline gains often shrink under proper controls,
+matched budgets, and held-out evaluation. Our work is in that tradition: it does not
+propose a new optimizer but stress-tests a popular one and reports, with full
+provenance, that a widely-assumed benefit does not robustly appear in this regime.
 
 \section{Benchmark Construction}
-\paragraph{Tasks.} \nAgents{} single-turn tasks across diverse domains. Public
-tasks are sampled from established datasets (GSM8K~\cite{gsm8k2021},
-banking-style intent~\cite{banking77}, news, emotion, toxicity, spam, fine-grained
-sentiment); authored tasks use \emph{generate-then-validate} (a strong model
-generates label-conditioned examples; an independent labeling pass keeps only
-unanimously-recovered labels). Held-out test sizes: 30 (public), 24 (authored),
-15 (three seed tasks); all splits committed.
-\paragraph{Baseline prompt.} A competent first draft stating role, task, and the
-full allowed label set --- not a strawman: it contains the information needed.
-\paragraph{Output contract (the key fix).} Each condition's prompt is appended
-with an identical instruction to end with \texttt{FINAL: <answer>}; the objective
-scorer reads only that line. The earlier (v1) scorer extracted the label by its
-\emph{latest mention}, so a verbose baseline that named other labels mid-reasoning
-was mis-scored downward --- inflating the apparent gain of terse optimized
-prompts. The contract removes this confound while remaining identical across arms.
+\label{sec:bench}
+\paragraph{Tasks.}
+TEI-Bench comprises \nAgents{} single-turn tasks spanning finance, healthcare,
+education, legal, retail, media, trust \& safety, and others
+(Table~\ref{tab:per} lists all). Each task is a classification, extraction, or
+short-reasoning problem with a deterministic gold answer, so the primary endpoint
+can be computed by code rather than a model. Public tasks are sampled from
+established datasets (GSM8K~\cite{gsm8k2021}; banking intent~\cite{banking77}; and
+public news, emotion, toxicity, spam, and fine-grained-sentiment corpora). Authored
+tasks use a \emph{generate-then-validate} procedure: a strong model generates
+label-conditioned examples, and an independent labeling pass keeps only examples
+whose intended label is unanimously recovered, which removes the most ambiguous
+items. All splits are committed verbatim. Table~\ref{tab:comp} summarizes the
+composition; the full per-task catalog (domain, source, metric, split sizes, label
+set, and baseline prompt) is in Appendix~\ref{app:tasks}.
+
+\begin{table}[t]\centering
+\caption{Benchmark composition. Tasks span four objective metrics and a roughly
+even public/authored split; about a third saturate at ceiling, which motivates the
+headroom subset.}
+\label{tab:comp}\footnotesize
+\setlength{\tabcolsep}{5pt}
+\input{tables/task_summary}
+\end{table}
+
+\paragraph{Splits.}
+Held-out test sizes are 30 (public), 24 (authored), and 15 (three early seed
+tasks); the train split (used only to drive optimization) is disjoint. The
+\emph{test split is never shown to the optimizer or judge during optimization}: it
+is evaluated once, after the prompt is frozen. Per-task accuracy is reported with a
+bootstrap 95\% CI over test examples (Appendix~\ref{app:pertask}); the unit of
+statistical analysis across the suite is the task ($n=\nAgents$).
+
+\paragraph{Baseline prompt.}
+The baseline is a competent first draft---it states the role, the task, and the
+\emph{full allowed label set}---not a strawman. It contains the information needed
+to do the task; the question is whether optimization improves on a reasonable
+starting point, not whether it can rescue a broken one.
+
+\paragraph{The output contract (the key confound fix).}
+Every condition's prompt is appended with one identical instruction: end the
+response with a line \texttt{FINAL: <answer>}. The objective scorer reads only that
+line (falling back to legacy heuristics only if the line is absent). This matters
+because the earlier (v1) scorer extracted the predicted label by its \emph{latest
+mention} anywhere in the output. A verbose baseline that reasoned ``this is not
+\emph{spam}, it resembles \emph{promotion} but is actually \emph{transactional}''
+would be mis-scored on the last word it happened to mention, whereas a terse
+optimized prompt that emitted only the answer was scored correctly. The optimizer
+was thus rewarded for \emph{formatting}, not \emph{accuracy}. The \texttt{FINAL:}
+contract removes this confound while remaining byte-for-byte identical across all
+four arms, so it cannot advantage any one of them. Appendix~\ref{app:templates}
+gives the exact contract text.
+
+\paragraph{Scorers (deterministic, no LLM).}
+The primary endpoint is computed in code, with no model in the loop, by one of four
+metrics. \emph{Classification}: the \texttt{FINAL:} span is normalized
+(lower-cased, underscores/hyphens$\to$spaces, whitespace collapsed) and matched
+against the allowed label set by exact match, then by unique substring (longest
+label wins on ties), then by reverse containment for abbreviations; score is $1$ iff
+the matched label equals the normalized gold. \emph{Numeric}: the last number on the
+\texttt{FINAL:} line is parsed and compared to gold within a relative tolerance of
+$10^{-6}$. \emph{Token-F1}: token overlap between the \texttt{FINAL:} span and gold
+(for short extraction). \emph{Contains-all}: fraction of required substrings present.
+A conservative fallback (last non-empty line, then whole text) scores outputs that
+fail to emit a \texttt{FINAL:} line, so non-compliant responses are penalized only
+when genuinely wrong, not for formatting. Crucially, the \emph{same} scorer and the
+\emph{same} contract apply to every arm.
+
+\paragraph{A worked example of the artifact.}
+Consider a sentiment task with labels \{\texttt{positive}, \texttt{negative},
+\texttt{neutral}\}, gold \texttt{neutral}. A verbose baseline might answer: ``This is
+not strongly \emph{positive}; it could read as \emph{negative}, but on balance it is
+\emph{neutral}.'' The v1 ``latest-mention'' scorer reads the last label \emph{token}
+in the text---here \texttt{neutral}, correct by luck, but for the symmetric phrasing
+``\dots\ but it is not \emph{negative}'' it would read \texttt{negative} and mark a
+correct answer wrong. A terse optimized prompt that emits only \texttt{neutral} is
+never penalized. The optimizer is thus rewarded for terseness, not accuracy. The
+\texttt{FINAL:} contract makes both styles end with \texttt{FINAL: neutral}, so the
+scorer reads the same field regardless of reasoning verbosity
+(Appendix~\ref{app:transcripts} shows real recorded outputs under both conditions).
 
 \section{Method and Ablation Arms}
-\textbf{Evaluate:} four GPA-inspired dimensions scored by a reference-based judge
-that is a stronger, different model than the agent. \textbf{Improve:} reflective
-mutation on failing \emph{train} examples + system-aware merge, Pareto front; the
-test split is never seen. \textbf{Arms:} (1) \emph{baseline}; (2) \emph{random} ---
-undirected paraphrase search, same budget; (3) \emph{objective-only reflection}
---- reflective mutation, objective-only selection (no GPA); (4) \emph{TEI} ---
-reflective mutation with GPA-guided Pareto selection.
+\label{sec:method}
+The TEI loop has three parts. \textbf{Target} fixes the task and the competent
+baseline prompt. \textbf{Evaluate} scores each agent output. \textbf{Improve}
+proposes a new prompt from the evaluation feedback. We instantiate four arms that
+share \emph{everything} except how candidate prompts are proposed and selected, so
+that differences isolate the contribution of evaluation-guided reflection and of
+the GPA signal.
+
+\paragraph{Problem setup and notation.}
+A task $\tau$ provides a train set $T$ and a disjoint held-out test set $H$ of
+(input, gold) pairs, a metric $\mathrm{obj}(\cdot)\in[0,1]$, and a competent baseline
+system prompt $p_0$. An \emph{agent} is the fixed model $M_a$ run with a system
+prompt $p$; running it on input $x$ yields output $M_a(p,x)$, scored
+$\mathrm{obj}(M_a(p,x),y)$ against gold $y$. An optimizer arm is a procedure
+$\mathcal{A}$ that, given $p_0$ and $T$ (and a budget of $K$ iterations), returns a
+final prompt $p^\star=\mathcal{A}(p_0,T;K)$ \emph{without ever touching} $H$. The
+quantity of interest is the held-out objective
+$\widehat{O}(\mathcal{A})=\frac{1}{|H|}\sum_{(x,y)\in H}\mathrm{obj}(M_a(p^\star,x),y)$,
+and our analyses are paired across the \nAgents{} tasks on
+$\widehat{O}(\mathcal{A})-\widehat{O}(\text{baseline})$. The baseline arm is simply
+$p^\star=p_0$. This framing makes explicit that the only thing that varies across
+arms is the map $\mathcal{A}$ from $(p_0,T)$ to $p^\star$; the agent model, the
+test set, the scorer, and the output contract are held fixed.
+
+\paragraph{Evaluate (the GPA-inspired judge).}
+A reference-based judge---a stronger, different model than the agent
+(\texttt{claude-sonnet-4-5} vs.\ \texttt{claude-haiku-4-5})---scores each output on
+four dimensions in $[0,1]$: \emph{target alignment}, \emph{reasoning soundness},
+\emph{execution accuracy}, and \emph{output integrity}. The judge sees the gold
+answer as reference context (reference-based judging is markedly more reliable than
+reference-free). These four dimensions are a single-turn adaptation of the
+trajectory-level GPA framework~\cite{gpa2025}; we use them only as a \emph{secondary}
+endpoint and as the selection signal for the TEI arm. The full rubric and judge
+prompt are in Appendix~\ref{app:templates}.
+
+\paragraph{Improve (operators).}
+Two reflective operators act on \emph{train}-split failures. The \emph{mutation}
+operator is shown a sample of the current prompt's failing train examples (input,
+the agent's wrong output, and the gold answer), is asked to diagnose the failure
+mode in natural language, and then to rewrite the system prompt to fix it---the
+reflective step characteristic of GEPA-style optimization. The system-aware
+\emph{merge} operator is shown two strong candidate prompts and asked to combine
+their complementary strengths into one. Each new candidate is scored on a fresh
+train minibatch (size 10); its fitness is the composite
+$s(c)=w\cdot\text{obj}(c)+(1-w)\cdot\text{gpa}(c)$, where $\text{obj}$ is the
+code-computed objective and $\text{gpa}$ is the mean of the four judge dimensions.
+The optimizer maintains a Pareto front over (objective, GPA) so that a candidate
+strong on either signal is retained, and the final prompt is the front member with
+the best train composite. The TEI arm uses $w=0.5$ (judge on); the objective-only
+and random arms use $w=1$ (judge off). All operator prompts are reproduced verbatim
+in Appendix~\ref{app:templates}.
+
+\paragraph{The four arms.}
+\begin{enumerate}\itemsep1pt
+  \item \textbf{Baseline}: the competent prompt, no optimization.
+  \item \textbf{Random search}: undirected paraphrase search. Each iteration
+  rephrases a pooled prompt \emph{without any information about which examples
+  failed}, and---like every arm---selects the candidate with the best \emph{train}
+  objective. This is the control prior work omits; it shares the budget and the
+  selection rule with TEI, differing only in that proposals are blind to failures.
+  \item \textbf{Objective-only reflection}: the reflective mutation/merge operators,
+  but selection uses the objective only ($w=1$, GPA off). Isolates the value of the
+  GPA signal.
+  \item \textbf{TEI (full)}: reflective operators with GPA-guided Pareto selection
+  ($w=0.5$, judge on).
+\end{enumerate}
+Because random search and TEI share budget and the train-objective selection rule,
+a tie between them implies the sharpest reading of our result: \emph{TEI behaves
+like a train-selected random paraphrase}. On the headroom subset we add a fifth
+arm, an \textbf{OPRO-style}~\cite{opro2023} optimizer that is shown a score-sorted
+history of prior prompts and asked to propose a higher-scoring one (no failure
+examples), as a recognizable external comparator.
+
+\paragraph{Budget accounting.}
+All optimization arms use the same number of iterations, the same train minibatch
+size (10), and the same selection rule, so the number of agent and optimizer LLM
+calls is matched across arms. The main run uses 6 iterations; the high-budget run
+uses $\hbIters$.
+
+\begin{algorithm}[t]
+\caption{One arm of TEI-Bench (shared skeleton)}
+\label{alg:tei}
+\begin{algorithmic}[1]
+\Require baseline prompt $p_0$, train $T$, test $H$, mode $\in\{$base, rand, objref, tei, opro$\}$, iters $K$
+\State pool $\gets \{p_0\}$; evaluate $p_0$ on a train minibatch
+\For{$k=1$ to $K$} \Comment{skip if mode = base}
+  \State propose $p'$: \textbf{rand} paraphrase / \textbf{objref,tei} reflect on failures / \textbf{opro} from score history
+  \State score $p'$ on a train minibatch (objective; + GPA if tei)
+  \State add $p'$ to pool; update Pareto front
+\EndFor
+\State $p^\star \gets \arg\max_{p\in\text{pool}} \big[w\,\text{obj}(p)+(1{-}w)\,\text{gpa}(p)\big]$ on \emph{train}
+\State \Return objective and GPA of $p^\star$ on held-out $H$ \Comment{$H$ seen once}
+\end{algorithmic}
+\end{algorithm}
 
 \section{Experimental Protocol}
-Agent \texttt{claude-haiku-4-5}; judge + optimizer \texttt{claude-sonnet-4-5};
-cross-provider replication with agent \texttt{gpt-4o-mini}. Primary endpoint:
-code-computed accuracy from the \texttt{FINAL:} line; secondary: four GPA-inspired
-dimensions (baseline, TEI). The analysis plan was committed and tagged
-\texttt{prereg-v2} \emph{before} this run; we also disclose that an earlier v1 run
-had a config mismatch and the scoring artifact above (v1 retained for provenance).
-Config: 6 iterations, minibatch 10, seed 0, per-task bootstrap CIs. For each
-contrast: paired $t$, Wilcoxon, Cohen's $d_z$, bootstrap 95\% CI, Holm
-correction~\cite{holm1979}; pre-specified public/synthetic/headroom subgroups.
+\label{sec:protocol}
+\paragraph{Models.}
+Agent \texttt{claude-haiku-4-5}; judge and optimizer \texttt{claude-sonnet-4-5}. A
+cross-provider replication uses agent \texttt{gpt-4o-mini} (judge/optimizer
+unchanged) as a spot-check of provider-specificity.
+
+\paragraph{Endpoints.}
+\emph{Primary}: code-computed accuracy (exact match / normalized numeric / token-F1
+as appropriate) from the \texttt{FINAL:} line. \emph{Secondary}: the four
+GPA-inspired dimensions (computed for baseline and TEI). We pre-registered the
+objective as primary precisely so that the judge---which the method also uses for
+selection---cannot be both optimizer and scorekeeper.
+
+\paragraph{Statistics.}
+For each contrast we report the paired $t$-test, Wilcoxon signed-rank, Cohen's
+$d_z$, a bootstrap 95\% CI on the mean paired difference, and the win/loss/tie
+count, with Holm--Bonferroni~\cite{holm1979} correction across the family of
+contrasts. Because our central claim is a \emph{null}, we add (i) an exact
+\textbf{sign test}; (ii) a paired \textbf{permutation} (sign-flip) test; (iii) a
+\textbf{TOST equivalence} test against a $\pm\tostBound$ bound; and (iv) a
+\textbf{power / minimum-detectable-effect (MDE)} analysis at $80\%$ power. We
+pre-specified the public/synthetic/headroom subgroups.
+
+\paragraph{Pre-registration and provenance.}
+The analysis plan was committed and tagged \texttt{prereg-v2} \emph{before} this
+run. We also disclose, in that file, that an earlier v1 plan named
+\texttt{iterations=8, eval\_repeats=2} while the executed v1 used
+\texttt{iterations=6, eval\_repeats=1}---a real inconsistency---and that v1 suffered
+the scoring artifact described in \S\ref{sec:bench}; v1 is retained only for
+provenance. The total cost of the main run is approximately \$20 ($\sim$2 hours).
+
+\paragraph{Compute, cost, and budget accounting.}
+The experiment is intentionally cheap to reproduce. The agent is a small model; the
+judge and optimizer are a mid-size model. Each optimization arm issues the same
+number of agent calls (one per train-minibatch example per iteration, plus one
+held-out test pass) and the same number of optimizer calls (one proposal per
+iteration), so the four arms are budget-matched by construction; the only per-call
+difference is that the TEI and baseline arms additionally invoke the judge. A
+content-addressed cache makes re-runs near-free: identical (model, system, user,
+decoding) tuples are served from disk, so re-executing the analysis does not re-bill
+the API. We release exact package versions and a single driver command so that every
+number in this paper regenerates end-to-end from the recorded data.
 
 \section{Results}
-Mean held-out objective: baseline \armBase, random \armRand, objective-only
-\armObjref, TEI \armTei{} (Fig.~\ref{fig:arms}; Table~\ref{tab:abl}).
+\label{sec:results}
+Mean held-out objective accuracy is baseline~\armBase{}, random~\armRand{},
+objective-only~\armObjref{}, and TEI~\armTei{} (Fig.~\ref{fig:arms};
+Table~\ref{tab:abl}). The four arms overlap heavily.
 
-\begin{table}[h]\centering
-\caption{Paired contrasts on held-out objective accuracy ($n=\nAgents$).
-None survive Holm correction.}
-\label{tab:abl}\small
+\begin{table}[t]\centering
+\caption{Paired contrasts on held-out objective accuracy ($n=\nAgents$). $A,B$ are
+the two arms; $\Delta=A-B$. \emph{No} contrast survives Holm correction.}
+\label{tab:abl}\footnotesize
+\setlength{\tabcolsep}{3.2pt}
 \input{tables/ablation}
 \end{table}
 
-\begin{figure}[h]\centering
-\includegraphics[width=0.6\textwidth]{figures/ablation_arms.png}
-\caption{Held-out objective by arm (mean $\pm$ 95\% CI). The arms overlap.}
+\begin{figure}[t]\centering
+\includegraphics[width=\linewidth]{figures/ablation_arms.png}
+\caption{Held-out accuracy by optimization arm (mean; whiskers are 95\% CIs). The
+\textbf{$y$-axis is truncated} to make the $\le0.015$ differences visible; even so,
+the confidence intervals overlap almost completely and no pairwise difference
+survives Holm correction. The visual ``differences'' are within noise.}
 \label{fig:arms}
 \end{figure}
 
-\paragraph{The optimizer does not beat a fair baseline.}
+\paragraph{RQ1: TEI does not beat a fair baseline.}
 TEI exceeds the baseline by only \teiBaseDelta{} (95\% CI
 $[\teiBaseCIlo,\teiBaseCIhi]$, $t=\teiBaseT$, $p=\teiBaseP$, $d_z=\teiBaseDz$),
-which does not survive multiplicity correction (Holm $p=\holmTeiBaseP$); the
-win/loss/tie is \teiBaseW/\teiBaseL/\teiBaseTie{}.
-\paragraph{It is indistinguishable from random search.}
-Undirected random prompt search changes the baseline by \randBaseDelta{}
-($p=\randBaseP$) --- about the same as TEI --- and TEI minus random is
-\teiRandDelta{} ($p=\teiRandP$, $d_z=\teiRandDz$). The control prior work omits is
-decisive here: whatever small movement exists comes from \emph{any} prompt
-perturbation, not from evaluation-guided reflection.
-\paragraph{The GPA signal adds nothing.}
-TEI minus objective-only reflection is \teiObjrefDelta{} ($p=\teiObjrefP$,
-$d_z=\teiObjrefDz$): GPA-guided selection does not beat objective-only selection.
-\paragraph{Secondary and subgroups.}
-GPA aggregate moves \gpaBase{}$\rightarrow$\gpaTei{} ($\Delta=\gpaDelta$,
-$p=\gpaP$). Public-only ($n=\pubN$): $\Delta=\pubDelta$ ($p=\pubP$);
-synthetic-only ($n=\synN$): $\Delta=\synDelta$ ($p=\synP$). The headroom subset
-($n=\headN$, baseline $<0.9$) is the only positive hint: $\Delta=\headDelta$
-($p=\headP$, $d_z=\headDz$). Cross-provider replication (Table~\ref{tab:xp}).
+which does not survive multiplicity correction (Holm $p=\holmTeiBaseP$). The
+direction is inconsistent across tasks: \teiBaseW{} wins, \teiBaseL{} losses,
+\teiBaseTie{} ties (sign test $p=\signP$; permutation $p=\permP$). A two one-sided
+test (TOST) against a $\pm\tostBound$ margin finds the arms statistically
+\emph{equivalent} ($p=\tostP$). We stress the honest caveat: the full-suite test is
+\emph{underpowered}---\nCeiling{} of \nAgents{} tasks sit at ceiling ($\geq0.999$
+baseline), so the suite can mechanically detect only effects $\geq$~MDE$_{80}=\mdeFull$
+(post-hoc power for the observed effect is \powerFull). This is exactly why the
+headroom subset below is the load-bearing test.
 
-\begin{table}[h]\centering
-\caption{Cross-provider replication (agent = gpt-4o-mini).}
-\label{tab:xp}\small
+\paragraph{RQ2: TEI is indistinguishable from random search.}
+Budget-matched random prompt search moves the baseline by \randBaseDelta{}
+($p=\randBaseP$)---about the same as TEI---and the TEI$-$random difference is
+\teiRandDelta{} ($p=\teiRandP$, $d_z=\teiRandDz$). Since both arms select the
+best-on-train candidate, the sharpest statement of our result is that, in this
+regime, \emph{TEI behaves like a train-selected random paraphrase}: the
+``evaluation-guided'' machinery does not beat blind rephrasing of equal budget.
+
+\paragraph{RQ3: the GPA signal adds nothing.}
+TEI$-$objective-only-reflection is \teiObjrefDelta{} ($p=\teiObjrefP$,
+$d_z=\teiObjrefDz$). Pareto selection on the four GPA dimensions does not beat
+selecting on the objective alone. The GPA aggregate itself moves only
+\gpaBase{}$\rightarrow$\gpaTei{} ($\Delta=\gpaDelta$, $p=\gpaP$).
+
+\paragraph{RQ4: the previously reported gain was largely an artifact.}
+Under the naive latest-mention scorer, the identical pipeline produced $+0.175$
+($p<10^{-5}$); under the \texttt{FINAL:} contract it produces \teiBaseDelta{}. The
+difference is almost entirely the format confound: the optimizer learned to emit a
+clean, parseable label, which the brittle scorer over-credited.
+
+\paragraph{Subgroups and the headroom subset.}
+Public-only ($n=\pubN$): $\Delta=\pubDelta$ ($p=\pubP$); synthetic-only
+($n=\synN$): $\Delta=\synDelta$ ($p=\synP$). The headroom subset---tasks with
+baseline $<0.9$, where movement is even possible ($n=\headN$)---is where the signal
+lives: \headDelta{} at the practical budget, a \emph{medium} effect
+($d_z=\headDz$, $p=\headP$, power~\headPower; MDE$_{80}=\headMde$), which at a larger
+budget becomes a medium--large, nominally significant gain over baseline
+(\hbTeiBaseDelta{}, $p=\hbTeiBaseP$, $d_z=\hbTeiBaseDz$; the high-budget arm below).
+Fig.~\ref{fig:headroom} shows the per-task picture at the practical budget: gains
+concentrate on a few subjective tasks, several are flat, and two regress.
+
+\begin{figure}[t]\centering
+\includegraphics[width=0.92\linewidth]{figures/headroom_forest.png}
+\caption{Per-task TEI$-$baseline on the headroom subset (baseline $<0.9$). The mean
+is positive and medium-sized but not significant; gains concentrate in a few
+subjective tasks while two tasks regress.}
+\label{fig:headroom}
+\end{figure}
+
+\paragraph{RQ5: does the null survive a realistic budget? (high-budget + OPRO.)}
+Six iterations is a small budget; a skeptic may argue the null is
+optimization-starvation. We therefore re-ran the headroom subset---the only tasks
+with room to move---at $\hbIters$ iterations (a $3.3\times$ larger budget) and added
+an OPRO-style external optimizer as a recognizable comparator (Table~\ref{tab:hb}).
+At the larger budget, the held-out arm means are baseline~\hbBase{},
+random~\hbRand{}, objective-only~\hbObjref{}, OPRO~\hbOpro{}, and TEI~\hbTei{}.
+Three things stand out, and together they sharpen rather than overturn the picture.
+\emph{First, budget is not the issue.} The within-task budget effect (20- vs.\
+6-iteration TEI on the same $n=\hbBudgetN$ tasks) is \hbBudgetDelta{}
+($p=\hbBudgetP$): the headroom effect is already present at six iterations, so the
+full-suite null is \emph{not} optimization-starvation. \emph{Second, on tasks with
+headroom, reflective optimization does help, and a non-reflective optimizer does
+not.} TEI beats the baseline by \hbTeiBaseDelta{} (95\% CI touching $+0.14$, $p=\hbTeiBaseP$,
+$d_z=\hbTeiBaseDz$, medium--large) and beats the OPRO-style optimizer by
+\hbTeiOproDelta{} ($p=\hbTeiOproP$, $d_z=\hbTeiOproDz$), while OPRO itself moves the
+baseline by exactly \hbOproBaseDelta{} ($p=\hbOproBaseP$). A reflective loop that reads its
+failures thus does something a score-history optimizer does not. \emph{Third, and
+most important for honesty, TEI is still not separable from budget-matched random
+paraphrase}: TEI$-$random is \hbTeiRandDelta{} ($p=\hbTeiRandP$; 95\% CI
+$[+0.000,+0.142]$, just touching zero). Even where TEI clearly beats baseline and
+OPRO, undirected paraphrase search selected on the same train signal does nearly as
+well. We treat these headroom-subset contrasts as a \emph{focused secondary
+analysis}---we emphasize effect sizes and report uncorrected $p$, distinct from the
+pre-registered full-suite primary endpoint; under strict Holm correction across the
+four high-budget contrasts the nominal significances are borderline. The honest
+summary is in \S\ref{sec:discussion}.
+
+\begin{table}[t]\centering
+\caption{High-budget ($\hbIters$ iterations) arm on the headroom subset, plus an
+OPRO-style external optimizer. Arm means (top) and paired contrasts (bottom).}
+\label{tab:hb}\footnotesize
+\setlength{\tabcolsep}{3.5pt}
+\input{tables/highbudget}
+\end{table}
+
+\paragraph{Cross-provider spot-check.}
+On a 10-task subset, the Claude agent moves $0.786\!\rightarrow\!0.823$ ($+0.037$,
+$p=0.166$) while replacing the agent with \texttt{gpt-4o-mini} moves
+$0.832\!\rightarrow\!0.823$ ($-0.010$, $p=0.434$); neither is significant
+(Table~\ref{tab:xp}). We treat this as a spot-check rather than a full replication,
+but it indicates the null is not an artifact of one provider---if anything, the
+stronger \texttt{gpt-4o-mini} baseline leaves even less for the optimizer to gain.
+
+\begin{table}[t]\centering
+\caption{Cross-provider spot-check (agent = \texttt{gpt-4o-mini}). Small $n$;
+qualitative replication of the null only.}
+\label{tab:xp}\footnotesize
 \input{tables/xprovider}
 \end{table}
 
-\begin{figure}[h]\centering
-\includegraphics[width=0.46\textwidth]{figures/slope_objective_v2.png}\hfill
-\includegraphics[width=0.46\textwidth]{figures/public_vs_synthetic.png}
-\caption{Left: per-agent objective, baseline $\rightarrow$ TEI (held-out): roughly
-balanced ups and downs. Right: public vs.\ synthetic tasks.}
-\label{fig:slope}\label{fig:ps}
-\end{figure}
+\begin{figure*}[t]\centering
+\includegraphics[width=0.40\textwidth]{figures/slope_objective_v2.png}\hfill
+\includegraphics[width=0.40\textwidth]{figures/public_vs_synthetic.png}
+\caption{Left: per-task held-out objective, baseline $\rightarrow$ TEI; ups and
+downs roughly balance. Right: public vs.\ synthetic tasks ($y$-axis truncated);
+the baseline$\to$TEI movement is small in both, slightly larger on public tasks.}
+\label{fig:slope}
+\end{figure*}
 
-\begin{table}[h]\centering
-\caption{Per-agent held-out objective by arm.}
-\label{tab:per}\scriptsize
-\input{tables/per_agent_v2}
+\begin{table}[t]\centering
+\caption{Secondary endpoint: GPA-inspired judge dimensions, baseline vs.\ TEI
+($n=\nAgents$). Movement is small and not significant on any dimension.}
+\label{tab:gpadim}\footnotesize
+\setlength{\tabcolsep}{4pt}
+\input{tables/gpa_dims}
 \end{table}
 
+The full per-task results for all \nAgents{} tasks and four arms are in
+Table~\ref{tab:per}; per-task bootstrap CIs and per-dimension breakdowns are in
+Appendices~\ref{app:pertask}--\ref{app:gpadims}.
+
+\begin{table*}[t]\centering
+\caption{Per-task held-out objective accuracy by arm, all \nAgents{} tasks
+(Base = baseline, Rand = random search, ObjRef = objective-only reflection,
+TEI = full). Full bootstrap CIs in Appendix~\ref{app:pertask}.}
+\label{tab:per}\scriptsize
+\setlength{\tabcolsep}{4pt}
+\input{tables/per_agent_v2}
+\end{table*}
+
+\paragraph{What does optimization actually produce?}
+Inspecting the optimized prompts (all reproduced in Appendix~\ref{app:prompts})
+reveals why the arms tie. Across all three optimizing arms, the dominant edits are
+the same low-risk moves: restating the allowed labels with one-line definitions,
+adding a tie-breaking or decision rule for the most-confused pair, and re-emphasizing
+the \texttt{FINAL:} output format. These are sensible but \emph{generic} edits that
+do not require failure-specific reflection---which is precisely why blind random
+paraphrase, selected on the same train objective, lands in the same place. The
+reflective arms occasionally add a task-specific heuristic, but on held-out data
+these neither reliably help nor hurt relative to the paraphrase baseline.
+
+\paragraph{Where TEI helps and where it hurts.}
+The per-task picture (Fig.~\ref{fig:headroom}, Table~\ref{tab:per}) is not uniform.
+The largest TEI gains land on \emph{subjective} tasks with genuine
+label-boundary ambiguity---\texttt{market\_research\_subjectivity} and
+\texttt{media\_news\_desk} improve the most---where an added disambiguation rule can
+move several examples. The clearest regressions are
+\texttt{community\_forum\_topic} and \texttt{news\_agency\_topic}, where the
+reflective rewrite over-fit a train pattern that did not transfer, costing held-out
+accuracy. The remaining headroom tasks are flat. This dispersion---real gains on a
+few tasks, real losses on others, zero on most---is exactly what produces a mean
+near zero with a wide CI, and it is the honest texture behind the aggregate null:
+the method is neither uniformly useless nor reliably beneficial in this regime.
+
+\section{Power and Equivalence Analysis}
+\label{sec:power}
+
+\begin{table}[t]\centering
+\caption{The TEI$-$baseline null under every test we ran ($n=\nAgents$). All agree:
+no significant difference, equivalence within $\pm\tostBound$, and low power due to
+ceiling effects.}
+\label{tab:robust}\footnotesize
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{lr}
+\toprule
+Test / quantity & Value \\
+\midrule
+Mean $\Delta$ (TEI $-$ baseline) & \teiBaseDelta{} \\
+95\% bootstrap CI & $[\teiBaseCIlo,\teiBaseCIhi]$ \\
+Paired $t$-test & $t=\teiBaseT$, $p=\teiBaseP$ \\
+Holm-corrected $p$ & \holmTeiBaseP{} \\
+Sign test & $p=\signP$ \\
+Permutation (sign-flip) & $p=\permP$ \\
+Win / loss / tie & \teiBaseW{} / \teiBaseL{} / \teiBaseTie{} \\
+Cohen's $d_z$ & \teiBaseDz{} \\
+TOST equivalence ($\pm\tostBound$) & $p=\tostP$ (equiv.) \\
+MDE at 80\% power & \mdeFull{} \\
+Post-hoc power (obs.\ effect) & \powerFull{} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+A null result is only as strong as its power. With $n=\nAgents{}$ tasks and the
+observed dispersion of paired differences, our suite can detect (at $80\%$ power,
+$\alpha=0.05$) effects of at least MDE$_{80}=\mdeFull$; the observed TEI$-$baseline
+effect (\teiBaseDelta{}) has post-hoc power \powerFull. Two facts follow. First, we
+can confidently rule out a \emph{large} benefit of TEI over the baseline in this
+regime: the TOST test certifies equivalence within $\pm\tostBound$ ($p=\tostP$).
+Second, we \emph{cannot} rule out a small benefit, and we do not claim a true zero;
+the ceiling-heavy full suite simply lacks the resolution. The headroom subset is
+better-powered for the effects that matter ($d_z=\headDz$ at the practical budget),
+and at a larger budget the TEI$-$baseline effect there is medium--large and nominally
+significant (\hbTeiBaseDelta{}, $d_z=\hbTeiBaseDz$); so the correct reading of the
+full-suite null is ``no \emph{aggregate} effect, dominated by saturated tasks,'' not
+``no effect anywhere.'' We report all of these numbers---equivalence, power, MDE, and
+the headroom contrasts---rather than a single $p$-value so that readers can calibrate
+exactly how strong the negative and the positive parts of the claim are.
+
+\section{Threats to Validity}
+\label{sec:threats}
+\paragraph{Construct validity.}
+Our \emph{evaluate} stage is a single-turn, four-dimension adaptation of the
+GPA framework~\cite{gpa2025}, not the original trajectory-level instrument; a
+no-benefit result for our adaptation is not a verdict on GPA proper. Likewise our
+OPRO-style and GEPA-style arms are faithful re-implementations of the
+\emph{mechanisms}, not the original authors' code, and we label them as such.
+
+\paragraph{Internal validity.}
+The chief internal threat---a scoring artifact---is precisely what we found and
+fixed; the \texttt{FINAL:} contract is applied identically across arms and the
+scorer reads only that line. Agent and judge are different models to limit
+self-preference. The test split is evaluated once, after the prompt is frozen, so
+there is no held-out leakage. A residual threat is judge noise on the secondary
+endpoint; we mitigate it with temperature 0 and reference-based judging, and we do
+not let the judge define the primary outcome.
+
+\paragraph{External validity (the regime limit).}
+This is the threat we are most exposed to. We test \emph{single-turn} classification,
+extraction, and short reasoning. GEPA's demonstrated strength is \emph{multi-step}
+systems, where the optimizer reflects over reasoning traces, tool calls, and tool
+outputs; in single-turn tasks there is no such trajectory to reflect upon. Our null
+may therefore reflect a \emph{regime mismatch} rather than an absence of benefit in
+general. We accordingly scope every claim to the single-turn classification regime
+and flag multi-step/tool-use evaluation as the most important extension
+(\S\ref{sec:limitations}).
+
+\paragraph{Statistical-conclusion validity.}
+We use paired tests with multiplicity correction, report effect sizes and CIs, and
+explicitly quantify power, MDE, and equivalence rather than reading a non-significant
+$p$ as proof of zero. The dominant statistical threat is the ceiling effect; we
+address it head-on with the headroom subset and report it as the load-bearing
+analysis. With one seed, run-to-run variance is not captured; we treat the result as
+a single well-controlled observation and release everything needed to add seeds.
+
 \section{Discussion}
-The four-arm design produces an unambiguous and, we think, useful result: on this
-benchmark, an evaluation-guided prompt optimizer does \emph{not} reliably beat an
-unoptimized fair baseline, is indistinguishable from random prompt search, and
-derives no benefit from the GPA evaluation signal. The large gain seen under a
-naive scorer ($+0.175$) was substantially a \emph{format} artifact: the optimizer
-learned to emit a clean, parseable label, which the brittle scorer rewarded. When
-the output contract standardizes parsing across all arms, the gap vanishes. The
-only residual signal is on a minority of high-headroom tasks. We do not interpret
-this as evidence that prompt optimization never helps --- rather, that
-\emph{demonstrating} a robust benefit requires the controls used here.
+\label{sec:discussion}
+The four-arm design, the artifact correction, and the high-budget headroom arm
+together yield a reading that is more nuanced than either ``it works'' or ``it does
+nothing.'' We separate three claims by their strength.
+
+\paragraph{What we can say firmly.}
+(i) The large gain reported under a naive scorer ($+0.175$) was substantially a
+\emph{format} artifact; under a confound-free contract it is \teiBaseDelta{}.
+(ii) Across the full \nAgents-task suite at a practical budget, an evaluation-guided
+optimizer does \emph{not} beat a competent baseline---it is statistically equivalent
+within $\pm\tostBound$ (TOST $p=\tostP$) and indistinguishable from random prompt
+search. (iii) This full-suite null is \emph{not} optimization-starvation: a
+$3.3\times$ larger budget barely changes TEI (\hbBudgetDelta{}, $p=\hbBudgetP$); it
+is partly a ceiling effect ($\nCeiling$ of \nAgents{} tasks are saturated).
+
+\paragraph{What the headroom regime adds.}
+On the tasks that actually have room to move, reflective optimization is \emph{not}
+inert. At a larger budget TEI beats the baseline by a medium--large margin
+(\hbTeiBaseDelta{}, $d_z=\hbTeiBaseDz$) and beats an OPRO-style optimizer by the same
+amount (\hbTeiOproDelta{}, $d_z=\hbTeiOproDz$), while the OPRO-style optimizer moves the
+baseline by \emph{exactly} \hbOproBaseDelta{}. So a reflective loop that reads its
+own failures does something a score-history optimizer does not, and the gains
+concentrate on subjective, non-saturated tasks. Because objective-only reflection
+performs similarly to full TEI, this benefit comes from \emph{reflection on
+failures}, not from the GPA evaluation signal specifically.
+
+\paragraph{The honest limit.}
+Even in the headroom regime, TEI is \emph{not} statistically separable from
+budget-matched random paraphrase (\hbTeiRandDelta{}, $p=\hbTeiRandP$, CI touching
+zero). The sharpest, most defensible statement of our result is therefore: a
+reflective evaluation-guided loop beats a competent baseline and a non-reflective
+LLM-as-optimizer on non-saturated single-turn tasks, but \emph{we cannot show it
+beats blind paraphrase search of equal budget}. It does \emph{not} say prompt
+optimization never helps; it says that \emph{demonstrating} a robust, mechanism-
+specific benefit requires the controls used here---held-out evaluation, a
+budget-matched random-search ablation, agent/judge separation, and confound-free
+scoring. The most quotable consequence for practitioners is operational: before
+attributing a gain to an evaluation-guided loop, check it against a budget-matched
+random paraphrase selected on the same train signal.
+
+\paragraph{Recommendations for evaluating prompt optimizers.}
+From this study we distill a checklist that any prompt-optimization claim should
+clear before it is believed:
+\begin{enumerate}\itemsep1pt
+  \item \textbf{Hold out the test set.} Never report the split the optimizer
+  selected on; freeze the prompt, then evaluate once.
+  \item \textbf{Add a budget-matched random-search arm.} If undirected paraphrase
+  search, selected on the same train signal, moves the metric as much as the
+  ``smart'' method, the method's mechanism is unproven.
+  \item \textbf{Compute the primary metric in code.} Reserve the LLM judge for a
+  secondary endpoint, and never let the model that drives selection also be the
+  scorekeeper of record.
+  \item \textbf{Audit the scorer for format confounds.} Verify that the scorer reads
+  the same field across conditions; a brittle parser can manufacture large gains.
+  \item \textbf{Report effect sizes, CIs, equivalence, and power}---not a bare
+  $p$-value---and disclose ceiling effects that dilute the contrast.
+  \item \textbf{Match and report the budget}, and probe a higher budget before
+  concluding ``no benefit.''
+\end{enumerate}
+None of these is novel in isolation; the contribution is showing that, taken
+together, they overturn a large, significant-looking gain on this benchmark.
+
+\paragraph{Why the gap between demos and held-out reality?}
+The mechanism we observe is mundane but general. An evaluation-guided optimizer is,
+at heart, a search that selects whatever scores best on the signal it is given. When
+that signal is in-sample accuracy under a brittle scorer, the search reliably finds
+prompts that score well \emph{there}---by tightening output format, by over-fitting
+idiosyncrasies of the optimization examples, or simply by being one of many
+paraphrases that happen to do better on a small set. None of these need transfer to
+held-out data, and in our experiments they largely do not. This is the same dynamic
+that makes in-sample model selection optimistic throughout ML; prompt optimization is
+not exempt. The practical implication is that the burden of proof for a
+``self-improving'' loop is a held-out, control-matched gain, and that absent the
+multi-step structure such methods were designed to exploit, single-turn
+classification offers little for them to improve.
 
 \section{Limitations}
-We study single-turn classification/extraction/reasoning, not multi-step tool-use
-agents, where structural reflection may matter more. Per-task test sets are modest
-(15--30) though reported with bootstrap CIs; the statistical unit is the agent
-($n=\nAgents$). The optimizer budget (6 iterations) is small; a much larger budget
-might separate the arms (we report what a practical budget yields). Half the tasks
-are synthetic; we report public-only separately. A null result is evidence of
-absence-of-large-effect at this power, not proof of exact zero.
+\label{sec:limitations}
+We study single-turn classification/extraction/reasoning, \emph{not} multi-step
+tool-use agents, where structural reflection plausibly matters more; adding such
+tasks is our top priority. Per-task test sets are modest (15--30 examples) though
+reported with bootstrap CIs; the statistical unit is the task ($n=\nAgents$).
+About a third of tasks saturate at ceiling, diluting the full-suite contrast---hence
+our emphasis on the headroom subset. Half the tasks are synthetic (reported
+separately). The main budget is 6 iterations; the high-budget arm extends this to
+$\hbIters$ but only on the headroom subset. We run one seed. A git tag is weaker
+provenance than an OSF/Zenodo DOI; we plan a signed, archived snapshot. None of
+these change the qualitative conclusion, but each bounds its scope.
+
+\paragraph{What would change the verdict.}
+We state, in advance, the evidence that would overturn our reading. A
+\emph{multi-step / tool-use} suite on which a GEPA-style optimizer, given held-out
+evaluation and a budget-matched random-search control, produced a significant and
+replicable gain would show that the null is a regime artifact---and would be the most
+valuable extension of this work. A \emph{larger, ceiling-free} benchmark (100--300
+held-out examples per task, with baselines kept below saturation) that revealed a
+consistent positive effect would show that our null is a power artifact. A
+\emph{multi-seed} study with tight variance would sharpen the equivalence bound. We
+have built the protocol so that each of these is a drop-in addition rather than a
+rebuild, and we would update the conclusion accordingly. The present claim is
+deliberately narrow: \emph{in the single-turn classification regime, with a competent
+baseline, reflective optimization shows no aggregate benefit and beats a baseline and
+a non-reflective optimizer only on non-saturated tasks---where it still cannot be
+separated from budget-matched random paraphrase}.
 
 \section{Reproducibility}
-One command rebuilds tasks, one runs the experiment, one regenerates everything.
-Released: code, \nAgents{} datasets, all per-example traces and per-arm optimized
-prompts, a content-addressed cache, exact versions, the pre-registration (tag
-\texttt{prereg-v2}), and cost/runtime (\$20, $\sim$2\,h). Every number here is
-auto-generated from \texttt{results\_v2/}.
+\label{sec:repro}
+One command rebuilds the tasks, one runs the full ablation, and one regenerates
+every figure, table, and number in this paper from \texttt{results\_v2/}; the
+high-budget arm is a single command on \texttt{results\_v2\_hb/}. We release the
+code, the \nAgents{} datasets, all per-example test traces, every arm's optimized
+prompt (Appendix~\ref{app:prompts}), a content-addressed LLM cache, exact package
+versions, the pre-registration (tag \texttt{prereg-v2}), and cost/runtime. Every
+numeric value in the text is generated by macro from the recorded data---there are
+no hand-typed results.
 
 \section{Ethics}
-Content-moderation and clinical-style triage tasks are framed only as text
-classification; outputs are not advice. Public datasets retain their licenses.
+\label{sec:ethics}
+Content-moderation and clinical-style triage tasks are framed solely as text
+classification; outputs are not advice and carry no deployment claim. Public
+datasets retain their original licenses; authored data are released under the
+repository license. The study uses no human subjects and no private data.
+
+\section*{Author Contributions}
+O.J.\ designed the protocol, implemented the harness, optimizer arms, scorers, and
+analysis, ran the experiments, and wrote the paper. A.Z.\ contributed to task
+design, framing, and review. Both authors approved the final manuscript and take
+responsibility for the integrity of the released artifacts. Correspondence via the
+project repository.
 
 \section{Conclusion}
+\label{sec:conclusion}
 Under a confound-controlled, ablated, held-out protocol, the apparent gains of an
-evaluation-guided prompt optimizer largely disappear: it does not significantly
-beat a fair baseline and is indistinguishable from random prompt search. We
-release TEI-Bench so that prompt-optimization methods can be held to this bar.
-Code, data, traces, prompts: \url{https://github.com/ojavadli/tei-bench}.
+evaluation-guided prompt optimizer shrink dramatically in the single-turn
+classification regime. Across the full suite TEI does not beat a fair baseline, is
+statistically equivalent to it within $\pm\tostBound$, and is indistinguishable from
+budget-matched random prompt search; a previously reported $+0.175$ was largely a
+scoring artifact. On the tasks that have room to move, reflective optimization is not
+inert---TEI beats the baseline (\hbTeiBaseDelta{}, $d_z=\hbTeiBaseDz$) and a
+non-reflective OPRO-style optimizer (which gains nothing), and this is robust to
+budget---but even there it cannot be statistically separated from random paraphrase
+search. We release TEI-Bench so that prompt-optimization methods can be held to this
+bar, and we frame the result as a cautionary,
+reproducible note rather than a claim that such methods never help. Code, data,
+traces, and prompts: \url{https://github.com/ojavadli/tei-bench}.
 
+\balance
 \small
 \bibliographystyle{unsrtnat}
 \bibliography{references}
+
+\input{appendix}
+
 \end{document}

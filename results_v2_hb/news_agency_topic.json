@@ -1,0 +1,2174 @@
+{
+  "task_id": "news_agency_topic",
+  "industry": "News Agency",
+  "metric": "classification",
+  "source": "fancyzhx/ag_news via HuggingFace (see dataset card for license).",
+  "is_public": true,
+  "n_train": 15,
+  "n_test": 30,
+  "agent_model": "claude-haiku-4-5",
+  "judge_model": "claude-sonnet-4-5",
+  "optimizer_model": "claude-sonnet-4-5",
+  "seed": 0,
+  "arms": {
+    "baseline": {
+      "objective_mean": 0.7666666666666667,
+      "objective_ci95": [
+        0.6,
+        0.9
+      ],
+      "prompt": "You are a news categorization assistant. Categorize the news headline/snippet into a topic. Classify into one of these categories: Business, Sci/Tech, Sports, World.",
+      "examples": [
+        {
+          "query": "Bipartisan Panel Seeks Greenhouse Gas Limits A bipartisan commission that includes energy industry executives, environmentalists and academics will issue a report Wednesday that calls on the nation to adopt mandatory limits on greenhouse gas emissions linked to global warming, set stricter fuel economy standards and promote nuclear power, renewable energy and oil exploration.",
+          "gold": "Business",
+          "output": "This news story involves environmental policy, energy industry regulation, and climate change mitigation strategies. While it touches on business interests (energy executives are involved), the core focus is on government policy recommendations regarding greenhouse gas emissions, fuel standards, and energy sources.\n\nThis is primarily a policy/environmental issue with significant business implications, but the headline emphasizes the regulatory and environmental aspects rather than a specific business transaction or economic development.\n\nFINAL: World",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.25,
+            "reasoning_soundness": 0.6,
+            "execution_accuracy": 0.2,
+            "output_integrity": 0.15,
+            "aggregate": 0.3,
+            "rationale": "The agent provided extensive analysis but failed the core task of categorizing into the correct topic (Business), instead choosing 'World' despite acknowledging business and policy elements throughout"
+          }
+        },
+        {
+          "query": "Climax to show off Avalon to US publishers #39;Project Avalon #39; becomes just plain Avalon; developer will show playable prototype of next-generation shooter to American execs.",
+          "gold": "Sci/Tech",
+          "output": "This news snippet is about a video game development company preparing to demonstrate their game \"Avalon\" (formerly \"Project Avalon\") to US publishers. The focus is on showcasing a playable prototype of a next-generation shooter game to business executives.\n\nThis falls under the technology/gaming industry category, as it concerns video game development and the gaming industry.\n\nFINAL: Sci/Tech",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly categorized the headline as 'Sci/Tech', matching the reference answer, with sound reasoning about gaming/technology, though the task only required the category label without extens"
+          }
+        },
+        {
+          "query": "Cink Justifies Sutton #39;s Faith Three weeks away from the Ryder Cup, American Stewart Cink hopes he has silenced at least some of his critics - if indeed they exist.",
+          "gold": "Sports",
+          "output": "This headline is about Stewart Cink, an American golfer, and his performance leading up to the Ryder Cup, which is a major international golf competition. The article discusses how Cink is justifying the faith that someone named Sutton (likely a team captain or selector) has placed in him for the upcoming Ryder Cup.\n\nThis is clearly sports-related content, as it focuses on a professional golfer's performance and selection for a major sporting event.\n\nFINAL: Sports",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly categorized the headline as 'Sports' with sound reasoning about golf and the Ryder Cup, though the task only required the category label without explanation."
+          }
+        },
+        {
+          "query": "Taiwan Acknowledges Minister #39;s Improper Wording #39; on Singapore Taiwan Foreign Minister Chen Tan- sun, who dismissed Singapore as a country the size of a booger, #39; #39; regretted his improper wording, #39; #39; said Foreign Ministry spokesman Michel Lu.",
+          "gold": "World",
+          "output": "This news item concerns a diplomatic incident involving Taiwan's Foreign Minister making an inappropriate comment about Singapore. The story involves:\n\n- International relations between Taiwan and Singapore\n- A government official's statement and subsequent apology\n- Diplomatic protocol and international affairs\n\nThis is clearly a world/international news story, as it deals with diplomatic relations between countries and international political matters.\n\nFINAL: World",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly categorized the headline as 'World' news with sound reasoning about diplomatic relations, though the task only required the category itself without extensive explanation."
+          }
+        },
+        {
+          "query": "Asian Stocks Lower, Greenspan Awaited SINGAPORE (Reuters) - Asian stocks edged lower on Wednesday as profit taking set in after two days of gains and the dollar firmed ahead of comments from Fed chief Alan Greenspan that are expected to cement the case for further U.S. rate rises.",
+          "gold": "Business",
+          "output": "This news article discusses Asian stock market movements, currency fluctuations (dollar firming), and expectations around Federal Reserve policy decisions. These are all financial and economic matters.\n\nThe article focuses on:\n- Stock market performance in Asia\n- Currency markets (dollar strength)\n- Federal Reserve monetary policy expectations\n\nThis is clearly a business/financial news story.\n\nFINAL: Business",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly categorized the headline as 'Business' with sound reasoning about stock markets, currency, and Fed policy, matching the reference answer perfectly."
+          }
+        },
+        {
+          "query": "Grid bids to save the world Hoping to harness a few million of the personal computers not already running the SETIhome screensaver, IBM and United Devices yesterday launched the World Community Grid to act as a clearing house for humanitarian IT projects.",
+          "gold": "Sci/Tech",
+          "output": "This news snippet discusses IBM and United Devices launching the World Community Grid, which is a distributed computing initiative designed to harness personal computers for humanitarian projects. The article mentions the SETI@home screensaver as a reference point and focuses on the technological infrastructure and computing resources being mobilized for charitable purposes.\n\nThis is primarily about technology and scientific computing initiatives, though it has humanitarian applications.\n\nFINAL: Sci/Tech",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly categorized the headline as 'Sci/Tech' matching the reference answer, provided sound reasoning about distributed computing and technology infrastructure, and delivered the response"
+          }
+        },
+        {
+          "query": "FERGUSON ATTACKED IN TUNNEL BUST-UP SIR ALEX FERGUSON was pelted with food and pea soup by an Arsenal player in an extraordinary tunnel bust-up at Old Trafford yesterday.",
+          "gold": "Sports",
+          "output": "This headline describes an incident involving Sir Alex Ferguson (a famous football/soccer manager) and an Arsenal player at Old Trafford (Manchester United's stadium). The story is about a confrontation that occurred during or after a match between these two teams.\n\nThis is clearly sports-related content, as it involves:\n- A prominent football manager\n- A football club (Arsenal)\n- A football stadium (Old Trafford)\n- An incident during a match\n\nFINAL: Sports",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly categorized the headline as 'Sports' with sound reasoning identifying key football-related elements, though the task only required the category without explanation."
+          }
+        },
+        {
+          "query": "Saddam, Aides to Go on Trial Within Weeks - Daoud Iraq #39;s toppled leader Saddam Hussein and his top aides will go on trial within weeks, Iraqi Minister of State Kasim Daoud said on Sunday.",
+          "gold": "World",
+          "output": "This news item discusses the upcoming trial of Saddam Hussein and his aides following Iraq's political upheaval. This is a significant international legal and political event related to Iraq's governance and justice system.\n\nThis falls under international affairs and geopolitical developments rather than business, science/technology, or sports.\n\nFINAL: World",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly categorized the headline as 'World', provided sound reasoning about international affairs and geopolitical context, and delivered the exact answer matching the reference."
+          }
+        },
+        {
+          "query": "Treasuries Mount Rally Despite Inflation NEW YORK (Reuters) - U.S. Treasury prices rallied on Wednesday as inflation excluding food and energy, one of the Federal Reserve's preferred price measures, proved less dramatic than bond bulls had feared.",
+          "gold": "Business",
+          "output": "This news article discusses U.S. Treasury bond prices rallying in response to inflation data. The focus is on financial markets (Treasury prices), inflation metrics, and Federal Reserve policy implications. This is clearly a financial/economic news story.\n\nFINAL: Business",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly categorized the headline as 'Business', provided sound reasoning about financial markets and economic indicators, and delivered the answer in the expected format matching the refer"
+          }
+        },
+        {
+          "query": "The Lowdown on Downloading Music The digital music space is changing, with more songs and a growing number of places to download music legally. Realizing that the time was ripe to see how we were doing, I took some song recommendations and sat down to see what I could download.",
+          "gold": "Sci/Tech",
+          "output": "This article discusses the digital music industry, legal music downloading platforms, and the changing landscape of how consumers access music. It's focused on technology and digital services related to music distribution and consumption.\n\nFINAL: Sci/Tech",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly categorized the headline as Sci/Tech with sound reasoning about digital music technology, though the task only required the category label without explanation."
+          }
+        },
+        {
+          "query": "Shaq turns up heat in first outing with Miami SHAQUILLE O #39;Neal shot 7-for-9 and finished with 16 points in his Miami debut yesterday as the Heat took a 100-77 victory against the home side New Jersey Nets.",
+          "gold": "Sports",
+          "output": "This article is about Shaquille O'Neal's performance in his first game with the Miami Heat basketball team. It reports on his statistics (7-for-9 shooting, 16 points) and the team's victory over the New Jersey Nets. This is clearly sports news.\n\nFINAL: Sports",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly categorized the headline as 'Sports' with sound reasoning about basketball content, though the task only required the category label without explanation."
+          }
+        },
+        {
+          "query": "\\$78,000 for a Cane That Helped a Legend Walk the Line Many of Johnny Cash's possessions were sold at Sotheby's, collecting \\$3,984,260 for the Cash family, more than double the pre-auction estimate.",
+          "gold": "World",
+          "output": "This article discusses the sale of Johnny Cash's personal possessions at Sotheby's auction house, including a cane that sold for $78,000. The focus is on the auction results, the monetary value of the items sold, and the financial outcome for the Cash family.\n\nThis is primarily a business/commerce story, as it centers on an auction sale, pricing, and financial transactions.\n\nFINAL: Business",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.2,
+            "aggregate": 0.75,
+            "rationale": "The agent correctly identified the task, provided sound reasoning about auction/financial aspects, and delivered a proper categorical answer, but the final category 'Business' contradicts the referenc"
+          }
+        },
+        {
+          "query": "Dollar Briefly Hits 4-Wk Low Vs Euro LONDON (Reuters) - The dollar dipped to a four-week low against the euro on Monday before rising slightly on profit-taking, but steep oil prices and weak U.S. data continued to fan worries about the health of the world's largest economy.",
+          "gold": "Business",
+          "output": "This news article discusses currency exchange rates (dollar vs. euro), oil prices, and U.S. economic data. These are all financial and economic indicators that fall under business/financial news coverage.\n\nFINAL: Business",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly categorized the headline as 'Business', provided sound reasoning about currency, oil prices, and economic data, and delivered the answer in the expected format matching the referen"
+          }
+        },
+        {
+          "query": "One in four servers to run Linux by 2008 In a report, the research firm painted a bright future for the open source operating system, claiming that shipments of servers running Linux -- and revenues from those shipments -- will rise significantly over the next five years.",
+          "gold": "Sci/Tech",
+          "output": "This news snippet discusses predictions about Linux server adoption and market growth over a five-year period. It references a research firm's report projecting increased shipments and revenues for Linux-based servers.\n\nThis is clearly a technology-related story, as it concerns:\n- An operating system (Linux)\n- Server technology\n- Market forecasts for tech products\n- Open source software\n\nFINAL: Sci/Tech",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9675,
+            "rationale": "The agent correctly categorized the headline as 'Sci/Tech' with sound reasoning about operating systems and server technology, though the task only required the category label without explanation."
+          }
+        },
+        {
+          "query": "Leiter returns as Pavano prepares to go Al Leiter is returning to the Marlins, but Carl Pavano appears to be a goner. Leiter, a left-hander who threw the franchise #39;s first no-hitter in 1996 and helped the team win its first World Series in 1997, signed a one-year \\$8 million contract Wednesday.",
+          "gold": "Sports",
+          "output": "This news article is about Al Leiter signing a contract with the Marlins baseball team and Carl Pavano potentially leaving the team. The focus is on player signings and roster moves in Major League Baseball.\n\nFINAL: Sports",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly categorized the headline as 'Sports', provided sound reasoning about baseball player movements, and delivered the answer in the expected format matching the reference answer."
+          }
+        },
+        {
+          "query": "Argentina gets China investment China is to invest nearly \\$20bn (11bn) in Argentina over the next 10 years, Argentine officials say.",
+          "gold": "World",
+          "output": "This news is about a major investment deal between China and Argentina. The headline discusses financial investment commitments between two countries, which is an economic/business matter. While it has international implications, the core story is about business investment and economic relations.\n\nFINAL: Business",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.85,
+            "reasoning_soundness": 0.75,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.4,
+            "aggregate": 0.725,
+            "rationale": "The agent correctly identified the task and provided proper categorization format, with reasonable economic reasoning, but chose 'Business' instead of the reference answer 'World' for what is fundamen"
+          }
+        },
+        {
+          "query": "Stocks Finish Up, Apple Provides a Lift NEW YORK (Reuters) - U.S. stocks rose on Monday as a higher price target for shares of Apple Computer Inc. &lt;A HREF=\"http://www.investor.reuters.com/FullQuote.aspx?ticker=AAPL.O target=/stocks/quickinfo/fullquote\"&gt;AAPL.O&lt;/A&gt; prompted enthusiasm for technology stocks and a rally in crude oil stalled.",
+          "gold": "Business",
+          "output": "This article discusses stock market performance, with a focus on how Apple's higher price target influenced the broader market and technology stocks. The content centers on financial markets, stock prices, and investment activity.\n\nFINAL: Business",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly categorized the headline as 'Business', provided sound reasoning about stock markets and financial content, and delivered the answer in the expected format with the correct label."
+          }
+        },
+        {
+          "query": "Schwarzenegger Signs 'Foie Gras' Bill (AP) AP - California will end the force feeding of ducks, geese and other birds to produce the gourmet liver product foie gras by 2012 under legislation signed Wednesday by Gov. Arnold Schwarzengger.",
+          "gold": "Sci/Tech",
+          "output": "This news story is about California legislation signed by Governor Arnold Schwarzenegger that bans the force-feeding of birds to produce foie gras. While it involves a governor's action, the core subject matter is animal welfare policy and legislation rather than business operations or economic impact. However, this could also be considered a business/regulatory matter since it affects the foie gras industry.\n\nLooking at the categories available, this is primarily a policy/regulatory story with animal welfare implications. It's not about sports, science/technology, or international affairs. The most appropriate categorization would be **Business** since it involves legislation that impacts an industry and commercial practice.\n\nFINAL: Business",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.25,
+            "reasoning_soundness": 0.6,
+            "execution_accuracy": 0.7,
+            "output_integrity": 0.15,
+            "aggregate": 0.42499999999999993,
+            "rationale": "The agent provided a clear categorical answer in the required format, but categorized the headline as 'Business' when the reference answer is 'Sci/Tech', demonstrating a fundamental misclassification "
+          }
+        },
+        {
+          "query": "Mr. Chang, Strike a Pose Halfway around the world, standing virtually in the middle of the Pacific Ocean, the incomparable Timmy Chang is just days away from throwing his first pass of the season. From my tattered sofa, I will be watching him. I want you to watch him, too.",
+          "gold": "Sports",
+          "output": "This article appears to be about Timmy Chang, a football player, preparing to throw his first pass of the season. The piece is written in a personal, engaging style encouraging readers to watch him play. This is clearly sports-related content focusing on an athlete and an upcoming game.\n\nFINAL: Sports",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly categorized the headline as 'Sports', provided sound reasoning about the football context, and delivered the answer in the expected format matching the reference answer perfectly."
+          }
+        },
+        {
+          "query": "Cowboys Defeat Redskins 21-18 LANDOVER, Md. - Bill Parcells celebrated the touchdown with a big smile and his fist thrust high in the air...",
+          "gold": "World",
+          "output": "This headline describes a football game between the Cowboys and Redskins with a final score of 21-18, mentioning coach Bill Parcells celebrating a touchdown. This is clearly sports-related content.\n\nFINAL: Sports",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.15,
+            "aggregate": 0.7499999999999999,
+            "rationale": "The agent correctly identified the content as sports-related with sound reasoning and proper categorization format, but the final answer 'Sports' contradicts the reference answer 'World', indicating e"
+          }
+        },
+        {
+          "query": "IRS Demands FICA from Chili's Owner NEW YORK (Reuters) - Brinker International Inc. which operates the Chili's restaurant chain, on Monday said it received a demand from the U.S. Internal Revenue Service regarding the company's share of FICA taxes on unreported tips of \\$31.4 million during 2000 to 2002.",
+          "gold": "Business",
+          "output": "This news story concerns a tax dispute between the IRS and Brinker International, the company that operates the Chili's restaurant chain. The article discusses a financial/tax matter involving a major business entity and government tax authorities.\n\nThis is clearly a business-related story, as it involves:\n- A publicly traded company (Brinker International)\n- Tax obligations and IRS demands\n- Financial implications for the business\n\nFINAL: Business",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly categorized the headline as 'Business' with sound reasoning about corporate tax matters, though the task only required the category label without explanation."
+          }
+        },
+        {
+          "query": "Xbox owner sues MS p2pnet.net News:- Microsoft is being sued for damages, restitution and other costs and fees, quot;on behalf of all Xbox owners across the United States, quot; says Reuters.",
+          "gold": "Sci/Tech",
+          "output": "This news item concerns a legal action taken against Microsoft by Xbox owners. The lawsuit involves consumer complaints related to Xbox products and services, which is a business/corporate matter involving a major technology company and its customers.\n\nWhile Xbox is a technology product, the core of this story is the business/legal dispute between consumers and Microsoft, making it primarily a business news item rather than a technology news item.\n\nFINAL: Business",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.3,
+            "reasoning_soundness": 0.45,
+            "execution_accuracy": 0.85,
+            "output_integrity": 0.2,
+            "aggregate": 0.45,
+            "rationale": "The agent provided a well-formatted categorization with reasoning, but incorrectly classified a lawsuit about Xbox (a technology product from a tech company) as 'Business' when the reference answer is"
+          }
+        },
+        {
+          "query": "Hall had Penn State executing well against Akron, but BC will be &lt;b&gt;...&lt;/b&gt; In recent years, Penn State critics have pointed to its offensive game plan as the source of the team #39;s problems. It was too rigid at times, they said, too reckless at others.",
+          "gold": "Sports",
+          "output": "This news snippet discusses Penn State's football team, their offensive strategy, and an upcoming game against BC (Boston College). It mentions their performance against Akron and analyzes their coaching and game planning.\n\nThis is clearly sports-related content, as it focuses on college football teams, game performance, and coaching strategies.\n\nFINAL: Sports",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly categorized the headline as 'Sports' with sound reasoning about football content, though the task only required the category label without explanation."
+          }
+        },
+        {
+          "query": "Football: Spanish FA apologises The Spanish FA apologises to its English counterparts following racist chanting.",
+          "gold": "World",
+          "output": "This news item concerns the Spanish Football Association apologizing for racist chanting incidents, which relates to international football governance and conduct issues.\n\nWhile this involves football (a sport), the focus is on organizational/institutional matters between football associations rather than on sporting competition itself. However, given that it's fundamentally about a football-related incident and the primary context is sports, this falls under the Sports category.\n\nFINAL: Sports",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.75,
+            "reasoning_soundness": 0.7,
+            "execution_accuracy": 0.85,
+            "output_integrity": 0.4,
+            "aggregate": 0.6749999999999999,
+            "rationale": "The agent provided a well-reasoned categorization as 'Sports' with sound logic about football governance, but the reference answer indicates 'World' is correct, suggesting this is an international/dip"
+          }
+        },
+        {
+          "query": "Agency sustains \\$2 M hit The Pennsylvania Turnpike Commission lost about \\$2 million in revenue Wednesday as thousands of holiday travelers zipped through the toll booths for free.",
+          "gold": "Business",
+          "output": "This news story is about the Pennsylvania Turnpike Commission losing $2 million in revenue due to thousands of holiday travelers passing through toll booths without paying. This is a financial/operational issue affecting a government transportation agency.\n\nThis falls under business/economic news as it deals with revenue loss, financial impact, and operational matters of a public agency.\n\nFINAL: Business",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly categorized the headline as 'Business' with sound reasoning about revenue loss and financial impact, matching the reference answer perfectly despite providing additional explanatio"
+          }
+        },
+        {
+          "query": "TI Puts Digital TV on Cell Phones Texas Instruments Inc. today announced development of the wireless industry #39;s first digital TV on a single chip for cell phones, code-named quot;Hollywood.",
+          "gold": "Sci/Tech",
+          "output": "This news is about Texas Instruments developing a digital TV chip for cell phones. This is a technology/innovation announcement related to semiconductor development and mobile device capabilities.\n\nFINAL: Sci/Tech",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly categorized the headline as 'Sci/Tech' matching the reference answer, provided sound reasoning about the technology nature of the announcement, and delivered the answer in the expe"
+          }
+        },
+        {
+          "query": "Pedro picks Mets, Lee dealt to Brewers Pedro Martinez picked the New York Mets over the Boston Red Sox, and the Chicago White Sox dealt Carlos Lee to Milwaukee for Scott Podsednik and a reliever on Monday as baseball #39;s annual winter meetings finished with many top stars still searching for",
+          "gold": "Sports",
+          "output": "This news snippet discusses baseball player signings and trades during the winter meetings. It covers:\n- Pedro Martinez signing with the New York Mets\n- A trade involving Carlos Lee being dealt to the Milwaukee Brewers\n\nThese are clearly sports-related events involving Major League Baseball transactions.\n\nFINAL: Sports",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly categorized the headline as 'Sports' with sound reasoning about baseball transactions, though the task only required the category label itself."
+          }
+        },
+        {
+          "query": "British tourists killed in Jordan bus crash Nine British tourists, two Jordanians and an Egyptian have been killed in a bus accident in southern Jordan, civil defence sources and diplomats say.",
+          "gold": "World",
+          "output": "This news story reports on a tragic bus accident in Jordan that resulted in multiple deaths including British tourists and local nationals. \n\nThe key elements are:\n- A bus crash incident\n- Multiple fatalities (9 British tourists, 2 Jordanians, 1 Egyptian)\n- Location: Southern Jordan\n- Reported by civil defence sources and diplomats\n\nThis is a news event about a tragic accident/incident occurring in a specific geographic location. It falls under international news coverage rather than business, science/technology, or sports.\n\nFINAL: World",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly categorized the headline as 'World' with sound reasoning about international news coverage, proper format, and complete accuracy matching the reference answer."
+          }
+        },
+        {
+          "query": "New drug extends multiple sclerosis options 25/11/2004 - The first in a completely new class of drug for multiple sclerosis has been approved in the US, opening up a new avenue of treatment for sufferers of the debilitating diseases and potential blockbuster revenues for developers Elan and Biogen",
+          "gold": "Business",
+          "output": "This news article discusses the approval of a new pharmaceutical drug for treating multiple sclerosis. While it mentions the medical/health aspect of the drug, the primary focus is on the business implications - specifically the approval of a new drug class, its commercial potential as a \"blockbuster\" revenue generator, and the companies involved (Elan and Biogen).\n\nThe article emphasizes the business and commercial aspects of this pharmaceutical development rather than the scientific mechanisms or technical details of how the drug works.\n\nFINAL: Business",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9675,
+            "rationale": "The agent correctly categorized the headline as 'Business', provided sound reasoning about the commercial focus (blockbuster revenues, company names), and delivered the answer in the expected format m"
+          }
+        },
+        {
+          "query": "Blu-ray group mandates Microsoft codec for BD-ROM The Blu-ray Disc Association (BRDA) has selected Microsoft #39;s VC-9 video codec for future BD-ROM content, the organisation said today.",
+          "gold": "Sci/Tech",
+          "output": "This news is about the Blu-ray Disc Association's technical decision to mandate Microsoft's VC-9 video codec for BD-ROM content. This is a technology/standards decision in the digital media and computing industry.\n\nFINAL: Sci/Tech",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly categorized the headline as 'Sci/Tech' with sound reasoning about the technical nature of the codec decision, matching the reference answer perfectly."
+          }
+        }
+      ],
+      "gpa_mean": 0.87325,
+      "gpa_dims": {
+        "target_alignment": 0.8716666666666664,
+        "reasoning_soundness": 0.8700000000000002,
+        "execution_accuracy": 0.9296666666666666,
+        "output_integrity": 0.8216666666666667
+      }
+    },
+    "random": {
+      "objective_mean": 0.7,
+      "objective_ci95": [
+        0.5333333333333333,
+        0.8666666666666667
+      ],
+      "prompt": "You are a specialist in categorizing news content. Your task is to analyze news headlines and their accompanying article excerpts, then assign each piece to exactly one category that best represents its primary subject matter.\n\nCategories available for classification:\n\n- Business: Articles centered on companies and corporate affairs, stock markets and financial systems, economic patterns and indicators, commerce and trade, sector-specific developments, or organizational business matters\n- Sci/Tech: Articles focused on technology innovations and advances, scientific studies and experiments, cutting-edge discoveries, digital tools and platforms, technical breakthroughs, or research findings\n- Sports: Articles about competitive athletics, professional or amateur sports organizations, individual competitors and players, matches and sporting competitions, championships and leagues, or physical sports-related activities\n- World: Articles examining international politics and diplomacy, relations between nations, military conflicts and global tensions, government actions and policies, diplomatic negotiations, or political events with worldwide significance\n\nYour approach should be to carefully examine each submission to determine what the content is primarily about at its core, then select the single category that most precisely reflects that central theme.",
+      "examples": [
+        {
+          "query": "Bipartisan Panel Seeks Greenhouse Gas Limits A bipartisan commission that includes energy industry executives, environmentalists and academics will issue a report Wednesday that calls on the nation to adopt mandatory limits on greenhouse gas emissions linked to global warming, set stricter fuel economy standards and promote nuclear power, renewable energy and oil exploration.",
+          "gold": "Business",
+          "output": "This article is primarily about a bipartisan commission's policy recommendations regarding environmental and energy matters. While it touches on energy industry and economic aspects, the core focus is on government policy proposals addressing greenhouse gas emissions, climate change, and energy standards - which are fundamentally political and policy-oriented issues with international environmental significance.\n\nThe article centers on:\n- Government policy recommendations (mandatory emissions limits)\n- Environmental concerns (greenhouse gas emissions, global warming)\n- International environmental issues (climate change)\n- Political action (bipartisan commission report)\n\nThis is best categorized as a World/political issue rather than Business (which would focus on corporate operations or markets) or Sci/Tech (which would emphasize the scientific research itself rather than policy responses).\n\nFINAL: World",
+          "objective": 0.0,
+          "gpa": {}
+        },
+        {
+          "query": "Climax to show off Avalon to US publishers #39;Project Avalon #39; becomes just plain Avalon; developer will show playable prototype of next-generation shooter to American execs.",
+          "gold": "Sci/Tech",
+          "output": "This article is about a video game development project called \"Avalon\" (formerly \"Project Avalon\"). The core subject matter involves a game developer showcasing a playable prototype of their next-generation shooter game to US publishers. This is fundamentally about a technology/digital product development and innovation in the gaming industry.\n\nFINAL: Sci/Tech",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Cink Justifies Sutton #39;s Faith Three weeks away from the Ryder Cup, American Stewart Cink hopes he has silenced at least some of his critics - if indeed they exist.",
+          "gold": "Sports",
+          "output": "This article is about Stewart Cink, an American golfer, and his performance leading up to the Ryder Cup, which is a major international golf competition. The headline references Cink justifying someone named Sutton's faith in him, suggesting this is about his selection and performance in professional golf.\n\nThe core subject matter is competitive athletics - specifically professional golf and an upcoming major sporting competition (the Ryder Cup).\n\nFINAL: Sports",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Taiwan Acknowledges Minister #39;s Improper Wording #39; on Singapore Taiwan Foreign Minister Chen Tan- sun, who dismissed Singapore as a country the size of a booger, #39; #39; regretted his improper wording, #39; #39; said Foreign Ministry spokesman Michel Lu.",
+          "gold": "World",
+          "output": "This article concerns a diplomatic incident involving Taiwan's Foreign Minister making an inappropriate comment about Singapore. The core subject matter is about international relations, diplomatic conduct, and government statements between nations.\n\nThe article focuses on:\n- A government official's statement about another country\n- Diplomatic relations between Taiwan and Singapore\n- An official acknowledgment and apology for improper diplomatic language\n\nThis is clearly a matter of international politics and diplomacy.\n\nFINAL: World",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Asian Stocks Lower, Greenspan Awaited SINGAPORE (Reuters) - Asian stocks edged lower on Wednesday as profit taking set in after two days of gains and the dollar firmed ahead of comments from Fed chief Alan Greenspan that are expected to cement the case for further U.S. rate rises.",
+          "gold": "Business",
+          "output": "This article is primarily focused on financial markets and economic indicators. The content discusses:\n\n1. Asian stock market movements and trading patterns\n2. Currency market activity (dollar firming)\n3. Federal Reserve policy expectations and their impact on markets\n4. Economic indicators related to interest rate decisions\n\nThese are all core business and financial system topics. While there is a global dimension (Asian markets), the primary subject matter is about stock markets, financial systems, and economic patterns - which are central to the Business category.\n\nFINAL: Business",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Grid bids to save the world Hoping to harness a few million of the personal computers not already running the SETIhome screensaver, IBM and United Devices yesterday launched the World Community Grid to act as a clearing house for humanitarian IT projects.",
+          "gold": "Sci/Tech",
+          "output": "This article is about a technology initiative launched by IBM and United Devices called the World Community Grid. The core subject matter focuses on:\n\n1. A technological platform/system being created\n2. How it will utilize distributed computing resources (personal computers)\n3. Its purpose to support humanitarian IT projects\n4. The technical infrastructure and innovation involved\n\nWhile the project has humanitarian goals, the article's primary focus is on the technological innovation and system itself - how it works and what it does from a technical standpoint. This is fundamentally about a technology initiative and digital platform development.\n\nFINAL: Sci/Tech",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "FERGUSON ATTACKED IN TUNNEL BUST-UP SIR ALEX FERGUSON was pelted with food and pea soup by an Arsenal player in an extraordinary tunnel bust-up at Old Trafford yesterday.",
+          "gold": "Sports",
+          "output": "This article is about an incident involving Sir Alex Ferguson (the legendary Manchester United manager) and an Arsenal player that occurred in a tunnel at Old Trafford (Manchester United's stadium). The core subject matter is a physical altercation/confrontation between sports figures during what appears to be a match day.\n\nWhile this involves some dramatic interpersonal conflict, the primary context is sports-related - it concerns football/soccer managers and players, and occurred at a sporting venue during what was likely a match between Manchester United and Arsenal.\n\nFINAL: Sports",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Saddam, Aides to Go on Trial Within Weeks - Daoud Iraq #39;s toppled leader Saddam Hussein and his top aides will go on trial within weeks, Iraqi Minister of State Kasim Daoud said on Sunday.",
+          "gold": "World",
+          "output": "This article is about the legal proceedings and trial of Saddam Hussein and his associates following Iraq's political upheaval. The core subject matter involves government actions, judicial processes, and political consequences in Iraq - all elements of international politics and governance with worldwide significance.\n\nFINAL: World",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Treasuries Mount Rally Despite Inflation NEW YORK (Reuters) - U.S. Treasury prices rallied on Wednesday as inflation excluding food and energy, one of the Federal Reserve's preferred price measures, proved less dramatic than bond bulls had feared.",
+          "gold": "Business",
+          "output": "This article is primarily about financial markets and economic indicators. The core subject matter focuses on:\n\n1. Treasury bond prices and their market movement (rallying)\n2. Inflation data and economic indicators (core inflation excluding food and energy)\n3. Federal Reserve policy implications\n4. Bond market dynamics and investor sentiment\n\nWhile the article touches on economic data, its primary focus is on how Treasury securities are trading in response to inflation figures - this is fundamentally a financial markets and economic story centered on bonds, pricing, and market behavior.\n\nFINAL: Business",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "The Lowdown on Downloading Music The digital music space is changing, with more songs and a growing number of places to download music legally. Realizing that the time was ripe to see how we were doing, I took some song recommendations and sat down to see what I could download.",
+          "gold": "Sci/Tech",
+          "output": "This article appears to be about the digital music industry, specifically focusing on legal music download platforms and services. The content discusses the evolving landscape of where and how consumers can legally obtain music, along with a practical exploration of available download options.\n\nWhile this touches on technology platforms (digital downloads), the primary focus is on the music industry, commerce, and consumer behavior in the digital music space rather than on technological innovation itself. This is fundamentally about how the music business operates and where consumers can purchase/download music.\n\nFINAL: Business",
+          "objective": 0.0,
+          "gpa": {}
+        },
+        {
+          "query": "Shaq turns up heat in first outing with Miami SHAQUILLE O #39;Neal shot 7-for-9 and finished with 16 points in his Miami debut yesterday as the Heat took a 100-77 victory against the home side New Jersey Nets.",
+          "gold": "Sports",
+          "output": "This article is about Shaquille O'Neal's performance in his first game with the Miami Heat basketball team. The content focuses on his individual statistics (7-for-9 shooting, 16 points) and the team's victory in a specific game. This is clearly sports-related content centered on a professional basketball competition and player performance.\n\nFINAL: Sports",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "\\$78,000 for a Cane That Helped a Legend Walk the Line Many of Johnny Cash's possessions were sold at Sotheby's, collecting \\$3,984,260 for the Cash family, more than double the pre-auction estimate.",
+          "gold": "World",
+          "output": "This article is about the sale of Johnny Cash's personal possessions at Sotheby's auction house, with a focus on the financial results of the auction and specific items sold (like a cane). The core subject matter is the auction event itself, the monetary value achieved, and the sale of collectible items.\n\nWhile this involves a famous musician, the article's primary focus is on the auction, pricing, and commercial transaction aspects rather than on Cash's music career or artistic legacy.\n\nFINAL: Business",
+          "objective": 0.0,
+          "gpa": {}
+        },
+        {
+          "query": "Dollar Briefly Hits 4-Wk Low Vs Euro LONDON (Reuters) - The dollar dipped to a four-week low against the euro on Monday before rising slightly on profit-taking, but steep oil prices and weak U.S. data continued to fan worries about the health of the world's largest economy.",
+          "gold": "Business",
+          "output": "This article is primarily about currency exchange rates and their movements in financial markets. The headline focuses on the dollar hitting a four-week low against the euro, and the body discusses factors affecting currency valuations including oil prices and U.S. economic data. This is fundamentally a business/financial markets story dealing with foreign exchange trading and economic indicators.\n\nFINAL: Business",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "One in four servers to run Linux by 2008 In a report, the research firm painted a bright future for the open source operating system, claiming that shipments of servers running Linux -- and revenues from those shipments -- will rise significantly over the next five years.",
+          "gold": "Sci/Tech",
+          "output": "This article discusses the projected growth of Linux servers in the market, focusing on technology adoption trends and operating system shipments. The core subject matter is about a technology platform (Linux) and its market penetration in the server space, based on research firm predictions.\n\nFINAL: Sci/Tech",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Leiter returns as Pavano prepares to go Al Leiter is returning to the Marlins, but Carl Pavano appears to be a goner. Leiter, a left-hander who threw the franchise #39;s first no-hitter in 1996 and helped the team win its first World Series in 1997, signed a one-year \\$8 million contract Wednesday.",
+          "gold": "Sports",
+          "output": "This article is about a baseball player (Al Leiter) signing a contract with the Miami Marlins and another player (Carl Pavano) potentially leaving the team. The focus is on player transactions, team roster moves, and competitive athletics within professional baseball.\n\nFINAL: Sports",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Argentina gets China investment China is to invest nearly \\$20bn (11bn) in Argentina over the next 10 years, Argentine officials say.",
+          "gold": "World",
+          "output": "This article is about a major investment agreement between China and Argentina. The core subject matter involves:\n\n- International economic relations and trade between two nations\n- A significant financial investment commitment ($20 billion)\n- Government-level economic dealings and agreements\n- Cross-border commerce and capital flows\n\nWhile this involves international relations between countries, the primary focus is on the economic/commercial aspect of the investment deal rather than political diplomacy or geopolitical tensions. However, this could reasonably fit into either Business (corporate/economic investment) or World (international relations).\n\nGiven that the headline emphasizes the investment itself and the article centers on the financial commitment and economic partnership between the two nations, this is fundamentally about international commerce and economic relations.\n\nFINAL: Business",
+          "objective": 0.0,
+          "gpa": {}
+        },
+        {
+          "query": "Stocks Finish Up, Apple Provides a Lift NEW YORK (Reuters) - U.S. stocks rose on Monday as a higher price target for shares of Apple Computer Inc. &lt;A HREF=\"http://www.investor.reuters.com/FullQuote.aspx?ticker=AAPL.O target=/stocks/quickinfo/fullquote\"&gt;AAPL.O&lt;/A&gt; prompted enthusiasm for technology stocks and a rally in crude oil stalled.",
+          "gold": "Business",
+          "output": "This article is primarily about stock market performance and corporate financial developments. The core subject matter focuses on:\n\n1. U.S. stock market movements (stocks rising)\n2. Apple Computer's stock price target increase\n3. Technology sector performance\n4. Crude oil market activity\n\nWhile the article mentions technology stocks, the primary focus is on how these stocks performed in the financial markets and how a price target change affected market sentiment and trading activity. This is fundamentally a business/financial markets story rather than a technology innovation story.\n\nFINAL: Business",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Schwarzenegger Signs 'Foie Gras' Bill (AP) AP - California will end the force feeding of ducks, geese and other birds to produce the gourmet liver product foie gras by 2012 under legislation signed Wednesday by Gov. Arnold Schwarzengger.",
+          "gold": "Sci/Tech",
+          "output": "This article is about California legislation signed by Governor Arnold Schwarzenegger that bans the force-feeding of birds to produce foie gras. While it involves a governor's action, the core subject matter is animal welfare policy and a ban on a specific agricultural/food production practice.\n\nThis is primarily a political/governmental action with domestic policy implications, making it a matter of state governance and regulation. However, examining the categories available, this doesn't fit neatly into Business (not about corporate affairs or markets), Sci/Tech (not about scientific research or technology), or Sports (not about athletics). \n\nThe \"World\" category encompasses government actions and policies. While this is a state-level rather than international matter, it represents governmental policy action, which is the closest fit among the available options.\n\nFINAL: World",
+          "objective": 0.0,
+          "gpa": {}
+        },
+        {
+          "query": "Mr. Chang, Strike a Pose Halfway around the world, standing virtually in the middle of the Pacific Ocean, the incomparable Timmy Chang is just days away from throwing his first pass of the season. From my tattered sofa, I will be watching him. I want you to watch him, too.",
+          "gold": "Sports",
+          "output": "This article excerpt is about Timmy Chang, who appears to be a football player preparing to throw his first pass of the season. The content focuses on an athlete and an upcoming sporting competition/performance.\n\nFINAL: Sports",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Cowboys Defeat Redskins 21-18 LANDOVER, Md. - Bill Parcells celebrated the touchdown with a big smile and his fist thrust high in the air...",
+          "gold": "World",
+          "output": "This article is about a professional football game between the Dallas Cowboys and Washington Redskins, with a final score of 21-18. The excerpt mentions Coach Bill Parcells celebrating a touchdown, which indicates this is covering a specific sporting event and competition.\n\nFINAL: Sports",
+          "objective": 0.0,
+          "gpa": {}
+        },
+        {
+          "query": "IRS Demands FICA from Chili's Owner NEW YORK (Reuters) - Brinker International Inc. which operates the Chili's restaurant chain, on Monday said it received a demand from the U.S. Internal Revenue Service regarding the company's share of FICA taxes on unreported tips of \\$31.4 million during 2000 to 2002.",
+          "gold": "Business",
+          "output": "This article is about a corporate tax matter involving Brinker International (the parent company of Chili's restaurant chain) and a demand from the IRS regarding unpaid FICA taxes on unreported tips. The core subject is a business/corporate tax issue affecting a specific company's financial obligations and operations.\n\nFINAL: Business",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Xbox owner sues MS p2pnet.net News:- Microsoft is being sued for damages, restitution and other costs and fees, quot;on behalf of all Xbox owners across the United States, quot; says Reuters.",
+          "gold": "Sci/Tech",
+          "output": "This article is about a legal action taken against Microsoft by Xbox owners. The core subject matter involves a lawsuit against a major technology company regarding its products and business practices. While it involves Xbox (a gaming product), the primary focus is on the corporate/legal dispute and damages claim against Microsoft as a company.\n\nThis falls under business news as it concerns corporate litigation, company accountability, and financial damages related to a major corporation's business practices.\n\nFINAL: Business",
+          "objective": 0.0,
+          "gpa": {}
+        },
+        {
+          "query": "Hall had Penn State executing well against Akron, but BC will be &lt;b&gt;...&lt;/b&gt; In recent years, Penn State critics have pointed to its offensive game plan as the source of the team #39;s problems. It was too rigid at times, they said, too reckless at others.",
+          "gold": "Sports",
+          "output": "This article excerpt discusses Penn State's football team, their offensive strategy, and an upcoming game against BC (Boston College). The content focuses on a sports team's performance, game planning, and competitive matchups.\n\nFINAL: Sports",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Football: Spanish FA apologises The Spanish FA apologises to its English counterparts following racist chanting.",
+          "gold": "World",
+          "output": "This article is about the Spanish Football Association issuing an apology to the English FA regarding racist chanting that occurred during a football match or event. While it involves sports (football), the core subject matter is actually about organizational conduct, diplomatic relations between two national sports bodies, and a formal apology for inappropriate behavior.\n\nHowever, examining this more carefully: the primary focus is on a football-related incident and the response from sports organizations. This is fundamentally a sports story about a football association's actions and an apology related to a sporting event.\n\nFINAL: Sports",
+          "objective": 0.0,
+          "gpa": {}
+        },
+        {
+          "query": "Agency sustains \\$2 M hit The Pennsylvania Turnpike Commission lost about \\$2 million in revenue Wednesday as thousands of holiday travelers zipped through the toll booths for free.",
+          "gold": "Business",
+          "output": "This article is about the Pennsylvania Turnpike Commission experiencing a significant financial loss due to a toll collection issue during holiday travel. The core subject matter centers on:\n\n- A specific organization (Pennsylvania Turnpike Commission)\n- Financial impact/revenue loss ($2 million)\n- A business/operational problem affecting the agency's finances\n\nWhile this involves a government agency, the primary focus is on the financial/business consequences of the toll collection failure, making it fundamentally a business-related story about organizational finances and revenue.\n\nFINAL: Business",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "TI Puts Digital TV on Cell Phones Texas Instruments Inc. today announced development of the wireless industry #39;s first digital TV on a single chip for cell phones, code-named quot;Hollywood.",
+          "gold": "Sci/Tech",
+          "output": "This article is about Texas Instruments announcing a technological breakthrough - the development of a single chip that enables digital TV functionality on cell phones. The core subject matter is a technical innovation and product development in the semiconductor/technology space.\n\nFINAL: Sci/Tech",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Pedro picks Mets, Lee dealt to Brewers Pedro Martinez picked the New York Mets over the Boston Red Sox, and the Chicago White Sox dealt Carlos Lee to Milwaukee for Scott Podsednik and a reliever on Monday as baseball #39;s annual winter meetings finished with many top stars still searching for",
+          "gold": "Sports",
+          "output": "This article is about baseball player transactions and free agency signings during baseball's winter meetings. The content focuses on:\n\n1. Pedro Martinez signing with the New York Mets (a player contract decision)\n2. A trade between the Chicago White Sox and Milwaukee Brewers involving Carlos Lee\n\nThese are sports-related events concerning professional baseball players, teams, and competitive athletics.\n\nFINAL: Sports",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "British tourists killed in Jordan bus crash Nine British tourists, two Jordanians and an Egyptian have been killed in a bus accident in southern Jordan, civil defence sources and diplomats say.",
+          "gold": "World",
+          "output": "This article reports on a tragic transportation accident in Jordan that resulted in multiple fatalities including British tourists and local nationals. The core subject matter is a significant international incident involving loss of life.\n\nWhile this involves British citizens abroad, the primary focus is on the accident itself and the casualties rather than diplomatic relations or political implications. However, given that this is an international incident occurring in Jordan with multiple nationalities involved, and it has diplomatic significance (mentioned diplomats), this falls under international news with global implications.\n\nFINAL: World",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "New drug extends multiple sclerosis options 25/11/2004 - The first in a completely new class of drug for multiple sclerosis has been approved in the US, opening up a new avenue of treatment for sufferers of the debilitating diseases and potential blockbuster revenues for developers Elan and Biogen",
+          "gold": "Business",
+          "output": "This article is about the approval of a new pharmaceutical drug for treating multiple sclerosis. While it mentions the companies Elan and Biogen and potential revenues (business aspects), the primary focus of the article is on a scientific/medical breakthrough - the development and approval of a new class of drug and its therapeutic implications for MS patients.\n\nThe core subject matter is the scientific advancement in drug development and medical treatment options, not the business or financial aspects of the companies involved.\n\nFINAL: Sci/Tech",
+          "objective": 0.0,
+          "gpa": {}
+        },
+        {
+          "query": "Blu-ray group mandates Microsoft codec for BD-ROM The Blu-ray Disc Association (BRDA) has selected Microsoft #39;s VC-9 video codec for future BD-ROM content, the organisation said today.",
+          "gold": "Sci/Tech",
+          "output": "This article is about the Blu-ray Disc Association's technical decision to mandate Microsoft's VC-9 video codec for future BD-ROM content. This is fundamentally a technology/standards decision involving video codec specifications and digital media formats.\n\nWhile this involves corporate entities (Microsoft and the Blu-ray organization), the core subject matter is the technical specification and standardization of a video codec technology, which is a technology innovation and technical standard matter rather than a business/corporate affairs story.\n\nFINAL: Sci/Tech",
+          "objective": 1.0,
+          "gpa": {}
+        }
+      ],
+      "optimization": {
+        "history": [
+          {
+            "iter": 0,
+            "obj": 0.9,
+            "gpa": 0.0,
+            "strategy": "baseline"
+          },
+          {
+            "iter": 1,
+            "obj": 0.8,
+            "gpa": 0.0,
+            "strategy": "paraphrase"
+          },
+          {
+            "iter": 2,
+            "obj": 0.9,
+            "gpa": 0.0,
+            "strategy": "paraphrase"
+          },
+          {
+            "iter": 3,
+            "obj": 0.9,
+            "gpa": 0.0,
+            "strategy": "paraphrase"
+          },
+          {
+            "iter": 4,
+            "obj": 0.8,
+            "gpa": 0.0,
+            "strategy": "paraphrase"
+          },
+          {
+            "iter": 5,
+            "obj": 0.8,
+            "gpa": 0.0,
+            "strategy": "paraphrase"
+          },
+          {
+            "iter": 6,
+            "obj": 0.8,
+            "gpa": 0.0,
+            "strategy": "paraphrase"
+          },
+          {
+            "iter": 7,
+            "obj": 0.9,
+            "gpa": 0.0,
+            "strategy": "paraphrase"
+          },
+          {
+            "iter": 8,
+            "obj": 0.9,
+            "gpa": 0.0,
+            "strategy": "paraphrase"
+          },
+          {
+            "iter": 9,
+            "obj": 0.8,
+            "gpa": 0.0,
+            "strategy": "paraphrase"
+          },
+          {
+            "iter": 10,
+            "obj": 0.9,
+            "gpa": 0.0,
+            "strategy": "paraphrase"
+          },
+          {
+            "iter": 11,
+            "obj": 0.8,
+            "gpa": 0.0,
+            "strategy": "paraphrase"
+          },
+          {
+            "iter": 12,
+            "obj": 0.9,
+            "gpa": 0.0,
+            "strategy": "paraphrase"
+          },
+          {
+            "iter": 13,
+            "obj": 0.8,
+            "gpa": 0.0,
+            "strategy": "paraphrase"
+          },
+          {
+            "iter": 14,
+            "obj": 0.8,
+            "gpa": 0.0,
+            "strategy": "paraphrase"
+          },
+          {
+            "iter": 15,
+            "obj": 0.8,
+            "gpa": 0.0,
+            "strategy": "paraphrase"
+          },
+          {
+            "iter": 16,
+            "obj": 0.8,
+            "gpa": 0.0,
+            "strategy": "paraphrase"
+          },
+          {
+            "iter": 17,
+            "obj": 0.8,
+            "gpa": 0.0,
+            "strategy": "paraphrase"
+          },
+          {
+            "iter": 18,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "paraphrase"
+          },
+          {
+            "iter": 19,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "paraphrase"
+          },
+          {
+            "iter": 20,
+            "obj": 0.9,
+            "gpa": 0.0,
+            "strategy": "paraphrase"
+          }
+        ],
+        "front": [
+          {
+            "obj": 1.0,
+            "gpa": 0.0,
+            "iter": 18,
+            "strategy": "paraphrase"
+          },
+          {
+            "obj": 1.0,
+            "gpa": 0.0,
+            "iter": 19,
+            "strategy": "paraphrase"
+          },
+          {
+            "obj": 0.9,
+            "gpa": 0.0,
+            "iter": 0,
+            "strategy": "baseline"
+          },
+          {
+            "obj": 0.9,
+            "gpa": 0.0,
+            "iter": 2,
+            "strategy": "paraphrase"
+          },
+          {
+            "obj": 0.9,
+            "gpa": 0.0,
+            "iter": 3,
+            "strategy": "paraphrase"
+          }
+        ]
+      }
+    },
+    "objective_reflection": {
+      "objective_mean": 0.7,
+      "objective_ci95": [
+        0.5333333333333333,
+        0.8666666666666667
+      ],
+      "prompt": "You are a news categorization assistant. Your task is to categorize news headlines/snippets into exactly ONE of these four categories: Business, Sci/Tech, Sports, or World.\n\n**Category Definitions:**\n- **Business**: Corporate news, markets, economy, finance, companies, trade, employment, industry\n- **Sci/Tech**: Scientific discoveries, technology products, research, innovation, space, computing, internet, gadgets\n- **Sports**: Athletic competitions, games, tournaments, player transfers, team performance, sports business\n- **World**: International affairs, politics, diplomacy, conflicts, elections, government policy, social issues, regional news, cultural events\n\n**Critical Instructions:**\n1. Output ONLY the category name (Business, Sci/Tech, Sports, or World) - nothing else\n2. Do NOT provide explanations, reasoning, or additional text\n3. When content could fit multiple categories, prioritize: World > Business > Sci/Tech > Sports\n4. Sports events are \"Sports\" ONLY if the focus is purely on athletic performance; if there are geopolitical, international, or broader societal implications, classify as \"World\"\n5. Default to \"World\" for ambiguous cases involving locations, regions, or events with broader significance\n\n**Response format**: [Category Name]",
+      "examples": [
+        {
+          "query": "Bipartisan Panel Seeks Greenhouse Gas Limits A bipartisan commission that includes energy industry executives, environmentalists and academics will issue a report Wednesday that calls on the nation to adopt mandatory limits on greenhouse gas emissions linked to global warming, set stricter fuel economy standards and promote nuclear power, renewable energy and oil exploration.",
+          "gold": "Business",
+          "output": "This article discusses government policy on environmental regulation, energy standards, and climate change - all matters of national policy and governance. While it mentions industry executives and energy topics, the core focus is on a bipartisan government commission issuing policy recommendations on greenhouse gas limits and fuel standards, which are fundamentally political and regulatory matters.\n\nFINAL: World",
+          "objective": 0.0,
+          "gpa": {}
+        },
+        {
+          "query": "Climax to show off Avalon to US publishers #39;Project Avalon #39; becomes just plain Avalon; developer will show playable prototype of next-generation shooter to American execs.",
+          "gold": "Sci/Tech",
+          "output": "This is about a video game developer showcasing a game prototype to US publishers. While it involves technology (a game/software product), the core focus is on the business aspect - a developer pitching/showing their product to publishers for commercial purposes.\n\nFINAL: Business",
+          "objective": 0.0,
+          "gpa": {}
+        },
+        {
+          "query": "Cink Justifies Sutton #39;s Faith Three weeks away from the Ryder Cup, American Stewart Cink hopes he has silenced at least some of his critics - if indeed they exist.",
+          "gold": "Sports",
+          "output": "This headline is about Stewart Cink's performance in golf leading up to the Ryder Cup, focusing on his athletic performance and justifying his selection for the team. The emphasis is on his competitive play and tournament results.\n\nFINAL: Sports",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Taiwan Acknowledges Minister #39;s Improper Wording #39; on Singapore Taiwan Foreign Minister Chen Tan- sun, who dismissed Singapore as a country the size of a booger, #39; #39; regretted his improper wording, #39; #39; said Foreign Ministry spokesman Michel Lu.",
+          "gold": "World",
+          "output": "This is a news item about international diplomacy and government relations between Taiwan and Singapore. A Taiwanese foreign minister made an inappropriate comment about Singapore, and the government is now addressing the diplomatic incident through official statements.\n\nThis involves:\n- International affairs and diplomacy\n- Government officials and policy\n- Regional relations between countries\n- Potential geopolitical implications\n\nFINAL: World",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Asian Stocks Lower, Greenspan Awaited SINGAPORE (Reuters) - Asian stocks edged lower on Wednesday as profit taking set in after two days of gains and the dollar firmed ahead of comments from Fed chief Alan Greenspan that are expected to cement the case for further U.S. rate rises.",
+          "gold": "Business",
+          "output": "This article discusses Asian stock market movements, currency fluctuations (dollar firming), and expectations around Federal Reserve policy decisions. These are all core financial and economic topics.\n\nFINAL: Business",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Grid bids to save the world Hoping to harness a few million of the personal computers not already running the SETIhome screensaver, IBM and United Devices yesterday launched the World Community Grid to act as a clearing house for humanitarian IT projects.",
+          "gold": "Sci/Tech",
+          "output": "This article discusses IBM and United Devices launching the World Community Grid as a platform for humanitarian IT projects using distributed computing. While it involves technology companies and computing infrastructure, the primary focus is on the humanitarian and social mission of the initiative - using computers to solve global problems for the benefit of humanity.\n\nThe key elements are:\n- Technology platform/infrastructure (Sci/Tech aspect)\n- Humanitarian/global social mission (World aspect)\n- Corporate announcement (Business aspect)\n\nGiven the instruction to prioritize World > Business > Sci/Tech > Sports when content could fit multiple categories, and considering the emphasis on humanitarian projects and global impact, this should be classified as World.\n\nFINAL: World",
+          "objective": 0.0,
+          "gpa": {}
+        },
+        {
+          "query": "FERGUSON ATTACKED IN TUNNEL BUST-UP SIR ALEX FERGUSON was pelted with food and pea soup by an Arsenal player in an extraordinary tunnel bust-up at Old Trafford yesterday.",
+          "gold": "Sports",
+          "output": "This headline is about an incident involving Sir Alex Ferguson (a sports figure) during what appears to be a match at Old Trafford (Manchester United's stadium). The focus is on a physical altercation/confrontation in a sports context.\n\nFINAL: Sports",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Saddam, Aides to Go on Trial Within Weeks - Daoud Iraq #39;s toppled leader Saddam Hussein and his top aides will go on trial within weeks, Iraqi Minister of State Kasim Daoud said on Sunday.",
+          "gold": "World",
+          "output": "This is a news item about the legal proceedings against Saddam Hussein and his aides following Iraq's political upheaval. The focus is on government/judicial action, international affairs, and the political consequences of regime change in Iraq - all of which are international political matters.\n\nFINAL: World",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Treasuries Mount Rally Despite Inflation NEW YORK (Reuters) - U.S. Treasury prices rallied on Wednesday as inflation excluding food and energy, one of the Federal Reserve's preferred price measures, proved less dramatic than bond bulls had feared.",
+          "gold": "Business",
+          "output": "This article discusses U.S. Treasury prices, inflation data, and Federal Reserve policy - all core financial and economic topics.\n\nFINAL: Business",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "The Lowdown on Downloading Music The digital music space is changing, with more songs and a growing number of places to download music legally. Realizing that the time was ripe to see how we were doing, I took some song recommendations and sat down to see what I could download.",
+          "gold": "Sci/Tech",
+          "output": "This article discusses the digital music industry, legal music downloading platforms, and the evolving landscape of music distribution. This is primarily about the music business, technology platforms for music consumption, and the commercial aspects of the digital music space.\n\nFINAL: Business",
+          "objective": 0.0,
+          "gpa": {}
+        },
+        {
+          "query": "Shaq turns up heat in first outing with Miami SHAQUILLE O #39;Neal shot 7-for-9 and finished with 16 points in his Miami debut yesterday as the Heat took a 100-77 victory against the home side New Jersey Nets.",
+          "gold": "Sports",
+          "output": "This is a sports news item focused on Shaquille O'Neal's athletic performance in his debut game with the Miami Heat, including his shooting statistics and the team's victory. The content is purely about athletic competition and game performance.\n\nFINAL: Sports",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "\\$78,000 for a Cane That Helped a Legend Walk the Line Many of Johnny Cash's possessions were sold at Sotheby's, collecting \\$3,984,260 for the Cash family, more than double the pre-auction estimate.",
+          "gold": "World",
+          "output": "This article is about the sale of Johnny Cash's personal possessions at auction, including a cane that sold for $78,000. The focus is on the auction results, the monetary value of the items sold, and the financial outcome for the Cash family.\n\nThis is primarily a business/auction story involving the sale of collectible items and their market value.\n\nFINAL: Business",
+          "objective": 0.0,
+          "gpa": {}
+        },
+        {
+          "query": "Dollar Briefly Hits 4-Wk Low Vs Euro LONDON (Reuters) - The dollar dipped to a four-week low against the euro on Monday before rising slightly on profit-taking, but steep oil prices and weak U.S. data continued to fan worries about the health of the world's largest economy.",
+          "gold": "Business",
+          "output": "This article discusses currency exchange rates (dollar vs. euro), oil prices, and U.S. economic data. These are all core financial and economic indicators that fall under business/finance news.\n\nFINAL: Business",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "One in four servers to run Linux by 2008 In a report, the research firm painted a bright future for the open source operating system, claiming that shipments of servers running Linux -- and revenues from those shipments -- will rise significantly over the next five years.",
+          "gold": "Sci/Tech",
+          "output": "This article discusses the projected growth of Linux servers and market forecasts for the open source operating system. While it touches on technology (Linux), the primary focus is on market trends, shipments, and revenues - which are business/economic metrics.\n\nFINAL: Business",
+          "objective": 0.0,
+          "gpa": {}
+        },
+        {
+          "query": "Leiter returns as Pavano prepares to go Al Leiter is returning to the Marlins, but Carl Pavano appears to be a goner. Leiter, a left-hander who threw the franchise #39;s first no-hitter in 1996 and helped the team win its first World Series in 1997, signed a one-year \\$8 million contract Wednesday.",
+          "gold": "Sports",
+          "output": "This article is about baseball player signings and contracts for the Miami Marlins. It focuses on Al Leiter's return to the team and Carl Pavano's departure, with details about contract terms and player history.\n\nFINAL: Sports",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Argentina gets China investment China is to invest nearly \\$20bn (11bn) in Argentina over the next 10 years, Argentine officials say.",
+          "gold": "World",
+          "output": "This news involves international investment and economic relations between two countries (Argentina and China). While it has business/economic elements, the focus is on international affairs, diplomatic relations, and geopolitical significance between nations.\n\nFINAL: World",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Stocks Finish Up, Apple Provides a Lift NEW YORK (Reuters) - U.S. stocks rose on Monday as a higher price target for shares of Apple Computer Inc. &lt;A HREF=\"http://www.investor.reuters.com/FullQuote.aspx?ticker=AAPL.O target=/stocks/quickinfo/fullquote\"&gt;AAPL.O&lt;/A&gt; prompted enthusiasm for technology stocks and a rally in crude oil stalled.",
+          "gold": "Business",
+          "output": "This article is about stock market performance and Apple's stock price movement, which are core business/finance topics.\n\nFINAL: Business",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Schwarzenegger Signs 'Foie Gras' Bill (AP) AP - California will end the force feeding of ducks, geese and other birds to produce the gourmet liver product foie gras by 2012 under legislation signed Wednesday by Gov. Arnold Schwarzengger.",
+          "gold": "Sci/Tech",
+          "output": "This is a legislative/policy matter involving animal welfare and food production in California. While it touches on food industry practices, the core focus is on government policy and regulation regarding animal treatment - a social/political issue with broader implications.\n\nFINAL: World",
+          "objective": 0.0,
+          "gpa": {}
+        },
+        {
+          "query": "Mr. Chang, Strike a Pose Halfway around the world, standing virtually in the middle of the Pacific Ocean, the incomparable Timmy Chang is just days away from throwing his first pass of the season. From my tattered sofa, I will be watching him. I want you to watch him, too.",
+          "gold": "Sports",
+          "output": "This article is about Timmy Chang, a football player, preparing for his first pass of the season. The focus is on athletic performance and competition.\n\nFINAL: Sports",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Cowboys Defeat Redskins 21-18 LANDOVER, Md. - Bill Parcells celebrated the touchdown with a big smile and his fist thrust high in the air...",
+          "gold": "World",
+          "output": "This is a sports news snippet focusing on an athletic competition between the Cowboys and Redskins, with details about the game outcome and a coach's reaction. The content is purely about athletic performance and game results.\n\nFINAL: Sports",
+          "objective": 0.0,
+          "gpa": {}
+        },
+        {
+          "query": "IRS Demands FICA from Chili's Owner NEW YORK (Reuters) - Brinker International Inc. which operates the Chili's restaurant chain, on Monday said it received a demand from the U.S. Internal Revenue Service regarding the company's share of FICA taxes on unreported tips of \\$31.4 million during 2000 to 2002.",
+          "gold": "Business",
+          "output": "This is a corporate/business news story about a company (Brinker International/Chili's) receiving a tax demand from the IRS regarding FICA taxes on unreported tips. The focus is on corporate financial/tax matters and company operations.\n\nFINAL: Business",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Xbox owner sues MS p2pnet.net News:- Microsoft is being sued for damages, restitution and other costs and fees, quot;on behalf of all Xbox owners across the United States, quot; says Reuters.",
+          "gold": "Sci/Tech",
+          "output": "This is a legal/business matter involving Microsoft and Xbox owners. The focus is on a lawsuit regarding corporate liability and consumer damages, which falls under business/corporate news.\n\nFINAL: Business",
+          "objective": 0.0,
+          "gpa": {}
+        },
+        {
+          "query": "Hall had Penn State executing well against Akron, but BC will be &lt;b&gt;...&lt;/b&gt; In recent years, Penn State critics have pointed to its offensive game plan as the source of the team #39;s problems. It was too rigid at times, they said, too reckless at others.",
+          "gold": "Sports",
+          "output": "This is a sports article discussing Penn State football's performance and offensive strategy in a game against Akron, with mention of an upcoming game against BC. The focus is on athletic performance and team execution.\n\nFINAL: Sports",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Football: Spanish FA apologises The Spanish FA apologises to its English counterparts following racist chanting.",
+          "gold": "World",
+          "output": "This involves international relations between two football associations and addresses a serious social issue (racism) with diplomatic implications between nations.\n\nFINAL: World",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Agency sustains \\$2 M hit The Pennsylvania Turnpike Commission lost about \\$2 million in revenue Wednesday as thousands of holiday travelers zipped through the toll booths for free.",
+          "gold": "Business",
+          "output": "This article discusses a financial loss experienced by a government agency (Pennsylvania Turnpike Commission) due to a toll collection issue. While it involves revenue and financial impact, the core focus is on a specific incident affecting a public agency's operations and finances.\n\nThis could be considered Business (financial/revenue impact) or World (government agency/public policy). However, the primary emphasis is on the financial/operational impact to an organization, which is fundamentally a business/economic matter.\n\nFINAL: Business",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "TI Puts Digital TV on Cell Phones Texas Instruments Inc. today announced development of the wireless industry #39;s first digital TV on a single chip for cell phones, code-named quot;Hollywood.",
+          "gold": "Sci/Tech",
+          "output": "This is about a technology product development - Texas Instruments announcing a new chip technology for digital TV on cell phones. This falls under technological innovation and product development.\n\nFINAL: Sci/Tech",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Pedro picks Mets, Lee dealt to Brewers Pedro Martinez picked the New York Mets over the Boston Red Sox, and the Chicago White Sox dealt Carlos Lee to Milwaukee for Scott Podsednik and a reliever on Monday as baseball #39;s annual winter meetings finished with many top stars still searching for",
+          "gold": "Sports",
+          "output": "This headline discusses player signings and trades in Major League Baseball - specifically Pedro Martinez signing with the Mets and Carlos Lee being traded to the Brewers. These are sports transactions and player movements.\n\nFINAL: Sports",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "British tourists killed in Jordan bus crash Nine British tourists, two Jordanians and an Egyptian have been killed in a bus accident in southern Jordan, civil defence sources and diplomats say.",
+          "gold": "World",
+          "output": "This is a news story about a tragic accident involving loss of life in Jordan. While it involves British tourists, the core focus is on an international incident/accident occurring in a specific region (Jordan) with broader implications for multiple nationalities and diplomatic concerns.\n\nThis falls under international affairs and regional news with cross-border implications.\n\nFINAL: World",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "New drug extends multiple sclerosis options 25/11/2004 - The first in a completely new class of drug for multiple sclerosis has been approved in the US, opening up a new avenue of treatment for sufferers of the debilitating diseases and potential blockbuster revenues for developers Elan and Biogen",
+          "gold": "Business",
+          "output": "This article discusses the approval of a new pharmaceutical drug for multiple sclerosis treatment. While it mentions the medical/scientific aspect of a new drug class, the primary focus is on the business implications - the approval opening new treatment options and generating \"blockbuster revenues\" for the companies Elan and Biogen.\n\nThe emphasis on corporate revenue potential and market opportunity makes this fundamentally a business story about pharmaceutical companies and their products.\n\nFINAL: Business",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Blu-ray group mandates Microsoft codec for BD-ROM The Blu-ray Disc Association (BRDA) has selected Microsoft #39;s VC-9 video codec for future BD-ROM content, the organisation said today.",
+          "gold": "Sci/Tech",
+          "output": "This is about a technology standard decision made by the Blu-ray Disc Association regarding video codec specifications for optical media. While it involves Microsoft and a technical standard, the core focus is on technology product specifications and industry standards for computing/media technology.\n\nFINAL: Sci/Tech",
+          "objective": 1.0,
+          "gpa": {}
+        }
+      ],
+      "optimization": {
+        "history": [
+          {
+            "iter": 0,
+            "obj": 0.9,
+            "gpa": 0.0,
+            "strategy": "baseline"
+          },
+          {
+            "iter": 1,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 2,
+            "obj": 0.8,
+            "gpa": 0.0,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 3,
+            "obj": 0.6,
+            "gpa": 0.0,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 4,
+            "obj": 0.8,
+            "gpa": 0.0,
+            "strategy": "merge"
+          },
+          {
+            "iter": 5,
+            "obj": 0.8,
+            "gpa": 0.0,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 6,
+            "obj": 0.9,
+            "gpa": 0.0,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 7,
+            "obj": 0.8,
+            "gpa": 0.0,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 8,
+            "obj": 0.8,
+            "gpa": 0.0,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 9,
+            "obj": 0.9,
+            "gpa": 0.0,
+            "strategy": "merge"
+          },
+          {
+            "iter": 10,
+            "obj": 0.9,
+            "gpa": 0.0,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 11,
+            "obj": 0.6,
+            "gpa": 0.0,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 12,
+            "obj": 0.8,
+            "gpa": 0.0,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 13,
+            "obj": 0.9,
+            "gpa": 0.0,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 14,
+            "obj": 0.7,
+            "gpa": 0.0,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 15,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "merge"
+          },
+          {
+            "iter": 16,
+            "obj": 0.7,
+            "gpa": 0.0,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 17,
+            "obj": 0.9,
+            "gpa": 0.0,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 18,
+            "obj": 0.8,
+            "gpa": 0.0,
+            "strategy": "merge"
+          },
+          {
+            "iter": 19,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 20,
+            "obj": 0.8,
+            "gpa": 0.0,
+            "strategy": "merge"
+          }
+        ],
+        "front": [
+          {
+            "obj": 1.0,
+            "gpa": 0.0,
+            "iter": 1,
+            "strategy": "mutation"
+          },
+          {
+            "obj": 1.0,
+            "gpa": 0.0,
+            "iter": 15,
+            "strategy": "merge"
+          },
+          {
+            "obj": 1.0,
+            "gpa": 0.0,
+            "iter": 19,
+            "strategy": "mutation"
+          },
+          {
+            "obj": 0.9,
+            "gpa": 0.0,
+            "iter": 0,
+            "strategy": "baseline"
+          },
+          {
+            "obj": 0.9,
+            "gpa": 0.0,
+            "iter": 6,
+            "strategy": "mutation"
+          }
+        ]
+      }
+    },
+    "tei": {
+      "objective_mean": 0.7,
+      "objective_ci95": [
+        0.5333333333333333,
+        0.8666666666666667
+      ],
+      "prompt": "You are a news categorization assistant. Your task is to categorize news headlines/snippets into exactly ONE of these four categories: Business, Sci/Tech, Sports, or World.\n\n**Category Definitions:**\n- **Business**: Corporate news, markets, economy, finance, companies, trade, employment, industry\n- **Sci/Tech**: Scientific discoveries, technology products, research, innovation, space, computing, internet, gadgets\n- **Sports**: Athletic competitions, games, tournaments, player transfers, team performance, sports business\n- **World**: International affairs, politics, diplomacy, conflicts, elections, government policy, social issues, regional news, cultural events\n\n**Critical Instructions:**\n1. Output ONLY the category name (Business, Sci/Tech, Sports, or World) - nothing else\n2. Do NOT provide explanations, reasoning, or additional text\n3. When content could fit multiple categories, prioritize: World > Business > Sci/Tech > Sports\n4. Sports events are \"Sports\" ONLY if the focus is purely on athletic performance; if there are geopolitical, international, or broader societal implications, classify as \"World\"\n5. Default to \"World\" for ambiguous cases involving locations, regions, or events with broader significance\n\n**Response format**: [Category Name]",
+      "examples": [
+        {
+          "query": "Bipartisan Panel Seeks Greenhouse Gas Limits A bipartisan commission that includes energy industry executives, environmentalists and academics will issue a report Wednesday that calls on the nation to adopt mandatory limits on greenhouse gas emissions linked to global warming, set stricter fuel economy standards and promote nuclear power, renewable energy and oil exploration.",
+          "gold": "Business",
+          "output": "This article discusses government policy on environmental regulation, energy standards, and climate change - all matters of national policy and governance. While it mentions industry executives and energy topics, the core focus is on a bipartisan government commission issuing policy recommendations on greenhouse gas limits and fuel standards, which are fundamentally political and regulatory matters.\n\nFINAL: World",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.25,
+            "reasoning_soundness": 0.45,
+            "execution_accuracy": 0.3,
+            "output_integrity": 0.15,
+            "aggregate": 0.2875,
+            "rationale": "The agent provided extensive reasoning but categorized the headline as 'World' when the reference answer is 'Business' - the headline clearly discusses energy industry policy, emissions standards, and"
+          }
+        },
+        {
+          "query": "Climax to show off Avalon to US publishers #39;Project Avalon #39; becomes just plain Avalon; developer will show playable prototype of next-generation shooter to American execs.",
+          "gold": "Sci/Tech",
+          "output": "This is about a video game developer showcasing a game prototype to US publishers. While it involves technology (a game/software product), the core focus is on the business aspect - a developer pitching/showing their product to publishers for commercial purposes.\n\nFINAL: Business",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.85,
+            "execution_accuracy": 1.0,
+            "output_integrity": 0.4,
+            "aggregate": 0.7999999999999999,
+            "rationale": "The agent correctly formatted a categorical response and provided coherent reasoning, but misclassified the gaming/technology content as 'Business' when the reference answer is 'Sci/Tech', resulting i"
+          }
+        },
+        {
+          "query": "Cink Justifies Sutton #39;s Faith Three weeks away from the Ryder Cup, American Stewart Cink hopes he has silenced at least some of his critics - if indeed they exist.",
+          "gold": "Sports",
+          "output": "This headline is about Stewart Cink's performance in golf leading up to the Ryder Cup, focusing on his athletic performance and justifying his selection for the team. The emphasis is on his competitive play and tournament results.\n\nFINAL: Sports",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly categorized the headline as 'Sports' with sound reasoning about golf and the Ryder Cup, fully matching the reference answer and completing the task as specified."
+          }
+        },
+        {
+          "query": "Taiwan Acknowledges Minister #39;s Improper Wording #39; on Singapore Taiwan Foreign Minister Chen Tan- sun, who dismissed Singapore as a country the size of a booger, #39; #39; regretted his improper wording, #39; #39; said Foreign Ministry spokesman Michel Lu.",
+          "gold": "World",
+          "output": "This is a news item about international diplomacy and government relations between Taiwan and Singapore. A Taiwanese foreign minister made an inappropriate comment about Singapore, and the government is now addressing the diplomatic incident through official statements.\n\nThis involves:\n- International affairs and diplomacy\n- Government officials and policy\n- Regional relations between countries\n- Potential geopolitical implications\n\nFINAL: World",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly categorized the headline as 'World' with sound diplomatic reasoning, proper format, and perfect alignment with the reference answer, though the explanation was more verbose than st"
+          }
+        },
+        {
+          "query": "Asian Stocks Lower, Greenspan Awaited SINGAPORE (Reuters) - Asian stocks edged lower on Wednesday as profit taking set in after two days of gains and the dollar firmed ahead of comments from Fed chief Alan Greenspan that are expected to cement the case for further U.S. rate rises.",
+          "gold": "Business",
+          "output": "This article discusses Asian stock market movements, currency fluctuations (dollar firming), and expectations around Federal Reserve policy decisions. These are all core financial and economic topics.\n\nFINAL: Business",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly categorized the headline as 'Business', provided sound reasoning about financial markets and Fed policy, and delivered the answer in the expected format matching the reference exac"
+          }
+        },
+        {
+          "query": "Grid bids to save the world Hoping to harness a few million of the personal computers not already running the SETIhome screensaver, IBM and United Devices yesterday launched the World Community Grid to act as a clearing house for humanitarian IT projects.",
+          "gold": "Sci/Tech",
+          "output": "This article discusses IBM and United Devices launching the World Community Grid as a platform for humanitarian IT projects using distributed computing. While it involves technology companies and computing infrastructure, the primary focus is on the humanitarian and social mission of the initiative - using computers to solve global problems for the benefit of humanity.\n\nThe key elements are:\n- Technology platform/infrastructure (Sci/Tech aspect)\n- Humanitarian/global social mission (World aspect)\n- Corporate announcement (Business aspect)\n\nGiven the instruction to prioritize World > Business > Sci/Tech > Sports when content could fit multiple categories, and considering the emphasis on humanitarian projects and global impact, this should be classified as World.\n\nFINAL: World",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.25,
+            "reasoning_soundness": 0.4,
+            "execution_accuracy": 0.3,
+            "output_integrity": 0.0,
+            "aggregate": 0.2375,
+            "rationale": "The agent incorrectly categorized a technology/computing announcement as 'World' instead of 'Sci/Tech', misapplying a prioritization rule that wasn't part of the task instructions and fundamentally mi"
+          }
+        },
+        {
+          "query": "FERGUSON ATTACKED IN TUNNEL BUST-UP SIR ALEX FERGUSON was pelted with food and pea soup by an Arsenal player in an extraordinary tunnel bust-up at Old Trafford yesterday.",
+          "gold": "Sports",
+          "output": "This headline is about an incident involving Sir Alex Ferguson (a sports figure) during what appears to be a match at Old Trafford (Manchester United's stadium). The focus is on a physical altercation/confrontation in a sports context.\n\nFINAL: Sports",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly categorized the headline as Sports with sound reasoning about Ferguson, Old Trafford, and the sports context, matching the reference answer perfectly."
+          }
+        },
+        {
+          "query": "Saddam, Aides to Go on Trial Within Weeks - Daoud Iraq #39;s toppled leader Saddam Hussein and his top aides will go on trial within weeks, Iraqi Minister of State Kasim Daoud said on Sunday.",
+          "gold": "World",
+          "output": "This is a news item about the legal proceedings against Saddam Hussein and his aides following Iraq's political upheaval. The focus is on government/judicial action, international affairs, and the political consequences of regime change in Iraq - all of which are international political matters.\n\nFINAL: World",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly categorized the headline as 'World' with sound reasoning about international political affairs, though the task only required the category label without explanation."
+          }
+        },
+        {
+          "query": "Treasuries Mount Rally Despite Inflation NEW YORK (Reuters) - U.S. Treasury prices rallied on Wednesday as inflation excluding food and energy, one of the Federal Reserve's preferred price measures, proved less dramatic than bond bulls had feared.",
+          "gold": "Business",
+          "output": "This article discusses U.S. Treasury prices, inflation data, and Federal Reserve policy - all core financial and economic topics.\n\nFINAL: Business",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly categorized the headline as 'Business', provided sound reasoning about financial/economic content, and delivered the answer in the expected format matching the reference exactly."
+          }
+        },
+        {
+          "query": "The Lowdown on Downloading Music The digital music space is changing, with more songs and a growing number of places to download music legally. Realizing that the time was ripe to see how we were doing, I took some song recommendations and sat down to see what I could download.",
+          "gold": "Sci/Tech",
+          "output": "This article discusses the digital music industry, legal music downloading platforms, and the evolving landscape of music distribution. This is primarily about the music business, technology platforms for music consumption, and the commercial aspects of the digital music space.\n\nFINAL: Business",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.75,
+            "reasoning_soundness": 0.7,
+            "execution_accuracy": 0.85,
+            "output_integrity": 0.4,
+            "aggregate": 0.6749999999999999,
+            "rationale": "The agent correctly identified a valid category and provided reasonable justification, but misclassified the topic as 'Business' when the reference answer is 'Sci/Tech' — digital music downloading is "
+          }
+        },
+        {
+          "query": "Shaq turns up heat in first outing with Miami SHAQUILLE O #39;Neal shot 7-for-9 and finished with 16 points in his Miami debut yesterday as the Heat took a 100-77 victory against the home side New Jersey Nets.",
+          "gold": "Sports",
+          "output": "This is a sports news item focused on Shaquille O'Neal's athletic performance in his debut game with the Miami Heat, including his shooting statistics and the team's victory. The content is purely about athletic competition and game performance.\n\nFINAL: Sports",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly categorized the headline as Sports with sound reasoning about the athletic content, though the task only required the category label without explanation."
+          }
+        },
+        {
+          "query": "\\$78,000 for a Cane That Helped a Legend Walk the Line Many of Johnny Cash's possessions were sold at Sotheby's, collecting \\$3,984,260 for the Cash family, more than double the pre-auction estimate.",
+          "gold": "World",
+          "output": "This article is about the sale of Johnny Cash's personal possessions at auction, including a cane that sold for $78,000. The focus is on the auction results, the monetary value of the items sold, and the financial outcome for the Cash family.\n\nThis is primarily a business/auction story involving the sale of collectible items and their market value.\n\nFINAL: Business",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.2,
+            "aggregate": 0.75,
+            "rationale": "The agent correctly identified the task, provided sound reasoning about auction/market value, and delivered a proper categorical answer, but the final category 'Business' contradicts the reference ans"
+          }
+        },
+        {
+          "query": "Dollar Briefly Hits 4-Wk Low Vs Euro LONDON (Reuters) - The dollar dipped to a four-week low against the euro on Monday before rising slightly on profit-taking, but steep oil prices and weak U.S. data continued to fan worries about the health of the world's largest economy.",
+          "gold": "Business",
+          "output": "This article discusses currency exchange rates (dollar vs. euro), oil prices, and U.S. economic data. These are all core financial and economic indicators that fall under business/finance news.\n\nFINAL: Business",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly categorized the headline as 'Business', provided sound reasoning about currency, oil prices, and economic data, and delivered the answer in the expected format matching the referen"
+          }
+        },
+        {
+          "query": "One in four servers to run Linux by 2008 In a report, the research firm painted a bright future for the open source operating system, claiming that shipments of servers running Linux -- and revenues from those shipments -- will rise significantly over the next five years.",
+          "gold": "Sci/Tech",
+          "output": "This article discusses the projected growth of Linux servers and market forecasts for the open source operating system. While it touches on technology (Linux), the primary focus is on market trends, shipments, and revenues - which are business/economic metrics.\n\nFINAL: Business",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.25,
+            "reasoning_soundness": 0.6,
+            "execution_accuracy": 0.85,
+            "output_integrity": 0.2,
+            "aggregate": 0.475,
+            "rationale": "The agent provided a well-formatted categorization with reasoning, but incorrectly classified a technology-focused headline about Linux operating systems as 'Business' instead of 'Sci/Tech', despite t"
+          }
+        },
+        {
+          "query": "Leiter returns as Pavano prepares to go Al Leiter is returning to the Marlins, but Carl Pavano appears to be a goner. Leiter, a left-hander who threw the franchise #39;s first no-hitter in 1996 and helped the team win its first World Series in 1997, signed a one-year \\$8 million contract Wednesday.",
+          "gold": "Sports",
+          "output": "This article is about baseball player signings and contracts for the Miami Marlins. It focuses on Al Leiter's return to the team and Carl Pavano's departure, with details about contract terms and player history.\n\nFINAL: Sports",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly categorized the headline as 'Sports' and provided relevant context about baseball contracts, fully addressing the task with accurate execution and a correct final answer."
+          }
+        },
+        {
+          "query": "Argentina gets China investment China is to invest nearly \\$20bn (11bn) in Argentina over the next 10 years, Argentine officials say.",
+          "gold": "World",
+          "output": "This news involves international investment and economic relations between two countries (Argentina and China). While it has business/economic elements, the focus is on international affairs, diplomatic relations, and geopolitical significance between nations.\n\nFINAL: World",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly categorized the headline as 'World', provided sound reasoning about international relations, and delivered the answer in the proper format matching the reference answer."
+          }
+        },
+        {
+          "query": "Stocks Finish Up, Apple Provides a Lift NEW YORK (Reuters) - U.S. stocks rose on Monday as a higher price target for shares of Apple Computer Inc. &lt;A HREF=\"http://www.investor.reuters.com/FullQuote.aspx?ticker=AAPL.O target=/stocks/quickinfo/fullquote\"&gt;AAPL.O&lt;/A&gt; prompted enthusiasm for technology stocks and a rally in crude oil stalled.",
+          "gold": "Business",
+          "output": "This article is about stock market performance and Apple's stock price movement, which are core business/finance topics.\n\nFINAL: Business",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly categorized the headline as 'Business', provided sound reasoning about stock market and finance topics, and delivered the answer in the expected format matching the reference exact"
+          }
+        },
+        {
+          "query": "Schwarzenegger Signs 'Foie Gras' Bill (AP) AP - California will end the force feeding of ducks, geese and other birds to produce the gourmet liver product foie gras by 2012 under legislation signed Wednesday by Gov. Arnold Schwarzengger.",
+          "gold": "Sci/Tech",
+          "output": "This is a legislative/policy matter involving animal welfare and food production in California. While it touches on food industry practices, the core focus is on government policy and regulation regarding animal treatment - a social/political issue with broader implications.\n\nFINAL: World",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.25,
+            "reasoning_soundness": 0.45,
+            "execution_accuracy": 0.2,
+            "output_integrity": 0.15,
+            "aggregate": 0.26249999999999996,
+            "rationale": "The agent provided reasoning but failed the core task: the reference answer is 'Sci/Tech' while the output is 'World', and the explanation focuses on policy rather than recognizing this as a technolog"
+          }
+        },
+        {
+          "query": "Mr. Chang, Strike a Pose Halfway around the world, standing virtually in the middle of the Pacific Ocean, the incomparable Timmy Chang is just days away from throwing his first pass of the season. From my tattered sofa, I will be watching him. I want you to watch him, too.",
+          "gold": "Sports",
+          "output": "This article is about Timmy Chang, a football player, preparing for his first pass of the season. The focus is on athletic performance and competition.\n\nFINAL: Sports",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly categorized the headline as Sports, provided sound reasoning about the football context, and delivered the answer in the expected format matching the reference answer."
+          }
+        },
+        {
+          "query": "Cowboys Defeat Redskins 21-18 LANDOVER, Md. - Bill Parcells celebrated the touchdown with a big smile and his fist thrust high in the air...",
+          "gold": "World",
+          "output": "This is a sports news snippet focusing on an athletic competition between the Cowboys and Redskins, with details about the game outcome and a coach's reaction. The content is purely about athletic performance and game results.\n\nFINAL: Sports",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.0,
+            "aggregate": 0.7124999999999999,
+            "rationale": "The agent correctly identified the task, applied sound reasoning about sports content, and provided proper categorization format, but the final answer 'Sports' contradicts the reference answer 'World'"
+          }
+        },
+        {
+          "query": "IRS Demands FICA from Chili's Owner NEW YORK (Reuters) - Brinker International Inc. which operates the Chili's restaurant chain, on Monday said it received a demand from the U.S. Internal Revenue Service regarding the company's share of FICA taxes on unreported tips of \\$31.4 million during 2000 to 2002.",
+          "gold": "Business",
+          "output": "This is a corporate/business news story about a company (Brinker International/Chili's) receiving a tax demand from the IRS regarding FICA taxes on unreported tips. The focus is on corporate financial/tax matters and company operations.\n\nFINAL: Business",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly categorized the headline as 'Business' with sound reasoning about corporate tax matters, though the task only required the category label without explanation."
+          }
+        },
+        {
+          "query": "Xbox owner sues MS p2pnet.net News:- Microsoft is being sued for damages, restitution and other costs and fees, quot;on behalf of all Xbox owners across the United States, quot; says Reuters.",
+          "gold": "Sci/Tech",
+          "output": "This is a legal/business matter involving Microsoft and Xbox owners. The focus is on a lawsuit regarding corporate liability and consumer damages, which falls under business/corporate news.\n\nFINAL: Business",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.3,
+            "reasoning_soundness": 0.65,
+            "execution_accuracy": 0.85,
+            "output_integrity": 0.2,
+            "aggregate": 0.49999999999999994,
+            "rationale": "The agent provided a well-formatted categorization with reasoning, but incorrectly classified a technology product lawsuit as 'Business' when the reference answer is 'Sci/Tech', demonstrating poor ali"
+          }
+        },
+        {
+          "query": "Hall had Penn State executing well against Akron, but BC will be &lt;b&gt;...&lt;/b&gt; In recent years, Penn State critics have pointed to its offensive game plan as the source of the team #39;s problems. It was too rigid at times, they said, too reckless at others.",
+          "gold": "Sports",
+          "output": "This is a sports article discussing Penn State football's performance and offensive strategy in a game against Akron, with mention of an upcoming game against BC. The focus is on athletic performance and team execution.\n\nFINAL: Sports",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly categorized the headline as 'Sports' with sound reasoning about football content, though the task only required the category label without explanation."
+          }
+        },
+        {
+          "query": "Football: Spanish FA apologises The Spanish FA apologises to its English counterparts following racist chanting.",
+          "gold": "World",
+          "output": "This involves international relations between two football associations and addresses a serious social issue (racism) with diplomatic implications between nations.\n\nFINAL: World",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly categorized the headline as 'World', provided sound reasoning about international relations and diplomatic implications, followed the required format, and matched the reference ans"
+          }
+        },
+        {
+          "query": "Agency sustains \\$2 M hit The Pennsylvania Turnpike Commission lost about \\$2 million in revenue Wednesday as thousands of holiday travelers zipped through the toll booths for free.",
+          "gold": "Business",
+          "output": "This article discusses a financial loss experienced by a government agency (Pennsylvania Turnpike Commission) due to a toll collection issue. While it involves revenue and financial impact, the core focus is on a specific incident affecting a public agency's operations and finances.\n\nThis could be considered Business (financial/revenue impact) or World (government agency/public policy). However, the primary emphasis is on the financial/operational impact to an organization, which is fundamentally a business/economic matter.\n\nFINAL: Business",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly categorized the headline as 'Business', matching the reference answer, with sound reasoning about financial/revenue impact, proper format, and accurate final classification."
+          }
+        },
+        {
+          "query": "TI Puts Digital TV on Cell Phones Texas Instruments Inc. today announced development of the wireless industry #39;s first digital TV on a single chip for cell phones, code-named quot;Hollywood.",
+          "gold": "Sci/Tech",
+          "output": "This is about a technology product development - Texas Instruments announcing a new chip technology for digital TV on cell phones. This falls under technological innovation and product development.\n\nFINAL: Sci/Tech",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly categorized the headline as 'Sci/Tech' with sound reasoning about technology product development, matching the reference answer perfectly despite adding explanatory context."
+          }
+        },
+        {
+          "query": "Pedro picks Mets, Lee dealt to Brewers Pedro Martinez picked the New York Mets over the Boston Red Sox, and the Chicago White Sox dealt Carlos Lee to Milwaukee for Scott Podsednik and a reliever on Monday as baseball #39;s annual winter meetings finished with many top stars still searching for",
+          "gold": "Sports",
+          "output": "This headline discusses player signings and trades in Major League Baseball - specifically Pedro Martinez signing with the Mets and Carlos Lee being traded to the Brewers. These are sports transactions and player movements.\n\nFINAL: Sports",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly categorized the headline as 'Sports', provided sound reasoning about MLB transactions, and delivered the answer in the expected format matching the reference answer perfectly."
+          }
+        },
+        {
+          "query": "British tourists killed in Jordan bus crash Nine British tourists, two Jordanians and an Egyptian have been killed in a bus accident in southern Jordan, civil defence sources and diplomats say.",
+          "gold": "World",
+          "output": "This is a news story about a tragic accident involving loss of life in Jordan. While it involves British tourists, the core focus is on an international incident/accident occurring in a specific region (Jordan) with broader implications for multiple nationalities and diplomatic concerns.\n\nThis falls under international affairs and regional news with cross-border implications.\n\nFINAL: World",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly categorized the headline as 'World' news, provided sound reasoning about international/cross-border nature of the incident, and delivered the answer in the expected format matching"
+          }
+        },
+        {
+          "query": "New drug extends multiple sclerosis options 25/11/2004 - The first in a completely new class of drug for multiple sclerosis has been approved in the US, opening up a new avenue of treatment for sufferers of the debilitating diseases and potential blockbuster revenues for developers Elan and Biogen",
+          "gold": "Business",
+          "output": "This article discusses the approval of a new pharmaceutical drug for multiple sclerosis treatment. While it mentions the medical/scientific aspect of a new drug class, the primary focus is on the business implications - the approval opening new treatment options and generating \"blockbuster revenues\" for the companies Elan and Biogen.\n\nThe emphasis on corporate revenue potential and market opportunity makes this fundamentally a business story about pharmaceutical companies and their products.\n\nFINAL: Business",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly categorized the headline as 'Business', matching the reference answer, with sound reasoning about revenue focus and proper task execution."
+          }
+        },
+        {
+          "query": "Blu-ray group mandates Microsoft codec for BD-ROM The Blu-ray Disc Association (BRDA) has selected Microsoft #39;s VC-9 video codec for future BD-ROM content, the organisation said today.",
+          "gold": "Sci/Tech",
+          "output": "This is about a technology standard decision made by the Blu-ray Disc Association regarding video codec specifications for optical media. While it involves Microsoft and a technical standard, the core focus is on technology product specifications and industry standards for computing/media technology.\n\nFINAL: Sci/Tech",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9675,
+            "rationale": "The agent correctly categorized the headline as 'Sci/Tech' with sound reasoning about technology standards and codec specifications, matching the reference answer perfectly despite adding explanatory "
+          }
+        }
+      ],
+      "gpa_mean": 0.8293333333333333,
+      "gpa_dims": {
+        "target_alignment": 0.828333333333333,
+        "reasoning_soundness": 0.8366666666666664,
+        "execution_accuracy": 0.8956666666666666,
+        "output_integrity": 0.7566666666666666
+      },
+      "optimization": {
+        "history": [
+          {
+            "iter": 0,
+            "obj": 0.9,
+            "gpa": 0.9412499999999999,
+            "strategy": "baseline"
+          },
+          {
+            "iter": 1,
+            "obj": 1.0,
+            "gpa": 0.96,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 2,
+            "obj": 0.8,
+            "gpa": 0.9237499999999998,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 3,
+            "obj": 0.6,
+            "gpa": 0.7225,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 4,
+            "obj": 0.8,
+            "gpa": 0.8674999999999999,
+            "strategy": "merge"
+          },
+          {
+            "iter": 5,
+            "obj": 0.8,
+            "gpa": 0.8787500000000001,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 6,
+            "obj": 0.9,
+            "gpa": 0.9400000000000001,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 7,
+            "obj": 0.8,
+            "gpa": 0.7750000000000001,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 8,
+            "obj": 0.8,
+            "gpa": 0.8775000000000001,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 9,
+            "obj": 0.9,
+            "gpa": 0.95,
+            "strategy": "merge"
+          },
+          {
+            "iter": 10,
+            "obj": 0.9,
+            "gpa": 0.94,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 11,
+            "obj": 0.6,
+            "gpa": 0.68625,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 12,
+            "obj": 0.8,
+            "gpa": 0.9275,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 13,
+            "obj": 0.9,
+            "gpa": 0.93125,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 14,
+            "obj": 0.7,
+            "gpa": 0.75375,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 15,
+            "obj": 0.9,
+            "gpa": 0.9475,
+            "strategy": "merge"
+          },
+          {
+            "iter": 16,
+            "obj": 0.7,
+            "gpa": 0.8750000000000001,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 17,
+            "obj": 0.9,
+            "gpa": 0.94,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 18,
+            "obj": 0.8,
+            "gpa": 0.925,
+            "strategy": "merge"
+          },
+          {
+            "iter": 19,
+            "obj": 0.7,
+            "gpa": 0.7375,
+            "strategy": "mutation"
+          },
+          {
+            "iter": 20,
+            "obj": 0.8,
+            "gpa": 0.925,
+            "strategy": "merge"
+          }
+        ],
+        "front": [
+          {
+            "obj": 1.0,
+            "gpa": 0.96,
+            "iter": 1,
+            "strategy": "mutation"
+          }
+        ]
+      }
+    },
+    "opro": {
+      "objective_mean": 0.7,
+      "objective_ci95": [
+        0.5333333333333333,
+        0.8666666666666667
+      ],
+      "prompt": "You are a precise news categorization system. Analyze the given news headline or snippet and classify it into exactly ONE of these four categories: Business, Sci/Tech, Sports, or World.\n\nGuidelines:\n- Business: corporate news, markets, finance, economy, companies, trade\n- Sci/Tech: technology, science, innovation, research, computers, internet, software, gadgets\n- Sports: athletics, games, competitions, teams, players, tournaments\n- World: international affairs, politics, conflicts, diplomacy, global events, regional news\n\nFocus on the primary subject matter. If multiple categories could apply, choose the most dominant theme. Return only the category name.",
+      "examples": [
+        {
+          "query": "Bipartisan Panel Seeks Greenhouse Gas Limits A bipartisan commission that includes energy industry executives, environmentalists and academics will issue a report Wednesday that calls on the nation to adopt mandatory limits on greenhouse gas emissions linked to global warming, set stricter fuel economy standards and promote nuclear power, renewable energy and oil exploration.",
+          "gold": "Business",
+          "output": "This news story covers environmental policy and energy regulation at a national level. While it mentions energy industry executives and some business implications, the primary focus is on government policy recommendations regarding greenhouse gas emissions, fuel standards, and energy sources. This is fundamentally about international/national environmental and political affairs rather than corporate business news.\n\nThe key elements are:\n- A bipartisan commission (political)\n- Mandatory greenhouse gas limits (policy/regulation)\n- Fuel economy standards (environmental regulation)\n- Energy policy recommendations (government affairs)\n\nThis falls under global environmental and political matters.\n\nFINAL: World",
+          "objective": 0.0,
+          "gpa": {}
+        },
+        {
+          "query": "Climax to show off Avalon to US publishers #39;Project Avalon #39; becomes just plain Avalon; developer will show playable prototype of next-generation shooter to American execs.",
+          "gold": "Sci/Tech",
+          "output": "This news snippet is about a video game development company showcasing a playable prototype of their shooter game \"Avalon\" to US publishers. This is clearly focused on technology and gaming innovation - the development of a new game product and its presentation to industry stakeholders.\n\nFINAL: Sci/Tech",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Cink Justifies Sutton #39;s Faith Three weeks away from the Ryder Cup, American Stewart Cink hopes he has silenced at least some of his critics - if indeed they exist.",
+          "gold": "Sports",
+          "output": "This headline is about Stewart Cink, an American golfer, and his performance leading up to the Ryder Cup, which is a major golf competition. The article discusses his justification of being selected for the team and his performance in golf.\n\nThe primary subject matter is athletics/sports competition - specifically golf and the Ryder Cup tournament.\n\nFINAL: Sports",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Taiwan Acknowledges Minister #39;s Improper Wording #39; on Singapore Taiwan Foreign Minister Chen Tan- sun, who dismissed Singapore as a country the size of a booger, #39; #39; regretted his improper wording, #39; #39; said Foreign Ministry spokesman Michel Lu.",
+          "gold": "World",
+          "output": "This news item concerns a diplomatic incident involving Taiwan's Foreign Minister making an inappropriate comment about Singapore. The core subject matter is international relations, diplomacy, and a political/diplomatic controversy between two countries.\n\nWhile there are political elements, the primary focus is on international affairs and diplomatic relations between nations.\n\nFINAL: World",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Asian Stocks Lower, Greenspan Awaited SINGAPORE (Reuters) - Asian stocks edged lower on Wednesday as profit taking set in after two days of gains and the dollar firmed ahead of comments from Fed chief Alan Greenspan that are expected to cement the case for further U.S. rate rises.",
+          "gold": "Business",
+          "output": "This news article focuses on financial markets and economic indicators. The key elements are:\n\n- Asian stock market movements (profit taking)\n- Currency markets (dollar firming)\n- Federal Reserve policy and interest rate expectations\n- Comments from Fed chief Alan Greenspan\n\nThese are all core business and finance topics related to markets and economic policy.\n\nFINAL: Business",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Grid bids to save the world Hoping to harness a few million of the personal computers not already running the SETIhome screensaver, IBM and United Devices yesterday launched the World Community Grid to act as a clearing house for humanitarian IT projects.",
+          "gold": "Sci/Tech",
+          "output": "This news article discusses IBM and United Devices launching the World Community Grid, which is a distributed computing initiative designed to harness personal computers for humanitarian research projects. The primary focus is on technology infrastructure and scientific research applications.\n\nWhile this has humanitarian goals, the core subject matter is about technology innovation and how computing resources are being organized for research purposes. This falls squarely within the Sci/Tech category as it deals with technology systems, distributed computing, and scientific research initiatives.\n\nFINAL: Sci/Tech",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "FERGUSON ATTACKED IN TUNNEL BUST-UP SIR ALEX FERGUSON was pelted with food and pea soup by an Arsenal player in an extraordinary tunnel bust-up at Old Trafford yesterday.",
+          "gold": "Sports",
+          "output": "This headline describes an incident involving Sir Alex Ferguson (a football/soccer manager) and an Arsenal player in a tunnel at Old Trafford (Manchester United's stadium). The primary subject matter is about a confrontation between sports figures during or around a match.\n\nFINAL: Sports",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Saddam, Aides to Go on Trial Within Weeks - Daoud Iraq #39;s toppled leader Saddam Hussein and his top aides will go on trial within weeks, Iraqi Minister of State Kasim Daoud said on Sunday.",
+          "gold": "World",
+          "output": "This news item concerns the legal proceedings against Saddam Hussein and his aides following Iraq's political upheaval. The primary focus is on international affairs, political developments, and the judicial process in Iraq - all of which fall under global/international events and regional news.\n\nFINAL: World",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Treasuries Mount Rally Despite Inflation NEW YORK (Reuters) - U.S. Treasury prices rallied on Wednesday as inflation excluding food and energy, one of the Federal Reserve's preferred price measures, proved less dramatic than bond bulls had feared.",
+          "gold": "Business",
+          "output": "This article discusses U.S. Treasury bond prices, inflation data, and Federal Reserve policy - all core financial and economic topics. The focus is on market movements in Treasury securities and economic indicators that affect financial markets.\n\nFINAL: Business",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "The Lowdown on Downloading Music The digital music space is changing, with more songs and a growing number of places to download music legally. Realizing that the time was ripe to see how we were doing, I took some song recommendations and sat down to see what I could download.",
+          "gold": "Sci/Tech",
+          "output": "This article discusses the digital music industry, legal music downloading platforms, and the changing landscape of how consumers access music. While it touches on technology (downloading), the primary focus is on the music industry, consumer behavior, and the business of music distribution.\n\nFINAL: Business",
+          "objective": 0.0,
+          "gpa": {}
+        },
+        {
+          "query": "Shaq turns up heat in first outing with Miami SHAQUILLE O #39;Neal shot 7-for-9 and finished with 16 points in his Miami debut yesterday as the Heat took a 100-77 victory against the home side New Jersey Nets.",
+          "gold": "Sports",
+          "output": "This article is about Shaquille O'Neal's performance in his first game with the Miami Heat basketball team, including his statistics and the team's victory. This is clearly a sports story focused on an athlete's game performance and a team's competition result.\n\nFINAL: Sports",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "\\$78,000 for a Cane That Helped a Legend Walk the Line Many of Johnny Cash's possessions were sold at Sotheby's, collecting \\$3,984,260 for the Cash family, more than double the pre-auction estimate.",
+          "gold": "World",
+          "output": "This article discusses the sale of Johnny Cash's personal possessions at Sotheby's auction house, including a cane that sold for $78,000. The focus is on the auction results, the total amount collected ($3,984,260), and the financial outcome for the Cash family.\n\nWhile this involves a celebrity and historical memorabilia, the primary subject matter is the auction sale itself - a commercial transaction involving the sale of goods at a major auction house. This falls under business/commerce rather than entertainment or celebrity news.\n\nFINAL: Business",
+          "objective": 0.0,
+          "gpa": {}
+        },
+        {
+          "query": "Dollar Briefly Hits 4-Wk Low Vs Euro LONDON (Reuters) - The dollar dipped to a four-week low against the euro on Monday before rising slightly on profit-taking, but steep oil prices and weak U.S. data continued to fan worries about the health of the world's largest economy.",
+          "gold": "Business",
+          "output": "This news article focuses on currency exchange rates (dollar vs. euro), oil prices, and economic data affecting the U.S. economy. These are all core financial and economic indicators that fall under business/finance reporting.\n\nFINAL: Business",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "One in four servers to run Linux by 2008 In a report, the research firm painted a bright future for the open source operating system, claiming that shipments of servers running Linux -- and revenues from those shipments -- will rise significantly over the next five years.",
+          "gold": "Sci/Tech",
+          "output": "This news snippet discusses predictions about Linux server adoption and market growth over a five-year period. The focus is on:\n\n- Server shipments and revenues\n- Market projections for an operating system\n- Business/commercial adoption trends\n\nWhile this involves technology (Linux), the primary emphasis is on business metrics (shipments, revenues, market forecasts) rather than technical innovation or development. This is fundamentally a business/market analysis story.\n\nFINAL: Business",
+          "objective": 0.0,
+          "gpa": {}
+        },
+        {
+          "query": "Leiter returns as Pavano prepares to go Al Leiter is returning to the Marlins, but Carl Pavano appears to be a goner. Leiter, a left-hander who threw the franchise #39;s first no-hitter in 1996 and helped the team win its first World Series in 1997, signed a one-year \\$8 million contract Wednesday.",
+          "gold": "Sports",
+          "output": "This news is about baseball players signing contracts and returning to teams. The primary focus is on Al Leiter signing with the Marlins and Carl Pavano's departure from the team.\n\nThis is clearly a sports story involving player signings and team roster moves.\n\nFINAL: Sports",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Argentina gets China investment China is to invest nearly \\$20bn (11bn) in Argentina over the next 10 years, Argentine officials say.",
+          "gold": "World",
+          "output": "This news is about a major investment deal between China and Argentina. The primary focus is on:\n- A $20 billion investment commitment\n- Financial/economic agreement between two countries\n- Corporate and trade relations\n\nWhile this involves international relations between two countries, the dominant theme is the economic investment and business deal itself, making it primarily a business/finance story rather than a geopolitical or diplomatic matter.\n\nFINAL: Business",
+          "objective": 0.0,
+          "gpa": {}
+        },
+        {
+          "query": "Stocks Finish Up, Apple Provides a Lift NEW YORK (Reuters) - U.S. stocks rose on Monday as a higher price target for shares of Apple Computer Inc. &lt;A HREF=\"http://www.investor.reuters.com/FullQuote.aspx?ticker=AAPL.O target=/stocks/quickinfo/fullquote\"&gt;AAPL.O&lt;/A&gt; prompted enthusiasm for technology stocks and a rally in crude oil stalled.",
+          "gold": "Business",
+          "output": "This news article is primarily about stock market performance and corporate financial news. The headline focuses on U.S. stocks rising, with Apple's stock price target increase being a key driver of market movement. While Apple is a technology company, the article's main subject is the stock market and financial markets rather than technology innovation or products.\n\nFINAL: Business",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Schwarzenegger Signs 'Foie Gras' Bill (AP) AP - California will end the force feeding of ducks, geese and other birds to produce the gourmet liver product foie gras by 2012 under legislation signed Wednesday by Gov. Arnold Schwarzengger.",
+          "gold": "Sci/Tech",
+          "output": "This news story is about California legislation signed by Governor Arnold Schwarzenegger that bans the force-feeding of birds to produce foie gras. While it involves a governor and legislation, the primary focus is on animal welfare policy and a state law regulating a food production practice.\n\nThis is a political/legislative matter at the state level, making it a World/regional news story about government policy and international food production practices.\n\nFINAL: World",
+          "objective": 0.0,
+          "gpa": {}
+        },
+        {
+          "query": "Mr. Chang, Strike a Pose Halfway around the world, standing virtually in the middle of the Pacific Ocean, the incomparable Timmy Chang is just days away from throwing his first pass of the season. From my tattered sofa, I will be watching him. I want you to watch him, too.",
+          "gold": "Sports",
+          "output": "This article is about Timmy Chang, a football player, preparing to throw his first pass of the season. The focus is on an athlete and his upcoming athletic performance/competition.\n\nFINAL: Sports",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Cowboys Defeat Redskins 21-18 LANDOVER, Md. - Bill Parcells celebrated the touchdown with a big smile and his fist thrust high in the air...",
+          "gold": "World",
+          "output": "This news snippet describes a football game between the Cowboys and Redskins with a final score of 21-18, mentioning coach Bill Parcells celebrating a touchdown. This is clearly about athletics and sports competition.\n\nFINAL: Sports",
+          "objective": 0.0,
+          "gpa": {}
+        },
+        {
+          "query": "IRS Demands FICA from Chili's Owner NEW YORK (Reuters) - Brinker International Inc. which operates the Chili's restaurant chain, on Monday said it received a demand from the U.S. Internal Revenue Service regarding the company's share of FICA taxes on unreported tips of \\$31.4 million during 2000 to 2002.",
+          "gold": "Business",
+          "output": "This news item concerns a corporate tax matter involving Brinker International (Chili's owner) and the IRS regarding FICA taxes. The primary focus is on a financial/tax demand against a company, which falls under corporate and business news.\n\nFINAL: Business",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Xbox owner sues MS p2pnet.net News:- Microsoft is being sued for damages, restitution and other costs and fees, quot;on behalf of all Xbox owners across the United States, quot; says Reuters.",
+          "gold": "Sci/Tech",
+          "output": "This news item concerns a legal action against Microsoft by Xbox owners. While it involves Microsoft (a technology company), the primary focus is on a lawsuit regarding damages and restitution - which are legal/financial matters rather than the technology itself.\n\nHowever, the core subject matter is about a corporate entity (Microsoft) facing legal action related to its product (Xbox). This is fundamentally a business/corporate matter involving litigation and potential financial liability.\n\nFINAL: Business",
+          "objective": 0.0,
+          "gpa": {}
+        },
+        {
+          "query": "Hall had Penn State executing well against Akron, but BC will be &lt;b&gt;...&lt;/b&gt; In recent years, Penn State critics have pointed to its offensive game plan as the source of the team #39;s problems. It was too rigid at times, they said, too reckless at others.",
+          "gold": "Sports",
+          "output": "This news snippet discusses Penn State's football team, their offensive game plan, and an upcoming game against BC (Boston College). The focus is on athletic performance, team strategy, and sports competition.\n\nFINAL: Sports",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Football: Spanish FA apologises The Spanish FA apologises to its English counterparts following racist chanting.",
+          "gold": "World",
+          "output": "This news item concerns the Spanish Football Association apologizing for racist chanting incidents, which relates to international sports governance and conduct issues within football.\n\nThe primary subject matter is about a football/sports organization and a disciplinary/conduct matter within the sport.\n\nFINAL: Sports",
+          "objective": 0.0,
+          "gpa": {}
+        },
+        {
+          "query": "Agency sustains \\$2 M hit The Pennsylvania Turnpike Commission lost about \\$2 million in revenue Wednesday as thousands of holiday travelers zipped through the toll booths for free.",
+          "gold": "Business",
+          "output": "This news snippet discusses the Pennsylvania Turnpike Commission losing $2 million in revenue due to toll booth issues during holiday travel. This is primarily about:\n\n- A government agency (Pennsylvania Turnpike Commission)\n- Financial/revenue loss\n- Economic impact\n\nWhile it involves transportation infrastructure, the core story is about the financial impact and revenue loss to the agency, which makes this a business/economic news story.\n\nFINAL: Business",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "TI Puts Digital TV on Cell Phones Texas Instruments Inc. today announced development of the wireless industry #39;s first digital TV on a single chip for cell phones, code-named quot;Hollywood.",
+          "gold": "Sci/Tech",
+          "output": "This news is about Texas Instruments developing a technology chip that enables digital TV functionality on cell phones. The primary focus is on a technological innovation - specifically a semiconductor/chip development for mobile devices.\n\nFINAL: Sci/Tech",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Pedro picks Mets, Lee dealt to Brewers Pedro Martinez picked the New York Mets over the Boston Red Sox, and the Chicago White Sox dealt Carlos Lee to Milwaukee for Scott Podsednik and a reliever on Monday as baseball #39;s annual winter meetings finished with many top stars still searching for",
+          "gold": "Sports",
+          "output": "This news snippet discusses baseball player signings and trades during the winter meetings. The primary focus is on:\n\n1. Pedro Martinez signing with the Mets\n2. Carlos Lee being traded from the White Sox to the Brewers\n\nThese are clearly sports-related events involving player transactions and team movements in Major League Baseball.\n\nFINAL: Sports",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "British tourists killed in Jordan bus crash Nine British tourists, two Jordanians and an Egyptian have been killed in a bus accident in southern Jordan, civil defence sources and diplomats say.",
+          "gold": "World",
+          "output": "This news story reports on a tragic bus accident in Jordan that resulted in deaths of multiple tourists and locals. The primary focus is on an international incident involving loss of life in a specific geographic region.\n\nThis is clearly a **World** category story because it involves:\n- An international incident occurring in Jordan\n- Multiple nationalities affected (British, Jordanian, Egyptian)\n- A regional/global news event rather than business, technology, or sports\n\nFINAL: World",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "New drug extends multiple sclerosis options 25/11/2004 - The first in a completely new class of drug for multiple sclerosis has been approved in the US, opening up a new avenue of treatment for sufferers of the debilitating diseases and potential blockbuster revenues for developers Elan and Biogen",
+          "gold": "Business",
+          "output": "This news article is about the approval of a new pharmaceutical drug for treating multiple sclerosis. While it mentions the medical/scientific aspect of a new drug class, the primary focus is on:\n\n1. Drug approval and regulatory news\n2. Commercial/business implications (\"blockbuster revenues\")\n3. Company performance (Elan and Biogen)\n4. Market opportunity for pharmaceutical companies\n\nThe dominant theme is the business and commercial significance of this drug approval for the companies involved, rather than the scientific research behind it.\n\nFINAL: Business",
+          "objective": 1.0,
+          "gpa": {}
+        },
+        {
+          "query": "Blu-ray group mandates Microsoft codec for BD-ROM The Blu-ray Disc Association (BRDA) has selected Microsoft #39;s VC-9 video codec for future BD-ROM content, the organisation said today.",
+          "gold": "Sci/Tech",
+          "output": "This news is about the Blu-ray Disc Association's technical decision to mandate Microsoft's VC-9 video codec for BD-ROM content. This is primarily a technology/standards matter involving video compression technology and disc format specifications.\n\nFINAL: Sci/Tech",
+          "objective": 1.0,
+          "gpa": {}
+        }
+      ],
+      "optimization": {
+        "history": [
+          {
+            "iter": 0,
+            "obj": 0.9,
+            "gpa": 0.0,
+            "strategy": "baseline"
+          },
+          {
+            "iter": 1,
+            "obj": 1.0,
+            "gpa": 0.0,
+            "strategy": "opro"
+          },
+          {
+            "iter": 2,
+            "obj": 0.8,
+            "gpa": 0.0,
+            "strategy": "opro"
+          },
+          {
+            "iter": 3,
+            "obj": 0.8,
+            "gpa": 0.0,
+            "strategy": "opro"
+          },
+          {
+            "iter": 4,
+            "obj": 0.9,
+            "gpa": 0.0,
+            "strategy": "opro"
+          },
+          {
+            "iter": 5,
+            "obj": 0.8,
+            "gpa": 0.0,
+            "strategy": "opro"
+          },
+          {
+            "iter": 6,
+            "obj": 0.8,
+            "gpa": 0.0,
+            "strategy": "opro"
+          },
+          {
+            "iter": 7,
+            "obj": 0.7,
+            "gpa": 0.0,
+            "strategy": "opro"
+          },
+          {
+            "iter": 8,
+            "obj": 0.9,
+            "gpa": 0.0,
+            "strategy": "opro"
+          },
+          {
+            "iter": 9,
+            "obj": 0.8,
+            "gpa": 0.0,
+            "strategy": "opro"
+          },
+          {
+            "iter": 10,
+            "obj": 0.8,
+            "gpa": 0.0,
+            "strategy": "opro"
+          },
+          {
+            "iter": 11,
+            "obj": 0.8,
+            "gpa": 0.0,
+            "strategy": "opro"
+          },
+          {
+            "iter": 12,
+            "obj": 0.9,
+            "gpa": 0.0,
+            "strategy": "opro"
+          },
+          {
+            "iter": 13,
+            "obj": 0.8,
+            "gpa": 0.0,
+            "strategy": "opro"
+          },
+          {
+            "iter": 14,
+            "obj": 0.9,
+            "gpa": 0.0,
+            "strategy": "opro"
+          },
+          {
+            "iter": 15,
+            "obj": 0.9,
+            "gpa": 0.0,
+            "strategy": "opro"
+          },
+          {
+            "iter": 16,
+            "obj": 0.8,
+            "gpa": 0.0,
+            "strategy": "opro"
+          },
+          {
+            "iter": 17,
+            "obj": 0.7,
+            "gpa": 0.0,
+            "strategy": "opro"
+          },
+          {
+            "iter": 18,
+            "obj": 0.8,
+            "gpa": 0.0,
+            "strategy": "opro"
+          },
+          {
+            "iter": 19,
+            "obj": 0.9,
+            "gpa": 0.0,
+            "strategy": "opro"
+          },
+          {
+            "iter": 20,
+            "obj": 0.9,
+            "gpa": 0.0,
+            "strategy": "opro"
+          }
+        ],
+        "front": [
+          {
+            "obj": 1.0,
+            "gpa": 0.0,
+            "iter": 1,
+            "strategy": "opro"
+          },
+          {
+            "obj": 0.9,
+            "gpa": 0.0,
+            "iter": 0,
+            "strategy": "baseline"
+          },
+          {
+            "obj": 0.9,
+            "gpa": 0.0,
+            "iter": 4,
+            "strategy": "opro"
+          },
+          {
+            "obj": 0.9,
+            "gpa": 0.0,
+            "iter": 8,
+            "strategy": "opro"
+          },
+          {
+            "obj": 0.9,
+            "gpa": 0.0,
+            "iter": 12,
+            "strategy": "opro"
+          }
+        ]
+      }
+    }
+  },
+  "duration_s": 550.2
+}
