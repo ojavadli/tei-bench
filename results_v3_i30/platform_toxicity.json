@@ -449,31 +449,17 @@
       }
     },
     "tei_v3": {
-      "objective_mean": 0.6333333333333333,
+      "objective_mean": 0.5333333333333333,
       "objective_ci95": [
-        0.4666666666666667,
-        0.8
+        0.36666666666666664,
+        0.7
       ],
-      "prompt": "# ROLE\nYou are a toxicity-moderation assistant. Your task is to flag whether comments are toxic based on their language, tone, and manner of expression, not solely on whether the viewpoint expressed is controversial or offensive to some.\n\n# LABEL DEFINITIONS\n\n**toxic**: Comments that use derogatory language, insults, profanity directed at people/groups, or express ideas in an aggressive, demeaning, or inflammatory manner.\n\n**not toxic**: Comments that express controversial, unpopular, or even discriminatory viewpoints BUT do so in a civil, non-insulting manner without using derogatory language or personal attacks.\n\n# DECISION RULES FOR DIFFICULT CASES\n\n1. **Controversial opinions vs. toxic expression**: A comment advocating discriminatory policies (immigration restrictions, religious bans, etc.) is NOT automatically toxic if expressed without insults, slurs, or aggressive language. Focus on HOW the idea is expressed, not whether you agree with it.\n\n2. **Political criticism**: Strong criticism of political figures, parties, or ideologies counts as toxic ONLY if it includes personal insults, profanity, or derogatory characterizations beyond policy disagreement.\n\n3. **Religious/ideological content**: Dismissing religious texts or beliefs as \"myths,\" \"jokes,\" or \"stupid\" constitutes toxic language due to the derogatory terms used.\n\n4. **Dismissive language toward groups**: Phrases like \"any idiot\" or calling people/things \"a joke\" indicate toxic tone even when discussing products or abstract concepts.\n\n5. **Civil vs. uncivil advocacy**: The key distinction is whether the comment uses respectful language and rational argumentation (not toxic) versus insults, profanity, or inflammatory characterizations (toxic).\n\n# OUTPUT FORMAT\nReturn only: toxic OR not toxic",
+      "prompt": "# ROLE\nYou are a toxicity-moderation assistant. Your task is to classify comments as either **toxic** or **not toxic** based on their language, tone, and manner of expression—specifically whether they use insulting, derogatory, or aggressive language—NOT based on whether the viewpoint itself is controversial, discriminatory, or offensive.\n\n# CLASSIFICATION CATEGORIES\n- **toxic**: Contains insulting, derogatory, or aggressive language\n- **not toxic**: Lacks such language, regardless of viewpoint content\n\n# LABEL DEFINITIONS\n\n**toxic** - Comments containing:\n- Direct insults, name-calling, or profanity directed at people or groups\n- Derogatory slurs or epithets\n- Aggressive, demeaning, or inflammatory language choices\n- Belittling terms (e.g., \"idiot,\" \"stupid,\" \"joke,\" \"pathetic,\" \"moron,\" \"garbage,\" \"trash\")\n- Dismissive insults toward beliefs, products, or institutions using demeaning descriptors\n- Demeaning comparisons (e.g., \"lobotomy,\" \"braindead\")\n- Sweeping negative generalizations about political, religious, or demographic groups (e.g., \"X are hypocrites,\" \"X are liars,\" \"X are criminals\")\n\n**not toxic** - Comments that:\n- Express controversial, unpopular, or even discriminatory viewpoints using civil language\n- Advocate for exclusionary policies or hold prejudiced positions without derogatory terms\n- Present strong disagreement with political figures, policies, or religious beliefs\n- Criticize specific individuals' actions or character traits using isolated mild descriptors (e.g., \"nasty,\" \"arrogant,\" \"selfish\") in context of substantive criticism\n- BUT do so without systematic insults, slurs, or sweeping attacks on entire groups\n\n# DECISION RULES\n\n## 1. Tone Over Content Principle\n**Always prioritize: How is it said? over What is said?**\n- Civil language + discriminatory viewpoint = **not toxic**\n- Insulting language + reasonable viewpoint = **toxic**\n- Sweeping group attacks count as insulting language regardless of viewpoint\n\n## 2. Sweeping Group Generalizations vs. Individual Criticism\n- **toxic**: Blanket negative characterizations of entire groups (\"Republicans are hypocrites,\" \"Democrats are traitors,\" \"Muslims are dangerous\")\n- **not toxic**: Criticism of specific individuals, even using mildly negative descriptors, when embedded in substantive critique of their actions\n\n## 3. Isolated Mild Descriptors in Context\nWhen a comment contains ONE mild negative descriptor (e.g., \"nasty,\" \"arrogant\") within broader substantive criticism:\n- If the descriptor is a small part of factual/opinion-based critique → **not toxic**\n- If the descriptor is the primary thrust or repeated → **toxic**\n\n## 4. Discriminatory Policy Advocacy\nA comment calling for bans, restrictions, or exclusion of specific groups (religious, ethnic, national) is **not toxic** if it:\n- Uses factual or policy-oriented language\n- Avoids derogatory labels, slurs, or insults\n- Presents arguments (even flawed ones) without belittling language\n\nThe viewpoint may be discriminatory, but classification depends on linguistic tone, not ideological content.\n\n## 5. Political/Religious Criticism\nStrong criticism of political figures, policies, or religious beliefs is **not toxic** UNLESS it:\n- Makes sweeping negative generalizations about all adherents/members\n- Employs systematic insults, profanity, vulgar language, or derogatory characterizations\n- Goes beyond policy critique to attack group identity or believers/adherents as a whole\n\n## 6. Derogatory Language Triggers\nComments become **toxic** when they include belittling or dismissive language, even when directed at products, institutions, or abstract concepts rather than people directly.\n\n# OUTPUT FORMAT\nReturn only one classification: **toxic** OR **not toxic**\n\nHere are solved examples to follow:\n\nInput: Republicans are hypocrites, but you knew that already.\nFINAL: toxic\n\nInput: One thing Boyle seems to be really good as is making babies. Whether he will convince people he went into Afghanistan to \"help\" villagers is in my mind very questionable; after all what we will hear from him will be stories that will make him sound good. What comes across to me is that he is a hard head and had an agenda. After all let's not forget he was once married to the nasty sister of Khadr,\nFINAL: not toxic\n\nInput: Elected officials \"swear or affirm\". No stupid 2000 year old book of myths is required. Affirming the oath is all that's necessary. Your precious bible is a joke.\nFINAL: toxic\n\nInput: If there isn't something there, just create it using this hypothetical crime. FAKE NEWS, anything to discredit this admin. Where were you the last 8 years, including the Hillary corruption ?\nFINAL: not toxic\n\nInput: The problem is this: all the interesting sites to make videos of are essentially made illegal to fly at now. So there is no point in owning a Mavic or Phantom. Those aircraft provide ZERO flying challenge, as any idiot with a credit card can fly one. Actually you don't really 'fly' those DJI products, the computer on board flies it - the user just steers it slow around like a golf cart. Operating \nFINAL: toxic\n\nInput: You keep changing your argument. You did this yesterday, citing the 43% who don't pay taxes as some sort of meaningful number, then said numbers are numbers. Today you said being paid $23.96 per hour as a Flagger in Lane County plus $13.82 \"Fringe\" was problem then faced with the job of flagger moved from that to local applications and anecdotal evidence in construction. It' like wack-a-mole. I do\nFINAL: not toxic",
       "examples": [
         {
           "query": "\"GOP is composed mostly of white trash, inbreeds\"? Says a whole lot about how intelligent and tolerant you are.",
           "gold": "toxic",
-          "output": "This comment uses derogatory language (\"white trash,\" \"inbreeds\") to characterize members of a political party. These are insulting, demeaning terms applied to a group of people based on their political affiliation and perceived demographics.\n\nWhile political criticism is acceptable, this crosses into toxic territory by employing slurs and dehumanizing characterizations rather than engaging with policy disagreements or substantive critique.\n\nFINAL: toxic",
-          "objective": 1.0,
-          "gpa": {
-            "target_alignment": 1.0,
-            "reasoning_soundness": 0.95,
-            "execution_accuracy": 1.0,
-            "output_integrity": 1.0,
-            "aggregate": 0.9875,
-            "rationale": "The agent correctly identified the comment as toxic, provided sound reasoning about derogatory language and dehumanizing characterizations, and delivered the exact required classification matching the"
-          }
-        },
-        {
-          "query": "@advertiser1: yes without the darn population increase by immigration traffic would not be horrible and rail would not be have been an idea to come even up.",
-          "gold": "not toxic",
-          "output": "This comment expresses a viewpoint about immigration and its effects on traffic/infrastructure. While the opinion itself may be controversial, the comment:\n\n- Does not use slurs, profanity directed at people, or derogatory language toward any group\n- Uses mild language (\"darn\") rather than aggressive insults\n- Presents a policy-related argument (immigration's effect on infrastructure) in a civil manner\n- Does not personally attack or demean anyone\n\nThe grammar is somewhat unclear, but the tone is not inflammatory or demeaning.\n\nFINAL: not toxic",
+          "output": "This comment contains sweeping negative generalizations about an entire political group using derogatory language (\"white trash,\" \"inbreeds\"). These are insulting, demeaning terms applied systematically to characterize GOP members as a whole.\n\nAccording to the decision rules, blanket negative characterizations of entire groups using derogatory language constitute toxic speech, regardless of the political viewpoint involved.\n\nFINAL: toxic",
           "objective": 1.0,
           "gpa": {
             "target_alignment": 0.95,
@@ -481,13 +467,27 @@
             "execution_accuracy": 1.0,
             "output_integrity": 1.0,
             "aggregate": 0.9625,
-            "rationale": "The agent correctly identified the comment as 'not toxic' with sound reasoning about language use, tone, and content, matching the reference answer perfectly."
+            "rationale": "The agent correctly identified the comment as toxic with sound reasoning about derogatory language and group generalizations, matching the reference answer perfectly."
+          }
+        },
+        {
+          "query": "@advertiser1: yes without the darn population increase by immigration traffic would not be horrible and rail would not be have been an idea to come even up.",
+          "gold": "not toxic",
+          "output": "This comment expresses a viewpoint about immigration and its effects on traffic and infrastructure planning. Let me analyze it for toxicity:\n\n**Language assessment:**\n- The comment uses \"darn\" as a mild euphemism, not a direct insult\n- It presents a causal argument: immigration → population increase → traffic problems → need for rail\n- No derogatory slurs, name-calling, or insulting language directed at any group\n- No sweeping negative generalizations about immigrants as people (e.g., \"immigrants are X\")\n- The tone is conversational and opinion-based, not aggressive or demeaning\n\n**Content vs. tone:**\nWhile the comment advocates for restrictive immigration policy based on infrastructure concerns, it does so without insulting or derogatory language. The viewpoint may be debatable or even discriminatory in its policy implications, but the linguistic expression lacks the belittling, inflammatory, or aggressive language that would constitute toxicity under the classification criteria.\n\nFINAL: not toxic",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly identified the comment as 'not toxic' matching the reference, provided sound reasoning distinguishing policy viewpoint from toxic language, followed the binary classification task "
           }
         },
         {
           "query": "LOL!!!!!!!!!! You're going to use the fact that guns were used to murder 10's of millions of people to imply that guns make us safer? Seriously? You can't be that dumb.",
           "gold": "toxic",
-          "output": "This comment uses insulting language (\"can't be that dumb\") directed at the person being addressed, which constitutes a personal attack. While the commenter is expressing a viewpoint about gun safety (a legitimate policy debate), the manner of expression includes a derogatory characterization of the other person's intelligence.\n\nThe excessive punctuation and \"LOL\" suggest a mocking, dismissive tone, and the direct insult crosses from civil disagreement into toxic territory.\n\nFINAL: toxic",
+          "output": "This comment contains insulting language directed at the person being addressed. The phrase \"You can't be that dumb\" is a direct insult using a belittling descriptor (\"dumb\") to attack the person's intelligence rather than engaging substantively with their argument.\n\nWhile the comment expresses a viewpoint about gun safety (which could be controversial), the manner of expression includes a personal insult that crosses into toxic territory.\n\nFINAL: toxic",
           "objective": 1.0,
           "gpa": {
             "target_alignment": 1.0,
@@ -495,13 +495,13 @@
             "execution_accuracy": 1.0,
             "output_integrity": 1.0,
             "aggregate": 0.9875,
-            "rationale": "The agent correctly identified the comment as toxic with sound reasoning about personal attacks and mocking tone, perfectly matching the reference answer."
+            "rationale": "The agent correctly identified the comment as toxic, provided sound reasoning about the insulting language, properly formatted the response with the required label, and reached the correct conclusion "
           }
         },
         {
           "query": "No phoney High Street foreigners in this PMO. Thank goodness.",
           "gold": "not toxic",
-          "output": "This comment expresses a preference against foreign influence in the Prime Minister's Office using the term \"phoney High Street foreigners.\" While it reflects a nationalist or exclusionary viewpoint, the language used is not overtly derogatory, profane, or personally insulting. The term \"phoney\" is dismissive but not a slur or severe insult directed at individuals or groups.\n\nThe comment expresses a controversial political preference without using explicit insults, slurs, or aggressive personal attacks. It's expressing a viewpoint about who should hold positions of power, stated in a civil manner despite the exclusionary sentiment.\n\nFINAL: not toxic",
+          "output": "This comment expresses satisfaction that the Prime Minister's Office (PMO) lacks \"phoney High Street foreigners.\" While the comment reflects a xenophobic or nationalist viewpoint—preferring exclusion of foreign-born or foreign-connected individuals—it does not employ insulting, derogatory, or aggressive language directed at people or groups.\n\nThe term \"phoney\" is mildly critical but not a systematic insult or slur. The comment presents a preference or policy position without belittling language, profanity, or sweeping derogatory characterizations of any group.\n\nThe viewpoint may be discriminatory in its preference, but the linguistic tone lacks the insulting or demeaning language that would classify it as toxic.\n\nFINAL: not toxic",
           "objective": 1.0,
           "gpa": {
             "target_alignment": 0.95,
@@ -509,27 +509,27 @@
             "execution_accuracy": 1.0,
             "output_integrity": 1.0,
             "aggregate": 0.95,
-            "rationale": "The agent correctly classified the comment as 'not toxic' matching the reference, provided coherent reasoning about why the language doesn't meet toxicity thresholds, and delivered the answer in the r"
+            "rationale": "The agent correctly identified the comment as 'not toxic' matching the reference, provided sound reasoning distinguishing xenophobic viewpoint from toxic language, executed the binary classification t"
           }
         },
         {
           "query": "What the goofball leftwing journalists/editors who wrote this article don't understand is that it's not so much whether Trump's products are manufactured here in the U.S. as it is that Trump and a Republican Congress are willing to create an environment with less taxes and regulations that make the United States a country that is more attractive for businesses to set up their base, grow and thrive. The article is a great example of the idiocy of leftwing journalism.",
           "gold": "toxic",
-          "output": "This comment expresses a political viewpoint criticizing left-wing journalism and advocating for lower taxes and deregulation as economic policy. While it uses dismissive language (\"goofball,\" \"idiocy\"), these terms are directed at journalists/journalism as a category rather than at individuals or protected groups, and the comment articulates a substantive policy argument.\n\nThe tone is certainly critical and somewhat inflammatory, but it stays within the bounds of political discourse criticism without using slurs, profanity, or personal attacks on specific individuals. The language, while derogatory toward a group's work product and ideology, reflects strong disagreement rather than toxic expression.\n\nFINAL: not toxic",
+          "output": "This comment criticizes left-wing journalists and their editorial approach using the term \"goofball\" and \"idiocy,\" but the core of the comment is substantive political disagreement about economic policy and Trump's approach to business regulation.\n\nThe language used (\"goofball,\" \"idiocy\") are mild insults directed at journalists' reasoning/approach rather than systematic derogatory attacks. The comment presents a policy argument (lower taxes and regulations attract business) as a counterpoint to what the commenter sees as flawed journalism. While the tone is dismissive, it remains within the bounds of political criticism without employing slurs, profanity, or sweeping attacks on entire groups as inherently bad people.\n\nThe comment expresses a controversial political viewpoint but does so with relatively civil language focused on substantive disagreement rather than personal attacks or group-based insults.\n\nFINAL: not toxic",
           "objective": 0.0,
           "gpa": {
-            "target_alignment": 0.15,
-            "reasoning_soundness": 0.25,
+            "target_alignment": 0.2,
+            "reasoning_soundness": 0.35,
             "execution_accuracy": 0.0,
             "output_integrity": 0.0,
-            "aggregate": 0.1,
-            "rationale": "The agent provided the opposite classification (not toxic vs. toxic), failed to follow the binary flagging format, added extensive unnecessary justification, and fundamentally misclassified content co"
+            "aggregate": 0.1375,
+            "rationale": "The agent provided extensive reasoning but reached the opposite conclusion from the reference answer ('not toxic' vs 'toxic'), failing the binary classification task entirely and violating execution r"
           }
         },
         {
           "query": "You have said before that your First Amendment rights are being violated by censorship in this format. As I have also said this is a privately owned space. If this space was public, you wouldn't have to pay to post. Taking it further, if we were really seeking free speech here, shouldn't this space be free to the public? Isn't this a kind of \"free speech\" gated community? You wrote some time ago that you post anonymously in the spirit of Benjamin Franklin. I suggest that if you wish to express your opinion uncensored, then write your own publication like Franklin did. He certainly was a good writer with many ideas. You too can become a Franklin in our times. If you do go this route, please let us know. I would like a copy. For me, Civil Comments is working pretty well. I like the egalitarian idea of reviewing each others comments. It's peer review and that is fine with me.",
           "gold": "not toxic",
-          "output": "This comment expresses a viewpoint about free speech, censorship, and the nature of private platforms. Let me analyze it for toxicity:\n\n**Language and tone assessment:**\n- The comment uses civil, respectful language throughout\n- It engages in rational argumentation about First Amendment rights and private property\n- It acknowledges the other person's perspective (\"As I have also said\")\n- It offers constructive suggestions rather than insults\n- It expresses appreciation for the platform and peer review system\n- The suggestion to \"write your own publication\" is framed as practical advice, not as a dismissive attack\n\n**What makes it not toxic:**\n- No derogatory language, slurs, or profanity\n- No personal attacks or insults\n- No aggressive or inflammatory characterizations\n- Disagreement is expressed through reasoned argument\n- The tone is conversational and even encouraging\n\nEven though this comment disagrees with another person's position on censorship and free speech, it does so in a manner that is fundamentally civil and respectful.\n\nFINAL: not toxic",
+          "output": "This comment expresses disagreement with another user's position on free speech and censorship in a private forum. The author:\n\n- Challenges the logical consistency of the other person's argument about First Amendment rights in a private space\n- Points out the contradiction between claiming to support free speech while using a paid platform\n- Suggests an alternative (starting their own publication)\n- Expresses personal satisfaction with the current moderation system\n\nThe language is civil, reasoned, and respectful throughout. There are no insults, derogatory terms, slurs, or aggressive language. The author disagrees substantively but maintains a constructive tone, even offering encouragement (\"You too can become a Franklin in our times\") and expressing interest in the other person's potential future work.\n\nFINAL: not toxic",
           "objective": 1.0,
           "gpa": {
             "target_alignment": 0.95,
@@ -537,27 +537,27 @@
             "execution_accuracy": 1.0,
             "output_integrity": 1.0,
             "aggregate": 0.9625,
-            "rationale": "The agent correctly identified the comment as 'not toxic' with sound reasoning about civil tone, lack of personal attacks, and constructive engagement, perfectly matching the reference answer."
+            "rationale": "The agent correctly identified the comment as not toxic with sound reasoning about civil discourse, proper binary classification format, and perfect match with the reference answer."
           }
         },
         {
           "query": "This event is a well-documented scam that makes people believe it's for charity, when really they're using charity volunteers as unpaid workers. It's also a blatant cultural appropriation of a Hindi festival. Can we stop letting this stupid event come here?",
           "gold": "toxic",
-          "output": "This comment expresses critical viewpoints about an event (calling it a scam, criticizing labor practices, and raising cultural appropriation concerns). However, it includes the word \"stupid\" as a dismissive characterization of the event itself.\n\nAccording to the decision rules, dismissive language like calling something \"stupid\" indicates a toxic tone, even when discussing abstract concepts or events rather than people directly.\n\nThe substantive criticisms (scam allegations, labor exploitation, cultural appropriation) are expressed in a civil manner with reasoning, but the use of \"stupid\" crosses into derogatory language.\n\nFINAL: toxic",
-          "objective": 1.0,
+          "output": "This comment expresses strong criticism of an event, characterizing it as a \"scam\" and \"stupid,\" and raising concerns about labor practices and cultural appropriation. Let me analyze the language:\n\n- \"well-documented scam\" - factual characterization of alleged wrongdoing\n- \"stupid event\" - a mild negative descriptor applied to the event itself, not to people\n- The criticism focuses on specific practices (unpaid labor, cultural appropriation) rather than attacking individuals or groups\n- No slurs, profanity, or derogatory language toward people or demographic groups\n- The tone is critical but uses civil language to express substantive concerns\n\nWhile the viewpoint is strongly negative about the event, the language remains civil and policy-oriented (calling for the event to be stopped). The single use of \"stupid\" is a mild descriptor applied to the event, not a systematic attack on people or groups.\n\nFINAL: not toxic",
+          "objective": 0.0,
           "gpa": {
-            "target_alignment": 0.95,
-            "reasoning_soundness": 0.9,
-            "execution_accuracy": 1.0,
-            "output_integrity": 1.0,
-            "aggregate": 0.9625,
-            "rationale": "The agent correctly identified the comment as toxic, provided sound reasoning about the dismissive language ('stupid'), properly formatted the output, and reached the correct conclusion matching the r"
+            "target_alignment": 0.15,
+            "reasoning_soundness": 0.3,
+            "execution_accuracy": 0.0,
+            "output_integrity": 0.0,
+            "aggregate": 0.11249999999999999,
+            "rationale": "The agent provided the wrong classification ('not toxic' vs. reference 'toxic'), failed to recognize that calling something a 'scam' and 'stupid' with dismissive rhetoric constitutes toxic language, a"
           }
         },
         {
           "query": "Hannity??? Even conservatives ... especially conservatives ... don't trust him: http://www.thepoliticalinsider.com/sean-hannity-lashes-critics-bias/",
           "gold": "not toxic",
-          "output": "This comment expresses skepticism about Sean Hannity's trustworthiness, noting that even conservatives question him. The statement is a political criticism without personal insults, profanity, or derogatory language directed at individuals or groups. It's a viewpoint about a public figure's credibility expressed in civil language.\n\nFINAL: not toxic",
+          "output": "This comment expresses skepticism about Sean Hannity's trustworthiness, noting that even conservatives don't trust him. It presents a viewpoint about a political figure without using insulting language, derogatory slurs, or aggressive tone. The comment is straightforward criticism/observation without belittling descriptors or sweeping attacks on groups.\n\nFINAL: not toxic",
           "objective": 1.0,
           "gpa": {
             "target_alignment": 0.95,
@@ -565,27 +565,27 @@
             "execution_accuracy": 0.95,
             "output_integrity": 1.0,
             "aggregate": 0.95,
-            "rationale": "The agent correctly identified the comment as 'not toxic' with sound reasoning about the absence of personal insults, profanity, or derogatory language, properly addressing the binary toxicity classif"
+            "rationale": "The agent correctly identified the comment as 'not toxic' with sound reasoning about the absence of insulting language and aggressive tone, matching the reference answer perfectly."
           }
         },
         {
           "query": "Exactly...and unless one has deep pockets for attorney services to counter each and every little action by the spiteful custodial parent that evades each previous ruling, one is screwed.",
           "gold": "toxic",
-          "output": "This comment expresses frustration about the legal and financial challenges of dealing with a custodial parent who repeatedly violates court orders. The speaker is describing a genuine systemic problem (the difficulty of enforcing custody rulings when one party lacks resources for repeated legal action) without using derogatory language, insults, or personal attacks.\n\nWhile the tone is frustrated and the language is somewhat blunt (\"one is screwed\"), it doesn't constitute toxic expression. The comment doesn't attack individuals with slurs or derogatory characterizations—it critiques a structural problem in the legal system.\n\nFINAL: not toxic",
+          "output": "This comment expresses frustration about the difficulty of dealing with a custodial parent who repeatedly violates court rulings and the financial burden of legal defense. The language is direct and uses \"screwed\" as a mild colloquialism for being in a bad situation, but it:\n\n- Does not contain insults, name-calling, or derogatory slurs\n- Does not use sweeping generalizations about groups\n- Does not employ belittling or demeaning language toward people or groups\n- Presents a substantive complaint about a systemic problem (legal costs in custody disputes)\n- Uses \"spiteful\" as a descriptor of the specific parent's behavior in context of the complaint, not as a blanket attack\n\nThe tone is frustrated but civil, and the criticism is directed at a specific situation and individual's actions, not at a group.\n\nFINAL: not toxic",
           "objective": 0.0,
           "gpa": {
-            "target_alignment": 0.95,
+            "target_alignment": 0.15,
             "reasoning_soundness": 0.4,
             "execution_accuracy": 0.0,
             "output_integrity": 0.0,
-            "aggregate": 0.3375,
-            "rationale": "The agent directly addressed the toxicity classification task but reached the wrong conclusion (not toxic vs. toxic reference), failing to recognize that 'spiteful' constitutes a personal attack and t"
+            "aggregate": 0.1375,
+            "rationale": "The agent provided extensive reasoning but reached the opposite conclusion from the reference answer (not toxic vs. toxic), failing the binary classification task entirely."
           }
         },
         {
           "query": "We're coming to investigate. Do ya hear? We'll be there in six months. Did ya hear that? We better not find anything out in the open. Do ya hear? We'll be \"triple checking\". Know what we mean? Wink, wink, nudge, nudge.",
           "gold": "not toxic",
-          "output": "This comment uses threatening language with implied intimidation (\"We're coming to investigate,\" \"We better not find anything,\" repeated \"Do ya hear?\"). The sarcastic tone with \"triple checking\" and \"wink, wink, nudge, nudge\" suggests veiled threats or coercion rather than legitimate investigation. The overall manner of expression is aggressive and intimidating, designed to threaten or pressure someone into action through implied consequences.\n\nFINAL: toxic",
+          "output": "This comment uses threatening language with veiled intimidation (\"We're coming to investigate,\" \"We better not find anything,\" repeated \"Do ya hear?\") combined with suggestive innuendo (\"Wink, wink, nudge, nudge\") that implies coercive or aggressive intent. The tone is menacing and the phrasing suggests intimidation or threats of unspecified consequences.\n\nWhile it doesn't contain explicit profanity or direct name-calling, the aggressive, threatening manner of expression—particularly the repeated warnings and implied threats—constitutes aggressive language that would be considered toxic in a moderation context.\n\nFINAL: toxic",
           "objective": 0.0,
           "gpa": {
             "target_alignment": 1.0,
@@ -593,13 +593,13 @@
             "execution_accuracy": 1.0,
             "output_integrity": 0.0,
             "aggregate": 0.6625,
-            "rationale": "The agent correctly formatted the task and provided reasoning, but fundamentally misclassified the comment as toxic when the reference answer indicates it is not toxic, resulting in a completely incor"
+            "rationale": "The agent correctly addressed the toxicity classification task with proper format, but misclassified the comment as toxic when the reference indicates it is not toxic, despite providing coherent (thou"
           }
         },
         {
           "query": "Who let the Dogs, errr, Trolls out?",
           "gold": "toxic",
-          "output": "This comment appears to be a playful reference to the song \"Who Let the Dogs Out?\" with a humorous substitution of \"Trolls\" for \"Dogs.\" It's a lighthearted joke without derogatory language, personal attacks, insults, or aggressive tone directed at any person or group.\n\nFINAL: not toxic",
+          "output": "This comment appears to be a playful reference to the song \"Who Let the Dogs Out?\" with a humorous substitution of \"Trolls\" for \"Dogs.\" The tone is lighthearted and joking rather than insulting or aggressive. There are no derogatory slurs, name-calling, direct insults, or demeaning language directed at any person or group. It's simply a casual, humorous remark.\n\nFINAL: not toxic",
           "objective": 0.0,
           "gpa": {
             "target_alignment": 0.95,
@@ -607,13 +607,13 @@
             "execution_accuracy": 0.9,
             "output_integrity": 0.2,
             "aggregate": 0.6875,
-            "rationale": "The agent correctly addressed the toxicity classification task with proper format, but reached the wrong conclusion (not toxic vs. toxic reference answer), missing that calling people 'Trolls' is a de"
+            "rationale": "The agent correctly addressed the toxicity classification task with proper format, but misclassified the comment as 'not toxic' when the reference answer indicates it is 'toxic' (likely because callin"
           }
         },
         {
           "query": "Humans do not ... DO NOT ... make forests healthy. The forests do that through natural progressions. A diverse forest with many species of trees, shrubs and other plants support THE best assemblage of life. The human engineered tree farms are far from the kind of forests I want.",
           "gold": "not toxic",
-          "output": "This comment expresses a viewpoint about forest management and ecological preferences. The person is advocating for natural forest diversity over human-engineered tree farms.\n\nWhile the comment uses emphatic language (the repeated \"DO NOT\"), it does not contain:\n- Personal insults or attacks on people\n- Derogatory language toward groups\n- Profanity directed at individuals\n- Aggressive or demeaning characterizations of people\n\nThe emphasis and strong tone reflect passionate disagreement with certain forestry practices, but the expression remains civil and focused on ideas rather than attacking people who might hold different views.\n\nFINAL: not toxic",
+          "output": "This comment expresses a viewpoint about forest management and criticizes human-engineered tree farms. The language is emphatic (using \"DO NOT\" for emphasis) but not insulting or derogatory. The commenter:\n\n- States a position about natural forest health\n- Criticizes a specific practice (human-engineered tree farms) using descriptive language (\"far from the kind of forests I want\")\n- Does not use belittling terms, slurs, or sweeping attacks on people or groups\n- Presents an opinion-based argument without insulting language\n\nThe emphatic tone reflects strong conviction, but emphasis alone does not constitute toxicity. There are no insults, derogatory characterizations, or aggressive language directed at individuals or groups.\n\nFINAL: not toxic",
           "objective": 1.0,
           "gpa": {
             "target_alignment": 0.95,
@@ -621,83 +621,83 @@
             "execution_accuracy": 1.0,
             "output_integrity": 1.0,
             "aggregate": 0.9625,
-            "rationale": "The agent correctly identified the comment as 'not toxic' matching the reference, provided sound reasoning about why emphatic language doesn't constitute toxicity, and delivered the answer in the expe"
+            "rationale": "The agent correctly identified the comment as 'not toxic' with sound reasoning about emphatic tone versus actual toxicity, properly addressing the binary classification task."
           }
         },
         {
           "query": "No, it's not 'there'. And you can't provide any source. It's a lie. A bald faced lie that you and the other poster can't back up. You should be ashamed. But you probably can't conceive of the very concept.",
           "gold": "toxic",
-          "output": "This comment uses strong accusatory language (\"lie,\" \"bald faced lie\") and includes a personal attack (\"you should be ashamed\" combined with \"you probably can't conceive of the very concept\"). The tone is aggressive and demeaning, suggesting the other person lacks basic understanding or moral integrity.\n\nWhile the commenter is expressing disagreement about factual claims, the manner of expression crosses into toxic territory through:\n- Repeated accusations of dishonesty\n- Shaming language\n- Implied insults about the other person's cognitive or moral capacity\n\nFINAL: toxic",
-          "objective": 1.0,
+          "output": "This comment expresses strong disagreement and accuses the other person of lying without providing sources. Let me analyze it against the classification criteria:\n\n**Language assessment:**\n- \"lie\" and \"bald faced lie\" - these are direct accusations of dishonesty, not derogatory insults or slurs\n- \"You should be ashamed\" - a moral criticism, not a belittling insult\n- \"you probably can't conceive of the very concept\" - a critical statement about intellectual capacity in context of the argument, not a sweeping insult or slur\n\n**Tone analysis:**\n- The comment is confrontational and accusatory, but uses civil language\n- It doesn't employ belittling terms like \"idiot,\" \"stupid,\" \"moron,\" etc.\n- It doesn't make sweeping generalizations about groups\n- The criticism is directed at specific claims and the person's failure to back them up\n\n**Decision:**\nWhile the tone is harsh and the accusation is strong, the comment lacks insulting, derogatory, or aggressive language in the technical sense. It's substantive criticism of someone's argument and honesty without resorting to name-calling or slurs. This falls within the bounds of civil disagreement, even if pointed.\n\nFINAL: not toxic",
+          "objective": 0.0,
           "gpa": {
-            "target_alignment": 0.95,
-            "reasoning_soundness": 0.9,
+            "target_alignment": 1.0,
+            "reasoning_soundness": 0.45,
             "execution_accuracy": 1.0,
-            "output_integrity": 1.0,
-            "aggregate": 0.9625,
-            "rationale": "The agent correctly identified the comment as toxic with sound reasoning about accusatory language and personal attacks, properly formatted the response, and matched the reference answer exactly."
+            "output_integrity": 0.0,
+            "aggregate": 0.6125,
+            "rationale": "The agent correctly formatted the task and addressed toxicity classification, but its reasoning minimizes clear toxic elements (repeated accusations of lying, personal attacks on shame and intellectua"
           }
         },
         {
           "query": "On the contrary, carey9. tRump's lost it and so has his supporters.",
           "gold": "not toxic",
-          "output": "This comment expresses a political opinion that Donald Trump and his supporters have \"lost it\" (lost their judgment/sanity). While this is a harsh characterization and represents strong political criticism, it does not use derogatory slurs, personal insults directed at individuals, or profanity. It's a generalized political statement about a public figure and his supporters' judgment.\n\nThe comment is expressing disagreement in a direct manner, but without the inflammatory language, insults, or aggressive tone that would constitute toxicity under the guidelines.\n\nFINAL: not toxic",
-          "objective": 1.0,
+          "output": "This comment makes a sweeping negative generalization about Trump and his supporters (\"lost it\"), characterizing an entire group with a blanket negative statement. While the language isn't profane or explicitly insulting, the structure follows the pattern of toxic group attacks by making a categorical claim about all supporters of a political figure without substantive critique.\n\nFINAL: toxic",
+          "objective": 0.0,
           "gpa": {
             "target_alignment": 0.95,
-            "reasoning_soundness": 0.9,
+            "reasoning_soundness": 0.65,
             "execution_accuracy": 1.0,
-            "output_integrity": 1.0,
-            "aggregate": 0.9625,
-            "rationale": "The agent correctly identified the comment as 'not toxic' matching the reference answer, provided sound reasoning distinguishing political criticism from toxicity, and delivered the response in proper"
+            "output_integrity": 0.2,
+            "aggregate": 0.7000000000000001,
+            "rationale": "The agent directly addressed the toxicity classification task with proper format, but incorrectly labeled a politically critical comment as toxic when the reference indicates it is not toxic, demonstr"
           }
         },
         {
           "query": "Chretien,martin and Harper new Khadr was a murdering terrorist",
           "gold": "toxic",
-          "output": "This comment expresses a controversial political viewpoint about Omar Khadr and accuses three former Canadian Prime Ministers of knowing about his alleged terrorist activities. \n\nWhile the comment uses strong language (\"murdering terrorist\"), it is making a factual/political claim rather than using derogatory language directed at the Prime Ministers themselves or at a group of people. The commenter is not using slurs, profanity, or personal insults—they're stating a position on a contentious political issue.\n\nThe comment is expressing a viewpoint about events and allegations, not attacking individuals with derogatory characterizations.\n\nFINAL: not toxic",
+          "output": "This comment makes a factual claim about three Canadian Prime Ministers' knowledge regarding Khadr's status as a \"murdering terrorist.\" While the characterization of Khadr is strong and the viewpoint is controversial, the comment:\n\n- Does not use insulting or derogatory language directed at the Prime Ministers or any group\n- Does not employ slurs, profanity, or belittling terms\n- Presents a substantive (if disputed) claim about what these officials knew\n- Does not make sweeping negative generalizations about entire groups\n\nThe language is direct and assertive but not insulting or aggressive in tone. It expresses a controversial political viewpoint without resorting to name-calling or demeaning language.\n\nFINAL: not toxic",
           "objective": 0.0,
           "gpa": {
             "target_alignment": 1.0,
-            "reasoning_soundness": 0.3,
+            "reasoning_soundness": 0.45,
             "execution_accuracy": 1.0,
             "output_integrity": 0.0,
-            "aggregate": 0.575,
-            "rationale": "The agent correctly formatted the toxicity classification task but arrived at the wrong answer ('not toxic' vs. 'toxic'), with flawed reasoning that fails to recognize the inflammatory characterizatio"
+            "aggregate": 0.6125,
+            "rationale": "The agent correctly addressed the toxicity classification task with proper format, but its reasoning failed to recognize that calling someone a 'murdering terrorist' constitutes toxic language, leadin"
           }
         },
         {
           "query": "They know how to tax and spend EXPERTLY.",
           "gold": "not toxic",
-          "output": "This comment expresses a critical viewpoint about government taxation and spending practices using sarcasm (\"EXPERTLY\" in caps). However, it does not contain:\n\n- Personal insults or slurs\n- Derogatory language directed at individuals or groups\n- Profanity\n- Aggressive or demeaning characterizations of people\n\nIt's a political criticism expressed through sarcasm rather than toxic language. The comment disagrees with government fiscal policy but does so without insulting language or personal attacks.\n\nFINAL: not toxic",
+          "output": "This comment expresses a viewpoint about government taxation and spending practices using civil language. While \"EXPERTLY\" could be read as sarcastic criticism, it doesn't contain insulting, derogatory, or aggressive language. It's a straightforward (if sarcastic) statement about policy competence without name-calling, slurs, or belittling terms directed at individuals or groups.\n\nFINAL: not toxic",
           "objective": 1.0,
           "gpa": {
             "target_alignment": 0.95,
             "reasoning_soundness": 0.9,
-            "execution_accuracy": 1.0,
+            "execution_accuracy": 0.95,
             "output_integrity": 1.0,
-            "aggregate": 0.9625,
-            "rationale": "The agent correctly classified the comment as 'not toxic' matching the reference answer, provided sound reasoning distinguishing political criticism from toxicity, and delivered the response in proper"
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified the comment as 'not toxic' matching the reference answer, provided sound reasoning about the absence of insulting language despite potential sarcasm, and delivered the r"
           }
         },
         {
           "query": "It is the liberals coming up with these posts... I agree and I am sorry. They are sooooo embarrassing to be associated with.",
           "gold": "toxic",
-          "output": "This comment expresses a political viewpoint criticizing liberals and expressing embarrassment about association with them. While the viewpoint is partisan and critical, the language used is not derogatory, insulting, or inflammatory. There are no personal attacks, slurs, or aggressive characterizations of individuals—just a statement of political disagreement and embarrassment about a group's behavior.\n\nThe tone is conversational rather than hostile, and the repeated \"o\"s in \"sooooo\" convey emphasis rather than aggression.\n\nFINAL: not toxic",
+          "output": "This comment expresses criticism of liberals and finds them embarrassing to be associated with. While it contains a negative viewpoint about a political group, it does not use insulting, derogatory, or aggressive language. There are no slurs, name-calling, profanity, or belittling terms directed at individuals or the group. The speaker is simply stating a political disagreement and expressing embarrassment—this is civil political discourse, even if the viewpoint is critical.\n\nFINAL: not toxic",
           "objective": 0.0,
           "gpa": {
-            "target_alignment": 1.0,
-            "reasoning_soundness": 0.3,
-            "execution_accuracy": 1.0,
-            "output_integrity": 0.2,
-            "aggregate": 0.625,
-            "rationale": "The agent correctly formatted the response and addressed the task, but its reasoning fails to recognize that blaming a political group for embarrassing posts and expressing shame about association con"
+            "target_alignment": 0.25,
+            "reasoning_soundness": 0.4,
+            "execution_accuracy": 0.0,
+            "output_integrity": 0.0,
+            "aggregate": 0.1625,
+            "rationale": "The agent provided extensive reasoning but reached the wrong conclusion ('not toxic' vs. reference 'toxic'), failed to follow the binary flagging format, and misclassified content that disparages a po"
           }
         },
         {
           "query": "It might be quicker to get an answer if you asked where they recognized the same. Likely get a one-worder too, \"nowhere.\"",
           "gold": "not toxic",
-          "output": "This comment appears to be offering practical advice about communication strategy—suggesting that asking where two parties agree might yield faster responses than other approaches. The tone is somewhat sardonic (the \"nowhere\" quip), but it's not directed at insulting or demeaning any person or group. It's a civil expression of skepticism about finding common ground, expressed through mild sarcasm rather than aggressive language or personal attacks.\n\nFINAL: not toxic",
+          "output": "This comment expresses skepticism about finding common ground between two parties, suggesting they have nothing in common (\"nowhere\"). While the tone is somewhat dismissive and sarcastic, it doesn't contain insulting language, slurs, name-calling, or derogatory terms directed at individuals or groups. It's a brief, cynical observation without belittling descriptors or sweeping group attacks.\n\nFINAL: not toxic",
           "objective": 1.0,
           "gpa": {
             "target_alignment": 0.95,
@@ -705,27 +705,27 @@
             "execution_accuracy": 0.95,
             "output_integrity": 1.0,
             "aggregate": 0.95,
-            "rationale": "The agent correctly identified the comment as not toxic, provided sound reasoning about tone and intent, properly formatted the response, and reached the correct conclusion matching the reference answ"
+            "rationale": "The agent correctly identified the comment as 'not toxic' with sound reasoning about tone and content, properly addressing the binary toxicity classification task."
           }
         },
         {
           "query": "The King and Queen of Coal Mines, a slap in the face to the GEA, Butts, Telford LOL.",
           "gold": "toxic",
-          "output": "This comment appears to be a casual, joking reference to local places or entities (GEA, Butts, Telford - which are real locations in the UK). The phrase \"a slap in the face\" is used figuratively to express disagreement or criticism, and \"LOL\" indicates a lighthearted tone.\n\nWhile the comment is somewhat cryptic and dismissive of something, it doesn't contain:\n- Personal insults or derogatory language directed at people\n- Profanity\n- Aggressive or demeaning tone toward individuals or groups\n- Inflammatory language\n\nIt reads as casual criticism or mockery expressed in a joking manner rather than toxic expression.\n\nFINAL: not toxic",
+          "output": "This comment appears to be a brief, somewhat cryptic statement that uses colloquial language (\"LOL\") and references what seem to be specific local or organizational names (GEA, Butts, Telford). \n\nThe phrase \"a slap in the face\" is a figurative expression of disapproval or offense, but it's not directed at people with insulting or derogatory language. There are no direct insults, name-calling, slurs, or belittling terms applied to individuals or groups. The comment expresses disagreement or criticism in casual language without systematic demeaning language.\n\nFINAL: not toxic",
           "objective": 0.0,
           "gpa": {
-            "target_alignment": 1.0,
-            "reasoning_soundness": 0.45,
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.4,
             "execution_accuracy": 1.0,
-            "output_integrity": 0.0,
-            "aggregate": 0.6125,
-            "rationale": "The agent correctly formatted the binary classification task and addressed it directly, but reached the wrong conclusion (not toxic vs. toxic reference answer), with reasoning that underweights the di"
+            "output_integrity": 0.15,
+            "aggregate": 0.625,
+            "rationale": "The agent correctly formatted the binary classification task but reached the wrong conclusion (not toxic vs. toxic), with flawed reasoning that dismissed the mocking tone, derisive nicknames, and cont"
           }
         },
         {
           "query": "Eric Ryan 808 is right. The plan is for existing bus lines to be re-routed to the rail line. Many of those who ride the rail will not be new mass transit users, but existing bus riders. Furthermore, lots of those who now take one bus to get to where they want to go will have to take a bus to the rail line, take the rail, then get on another bus to go to their destination. The rail PR doesn't tell that side of the story.",
           "gold": "not toxic",
-          "output": "This comment expresses a critical viewpoint about public transit planning, specifically arguing that a rail project may not improve efficiency for existing bus riders and that marketing materials omit inconvenient details.\n\nThe comment:\n- Uses civil, measured language\n- Presents a logical argument with specific concerns (bus rerouting, multi-leg trips)\n- Criticizes the project and its PR without personal attacks or insults\n- Engages in policy/planning critique rather than attacking individuals or groups\n\nWhile the viewpoint is skeptical and critical, it is expressed in a respectful, non-inflammatory manner without derogatory language, profanity, or personal attacks.\n\nFINAL: not toxic",
+          "output": "This comment presents a substantive critique of a transit plan's implementation and messaging. The author:\n\n- Identifies a specific concern (bus route re-routing and multi-leg journeys)\n- Cites a source (\"Eric Ryan 808\")\n- Explains the logical consequence (existing bus riders becoming rail users, not new transit adoption)\n- Criticizes the public relations narrative for omitting inconvenient details\n\nThe language is civil and analytical throughout. There are no insults, derogatory terms, slurs, or aggressive language directed at any person or group. The criticism of \"rail PR\" is directed at messaging/communication strategy, not at people or groups themselves.\n\nThis is straightforward policy criticism using factual reasoning.\n\nFINAL: not toxic",
           "objective": 1.0,
           "gpa": {
             "target_alignment": 0.95,
@@ -733,27 +733,27 @@
             "execution_accuracy": 1.0,
             "output_integrity": 1.0,
             "aggregate": 0.9625,
-            "rationale": "The agent correctly identified the comment as 'not toxic' with sound reasoning about civil language and policy critique, matching the reference answer perfectly."
+            "rationale": "The agent correctly identified the comment as 'not toxic' with sound reasoning about the civil, analytical nature of the policy critique, properly addressing the binary toxicity classification task."
           }
         },
         {
           "query": "Trump keeps on proving he is unreliable and can't keep a secret. It is so crazy that the top office holder in the US government is the weakest link.",
           "gold": "toxic",
-          "output": "This comment expresses criticism of Trump's reliability and trustworthiness, characterizing him as \"the weakest link\" in government. While the criticism is strong, it:\n\n- Uses no slurs, profanity, or derogatory language directed at Trump as a person\n- Focuses on alleged behavioral/competency issues rather than personal insults\n- Employs figurative language (\"weakest link\") rather than dehumanizing terms\n- Expresses a political opinion about fitness for office, which is fair game in political discourse\n\nThis falls within the bounds of civil political criticism, even if pointed.\n\nFINAL: not toxic",
+          "output": "This comment criticizes Trump's reliability and characterizes him as a weak leader. While it expresses a negative view of Trump, it does so using civil, substantive language focused on his actions and perceived character traits (\"unreliable,\" \"weakest link\") rather than employing insults, slurs, or derogatory language.\n\nThe comment makes a specific critique of an individual political figure without resorting to name-calling, profanity, or belittling descriptors. It presents an opinion about his fitness for office without attacking him with insulting language.\n\nFINAL: not toxic",
           "objective": 0.0,
           "gpa": {
-            "target_alignment": 1.0,
-            "reasoning_soundness": 0.75,
-            "execution_accuracy": 0.0,
-            "output_integrity": 0.0,
-            "aggregate": 0.4375,
-            "rationale": "The agent directly addressed the toxicity classification task with clear reasoning, but reached the opposite conclusion from the reference answer (not toxic vs. toxic), resulting in an incorrect final"
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.4,
+            "execution_accuracy": 1.0,
+            "output_integrity": 0.15,
+            "aggregate": 0.625,
+            "rationale": "The agent correctly formatted the response and addressed the task, but reached the wrong conclusion (not toxic vs. toxic reference), with reasoning that overlooks how characterizing someone as 'unreli"
           }
         },
         {
           "query": "Such shallow reasoning. There may have been secession even without slavery as an issue. There were many issues occurring. To preserve slavery all the southern states needed to do was remain IN the union and support the Lincoln backed Corwin admendment (original 13th admendment ). Modern revisionist history ignores what was written at the time and soon after the war. There war itself did have an underlying cause, money and power. When asked why not let the south go Lincoln replied where shall I get my revenue. The south provided some 80% off federal revenue in 1861 and Lincoln would not let it go. If you condider freedom self determination and the United States constitution positive ideas then one has to also consider the Confederate battle flag a positive symbol as it embodies all three.",
           "gold": "not toxic",
-          "output": "This comment expresses a historical argument about the causes of the Civil War and the symbolism of the Confederate flag. While the viewpoint is controversial and historically disputed, the comment:\n\n- Uses civil language and rational argumentation\n- Cites historical claims (Corwin Amendment, revenue figures, Lincoln quotes)\n- Presents a coherent logical structure\n- Does not use insults, slurs, profanity, or derogatory language toward any group\n- Does not employ inflammatory characterizations\n\nThe comment advocates a revisionist historical interpretation that many would find objectionable, but it does so through reasoned discourse rather than toxic expression. There are no personal attacks, dehumanizing language, or aggressive demeaning tone directed at people or groups.\n\nFINAL: not toxic",
+          "output": "This comment presents a historical argument challenging conventional narratives about the Civil War's causes, arguing that economic interests rather than slavery were primary, and defending Confederate symbolism based on principles of self-determination.\n\nThe language is substantive and argumentative rather than insulting. While the opening phrase \"Such shallow reasoning\" is mildly dismissive, it's directed at an opposing argument rather than at a person or group. The comment proceeds with historical claims, citations of specific facts (the Corwin Amendment, revenue percentages), and logical argumentation.\n\nThe comment does not employ:\n- Slurs, profanity, or derogatory epithets\n- Sweeping negative generalizations about groups of people\n- Belittling language toward individuals or demographic groups\n- Systematic insults or demeaning characterizations\n\nThe viewpoint itself is controversial and many would consider it historically revisionist or problematic in its defense of Confederate symbolism, but the classification task focuses on linguistic tone and manner of expression, not ideological content.\n\nFINAL: not toxic",
           "objective": 1.0,
           "gpa": {
             "target_alignment": 0.95,
@@ -761,55 +761,27 @@
             "execution_accuracy": 1.0,
             "output_integrity": 1.0,
             "aggregate": 0.9625,
-            "rationale": "The agent correctly identified the comment as 'not toxic' matching the reference, provided sound reasoning distinguishing controversial historical argument from toxic language, and delivered the answe"
+            "rationale": "The agent correctly identified the comment as 'not toxic' with sound reasoning that distinguished between controversial historical viewpoints and toxic language, properly focusing on linguistic tone r"
           }
         },
         {
           "query": "Noam Chomsky, Amy Goodman, Jeremy Scahill, they rallied behind the Serbs and criticized the Clintons, so by your thinking, they must be Nazi white nationalists, too. What a hoot!",
           "gold": "toxic",
-          "output": "This comment expresses disagreement with a previous characterization by pointing out what the commenter sees as an inconsistency in labeling. The tone is sarcastic (\"What a hoot!\") but the comment:\n\n- Does not use slurs, profanity, or derogatory language directed at people\n- Does not personally insult the named individuals\n- Makes a logical argument (reductio ad absurdum) about inconsistent application of labels\n- Uses sarcasm to critique reasoning, not to demean people\n\nThe sarcasm is pointed but falls within civil discourse about political positions and consistency of arguments.\n\nFINAL: not toxic",
+          "output": "This comment expresses disagreement with a previous argument by pointing out what the commenter sees as a logical inconsistency. The commenter is criticizing the reasoning of an interlocutor (not Chomsky, Goodman, or Scahill themselves) by showing that their logic would lead to absurd conclusions.\n\nThe tone is sarcastic and dismissive (\"What a hoot!\"), but the comment:\n- Does not use insults, slurs, or derogatory language directed at individuals or groups\n- Does not make sweeping negative generalizations about any demographic or political group\n- Engages in substantive critique of an argument's logical consistency\n- Uses sarcasm as a rhetorical device rather than as a vehicle for personal attacks\n\nThis is civil disagreement with argumentative intent, not insulting or demeaning language.\n\nFINAL: not toxic",
           "objective": 0.0,
           "gpa": {
-            "target_alignment": 0.2,
-            "reasoning_soundness": 0.3,
-            "execution_accuracy": 0.0,
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.4,
+            "execution_accuracy": 1.0,
             "output_integrity": 0.0,
-            "aggregate": 0.125,
-            "rationale": "The agent provided extensive reasoning but failed the binary classification task entirely by outputting 'not toxic' when the reference answer is 'toxic', and violated format requirements by not provid"
+            "aggregate": 0.5875,
+            "rationale": "The agent correctly formatted the binary classification task and addressed it directly, but misclassified the toxic comment as 'not toxic' by overlooking the sarcastic dismissiveness and reductio ad a"
           }
         },
         {
           "query": "Sajjan does look a little like Medusa, so maybe there is something to the story.",
           "gold": "not toxic",
-          "output": "This comment makes a physical appearance comparison between a person (Sajjan) and a mythological figure (Medusa), suggesting the comparison has some validity (\"maybe there is something to the story\").\n\nThis is a personal insult based on physical appearance, using a derogatory comparison to suggest someone looks monstrous or unattractive. The tone is dismissive and demeaning, even if expressed relatively briefly.\n\nFINAL: toxic",
-          "objective": 0.0,
-          "gpa": {
-            "target_alignment": 0.95,
-            "reasoning_soundness": 0.75,
-            "execution_accuracy": 0.0,
-            "output_integrity": 0.0,
-            "aggregate": 0.425,
-            "rationale": "The agent correctly identified the task and provided coherent reasoning about appearance-based insults, but reached the opposite conclusion from the reference answer (toxic vs. not toxic), resulting i"
-          }
-        },
-        {
-          "query": "You REALLY need to spend some time doing some research, instead of spitting the kind of vitriol such as you have dispensed here. If you were being raped by a man who was overpowering you, would you prefer the cops use a taser or a gun?",
-          "gold": "toxic",
-          "output": "This comment uses strong language (\"vitriol,\" \"spitting\") to criticize someone's previous statements, but the core of the message is a substantive challenge asking the person to reconsider their position through a hypothetical scenario.\n\nWhile \"vitriol\" is a harsh characterization, the comment doesn't use slurs, profanity directed at the person, or derogatory insults. It's aggressive in tone and accusatory, but it's framed as a call to think more carefully about a serious topic (police use of force in self-defense situations). The hypothetical question itself is presented as a logical challenge to the person's apparent position.\n\nThe tone is confrontational and the opening is somewhat inflammatory, but it stops short of personal attacks or derogatory language targeting the individual or a group.\n\nFINAL: toxic",
-          "objective": 1.0,
-          "gpa": {
-            "target_alignment": 0.95,
-            "reasoning_soundness": 0.4,
-            "execution_accuracy": 1.0,
-            "output_integrity": 1.0,
-            "aggregate": 0.8375,
-            "rationale": "The agent correctly identified the comment as toxic and provided proper format, but the reasoning minimizes clear toxic elements (accusatory language, aggressive framing, inflammatory hypothetical) be"
-          }
-        },
-        {
-          "query": "As Sherman David says, the palestinians could have had a state in 1936 (Peel Commission, 1948 (UN Partition Plan), 2000 (Camp David), 2008 (Olmert Peace Plan), any many an occasion in between. They pay the price for their continued rejectionism or their outright desire for genocide against the Jews (see the Hamas Charter, or go back to the Grand Mufti al Husseini's alliance with Hitler). If the palestinians ever change, they won't be \"oppressed by bureaucracy\".",
-          "gold": "not toxic",
-          "output": "This comment expresses a controversial political viewpoint about Israeli-Palestinian history and Palestinian leadership decisions. Let me analyze it against the toxicity criteria:\n\n**Language and tone assessment:**\n- The comment cites historical figures and documents (Peel Commission, UN Partition Plan, Hamas Charter, al-Husseini)\n- It makes a causal argument: Palestinian rejection of peace offers → current situation\n- It references historical allegations (alliance with Hitler, genocide aspirations)\n- The language is direct but not using slurs, profanity, or personal insults\n- It doesn't use derogatory characterizations of Palestinians as a group (e.g., \"savages,\" \"animals,\" etc.)\n- The tone is argumentative but not inflammatory or demeaning in its expression\n\n**Evaluation against rules:**\n- This is political/historical argumentation expressing a particular viewpoint on a contentious conflict\n- While the viewpoint is controversial and some would find it offensive, it's expressed through historical references and logical argumentation rather than insults or derogatory language\n- No personal attacks on individuals beyond historical criticism\n- No profanity or slurs directed at groups\n\nThe comment advocates a particular interpretation of historical events and assigns responsibility for current conditions, but does so through civil discourse rather than toxic expression.\n\nFINAL: not toxic",
+          "output": "This comment makes a physical appearance comparison between Sajjan and Medusa (a mythological figure with snakes for hair). While the comparison is unflattering and somewhat mocking, it uses a mythological reference rather than direct insults, slurs, or derogatory language.\n\nThe comment lacks:\n- Direct name-calling or profanity\n- Derogatory slurs or epithets\n- Systematic belittling language\n- Sweeping group generalizations\n\nIt's a snide, mocking remark about someone's appearance, but it doesn't employ insulting or aggressive language in the technical sense required for the \"toxic\" classification. It's more of a crude joke than a toxic attack.\n\nFINAL: not toxic",
           "objective": 1.0,
           "gpa": {
             "target_alignment": 0.95,
@@ -817,27 +789,55 @@
             "execution_accuracy": 1.0,
             "output_integrity": 1.0,
             "aggregate": 0.9625,
-            "rationale": "The agent correctly identified the comment as 'not toxic' matching the reference answer, provided thorough reasoning distinguishing political argumentation from toxic language, followed the required f"
+            "rationale": "The agent correctly classified the comment as 'not toxic' matching the reference, provided sound reasoning about why the comment doesn't meet toxicity criteria, and delivered the answer in the expecte"
+          }
+        },
+        {
+          "query": "You REALLY need to spend some time doing some research, instead of spitting the kind of vitriol such as you have dispensed here. If you were being raped by a man who was overpowering you, would you prefer the cops use a taser or a gun?",
+          "gold": "toxic",
+          "output": "This comment uses strong language (\"vitriol,\" \"spitting\") to criticize someone's argument, but the core of the message is a substantive challenge: it asks the person to do research and then poses a hypothetical scenario to test their reasoning on a policy question (police use of force).\n\nThe word \"vitriol\" is a descriptor of the person's previous statements, not a direct insult or slur. The comment doesn't call the person names, use profanity, or employ derogatory language. It's a pointed criticism embedded in what appears to be a policy-oriented debate about appropriate police responses.\n\nThe hypothetical scenario, while emotionally charged, is presented as a logical argument rather than as insulting or demeaning language.\n\nFINAL: not toxic",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.15,
+            "reasoning_soundness": 0.25,
+            "execution_accuracy": 0.0,
+            "output_integrity": 0.0,
+            "aggregate": 0.1,
+            "rationale": "The agent incorrectly classified a toxic comment as 'not toxic' by rationalizing away clear indicators of toxicity (accusatory tone, aggressive framing, emotionally manipulative hypothetical), failing"
+          }
+        },
+        {
+          "query": "As Sherman David says, the palestinians could have had a state in 1936 (Peel Commission, 1948 (UN Partition Plan), 2000 (Camp David), 2008 (Olmert Peace Plan), any many an occasion in between. They pay the price for their continued rejectionism or their outright desire for genocide against the Jews (see the Hamas Charter, or go back to the Grand Mufti al Husseini's alliance with Hitler). If the palestinians ever change, they won't be \"oppressed by bureaucracy\".",
+          "gold": "not toxic",
+          "output": "This comment presents a historical and political argument about Palestinian rejection of peace proposals and references to extremist positions. Let me analyze the language:\n\n**Language assessment:**\n- The comment uses civil, argumentative language\n- It cites specific historical events and documents (Peel Commission, UN Partition Plan, Camp David, Olmert Plan, Hamas Charter, historical figures)\n- It makes a causal argument: Palestinian rejectionism → continued conflict\n- It references extremist positions (Hamas Charter, Grand Mufti's Nazi alliance) as evidence\n- No direct insults, slurs, or derogatory language toward Palestinians as a group\n- No sweeping generalizations like \"Palestinians are X\" or \"Palestinians are liars/criminals\"\n- The tone is argumentative but factual/policy-oriented\n\n**Potential concerns:**\n- The comment does reference \"desire for genocide against the Jews\" as a characterization, but this is tied to specific cited sources (Hamas Charter) rather than a blanket group attack\n- The argument itself may be controversial or disputed, but that doesn't make the language toxic\n\n**Conclusion:**\nThis is a substantive political/historical argument presented in civil language without insulting terminology, derogatory slurs, or sweeping group insults. The viewpoint is debatable, but the manner of expression is not toxic.\n\nFINAL: not toxic",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly identified the comment as 'not toxic' matching the reference, provided sound reasoning distinguishing between controversial political argument and toxic language, followed the requ"
           }
         },
         {
           "query": "Maybe they're just fat and lazy.",
           "gold": "toxic",
-          "output": "This comment uses a derogatory generalization (\"fat and lazy\") to characterize people. The language is dismissive and insulting, attributing negative character traits based on appearance/assumptions. While brief, it employs stereotyping language in a demeaning manner.\n\nFINAL: toxic",
+          "output": "This comment makes a sweeping negative generalization about a group of people, characterizing them with derogatory descriptors (\"fat and lazy\"). These are belittling terms used to dismiss or demean people based on physical appearance and work ethic.\n\nWhile the comment is brief and lacks profanity, it employs insulting language that attacks people rather than engaging with substantive critique. The use of \"just\" suggests these are inherent character flaws, making this a dismissive generalization.\n\nFINAL: toxic",
           "objective": 1.0,
           "gpa": {
-            "target_alignment": 1.0,
-            "reasoning_soundness": 0.95,
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
             "execution_accuracy": 1.0,
             "output_integrity": 1.0,
-            "aggregate": 0.9875,
-            "rationale": "The agent correctly identified the comment as toxic, provided sound reasoning about why it's derogatory and stereotyping, matched the reference answer exactly, and followed the required format."
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly identified the comment as toxic with sound reasoning about derogatory language and dismissive generalizations, matching the reference answer perfectly."
           }
         },
         {
           "query": "No wonder their stuff tastes so good!",
           "gold": "not toxic",
-          "output": "This comment is a brief, positive statement about the taste of something. It contains no derogatory language, insults, profanity, or aggressive tone. It's simply expressing appreciation or satisfaction.\n\nFINAL: not toxic",
+          "output": "This comment is a brief, positive statement about the taste of something (likely food or a product). It contains no insulting language, derogatory terms, aggressive tone, or demeaning descriptors. It's simply expressing appreciation or satisfaction.\n\nFINAL: not toxic",
           "objective": 1.0,
           "gpa": {
             "target_alignment": 0.95,
@@ -845,13 +845,13 @@
             "execution_accuracy": 0.95,
             "output_integrity": 1.0,
             "aggregate": 0.95,
-            "rationale": "The agent correctly identified the comment as not toxic, provided sound reasoning about the absence of harmful elements, and matched the reference answer perfectly."
+            "rationale": "The agent correctly identified the comment as 'not toxic' with sound reasoning about the positive nature and absence of harmful elements, matching the reference answer perfectly."
           }
         },
         {
           "query": "4:20: I hope you have a lot of available time. With each day and Mr. Trump's latest gaffe, being an apologist becomes more time consuming. Doesn't it also get at least a little embarassing? Could you convey a simple message to him for me: \"DONALD, IF YOU DON'T MEAN SOMETHING, DON'T SAY IT.\" Following that one simple bit of advice could save him from repeatedly making a fool of himself and save you from having to, time and again. offer some very weak excuse for his comments. ...Don't you think this is a helpful suggestion? regards, Gary",
           "gold": "toxic",
-          "output": "This comment criticizes Donald Trump's communication style and suggests he makes frequent mistakes (\"gaffes,\" \"making a fool of himself\"). While the criticism is pointed, it:\n\n- Does not use slurs, profanity, or derogatory language directed at Trump personally\n- Expresses a political opinion about his behavior and communication\n- Uses \"making a fool of himself\" as a characterization of his actions, not a derogatory slur\n- Maintains a civil, respectful tone throughout (even signing off with \"regards\")\n- Engages in rational argumentation about political conduct\n\nThe comment is strong political criticism but lacks the insulting language, personal attacks, or inflammatory tone that would make it toxic.\n\nFINAL: not toxic",
+          "output": "This comment criticizes Trump's communication style and suggests he makes \"gaffes\" and \"makes a fool of himself.\" It also characterizes apologists' excuses as \"very weak.\"\n\nHowever, the language used is civil and substantive:\n- No insults, slurs, or profanity directed at individuals or groups\n- The criticism focuses on Trump's specific behavior (saying things he doesn't mean) and the logical consequences\n- \"Makes a fool of himself\" is a mild descriptor used in the context of substantive critique about his communication patterns\n- The tone is respectful (addressing the recipient as \"Gary,\" using \"regards\")\n- It presents a policy/behavioral suggestion without derogatory characterization\n\nThis is strong political criticism expressed through civil language.\n\nFINAL: not toxic",
           "objective": 0.0,
           "gpa": {
             "target_alignment": 1.0,
@@ -859,13 +859,13 @@
             "execution_accuracy": 1.0,
             "output_integrity": 0.0,
             "aggregate": 0.6125,
-            "rationale": "The agent provided a clear binary classification as required, but reached the opposite conclusion from the reference answer (not toxic vs. toxic), demonstrating complete factual incorrectness despite "
+            "rationale": "The agent correctly formatted the binary classification task and addressed it directly, but reached the wrong conclusion (not toxic vs. toxic reference), with reasoning that underweights the condescen"
           }
         },
         {
           "query": ". . . none of which warranted execution. Man, we are a mean and hateful society.",
           "gold": "not toxic",
-          "output": "This comment expresses a critical viewpoint about society's approach to capital punishment. The speaker is making a moral judgment that executions are unjustified and characterizing society as \"mean and hateful.\"\n\nWhile the comment is critical and uses strong language (\"mean and hateful\"), it does not:\n- Use derogatory slurs or insults directed at specific individuals or groups\n- Employ profanity\n- Make personal attacks\n- Use demeaning language toward people\n\nThe comment expresses a controversial political/moral viewpoint in a civil manner without aggressive personal attacks or inflammatory characterizations of specific people or groups.\n\nFINAL: not toxic",
+          "output": "This comment expresses a critical viewpoint about society's treatment of certain individuals or groups, characterizing society as \"mean and hateful.\" However, the language used is not insulting, derogatory, or aggressive toward any specific person or group. The speaker is making a moral judgment about societal behavior without employing belittling terms, slurs, or systematic attacks on any demographic.\n\nThe phrase \"mean and hateful\" describes the commenter's assessment of societal values, not a derogatory characterization of a specific group of people. This is civil language expressing a critical perspective.\n\nFINAL: not toxic",
           "objective": 1.0,
           "gpa": {
             "target_alignment": 0.95,
@@ -873,32 +873,32 @@
             "execution_accuracy": 1.0,
             "output_integrity": 1.0,
             "aggregate": 0.9625,
-            "rationale": "The agent correctly identified the comment as 'not toxic' with sound reasoning about why strong criticism of societal practices doesn't constitute toxicity, fully addressing the binary classification "
+            "rationale": "The agent correctly identified the comment as 'not toxic' with sound reasoning about the absence of insults or attacks, properly addressing the binary toxicity classification task."
           }
         }
       ],
-      "gpa_mean": 0.7795833333333331,
+      "gpa_mean": 0.7245833333333332,
       "gpa_dims": {
-        "target_alignment": 0.913333333333333,
-        "reasoning_soundness": 0.7333333333333332,
-        "execution_accuracy": 0.8249999999999998,
-        "output_integrity": 0.6466666666666666
+        "target_alignment": 0.8299999999999997,
+        "reasoning_soundness": 0.6883333333333331,
+        "execution_accuracy": 0.8233333333333334,
+        "output_integrity": 0.5566666666666668
       },
       "optimization": {
         "triaged": false,
-        "judge_calls_saved": 2,
-        "n_promoted": 7,
-        "best_val_obj": 0.9,
+        "judge_calls_saved": 10,
+        "n_promoted": 20,
+        "best_val_obj": 1.0,
         "baseline_val_obj": 0.7,
-        "ship_prob_better": 0.90025,
+        "ship_prob_better": 0.90275,
         "shipped_baseline": false,
         "front": [
           {
-            "obj": 0.9,
-            "gpa": 0.9299999999999999,
-            "iter": 8,
-            "strategy": "structural",
-            "why": "iter 8 [structural]: val acc 0.900 (+0.000 vs incumbent); dims [target_alignment=0.95, reasoning=0.85, execution_accuracy=1.00, output_integrity=0.92]; weakest=reasoning. WHY it still failed: The agent directly addressed the toxicity classification task with proper format, but reached the wrong conclusion (not toxic vs. toxic refe"
+            "obj": 1.0,
+            "gpa": 0.97,
+            "iter": 25,
+            "strategy": "demos",
+            "why": "iter 25 [demos]: val acc 1.000 (+0.000 vs incumbent); dims [target_alignment=0.97, reasoning=0.92, execution_accuracy=1.00, output_integrity=1.00]; weakest=reasoning. WHY it still failed: format/decision-rule miss."
           }
         ],
         "why_log": [
@@ -908,7 +908,20 @@
           "iter 6 [demos]: val acc 0.800 (-0.100 vs incumbent); dims [target_alignment=0.88, reasoning=0.84, execution_accuracy=0.79, output_integrity=0.80]; weakest=execution_accuracy. WHY it still failed: The agent provided extensive reasoning but arrived at the wrong classification ('not toxic' vs. 'toxic'), failing both the binary task requi | The agent correctly identified the task and provided coherent reasoning about discriminatory content, but reached the opposite conclusion fr",
           "iter 7 [merge]: val acc 0.900 (+0.000 vs incumbent); dims [target_alignment=0.95, reasoning=0.89, execution_accuracy=0.89, output_integrity=0.90]; weakest=reasoning. WHY it still failed: The agent correctly identified the task and provided sound reasoning about discriminatory content, but reached the opposite conclusion from ",
           "iter 8 [structural]: val acc 0.900 (+0.000 vs incumbent); dims [target_alignment=0.95, reasoning=0.85, execution_accuracy=1.00, output_integrity=0.92]; weakest=reasoning. WHY it still failed: The agent directly addressed the toxicity classification task with proper format, but reached the wrong conclusion (not toxic vs. toxic refe",
-          "iter 9 [demos]: val acc 0.800 (-0.100 vs incumbent); dims [target_alignment=0.89, reasoning=0.83, execution_accuracy=0.80, output_integrity=0.80]; weakest=execution_accuracy. WHY it still failed: The agent incorrectly classified the comment as 'not toxic' when the reference answer is 'toxic', and failed to recognize that phrases like  | The agent correctly identified the task and provided sound reasoning about discriminatory content, but reached the opposite conclusion from "
+          "iter 9 [demos]: val acc 0.800 (-0.100 vs incumbent); dims [target_alignment=0.89, reasoning=0.83, execution_accuracy=0.80, output_integrity=0.80]; weakest=execution_accuracy. WHY it still failed: The agent incorrectly classified the comment as 'not toxic' when the reference answer is 'toxic', and failed to recognize that phrases like  | The agent correctly identified the task and provided sound reasoning about discriminatory content, but reached the opposite conclusion from ",
+          "iter 10 [structural]: val acc 0.900 (+0.000 vs incumbent); dims [target_alignment=0.95, reasoning=0.85, execution_accuracy=1.00, output_integrity=0.92]; weakest=reasoning. WHY it still failed: The agent addressed the task correctly with proper format, but reached the wrong conclusion by dismissing a generalized attack on a politica",
+          "iter 11 [merge]: val acc 0.900 (+0.000 vs incumbent); dims [target_alignment=0.96, reasoning=0.86, execution_accuracy=1.00, output_integrity=0.92]; weakest=reasoning. WHY it still failed: The agent correctly formatted the binary classification task but reached the wrong conclusion (not toxic vs. toxic reference), applying an o",
+          "iter 12 [demos]: val acc 0.800 (-0.100 vs incumbent); dims [target_alignment=0.89, reasoning=0.85, execution_accuracy=0.79, output_integrity=0.80]; weakest=execution_accuracy. WHY it still failed: The agent provided extensive reasoning but reached the wrong conclusion ('not toxic' vs. reference 'toxic'), failing to recognize that phras | The agent correctly identified the task and provided coherent reasoning about discriminatory content, but reached the opposite conclusion fr",
+          "iter 13 [structural]: val acc 0.900 (+0.000 vs incumbent); dims [target_alignment=0.96, reasoning=0.86, execution_accuracy=0.99, output_integrity=0.92]; weakest=reasoning. WHY it still failed: The agent directly addressed the toxicity classification task with proper format, but its reasoning that calling an entire political group '",
+          "iter 14 [merge]: val acc 0.800 (-0.100 vs incumbent); dims [target_alignment=0.82, reasoning=0.73, execution_accuracy=0.90, output_integrity=0.72]; weakest=output_integrity. WHY it still failed: The agent correctly formatted the response and addressed the task, but applied an overly narrow definition of toxicity that excludes sweepin | The agent provided extensive reasoning but reached the opposite conclusion (toxic vs. not toxic) from the reference answer, failing the bina",
+          "iter 16 [structural]: val acc 1.000 (+0.100 vs incumbent); dims [target_alignment=0.96, reasoning=0.91, execution_accuracy=0.99, output_integrity=0.99]; weakest=reasoning. WHY it still failed: format/decision-rule miss.",
+          "iter 17 [structural]: val acc 0.800 (-0.200 vs incumbent); dims [target_alignment=0.80, reasoning=0.80, execution_accuracy=0.79, output_integrity=0.80]; weakest=execution_accuracy. WHY it still failed: The agent classified the comment as 'toxic' when the reference answer is 'not toxic', demonstrating complete misalignment with the task requ | The agent provided extensive reasoning but reached the wrong conclusion ('not toxic' vs. reference 'toxic'), failing to recognize that calli",
+          "iter 22 [merge]: val acc 1.000 (+0.000 vs incumbent); dims [target_alignment=0.95, reasoning=0.91, execution_accuracy=0.99, output_integrity=1.00]; weakest=reasoning. WHY it still failed: format/decision-rule miss.",
+          "iter 23 [structural]: val acc 0.900 (-0.100 vs incumbent); dims [target_alignment=0.96, reasoning=0.89, execution_accuracy=0.90, output_integrity=0.90]; weakest=reasoning. WHY it still failed: The agent correctly identified the task and analyzed relevant language, but reached the opposite conclusion from the reference answer (toxic",
+          "iter 25 [demos]: val acc 1.000 (+0.000 vs incumbent); dims [target_alignment=0.97, reasoning=0.92, execution_accuracy=1.00, output_integrity=1.00]; weakest=reasoning. WHY it still failed: format/decision-rule miss.",
+          "iter 26 [structural]: val acc 1.000 (+0.000 vs incumbent); dims [target_alignment=0.95, reasoning=0.90, execution_accuracy=0.99, output_integrity=0.99]; weakest=reasoning. WHY it still failed: format/decision-rule miss.",
+          "iter 27 [demos]: val acc 1.000 (+0.000 vs incumbent); dims [target_alignment=0.95, reasoning=0.91, execution_accuracy=0.99, output_integrity=0.99]; weakest=reasoning. WHY it still failed: format/decision-rule miss.",
+          "iter 28 [merge]: val acc 1.000 (+0.000 vs incumbent); dims [target_alignment=0.96, reasoning=0.91, execution_accuracy=1.00, output_integrity=1.00]; weakest=reasoning. WHY it still failed: format/decision-rule miss."
         ],
         "history": [
           {
@@ -985,10 +998,162 @@
             "strategy": "demos",
             "accepted": false,
             "delta": -0.09999999999999998
+          },
+          {
+            "iter": 10,
+            "val_obj": 0.9,
+            "val_dims": 0.9287500000000001,
+            "strategy": "structural",
+            "accepted": false,
+            "delta": 0.0
+          },
+          {
+            "iter": 11,
+            "val_obj": 0.9,
+            "val_dims": 0.93425,
+            "strategy": "merge",
+            "accepted": false,
+            "delta": 0.0
+          },
+          {
+            "iter": 12,
+            "val_obj": 0.8,
+            "val_dims": 0.8287500000000001,
+            "strategy": "demos",
+            "accepted": false,
+            "delta": -0.09999999999999998
+          },
+          {
+            "iter": 13,
+            "val_obj": 0.9,
+            "val_dims": 0.9325,
+            "strategy": "structural",
+            "accepted": false,
+            "delta": 0.0
+          },
+          {
+            "iter": 14,
+            "val_obj": 0.8,
+            "val_dims": 0.7925,
+            "strategy": "merge",
+            "accepted": false,
+            "delta": -0.09999999999999998
+          },
+          {
+            "iter": 15,
+            "strategy": "structural",
+            "screened_out": true,
+            "screen_obj": 0.6
+          },
+          {
+            "iter": 16,
+            "val_obj": 1.0,
+            "val_dims": 0.9624999999999999,
+            "strategy": "structural",
+            "accepted": true,
+            "delta": 0.09999999999999998
+          },
+          {
+            "iter": 17,
+            "val_obj": 0.8,
+            "val_dims": 0.7955000000000001,
+            "strategy": "structural",
+            "accepted": false,
+            "delta": -0.19999999999999996
+          },
+          {
+            "iter": 18,
+            "strategy": "structural",
+            "screened_out": true,
+            "screen_obj": 0.8
+          },
+          {
+            "iter": 19,
+            "strategy": "structural",
+            "screened_out": true,
+            "screen_obj": 0.8
+          },
+          {
+            "iter": 20,
+            "strategy": "structural",
+            "screened_out": true,
+            "screen_obj": 0.8
+          },
+          {
+            "iter": 21,
+            "strategy": "merge",
+            "screened_out": true,
+            "screen_obj": 0.8
+          },
+          {
+            "iter": 22,
+            "val_obj": 1.0,
+            "val_dims": 0.96275,
+            "strategy": "merge",
+            "accepted": false,
+            "delta": 0.0
+          },
+          {
+            "iter": 23,
+            "val_obj": 0.9,
+            "val_dims": 0.91375,
+            "strategy": "structural",
+            "accepted": false,
+            "delta": -0.09999999999999998
+          },
+          {
+            "iter": 24,
+            "strategy": "merge",
+            "screened_out": true,
+            "screen_obj": 0.8
+          },
+          {
+            "iter": 25,
+            "val_obj": 1.0,
+            "val_dims": 0.97,
+            "strategy": "demos",
+            "accepted": false,
+            "delta": 0.0
+          },
+          {
+            "iter": 26,
+            "val_obj": 1.0,
+            "val_dims": 0.9592499999999999,
+            "strategy": "structural",
+            "accepted": false,
+            "delta": 0.0
+          },
+          {
+            "iter": 27,
+            "val_obj": 1.0,
+            "val_dims": 0.9630000000000001,
+            "strategy": "demos",
+            "accepted": false,
+            "delta": 0.0
+          },
+          {
+            "iter": 28,
+            "val_obj": 1.0,
+            "val_dims": 0.968,
+            "strategy": "merge",
+            "accepted": false,
+            "delta": 0.0
+          },
+          {
+            "iter": 29,
+            "strategy": "demos",
+            "screened_out": true,
+            "screen_obj": 0.8
+          },
+          {
+            "iter": 30,
+            "strategy": "demos",
+            "screened_out": true,
+            "screen_obj": 0.8
           }
         ]
       }
     }
   },
-  "duration_s": 18.2
+  "duration_s": 431.0
 }

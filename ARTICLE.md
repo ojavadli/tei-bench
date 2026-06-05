@@ -13,8 +13,8 @@ Evaluation-guided prompt optimization is widely reported to improve LLM systems,
 - TEI v3 (redesigned loop: validated few-shot demonstrations + an INDEPENDENT confirmation gate + successive halving + headroom triage, same Target-Evaluate-Improve structure) on the full 31-task suite: held-out accuracy 0.877 vs baseline 0.852.
 - TEI v3 SIGNIFICANTLY beats the baseline: delta=+0.025 (p=0.024, d_z=0.43), win/loss/tie=6/0/25 -- with ZERO test regressions (the confirmation gate reverts to baseline whenever a candidate is not confirmed on an independent split).
 - Headroom subset (n=12): delta=+0.064 (p=0.018, d_z=0.80) -- a large, significant gain where improvement is actually possible.
-- Efficiency: 16 tasks triaged (baseline shipped, no spend) and 23 judge evaluations avoided by successive halving.
-- Honest caveat: TEI v3 is still NOT significantly better than budget-matched random search (delta=+0.010, p=0.239); the gain is driven by validated in-context demonstrations + do-no-harm selection, not by the evaluation/reflection signal per se.
+- Efficiency: 16 tasks triaged (baseline shipped, no spend) and 27 judge evaluations avoided by successive halving.
+- Honest caveat: TEI v3 is still NOT significantly better than budget-matched random search (delta=+0.010, p=0.271); the gain is driven by validated in-context demonstrations + do-no-harm selection, not by the evaluation/reflection signal per se.
 
 ![TEI v3 vs all arms](paper/figures/teiv3_arms.png)
 

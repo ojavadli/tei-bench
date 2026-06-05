@@ -1,0 +1,747 @@
+{
+  "task_id": "cybersec_alert",
+  "industry": "Cybersecurity",
+  "metric": "classification",
+  "source": "Authored for TEI-Bench (Sonnet-generated, Sonnet-validated; kept only label-agreed examples).",
+  "is_public": false,
+  "n_train": 15,
+  "n_test": 24,
+  "agent_model": "claude-haiku-4-5",
+  "judge_model": "claude-sonnet-4-5",
+  "optimizer_model": "claude-sonnet-4-5",
+  "seed": 0,
+  "arms": {
+    "baseline": {
+      "objective_mean": 0.9583333333333334,
+      "objective_ci95": [
+        0.875,
+        1.0
+      ],
+      "prompt": "You are a SOC alert triage analyst. Classify the security alert into a threat category. Classify into one of these categories: phishing, malware, brute_force, data_exfiltration, insider_threat, ddos.",
+      "examples": [
+        {
+          "query": "Firewall logs show an employee workstation established 47 consecutive HTTPS connections to a newly registered domain in the past hour, transferring approximately 2.3 GB of data to an external IP address located in a non-business region. The destination server has no prior communication history with our organization.",
+          "gold": "data_exfiltration",
+          "output": "**Analysis:**\n\nThis alert exhibits several key indicators:\n\n1. **High-volume data transfer** (2.3 GB in one hour) to an external destination\n2. **Newly registered domain** - suggests attacker infrastructure or compromised domain\n3. **Non-business region** - outside normal operational geography\n4. **No prior communication history** - anomalous destination\n5. **Multiple consecutive connections** - systematic data exfiltration pattern\n6. **Employee workstation as source** - suggests either compromised device or insider activity\n\nThe pattern is consistent with **data exfiltration** - the systematic unauthorized transfer of large volumes of data to an external, untrusted location. While this could involve malware (which may be present), the primary threat being demonstrated here is the actual exfiltration of data itself.\n\nThe characteristics rule out:\n- **Phishing** (no email/social engineering component evident)\n- **Brute force** (no authentication attack pattern)\n- **DDoS** (no volumetric attack to disrupt service)\n- **Insider threat** (while possible, the use of newly registered domain and non-business region suggests external attacker or compromised device rather than intentional insider action)\n- **Malware** (while malware may be the delivery mechanism, the alert describes the outcome: data exfiltration)\n\nFINAL: data_exfiltration",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9675,
+            "rationale": "The agent correctly classified the alert as data_exfiltration with sound reasoning that systematically analyzed all indicators and ruled out alternative categories, perfectly matching the reference an"
+          }
+        },
+        {
+          "query": "Finance department user executed 23 failed attempts to access restricted merger and acquisition folders on the executive file server within a 10-minute window, despite having no M&A project assignments.",
+          "gold": "insider_threat",
+          "output": "**Analysis:**\n\nThis alert exhibits characteristics of a brute force attack:\n\n1. **Multiple failed attempts**: 23 failed access attempts in a short timeframe (10 minutes) indicates systematic trial-and-error behavior\n2. **Rapid succession**: The concentrated 10-minute window shows automated or deliberate repeated attempts\n3. **Unauthorized access target**: Attempts directed at restricted M&A folders the user shouldn't need\n4. **Anomalous behavior**: User has no legitimate project assignment requiring this access\n\nWhile this could potentially indicate an insider threat (compromised account or malicious insider), the pattern of **repeated failed authentication/authorization attempts** is the defining characteristic of brute force activity. The attacker is attempting to bypass access controls through multiple tries.\n\nFINAL: brute_force",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.75,
+            "reasoning_soundness": 0.65,
+            "execution_accuracy": 0.85,
+            "output_integrity": 0.35,
+            "aggregate": 0.65,
+            "rationale": "The agent provided well-structured reasoning and correct format, but misclassified an insider threat scenario as brute_force—the user is authenticated (finance department user) attempting unauthorized"
+          }
+        },
+        {
+          "query": "Database connection pool exhausted due to 15,000 simultaneous TCP connection attempts from distributed sources. Application tier reporting complete service outage for past 8 minutes.",
+          "gold": "ddos",
+          "output": "**Analysis:**\n\nThis alert describes a scenario where:\n- 15,000 simultaneous TCP connection attempts are being made\n- Connections originate from distributed sources (multiple IPs)\n- The attack exhausts the database connection pool\n- Result is complete service outage (unavailability)\n\nThis is a classic Distributed Denial of Service (DDoS) attack pattern. The attacker is flooding the database with connection requests from multiple sources to overwhelm resources and prevent legitimate users from accessing the service.\n\nKey indicators:\n- High volume of connections (15,000)\n- Distributed sources (hallmark of DDoS)\n- Resource exhaustion (connection pool)\n- Service unavailability as the outcome\n\nThis is not brute force (which targets authentication), malware, phishing, data exfiltration, or insider threat. It's a volumetric attack designed to deny service.\n\nFINAL: ddos",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the threat as 'ddos', provided sound reasoning identifying all key attack indicators (distributed sources, volume, resource exhaustion, service denial), and delivered th"
+          }
+        },
+        {
+          "query": "Email security system quarantined messages claiming to be password expiration notices from IT. The emails contain QR codes that, when scanned, direct mobile devices to fraudulent authentication pages designed to harvest both passwords and MFA codes in real-time.",
+          "gold": "phishing",
+          "output": "**Analysis:**\n\nThis alert describes a sophisticated phishing attack with the following indicators:\n\n1. **Deceptive Sender Spoofing**: Emails falsely claim to be from IT department, impersonating a trusted internal source\n2. **Social Engineering**: Uses urgency/authority (password expiration notices) to pressure victims into action\n3. **Credential Harvesting**: QR codes direct to fraudulent authentication pages designed to steal:\n   - Passwords\n   - MFA codes (multi-factor authentication)\n4. **Attack Vector**: Email-based with mobile targeting\n\nThis is a classic phishing attack pattern - the primary goal is to deceive users into voluntarily providing authentication credentials through fraudulent means. While the attack may lead to account compromise or data exfiltration, the attack itself is fundamentally a phishing campaign.\n\n**FINAL: phishing**",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the threat as phishing with comprehensive reasoning that accurately identifies all key attack indicators (spoofing, social engineering, credential harvesting), matches t"
+          }
+        },
+        {
+          "query": "Windows Defender ATP identified WannaCry indicators on workstation DESK-7742. Ransomware variant detected encrypting network shares with .wcry extension. SMB exploitation via EternalBlue vulnerability CVE-2017-0144 confirmed. Bitcoin wallet demand note dropped in multiple directories. System isolated from network pending remediation.",
+          "gold": "malware",
+          "output": "This alert describes a ransomware infection with clear malware indicators:\n\n- **WannaCry ransomware variant** detected and actively encrypting files\n- **EternalBlue SMB exploitation** (CVE-2017-0144) - the attack vector used\n- **File encryption** with .wcry extension - characteristic ransomware behavior\n- **Ransom demand note** - typical ransomware payload\n- **Network propagation capability** - WannaCry spreads via SMB\n\nWhile ransomware can facilitate data exfiltration, the primary threat here is the malicious code execution, encryption functionality, and system compromise characteristic of malware. The alert focuses on the malware infection itself rather than data theft or exfiltration.\n\nFINAL: malware",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9675,
+            "rationale": "The agent correctly classified the threat as 'malware', provided sound reasoning identifying WannaCry characteristics, addressed the task directly, and matched the reference answer perfectly."
+          }
+        },
+        {
+          "query": "SSH service on production server 10.45.23.12 logged 89 failed authentication attempts from 203.0.113.58 in the last hour. Username enumeration pattern detected with common names like root, admin, user, test being cycled through systematically.",
+          "gold": "brute_force",
+          "output": "**Analysis:**\n\nThis alert exhibits classic brute force attack characteristics:\n\n1. **High volume of failed attempts**: 89 failed authentications in one hour is abnormal\n2. **Single source IP**: 203.0.113.58 is systematically attacking from one location\n3. **Username enumeration**: Cycling through common usernames (root, admin, user, test) in a systematic pattern\n4. **Target**: SSH service, a common attack vector for credential compromise\n5. **Timing**: Concentrated activity within one hour suggests automated attack tools\n\nThis is not phishing (no social engineering), malware (no code execution detected), data exfiltration (no data movement), insider threat (external IP), or DDoS (targeted credential attack, not volumetric). The systematic credential guessing is the defining characteristic of a brute force attack.\n\nFINAL: brute_force",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the threat as brute_force with sound reasoning that systematically identified all key indicators (failed attempts, single source, username enumeration, SSH targeting) an"
+          }
+        },
+        {
+          "query": "Database audit logs show contractor credentials executed query extracting 45,000 customer records including credit card information at 11:47 PM. Same session established external database connection to unknown MySQL server and performed bulk INSERT operations. Contractor access was scheduled to expire next week.",
+          "gold": "data_exfiltration",
+          "output": "**Analysis:**\n\nThis alert exhibits multiple indicators of data exfiltration:\n\n1. **Unauthorized data access**: Contractor credentials used to extract 45,000 customer records containing sensitive PII (credit card information)\n2. **Suspicious timing**: Activity occurred at 11:47 PM, outside normal business hours\n3. **External data transfer**: Bulk INSERT operations to an unknown external MySQL server indicate intentional data movement outside the organization\n4. **Credential misuse**: Access was scheduled to expire, suggesting urgency before revocation\n5. **Scale and sensitivity**: Large volume of highly sensitive financial data targeted\n\nWhile this could involve insider threat elements (contractor with legitimate credentials), the primary malicious activity is the unauthorized extraction and exfiltration of sensitive data to external systems. The pattern shows deliberate data theft rather than unauthorized access alone.\n\nFINAL: data_exfiltration",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9675,
+            "rationale": "The agent correctly classified the threat as data_exfiltration matching the reference answer, provided sound reasoning with relevant indicators (unauthorized access, suspicious timing, external transf"
+          }
+        },
+        {
+          "query": "Employee account jsmith accessed 847 customer records from the CRM database outside normal business hours at 2:47 AM on a Sunday, with no associated trouble ticket or business justification in the access logs.",
+          "gold": "insider_threat",
+          "output": "**Analysis:**\n\nThis alert exhibits several key indicators of suspicious insider activity:\n\n1. **Unusual timing**: Access at 2:47 AM on Sunday is well outside normal business hours\n2. **Large data volume**: 847 customer records accessed in a single session suggests bulk extraction rather than routine work\n3. **Lack of justification**: No trouble ticket or documented business reason for the access\n4. **CRM database access**: Customer records are high-value data targets\n5. **Employee account**: Legitimate credentials being used, suggesting either the employee themselves or compromised credentials\n\nWhile this *could* indicate a compromised account (which might suggest malware), the pattern is most consistent with **insider threat** - either the employee conducting unauthorized data access or their credentials being misused by an insider with knowledge of when to avoid detection.\n\nThe lack of any legitimate business context combined with the suspicious timing and volume strongly suggests intentional unauthorized access to sensitive customer data.\n\nFINAL: insider_threat",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9675,
+            "rationale": "The agent correctly classified the alert as 'insider_threat' matching the reference answer, provided sound reasoning covering all key indicators (timing, volume, lack of justification), and delivered "
+          }
+        },
+        {
+          "query": "CDN provider reports volumetric attack reaching 45 Gbps directed at our primary domain. Traffic analysis shows UDP flood from botnet with geographically distributed origins across 67 countries.",
+          "gold": "ddos",
+          "output": "**Analysis:**\n\nThis alert describes a volumetric attack with the following key indicators:\n- **45 Gbps traffic volume** - massive scale characteristic of DDoS\n- **UDP flood attack** - a common DDoS vector\n- **Botnet involvement** - distributed attack infrastructure\n- **Geographically distributed sources** (67 countries) - hallmark of distributed denial of service\n- **Directed at primary domain** - intent to disrupt service availability\n\nThis is a classic Distributed Denial of Service (DDoS) attack. The attack aims to overwhelm the target's infrastructure and disrupt service availability through sheer traffic volume, not to steal data, compromise systems with malware, or gain unauthorized access through brute force.\n\nFINAL: ddos",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the alert as 'ddos' with sound reasoning identifying all key attack indicators (volumetric scale, UDP flood, botnet, geographic distribution), properly formatted output,"
+          }
+        },
+        {
+          "query": "User reported suspicious email with Amazon branding stating their account was compromised. The message creates urgency by claiming unauthorized purchases were made. Investigation shows the embedded link uses URL obfuscation techniques and redirects through multiple domains before reaching a fake login form.",
+          "gold": "phishing",
+          "output": "**Analysis:**\n\nThis alert exhibits classic phishing characteristics:\n\n1. **Social Engineering**: Uses Amazon branding (impersonation) to establish false legitimacy\n2. **Urgency/Fear Tactic**: Claims account compromise and unauthorized purchases to pressure immediate action\n3. **Credential Harvesting**: The fake login form is designed to capture user credentials\n4. **Technical Obfuscation**: URL obfuscation and multi-domain redirects are common phishing tactics to evade detection and hide the malicious destination\n\nThe attack chain follows a typical phishing workflow: deceptive email → obfuscated link → credential theft via fake login page.\n\nFINAL: phishing",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the threat as phishing with comprehensive reasoning that accurately identifies all relevant attack indicators, matches the reference answer perfectly, and follows proper"
+          }
+        },
+        {
+          "query": "Antivirus quarantined Trojan.GenericKD.62518433 from email attachment invoice_March2024.zip. Extracted payload attempted to download secondary stage from compromised WordPress site. PowerShell obfuscation detected with base64-encoded shellcode. User jsmith@company.com clicked attachment before automated blocking engaged.",
+          "gold": "malware",
+          "output": "**Analysis:**\n\nThis alert exhibits multiple indicators of malware infection:\n\n1. **Antivirus detection**: Trojan.GenericKD.62518433 - a known malicious trojan signature\n2. **Delivery vector**: Email attachment (invoice_March2024.zip) - common malware distribution method\n3. **Malicious behavior**: \n   - Attempted secondary payload download from compromised infrastructure\n   - PowerShell obfuscation with base64-encoded shellcode - typical malware execution technique\n4. **User interaction**: Attachment was opened before automated blocking\n\nThe alert describes a complete malware infection chain: delivery via email → user execution → malicious code execution → command & control communication attempt.\n\n**FINAL: malware**",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the threat as 'malware' with comprehensive, logically sound analysis of all relevant indicators (trojan detection, delivery method, malicious behaviors, infection chain)"
+          }
+        },
+        {
+          "query": "Database server alert: PostgreSQL authentication failures spiked to 2,300+ attempts in 20 minutes from IP range 91.200.12.0/24. Connection attempts used dictionary-based username list against default port 5432. All attempts rejected due to invalid credentials.",
+          "gold": "brute_force",
+          "output": "**Analysis:**\n\nThis alert exhibits classic brute force attack characteristics:\n\n1. **High volume of attempts**: 2,300+ authentication failures in a short 20-minute window is abnormally high\n2. **Systematic approach**: Dictionary-based username list indicates automated, methodical credential guessing\n3. **Targeted service**: PostgreSQL on default port 5432 is a known database service\n4. **Single source**: Concentrated from a specific IP range (91.200.12.0/24)\n5. **Failed credentials**: All attempts rejected, consistent with brute force rather than successful compromise\n\nThis is not:\n- **Phishing**: No social engineering or deceptive messaging involved\n- **Malware**: No code execution or system compromise detected\n- **Data exfiltration**: No successful access or data movement\n- **Insider threat**: External IP range, not internal user behavior\n- **DDoS**: While high volume, this is credential-based attack, not resource exhaustion\n\nFINAL: brute_force",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the alert as brute_force with comprehensive, logically sound reasoning that systematically identified all relevant attack characteristics and explicitly ruled out altern"
+          }
+        },
+        {
+          "query": "Endpoint detection identified suspicious PowerShell script execution on finance department laptop that enumerated shared drives, compressed sensitive files into password-protected ZIP archives, and initiated FTP transfer to external server in Eastern Europe. User was on vacation during this activity.",
+          "gold": "data_exfiltration",
+          "output": "**Analysis:**\n\nThis alert exhibits multiple indicators of data exfiltration:\n\n1. **Suspicious script execution** - PowerShell script running with elevated activity\n2. **Reconnaissance activity** - Enumeration of shared drives indicates targeting of data sources\n3. **Data staging** - Compression of sensitive files into password-protected archives is a classic exfiltration preparation technique\n4. **Unauthorized transfer** - FTP transfer to external server (Eastern Europe) indicates data leaving the organization\n5. **Timing anomaly** - Activity during user's vacation suggests either compromised credentials or insider involvement, but the technical execution pattern is clearly exfiltration-focused\n\nWhile the vacation timing could suggest insider threat, the primary attack pattern—enumeration → compression → external transfer—is definitively a data exfiltration operation. The attacker is systematically extracting sensitive data from the finance department.\n\nFINAL: data_exfiltration",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the threat as data_exfiltration with sound reasoning through each attack stage, proper format, and complete alignment with the reference answer."
+          }
+        },
+        {
+          "query": "Receptionist account showing SQL injection patterns against internal HR portal attempting to elevate privileges and access performance review database. Account created search queries for termination records and executive compensation data.",
+          "gold": "insider_threat",
+          "output": "**Analysis:**\n\nThis alert exhibits multiple concerning indicators:\n\n1. **SQL injection patterns** - Technical attack method targeting the HR portal\n2. **Privilege escalation attempt** - Deliberate effort to gain unauthorized access levels\n3. **Suspicious data access** - Targeted queries for sensitive information (termination records, executive compensation)\n4. **Account context** - Receptionist account (low-privilege role) performing atypical technical attacks\n5. **Intentional data targeting** - Specific focus on high-value HR/compensation data suggests deliberate exfiltration intent\n\nWhile this could theoretically be malware compromising the account, the pattern of targeted SQL injection, privilege escalation, and selective high-value data queries points more strongly to **insider threat**. The receptionist account is being used to deliberately access restricted data through technical exploitation, suggesting either:\n- A compromised insider with technical knowledge\n- An insider using technical methods to cover their tracks\n- Account compromise by someone with insider knowledge of what data to target\n\nThe combination of privilege escalation + targeted sensitive data access = data exfiltration attempt, but the deliberate technical exploitation and insider account context makes this primarily an **insider_threat** classification.\n\nFINAL: insider_threat",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the alert as insider_threat with sound reasoning about SQL injection patterns, privilege escalation, and targeted data access from a low-privilege account, matching the "
+          }
+        },
+        {
+          "query": "IDS signature match: NTP amplification attack detected with reflection factor of 556x. External DNS servers being abused to flood our edge routers with 38 Gbps of spoofed response traffic.",
+          "gold": "ddos",
+          "output": "This alert describes a volumetric attack where external NTP servers are being abused to amplify and reflect traffic toward the organization's edge routers, resulting in massive inbound traffic (38 Gbps) designed to overwhelm network infrastructure.\n\nKey indicators:\n- NTP amplification attack (reflection-based)\n- 556x amplification factor\n- Spoofed response traffic flooding edge routers\n- Volumetric attack pattern (38 Gbps)\n\nThis is a classic Distributed Denial of Service (DDoS) attack using the NTP reflection/amplification technique.\n\nFINAL: ddos",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the alert as 'ddos', provided sound technical reasoning identifying all key attack characteristics, and delivered the answer in the expected format with complete accurac"
+          }
+        },
+        {
+          "query": "Multiple employees forwarded an email claiming to be from our benefits provider with subject line about health insurance enrollment deadline. The sender address uses our company name but a different TLD. Clicking the enrollment link presents a form requesting employee ID, SSN, and banking information.",
+          "gold": "phishing",
+          "output": "**Analysis:**\n\nThis alert exhibits classic phishing characteristics:\n\n1. **Spoofed sender address** - Uses company name but different TLD (domain impersonation)\n2. **Social engineering pretext** - Leverages legitimate business process (benefits enrollment) to create urgency\n3. **Credential harvesting** - Form requests sensitive PII (employee ID, SSN, banking information)\n4. **Mass distribution** - Multiple employees received the same malicious email\n5. **Malicious link** - URL directs to fraudulent enrollment form\n\nThe attacker is impersonating a trusted entity (benefits provider/company) to trick employees into voluntarily submitting sensitive personal and financial data.\n\nFINAL: phishing",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the threat as phishing with comprehensive, logically sound reasoning that identifies all key indicators (spoofed sender, social engineering, credential harvesting), perf"
+          }
+        },
+        {
+          "query": "Mobile device management flagged Android application com.systemupdate.core sideloaded outside Google Play containing Anubis banking trojan. Application requests dangerous permissions including SMS intercept and accessibility services. Network traffic shows exfiltration of contact list and installed app inventory to command server in Bulgaria.",
+          "gold": "malware",
+          "output": "This alert describes a sophisticated mobile malware attack with multiple indicators:\n\n**Key Threat Indicators:**\n- **Malware identification**: Anubis banking trojan explicitly detected\n- **Malicious capabilities**: SMS interception, accessibility service abuse (common for credential theft and unauthorized actions)\n- **Data exfiltration**: Contact lists and app inventory being sent to external command server\n- **Distribution method**: Sideloading outside official app store (evasion technique)\n- **Infrastructure**: Command server in Bulgaria (typical for botnet operations)\n\nWhile this alert contains elements of data exfiltration, the primary and most significant threat is the **malware** component. The Anubis trojan is the root cause enabling all other malicious activities (permissions abuse, data theft, command & control communication).\n\nFINAL: malware",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the threat as 'malware' matching the reference, provided sound reasoning identifying Anubis trojan as the root cause, followed the classification task format perfectly, "
+          }
+        },
+        {
+          "query": "Multiple authentication failures detected from IP 185.220.101.47 targeting user account 'admin' over the past 15 minutes. System logs show 247 consecutive failed login attempts with varying password combinations. Account has not been locked out yet.",
+          "gold": "brute_force",
+          "output": "**Analysis:**\n\nThis alert exhibits classic characteristics of a brute force attack:\n\n1. **Multiple failed authentication attempts** - 247 consecutive failed logins in 15 minutes indicates systematic password guessing\n2. **Targeting a high-value account** - The 'admin' account is a primary target for attackers\n3. **Varying password combinations** - Suggests automated tools cycling through password lists\n4. **Single source IP** - 185.220.101.47 is the consistent attack origin\n5. **Rapid succession** - 247 attempts in 15 minutes (roughly 16+ attempts per minute) is far beyond normal user behavior\n6. **Account not locked** - Indicates the attack may still be ongoing\n\nThis is a textbook brute force attack attempting to gain unauthorized access through password enumeration.\n\nFINAL: brute_force",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 1.0,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 1.0,
+            "rationale": "The agent correctly classified the alert as 'brute_force' with comprehensive, logically sound reasoning that accurately identifies all relevant attack indicators and matches the reference answer perfe"
+          }
+        },
+        {
+          "query": "SIEM correlation rule triggered on anomalous pattern: HR system access followed by bulk export of employee records, subsequent login to personal webmail, and large outbound SMTP traffic. Investigation reveals attachment contained spreadsheet with salary information and social security numbers sent to non-company domain.",
+          "gold": "data_exfiltration",
+          "output": "**Analysis:**\n\nThis alert exhibits multiple indicators of data exfiltration:\n\n1. **Unauthorized data access**: Anomalous access to HR system (sensitive employee records)\n2. **Bulk export**: Large-scale extraction of employee data (salary info, SSNs)\n3. **Exfiltration channel**: Data sent via personal webmail to external domain\n4. **Data confirmation**: Attachment contained PII/sensitive financial information\n5. **Behavioral anomaly**: Pattern suggests deliberate data theft rather than legitimate business activity\n\nWhile this could involve insider threat elements (employee account used), the primary security incident is the unauthorized extraction and transmission of sensitive data outside the organization's control.\n\nFINAL: data_exfiltration",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the threat as data_exfiltration with sound reasoning identifying all key indicators (unauthorized access, bulk export, external transmission of PII), proper format, and "
+          }
+        },
+        {
+          "query": "Network logs indicate contractor account querying Active Directory for all VPN user credentials and exporting results to CSV file. Contractor role is limited to help desk password resets with no authorization for bulk credential access.",
+          "gold": "insider_threat",
+          "output": "**Analysis:**\n\nThis alert exhibits several key indicators:\n\n1. **Unauthorized Access**: A contractor account is accessing data (VPN credentials) far beyond their authorized scope (help desk password resets only)\n\n2. **Privilege Escalation**: The account is querying Active Directory for bulk credential information - a capability not granted to their role\n\n3. **Data Exfiltration**: The credentials are being exported to a CSV file, indicating intentional removal of sensitive data from secure systems\n\n4. **Insider Threat Characteristics**: \n   - Legitimate account being misused\n   - Deliberate circumvention of access controls\n   - Extraction of high-value sensitive data (VPN credentials)\n   - Actions inconsistent with job responsibilities\n\nWhile this could involve malware compromising the contractor account, the evidence points most strongly to **insider threat** - either the contractor acting maliciously or their credentials being deliberately misused by someone with knowledge of their access level. The targeted nature of the query (specifically VPN credentials) and the deliberate export suggest intentional malicious activity rather than opportunistic malware behavior.\n\nFINAL: insider_threat",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9675,
+            "rationale": "The agent correctly classified the threat as insider_threat with sound reasoning about unauthorized access, privilege escalation, and data exfiltration, though the extensive analysis slightly exceeds "
+          }
+        },
+        {
+          "query": "Load balancer threshold exceeded: 12,500 requests per second hitting API endpoint /checkout from 890 IP addresses. Pattern indicates coordinated HTTP GET flood. Service degradation confirmed.",
+          "gold": "ddos",
+          "output": "**Analysis:**\n\nThis alert describes a coordinated attack with the following characteristics:\n- Massive spike in request volume (12,500 RPS)\n- Multiple source IPs (890 addresses) indicating distributed nature\n- Targeting a specific endpoint (/checkout)\n- HTTP GET flood pattern\n- Resulting in service degradation\n\nThis is a classic Distributed Denial of Service (DDoS) attack. The attacker is flooding the API endpoint with requests from many different IP addresses to overwhelm the service and make it unavailable to legitimate users.\n\nWhile the endpoint is a checkout function (which could theoretically relate to data exfiltration), the attack pattern is clearly focused on overwhelming the service rather than stealing data. The \"flood\" terminology and coordinated multi-source nature confirm this is a volumetric DDoS attack.\n\nFINAL: ddos",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the threat as 'ddos' with sound reasoning identifying all key attack characteristics (distributed sources, volumetric flood, service degradation), proper format, and per"
+          }
+        },
+        {
+          "query": "Employee clicked on a link in an email claiming to be from DocuSign requesting signature on an urgent contract. The link led to a fake Microsoft 365 login page. Web proxy logs show the destination domain was registered 3 days ago and uses a typosquatted version of the legitimate service.",
+          "gold": "phishing",
+          "output": "**Analysis:**\n\nThis alert exhibits classic phishing characteristics:\n\n1. **Social Engineering**: Email impersonating a trusted service (DocuSign) with urgency tactics (\"urgent contract\")\n2. **Credential Harvesting**: Fake login page designed to capture Microsoft 365 credentials\n3. **Domain Deception**: Typosquatted domain (mimics legitimate service) registered recently\n4. **Attack Infrastructure**: New domain (3 days old) typical of phishing campaigns\n\nThe attacker's goal is to steal user credentials through a fraudulent login page, which is the defining characteristic of phishing attacks.\n\nFINAL: phishing",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 1.0,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 1.0,
+            "rationale": "The agent correctly classified the alert as phishing with sound reasoning covering all key indicators (social engineering, credential harvesting, typosquatting, new domain), matching the reference ans"
+          }
+        },
+        {
+          "query": "Host-based IDS triggered on polymorphic code execution in memory region of chrome.exe. No corresponding disk-based file found indicating fileless attack vector. Process hollowing technique identified injecting malicious code into legitimate browser process. Beacon traffic to 203.0.113.88 every 60 seconds matches Cobalt Strike patterns.",
+          "gold": "malware",
+          "output": "**Analysis:**\n\nThis alert exhibits multiple indicators of malware activity:\n\n1. **Polymorphic code execution** - Code that changes/obfuscates itself to evade detection\n2. **Fileless attack** - Malicious code in memory without disk artifacts\n3. **Process hollowing** - Injecting malicious payload into legitimate process (chrome.exe)\n4. **Command & Control (C2) communication** - Regular beacon traffic to external IP matching known Cobalt Strike patterns\n\nThese are classic hallmarks of advanced malware, specifically a post-exploitation framework (Cobalt Strike) being used for command and control of a compromised host. This is not phishing (social engineering), brute force (credential attacks), data exfiltration alone (though it may lead to it), DDoS, or insider threat. The core threat is the malware infection itself.\n\nFINAL: malware",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the threat as malware with sound technical reasoning identifying polymorphic code, fileless attack, process hollowing, and C2 patterns, matching the reference answer per"
+          }
+        },
+        {
+          "query": "Cloud infrastructure console showing repeated failed authentication events for IAM user 'backup-service'. Logs indicate 178 unsuccessful login attempts with incorrect passwords from unfamiliar geographic location. MFA was not completed for any attempt.",
+          "gold": "brute_force",
+          "output": "**Analysis:**\n\nThis alert exhibits classic characteristics of a brute force attack:\n\n1. **High volume of failed attempts**: 178 unsuccessful login attempts is a significant number indicating systematic password guessing\n2. **Incorrect passwords**: Each attempt used wrong credentials, consistent with brute force methodology\n3. **Unfamiliar geographic location**: Attack originating from unexpected location suggests external threat actor\n4. **MFA bypass**: No successful MFA completion indicates attacker lacks second factor credentials\n5. **Targeted account**: Specific IAM user ('backup-service') suggests either reconnaissance or targeted attack\n\nThe pattern of repeated authentication failures with incorrect passwords is the defining characteristic of brute force attacks, as opposed to other categories like phishing (social engineering), malware (code execution), or data exfiltration (data theft).\n\nFINAL: brute_force",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the threat as brute_force with sound reasoning about failed authentication patterns, provided proper analysis of all relevant indicators, and delivered the exact answer "
+          }
+        }
+      ],
+      "gpa_mean": 0.9644791666666667,
+      "gpa_dims": {
+        "target_alignment": 0.945833333333333,
+        "reasoning_soundness": 0.9470833333333336,
+        "execution_accuracy": 0.9920833333333333,
+        "output_integrity": 0.9729166666666668
+      }
+    },
+    "tei_v3": {
+      "objective_mean": 0.9583333333333334,
+      "objective_ci95": [
+        0.875,
+        1.0
+      ],
+      "prompt": "You are a SOC alert triage analyst. Classify the security alert into a threat category. Classify into one of these categories: phishing, malware, brute_force, data_exfiltration, insider_threat, ddos.",
+      "examples": [
+        {
+          "query": "Firewall logs show an employee workstation established 47 consecutive HTTPS connections to a newly registered domain in the past hour, transferring approximately 2.3 GB of data to an external IP address located in a non-business region. The destination server has no prior communication history with our organization.",
+          "gold": "data_exfiltration",
+          "output": "**Analysis:**\n\nThis alert exhibits several key indicators:\n\n1. **High-volume data transfer** (2.3 GB in one hour) to an external destination\n2. **Newly registered domain** - suggests attacker infrastructure or compromised domain\n3. **Non-business region** - outside normal operational geography\n4. **No prior communication history** - anomalous destination\n5. **Multiple consecutive connections** - systematic data exfiltration pattern\n6. **Employee workstation as source** - suggests either compromised device or insider activity\n\nThe pattern is consistent with **data exfiltration** - the systematic unauthorized transfer of large volumes of data to an external, untrusted location. While this could involve malware (which may be present), the primary threat being demonstrated here is the actual exfiltration of data itself.\n\nThe characteristics rule out:\n- **Phishing** (no email/social engineering component evident)\n- **Brute force** (no authentication attack pattern)\n- **DDoS** (no volumetric attack to disrupt service)\n- **Insider threat** (while possible, the use of newly registered domain and non-business region suggests external attacker or compromised device rather than intentional insider action)\n- **Malware** (while malware may be the delivery mechanism, the alert describes the outcome: data exfiltration)\n\nFINAL: data_exfiltration",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9675,
+            "rationale": "The agent correctly classified the alert as data_exfiltration with sound reasoning that systematically analyzed all indicators and ruled out alternative categories, perfectly matching the reference an"
+          }
+        },
+        {
+          "query": "Finance department user executed 23 failed attempts to access restricted merger and acquisition folders on the executive file server within a 10-minute window, despite having no M&A project assignments.",
+          "gold": "insider_threat",
+          "output": "**Analysis:**\n\nThis alert exhibits characteristics of a brute force attack:\n\n1. **Multiple failed attempts**: 23 failed access attempts in a short timeframe (10 minutes) indicates systematic trial-and-error behavior\n2. **Rapid succession**: The concentrated 10-minute window shows automated or deliberate repeated attempts\n3. **Unauthorized access target**: Attempts directed at restricted M&A folders the user shouldn't need\n4. **Anomalous behavior**: User has no legitimate project assignment requiring this access\n\nWhile this could potentially indicate an insider threat (compromised account or malicious insider), the pattern of **repeated failed authentication/authorization attempts** is the defining characteristic of brute force activity. The attacker is attempting to bypass access controls through multiple tries.\n\nFINAL: brute_force",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.75,
+            "reasoning_soundness": 0.65,
+            "execution_accuracy": 0.85,
+            "output_integrity": 0.35,
+            "aggregate": 0.65,
+            "rationale": "The agent provided well-structured reasoning and correct format, but misclassified an insider threat scenario as brute_force—the user is authenticated (finance department user) attempting unauthorized"
+          }
+        },
+        {
+          "query": "Database connection pool exhausted due to 15,000 simultaneous TCP connection attempts from distributed sources. Application tier reporting complete service outage for past 8 minutes.",
+          "gold": "ddos",
+          "output": "**Analysis:**\n\nThis alert describes a scenario where:\n- 15,000 simultaneous TCP connection attempts are being made\n- Connections originate from distributed sources (multiple IPs)\n- The attack exhausts the database connection pool\n- Result is complete service outage (unavailability)\n\nThis is a classic Distributed Denial of Service (DDoS) attack pattern. The attacker is flooding the database with connection requests from multiple sources to overwhelm resources and prevent legitimate users from accessing the service.\n\nKey indicators:\n- High volume of connections (15,000)\n- Distributed sources (hallmark of DDoS)\n- Resource exhaustion (connection pool)\n- Service unavailability as the outcome\n\nThis is not brute force (which targets authentication), malware, phishing, data exfiltration, or insider threat. It's a volumetric attack designed to deny service.\n\nFINAL: ddos",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the threat as 'ddos', provided sound reasoning identifying all key attack indicators (distributed sources, volume, resource exhaustion, service denial), and delivered th"
+          }
+        },
+        {
+          "query": "Email security system quarantined messages claiming to be password expiration notices from IT. The emails contain QR codes that, when scanned, direct mobile devices to fraudulent authentication pages designed to harvest both passwords and MFA codes in real-time.",
+          "gold": "phishing",
+          "output": "**Analysis:**\n\nThis alert describes a sophisticated phishing attack with the following indicators:\n\n1. **Deceptive Sender Spoofing**: Emails falsely claim to be from IT department, impersonating a trusted internal source\n2. **Social Engineering**: Uses urgency/authority (password expiration notices) to pressure victims into action\n3. **Credential Harvesting**: QR codes direct to fraudulent authentication pages designed to steal:\n   - Passwords\n   - MFA codes (multi-factor authentication)\n4. **Attack Vector**: Email-based with mobile targeting\n\nThis is a classic phishing attack pattern - the primary goal is to deceive users into voluntarily providing authentication credentials through fraudulent means. While the attack may lead to account compromise or data exfiltration, the attack itself is fundamentally a phishing campaign.\n\n**FINAL: phishing**",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the threat as phishing with comprehensive reasoning that accurately identifies all key attack indicators (spoofing, social engineering, credential harvesting), matches t"
+          }
+        },
+        {
+          "query": "Windows Defender ATP identified WannaCry indicators on workstation DESK-7742. Ransomware variant detected encrypting network shares with .wcry extension. SMB exploitation via EternalBlue vulnerability CVE-2017-0144 confirmed. Bitcoin wallet demand note dropped in multiple directories. System isolated from network pending remediation.",
+          "gold": "malware",
+          "output": "This alert describes a ransomware infection with clear malware indicators:\n\n- **WannaCry ransomware variant** detected and actively encrypting files\n- **EternalBlue SMB exploitation** (CVE-2017-0144) - the attack vector used\n- **File encryption** with .wcry extension - characteristic ransomware behavior\n- **Ransom demand note** - typical ransomware payload\n- **Network propagation capability** - WannaCry spreads via SMB\n\nWhile ransomware can facilitate data exfiltration, the primary threat here is the malicious code execution, encryption functionality, and system compromise characteristic of malware. The alert focuses on the malware infection itself rather than data theft or exfiltration.\n\nFINAL: malware",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9675,
+            "rationale": "The agent correctly classified the threat as 'malware', provided sound reasoning identifying WannaCry characteristics, addressed the task directly, and matched the reference answer perfectly."
+          }
+        },
+        {
+          "query": "SSH service on production server 10.45.23.12 logged 89 failed authentication attempts from 203.0.113.58 in the last hour. Username enumeration pattern detected with common names like root, admin, user, test being cycled through systematically.",
+          "gold": "brute_force",
+          "output": "**Analysis:**\n\nThis alert exhibits classic brute force attack characteristics:\n\n1. **High volume of failed attempts**: 89 failed authentications in one hour is abnormal\n2. **Single source IP**: 203.0.113.58 is systematically attacking from one location\n3. **Username enumeration**: Cycling through common usernames (root, admin, user, test) in a systematic pattern\n4. **Target**: SSH service, a common attack vector for credential compromise\n5. **Timing**: Concentrated activity within one hour suggests automated attack tools\n\nThis is not phishing (no social engineering), malware (no code execution detected), data exfiltration (no data movement), insider threat (external IP), or DDoS (targeted credential attack, not volumetric). The systematic credential guessing is the defining characteristic of a brute force attack.\n\nFINAL: brute_force",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the threat as brute_force with sound reasoning that systematically identified all key indicators (failed attempts, single source, username enumeration, SSH targeting) an"
+          }
+        },
+        {
+          "query": "Database audit logs show contractor credentials executed query extracting 45,000 customer records including credit card information at 11:47 PM. Same session established external database connection to unknown MySQL server and performed bulk INSERT operations. Contractor access was scheduled to expire next week.",
+          "gold": "data_exfiltration",
+          "output": "**Analysis:**\n\nThis alert exhibits multiple indicators of data exfiltration:\n\n1. **Unauthorized data access**: Contractor credentials used to extract 45,000 customer records containing sensitive PII (credit card information)\n2. **Suspicious timing**: Activity occurred at 11:47 PM, outside normal business hours\n3. **External data transfer**: Bulk INSERT operations to an unknown external MySQL server indicate intentional data movement outside the organization\n4. **Credential misuse**: Access was scheduled to expire, suggesting urgency before revocation\n5. **Scale and sensitivity**: Large volume of highly sensitive financial data targeted\n\nWhile this could involve insider threat elements (contractor with legitimate credentials), the primary malicious activity is the unauthorized extraction and exfiltration of sensitive data to external systems. The pattern shows deliberate data theft rather than unauthorized access alone.\n\nFINAL: data_exfiltration",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9675,
+            "rationale": "The agent correctly classified the threat as data_exfiltration matching the reference answer, provided sound reasoning with relevant indicators (unauthorized access, suspicious timing, external transf"
+          }
+        },
+        {
+          "query": "Employee account jsmith accessed 847 customer records from the CRM database outside normal business hours at 2:47 AM on a Sunday, with no associated trouble ticket or business justification in the access logs.",
+          "gold": "insider_threat",
+          "output": "**Analysis:**\n\nThis alert exhibits several key indicators of suspicious insider activity:\n\n1. **Unusual timing**: Access at 2:47 AM on Sunday is well outside normal business hours\n2. **Large data volume**: 847 customer records accessed in a single session suggests bulk extraction rather than routine work\n3. **Lack of justification**: No trouble ticket or documented business reason for the access\n4. **CRM database access**: Customer records are high-value data targets\n5. **Employee account**: Legitimate credentials being used, suggesting either the employee themselves or compromised credentials\n\nWhile this *could* indicate a compromised account (which might suggest malware), the pattern is most consistent with **insider threat** - either the employee conducting unauthorized data access or their credentials being misused by an insider with knowledge of when to avoid detection.\n\nThe lack of any legitimate business context combined with the suspicious timing and volume strongly suggests intentional unauthorized access to sensitive customer data.\n\nFINAL: insider_threat",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9675,
+            "rationale": "The agent correctly classified the alert as 'insider_threat' matching the reference answer, provided sound reasoning covering all key indicators (timing, volume, lack of justification), and delivered "
+          }
+        },
+        {
+          "query": "CDN provider reports volumetric attack reaching 45 Gbps directed at our primary domain. Traffic analysis shows UDP flood from botnet with geographically distributed origins across 67 countries.",
+          "gold": "ddos",
+          "output": "**Analysis:**\n\nThis alert describes a volumetric attack with the following key indicators:\n- **45 Gbps traffic volume** - massive scale characteristic of DDoS\n- **UDP flood attack** - a common DDoS vector\n- **Botnet involvement** - distributed attack infrastructure\n- **Geographically distributed sources** (67 countries) - hallmark of distributed denial of service\n- **Directed at primary domain** - intent to disrupt service availability\n\nThis is a classic Distributed Denial of Service (DDoS) attack. The attack aims to overwhelm the target's infrastructure and disrupt service availability through sheer traffic volume, not to steal data, compromise systems with malware, or gain unauthorized access through brute force.\n\nFINAL: ddos",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the alert as 'ddos' with sound reasoning identifying all key attack indicators (volumetric scale, UDP flood, botnet, geographic distribution), properly formatted output,"
+          }
+        },
+        {
+          "query": "User reported suspicious email with Amazon branding stating their account was compromised. The message creates urgency by claiming unauthorized purchases were made. Investigation shows the embedded link uses URL obfuscation techniques and redirects through multiple domains before reaching a fake login form.",
+          "gold": "phishing",
+          "output": "**Analysis:**\n\nThis alert exhibits classic phishing characteristics:\n\n1. **Social Engineering**: Uses Amazon branding (impersonation) to establish false legitimacy\n2. **Urgency/Fear Tactic**: Claims account compromise and unauthorized purchases to pressure immediate action\n3. **Credential Harvesting**: The fake login form is designed to capture user credentials\n4. **Technical Obfuscation**: URL obfuscation and multi-domain redirects are common phishing tactics to evade detection and hide the malicious destination\n\nThe attack chain follows a typical phishing workflow: deceptive email → obfuscated link → credential theft via fake login page.\n\nFINAL: phishing",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the threat as phishing with comprehensive reasoning that accurately identifies all relevant attack indicators, matches the reference answer perfectly, and follows proper"
+          }
+        },
+        {
+          "query": "Antivirus quarantined Trojan.GenericKD.62518433 from email attachment invoice_March2024.zip. Extracted payload attempted to download secondary stage from compromised WordPress site. PowerShell obfuscation detected with base64-encoded shellcode. User jsmith@company.com clicked attachment before automated blocking engaged.",
+          "gold": "malware",
+          "output": "**Analysis:**\n\nThis alert exhibits multiple indicators of malware infection:\n\n1. **Antivirus detection**: Trojan.GenericKD.62518433 - a known malicious trojan signature\n2. **Delivery vector**: Email attachment (invoice_March2024.zip) - common malware distribution method\n3. **Malicious behavior**: \n   - Attempted secondary payload download from compromised infrastructure\n   - PowerShell obfuscation with base64-encoded shellcode - typical malware execution technique\n4. **User interaction**: Attachment was opened before automated blocking\n\nThe alert describes a complete malware infection chain: delivery via email → user execution → malicious code execution → command & control communication attempt.\n\n**FINAL: malware**",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the threat as 'malware' with comprehensive, logically sound analysis of all relevant indicators (trojan detection, delivery method, malicious behaviors, infection chain)"
+          }
+        },
+        {
+          "query": "Database server alert: PostgreSQL authentication failures spiked to 2,300+ attempts in 20 minutes from IP range 91.200.12.0/24. Connection attempts used dictionary-based username list against default port 5432. All attempts rejected due to invalid credentials.",
+          "gold": "brute_force",
+          "output": "**Analysis:**\n\nThis alert exhibits classic brute force attack characteristics:\n\n1. **High volume of attempts**: 2,300+ authentication failures in a short 20-minute window is abnormally high\n2. **Systematic approach**: Dictionary-based username list indicates automated, methodical credential guessing\n3. **Targeted service**: PostgreSQL on default port 5432 is a known database service\n4. **Single source**: Concentrated from a specific IP range (91.200.12.0/24)\n5. **Failed credentials**: All attempts rejected, consistent with brute force rather than successful compromise\n\nThis is not:\n- **Phishing**: No social engineering or deceptive messaging involved\n- **Malware**: No code execution or system compromise detected\n- **Data exfiltration**: No successful access or data movement\n- **Insider threat**: External IP range, not internal user behavior\n- **DDoS**: While high volume, this is credential-based attack, not resource exhaustion\n\nFINAL: brute_force",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the alert as brute_force with comprehensive, logically sound reasoning that systematically identified all relevant attack characteristics and explicitly ruled out altern"
+          }
+        },
+        {
+          "query": "Endpoint detection identified suspicious PowerShell script execution on finance department laptop that enumerated shared drives, compressed sensitive files into password-protected ZIP archives, and initiated FTP transfer to external server in Eastern Europe. User was on vacation during this activity.",
+          "gold": "data_exfiltration",
+          "output": "**Analysis:**\n\nThis alert exhibits multiple indicators of data exfiltration:\n\n1. **Suspicious script execution** - PowerShell script running with elevated activity\n2. **Reconnaissance activity** - Enumeration of shared drives indicates targeting of data sources\n3. **Data staging** - Compression of sensitive files into password-protected archives is a classic exfiltration preparation technique\n4. **Unauthorized transfer** - FTP transfer to external server (Eastern Europe) indicates data leaving the organization\n5. **Timing anomaly** - Activity during user's vacation suggests either compromised credentials or insider involvement, but the technical execution pattern is clearly exfiltration-focused\n\nWhile the vacation timing could suggest insider threat, the primary attack pattern—enumeration → compression → external transfer—is definitively a data exfiltration operation. The attacker is systematically extracting sensitive data from the finance department.\n\nFINAL: data_exfiltration",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the threat as data_exfiltration with sound reasoning through each attack stage, proper format, and complete alignment with the reference answer."
+          }
+        },
+        {
+          "query": "Receptionist account showing SQL injection patterns against internal HR portal attempting to elevate privileges and access performance review database. Account created search queries for termination records and executive compensation data.",
+          "gold": "insider_threat",
+          "output": "**Analysis:**\n\nThis alert exhibits multiple concerning indicators:\n\n1. **SQL injection patterns** - Technical attack method targeting the HR portal\n2. **Privilege escalation attempt** - Deliberate effort to gain unauthorized access levels\n3. **Suspicious data access** - Targeted queries for sensitive information (termination records, executive compensation)\n4. **Account context** - Receptionist account (low-privilege role) performing atypical technical attacks\n5. **Intentional data targeting** - Specific focus on high-value HR/compensation data suggests deliberate exfiltration intent\n\nWhile this could theoretically be malware compromising the account, the pattern of targeted SQL injection, privilege escalation, and selective high-value data queries points more strongly to **insider threat**. The receptionist account is being used to deliberately access restricted data through technical exploitation, suggesting either:\n- A compromised insider with technical knowledge\n- An insider using technical methods to cover their tracks\n- Account compromise by someone with insider knowledge of what data to target\n\nThe combination of privilege escalation + targeted sensitive data access = data exfiltration attempt, but the deliberate technical exploitation and insider account context makes this primarily an **insider_threat** classification.\n\nFINAL: insider_threat",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the alert as insider_threat with sound reasoning about SQL injection patterns, privilege escalation, and targeted data access from a low-privilege account, matching the "
+          }
+        },
+        {
+          "query": "IDS signature match: NTP amplification attack detected with reflection factor of 556x. External DNS servers being abused to flood our edge routers with 38 Gbps of spoofed response traffic.",
+          "gold": "ddos",
+          "output": "This alert describes a volumetric attack where external NTP servers are being abused to amplify and reflect traffic toward the organization's edge routers, resulting in massive inbound traffic (38 Gbps) designed to overwhelm network infrastructure.\n\nKey indicators:\n- NTP amplification attack (reflection-based)\n- 556x amplification factor\n- Spoofed response traffic flooding edge routers\n- Volumetric attack pattern (38 Gbps)\n\nThis is a classic Distributed Denial of Service (DDoS) attack using the NTP reflection/amplification technique.\n\nFINAL: ddos",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the alert as 'ddos', provided sound technical reasoning identifying all key attack characteristics, and delivered the answer in the expected format with complete accurac"
+          }
+        },
+        {
+          "query": "Multiple employees forwarded an email claiming to be from our benefits provider with subject line about health insurance enrollment deadline. The sender address uses our company name but a different TLD. Clicking the enrollment link presents a form requesting employee ID, SSN, and banking information.",
+          "gold": "phishing",
+          "output": "**Analysis:**\n\nThis alert exhibits classic phishing characteristics:\n\n1. **Spoofed sender address** - Uses company name but different TLD (domain impersonation)\n2. **Social engineering pretext** - Leverages legitimate business process (benefits enrollment) to create urgency\n3. **Credential harvesting** - Form requests sensitive PII (employee ID, SSN, banking information)\n4. **Mass distribution** - Multiple employees received the same malicious email\n5. **Malicious link** - URL directs to fraudulent enrollment form\n\nThe attacker is impersonating a trusted entity (benefits provider/company) to trick employees into voluntarily submitting sensitive personal and financial data.\n\nFINAL: phishing",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the threat as phishing with comprehensive, logically sound reasoning that identifies all key indicators (spoofed sender, social engineering, credential harvesting), perf"
+          }
+        },
+        {
+          "query": "Mobile device management flagged Android application com.systemupdate.core sideloaded outside Google Play containing Anubis banking trojan. Application requests dangerous permissions including SMS intercept and accessibility services. Network traffic shows exfiltration of contact list and installed app inventory to command server in Bulgaria.",
+          "gold": "malware",
+          "output": "This alert describes a sophisticated mobile malware attack with multiple indicators:\n\n**Key Threat Indicators:**\n- **Malware identification**: Anubis banking trojan explicitly detected\n- **Malicious capabilities**: SMS interception, accessibility service abuse (common for credential theft and unauthorized actions)\n- **Data exfiltration**: Contact lists and app inventory being sent to external command server\n- **Distribution method**: Sideloading outside official app store (evasion technique)\n- **Infrastructure**: Command server in Bulgaria (typical for botnet operations)\n\nWhile this alert contains elements of data exfiltration, the primary and most significant threat is the **malware** component. The Anubis trojan is the root cause enabling all other malicious activities (permissions abuse, data theft, command & control communication).\n\nFINAL: malware",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the threat as 'malware' matching the reference, provided sound reasoning identifying Anubis trojan as the root cause, followed the classification task format perfectly, "
+          }
+        },
+        {
+          "query": "Multiple authentication failures detected from IP 185.220.101.47 targeting user account 'admin' over the past 15 minutes. System logs show 247 consecutive failed login attempts with varying password combinations. Account has not been locked out yet.",
+          "gold": "brute_force",
+          "output": "**Analysis:**\n\nThis alert exhibits classic characteristics of a brute force attack:\n\n1. **Multiple failed authentication attempts** - 247 consecutive failed logins in 15 minutes indicates systematic password guessing\n2. **Targeting a high-value account** - The 'admin' account is a primary target for attackers\n3. **Varying password combinations** - Suggests automated tools cycling through password lists\n4. **Single source IP** - 185.220.101.47 is the consistent attack origin\n5. **Rapid succession** - 247 attempts in 15 minutes (roughly 16+ attempts per minute) is far beyond normal user behavior\n6. **Account not locked** - Indicates the attack may still be ongoing\n\nThis is a textbook brute force attack attempting to gain unauthorized access through password enumeration.\n\nFINAL: brute_force",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 1.0,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 1.0,
+            "rationale": "The agent correctly classified the alert as 'brute_force' with comprehensive, logically sound reasoning that accurately identifies all relevant attack indicators and matches the reference answer perfe"
+          }
+        },
+        {
+          "query": "SIEM correlation rule triggered on anomalous pattern: HR system access followed by bulk export of employee records, subsequent login to personal webmail, and large outbound SMTP traffic. Investigation reveals attachment contained spreadsheet with salary information and social security numbers sent to non-company domain.",
+          "gold": "data_exfiltration",
+          "output": "**Analysis:**\n\nThis alert exhibits multiple indicators of data exfiltration:\n\n1. **Unauthorized data access**: Anomalous access to HR system (sensitive employee records)\n2. **Bulk export**: Large-scale extraction of employee data (salary info, SSNs)\n3. **Exfiltration channel**: Data sent via personal webmail to external domain\n4. **Data confirmation**: Attachment contained PII/sensitive financial information\n5. **Behavioral anomaly**: Pattern suggests deliberate data theft rather than legitimate business activity\n\nWhile this could involve insider threat elements (employee account used), the primary security incident is the unauthorized extraction and transmission of sensitive data outside the organization's control.\n\nFINAL: data_exfiltration",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the threat as data_exfiltration with sound reasoning identifying all key indicators (unauthorized access, bulk export, external transmission of PII), proper format, and "
+          }
+        },
+        {
+          "query": "Network logs indicate contractor account querying Active Directory for all VPN user credentials and exporting results to CSV file. Contractor role is limited to help desk password resets with no authorization for bulk credential access.",
+          "gold": "insider_threat",
+          "output": "**Analysis:**\n\nThis alert exhibits several key indicators:\n\n1. **Unauthorized Access**: A contractor account is accessing data (VPN credentials) far beyond their authorized scope (help desk password resets only)\n\n2. **Privilege Escalation**: The account is querying Active Directory for bulk credential information - a capability not granted to their role\n\n3. **Data Exfiltration**: The credentials are being exported to a CSV file, indicating intentional removal of sensitive data from secure systems\n\n4. **Insider Threat Characteristics**: \n   - Legitimate account being misused\n   - Deliberate circumvention of access controls\n   - Extraction of high-value sensitive data (VPN credentials)\n   - Actions inconsistent with job responsibilities\n\nWhile this could involve malware compromising the contractor account, the evidence points most strongly to **insider threat** - either the contractor acting maliciously or their credentials being deliberately misused by someone with knowledge of their access level. The targeted nature of the query (specifically VPN credentials) and the deliberate export suggest intentional malicious activity rather than opportunistic malware behavior.\n\nFINAL: insider_threat",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9675,
+            "rationale": "The agent correctly classified the threat as insider_threat with sound reasoning about unauthorized access, privilege escalation, and data exfiltration, though the extensive analysis slightly exceeds "
+          }
+        },
+        {
+          "query": "Load balancer threshold exceeded: 12,500 requests per second hitting API endpoint /checkout from 890 IP addresses. Pattern indicates coordinated HTTP GET flood. Service degradation confirmed.",
+          "gold": "ddos",
+          "output": "**Analysis:**\n\nThis alert describes a coordinated attack with the following characteristics:\n- Massive spike in request volume (12,500 RPS)\n- Multiple source IPs (890 addresses) indicating distributed nature\n- Targeting a specific endpoint (/checkout)\n- HTTP GET flood pattern\n- Resulting in service degradation\n\nThis is a classic Distributed Denial of Service (DDoS) attack. The attacker is flooding the API endpoint with requests from many different IP addresses to overwhelm the service and make it unavailable to legitimate users.\n\nWhile the endpoint is a checkout function (which could theoretically relate to data exfiltration), the attack pattern is clearly focused on overwhelming the service rather than stealing data. The \"flood\" terminology and coordinated multi-source nature confirm this is a volumetric DDoS attack.\n\nFINAL: ddos",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the threat as 'ddos' with sound reasoning identifying all key attack characteristics (distributed sources, volumetric flood, service degradation), proper format, and per"
+          }
+        },
+        {
+          "query": "Employee clicked on a link in an email claiming to be from DocuSign requesting signature on an urgent contract. The link led to a fake Microsoft 365 login page. Web proxy logs show the destination domain was registered 3 days ago and uses a typosquatted version of the legitimate service.",
+          "gold": "phishing",
+          "output": "**Analysis:**\n\nThis alert exhibits classic phishing characteristics:\n\n1. **Social Engineering**: Email impersonating a trusted service (DocuSign) with urgency tactics (\"urgent contract\")\n2. **Credential Harvesting**: Fake login page designed to capture Microsoft 365 credentials\n3. **Domain Deception**: Typosquatted domain (mimics legitimate service) registered recently\n4. **Attack Infrastructure**: New domain (3 days old) typical of phishing campaigns\n\nThe attacker's goal is to steal user credentials through a fraudulent login page, which is the defining characteristic of phishing attacks.\n\nFINAL: phishing",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 1.0,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 1.0,
+            "rationale": "The agent correctly classified the alert as phishing with sound reasoning covering all key indicators (social engineering, credential harvesting, typosquatting, new domain), matching the reference ans"
+          }
+        },
+        {
+          "query": "Host-based IDS triggered on polymorphic code execution in memory region of chrome.exe. No corresponding disk-based file found indicating fileless attack vector. Process hollowing technique identified injecting malicious code into legitimate browser process. Beacon traffic to 203.0.113.88 every 60 seconds matches Cobalt Strike patterns.",
+          "gold": "malware",
+          "output": "**Analysis:**\n\nThis alert exhibits multiple indicators of malware activity:\n\n1. **Polymorphic code execution** - Code that changes/obfuscates itself to evade detection\n2. **Fileless attack** - Malicious code in memory without disk artifacts\n3. **Process hollowing** - Injecting malicious payload into legitimate process (chrome.exe)\n4. **Command & Control (C2) communication** - Regular beacon traffic to external IP matching known Cobalt Strike patterns\n\nThese are classic hallmarks of advanced malware, specifically a post-exploitation framework (Cobalt Strike) being used for command and control of a compromised host. This is not phishing (social engineering), brute force (credential attacks), data exfiltration alone (though it may lead to it), DDoS, or insider threat. The core threat is the malware infection itself.\n\nFINAL: malware",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly classified the threat as malware with sound technical reasoning identifying polymorphic code, fileless attack, process hollowing, and C2 patterns, matching the reference answer per"
+          }
+        },
+        {
+          "query": "Cloud infrastructure console showing repeated failed authentication events for IAM user 'backup-service'. Logs indicate 178 unsuccessful login attempts with incorrect passwords from unfamiliar geographic location. MFA was not completed for any attempt.",
+          "gold": "brute_force",
+          "output": "**Analysis:**\n\nThis alert exhibits classic characteristics of a brute force attack:\n\n1. **High volume of failed attempts**: 178 unsuccessful login attempts is a significant number indicating systematic password guessing\n2. **Incorrect passwords**: Each attempt used wrong credentials, consistent with brute force methodology\n3. **Unfamiliar geographic location**: Attack originating from unexpected location suggests external threat actor\n4. **MFA bypass**: No successful MFA completion indicates attacker lacks second factor credentials\n5. **Targeted account**: Specific IAM user ('backup-service') suggests either reconnaissance or targeted attack\n\nThe pattern of repeated authentication failures with incorrect passwords is the defining characteristic of brute force attacks, as opposed to other categories like phishing (social engineering), malware (code execution), or data exfiltration (data theft).\n\nFINAL: brute_force",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly classified the threat as brute_force with sound reasoning about failed authentication patterns, provided proper analysis of all relevant indicators, and delivered the exact answer "
+          }
+        }
+      ],
+      "gpa_mean": 0.9644791666666667,
+      "gpa_dims": {
+        "target_alignment": 0.945833333333333,
+        "reasoning_soundness": 0.9470833333333336,
+        "execution_accuracy": 0.9920833333333333,
+        "output_integrity": 0.9729166666666668
+      },
+      "optimization": {
+        "triaged": true,
+        "judge_calls_saved": 0,
+        "n_promoted": 0,
+        "best_val_obj": 1.0,
+        "baseline_val_obj": 1.0,
+        "ship_prob_better": null,
+        "shipped_baseline": null,
+        "front": [
+          {
+            "obj": 1.0,
+            "gpa": 0.978,
+            "why": "baseline (triaged)"
+          }
+        ],
+        "why_log": [],
+        "history": [
+          {
+            "iter": 0,
+            "val_obj": 1.0,
+            "strategy": "baseline",
+            "accepted": true
+          }
+        ]
+      }
+    }
+  },
+  "duration_s": 0.0
+}

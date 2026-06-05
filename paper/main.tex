@@ -889,6 +889,19 @@ on-aggregate-positive} loop whose gains come from disciplined selection
 reflection over random paraphrase beyond the shared selection gate is the next
 experiment the protocol is built to run.
 
+\paragraph{Budget is not the bottleneck (14 vs.\ 30 iterations).}
+More search does not help and can hurt. Re-running the full suite at $30$ iterations
+per task with \emph{no} early stopping (recorded in \texttt{results\_v3\_i30/}) leaves
+the gain over baseline essentially unchanged ($+0.022$ vs.\ \vthreeBaseDelta{}) while
+\emph{adding} a test regression ($1$ vs.\ \vthreeRegress{}; e.g.\ \texttt{platform\_toxicity}
+flips $+0.033\!\to\!-0.034$) at roughly $5\times$ the cost. Consistent with the
+high-budget arm (\S\ref{sec:results}), the binding constraint is the size of the
+\emph{per-task validation signal} ($15$--$30$ examples), not the number of
+optimization steps: more candidates over the same small split mostly add chances to
+overfit it. We therefore fix the budget at $14$ iterations, and identify
+\emph{larger per-task held-out sets} (so the confirmation gate can confidently ship
+the real gains) as the highest-value next investment---more so than additional search.
+
 \section{Limitations}
 \label{sec:limitations}
 We study single-turn classification/extraction/reasoning, \emph{not} multi-step

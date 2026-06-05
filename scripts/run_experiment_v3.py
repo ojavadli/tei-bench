@@ -73,7 +73,7 @@ async def eval_arm(llm, *, agent_model, system_prompt, task, run_judge):
     return rec
 
 
-async def run_task(llm, task, *, agent_model, num_iterations, seed, log):
+async def run_task(llm, task, *, agent_model, num_iterations, seed, log, patience):
     t0 = time.time()
     arms = {}
     arms["baseline"] = await eval_arm(llm, agent_model=agent_model,
@@ -81,7 +81,7 @@ async def run_task(llm, task, *, agent_model, num_iterations, seed, log):
     opt = await optimize_v3(
         llm, agent_model=agent_model, judge_model=JUDGE_MODEL, optimizer_model=OPT_MODEL,
         task=task, baseline_prompt=task.baseline_prompt, train=task.train,
-        num_iterations=num_iterations, seed=seed, log=log)
+        num_iterations=num_iterations, patience=patience, seed=seed, log=log)
     arms["tei_v3"] = await eval_arm(llm, agent_model=agent_model,
                                     system_prompt=opt["best_prompt"], task=task, run_judge=True)
     arms["tei_v3"]["optimization"] = {
@@ -101,6 +101,7 @@ async def run_task(llm, task, *, agent_model, num_iterations, seed, log):
 async def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--iterations", type=int, default=12)
+    ap.add_argument("--patience", type=int, default=5)
     ap.add_argument("--concurrency", type=int, default=10)
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--agent-model", default="claude-haiku-4-5")
@@ -137,7 +138,8 @@ async def main():
             continue
         log = []
         rec = await run_task(llm, task, agent_model=args.agent_model,
-                             num_iterations=args.iterations, seed=args.seed, log=log)
+                             num_iterations=args.iterations, seed=args.seed, log=log,
+                             patience=args.patience)
         out_path.write_text(json.dumps(rec, indent=2, ensure_ascii=False), encoding="utf-8")
         a = rec["arms"]; o = a["tei_v3"]["optimization"]
         tag = "TRIAGED" if o["triaged"] else f"saved={o['judge_calls_saved']}"

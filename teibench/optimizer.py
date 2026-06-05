@@ -248,7 +248,7 @@ async def optimize_v3(
                 f"QUERY: {f.query}\nAGENT OUTPUT: {f.output[:280]}\nREFERENCE: {f.gold}"
                 for f in fails)
             wd, wv = _weakest_dim(getattr(last_eval, "gpa_dims", {}) or {})
-            mem = "\n".join(why_log[-3:]) if why_log else "(no prior edits yet)"
+            mem = "\n".join(why_log[-5:]) if why_log else "(no prior edits yet)"
             new_prompt = await llm.complete(
                 model=optimizer_model, system=_STRUCT_SYSTEM,
                 user=(f"TASK: {task.instruction}\n\nCURRENT SYSTEM PROMPT:\n{parent.prompt}"
@@ -280,14 +280,18 @@ async def optimize_v3(
         pool.append(cand)
         last_eval = ev
 
-        # ---- why-better/why-worse note (credit assignment, fed to next proposal) ----
+        # ---- why-better/why-worse note (GEPA-style credit assignment, fed forward) ----
         delta = cand.objective - incumbent.objective
-        wd, wv = _weakest_dim(ev.gpa_dims or {})
-        rats = [getattr(e, "gpa", {}).get("rationale", "") for e in ev.examples
-                if isinstance(getattr(e, "gpa", None), dict) and e.objective < 1.0]
-        why = (f"iter {it} ({strategy}): val obj {delta:+.3f} -> {cand.objective:.3f}; "
-               f"weakest dim {wd}={wv:.2f}. "
-               + (f"why: {rats[0][:160]}" if rats else "why: format/decision-rule miss."))
+        dims = ev.gpa_dims or {}
+        wd, wv = _weakest_dim(dims)
+        dimstr = ", ".join(f"{k.replace('reasoning_soundness','reasoning')}={dims[k]:.2f}"
+                           for k in dims) or "n/a"
+        rats = [(e.gpa or {}).get("rationale", "") for e in ev.examples
+                if isinstance(getattr(e, "gpa", None), dict) and e.objective < 1.0
+                and (e.gpa or {}).get("rationale")]
+        why = (f"iter {it} [{strategy}]: val acc {cand.objective:.3f} ({delta:+.3f} vs incumbent); "
+               f"dims [{dimstr}]; weakest={wd}. WHY it still failed: "
+               + (" | ".join(r[:140] for r in rats[:2]) if rats else "format/decision-rule miss."))
         why_log.append(why)
 
         # ---- do-no-harm acceptance gate (accept only confident improvements) ----
