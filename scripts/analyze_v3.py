@@ -139,6 +139,23 @@ def main():
         ax.grid(axis="y", alpha=0)
         fig.tight_layout(); fig.savefig(FIG / "teiv3_forest.png"); plt.close(fig)
 
+    # ---- slope: baseline -> TEI v3 (do-no-harm: every line is up or flat, none down) ----
+    task_order = sorted(range(n), key=lambda i: obj["baseline"][i])
+    up = down = flat = 0
+    fig, ax = plt.subplots(figsize=(3.2, 3.6))
+    for i in task_order:
+        b, a = obj["baseline"][i], obj["tei_v3"][i]
+        c = GREEN if a > b + 1e-9 else (RED if a < b - 1e-9 else GREY)
+        up += a > b + 1e-9; down += a < b - 1e-9; flat += abs(a - b) <= 1e-9
+        ax.plot([0, 1], [b, a], "-", color=c, alpha=0.6, lw=1.2)
+        ax.scatter([0, 1], [b, a], color=c, s=14, zorder=3)
+    ax.set_xticks([0, 1]); ax.set_xticklabels(["Baseline", "TEI v3"]); ax.set_xlim(-0.2, 1.2)
+    ax.set_ylim(-0.02, 1.04); ax.set_ylabel("Held-out objective accuracy")
+    ax.set_title(f"Per-task baseline $\\rightarrow$ TEI v3 (do-no-harm)\n"
+                 f"{up} up \u00b7 {flat} tie \u00b7 {down} down", fontsize=8.5)
+    ax.grid(axis="x", alpha=0)
+    fig.tight_layout(); fig.savefig(FIG / "slope_v3.png"); plt.close(fig)
+
     # ---------- table ----------
     def crow(label, s):
         return (f"{label} & {s['mean_delta']:+.3f} & [{s['ci95_low']:+.3f},{s['ci95_high']:+.3f}] "

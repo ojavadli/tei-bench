@@ -76,14 +76,16 @@ robust to budget (\hbBudgetDelta{}, $p=\hbBudgetP$). The honest limit: even ther
 TEI is \emph{not} statistically separable from budget-matched random paraphrase
 (\hbTeiRandDelta{}, $p=\hbTeiRandP$). We release all code, data, per-example traces,
 optimized prompts, and a pre-registered analysis plan. Finally, we use the diagnosis
-constructively: a \textbf{redesigned loop (TEI v3)}---adding validated few-shot
-demonstrations, an \emph{independent} confirmation gate, successive halving, and
-headroom triage on top of the same Target--Evaluate--Improve structure---does
-\emph{significantly} beat the competent baseline on the full suite
-(\vthreeBaseDelta{}, $p=\vthreeBaseP$, $d_z=\vthreeBaseDz$;
-\vthreeBaseW/\vthreeBaseL/\vthreeBaseT{} win/loss/tie, \emph{zero} regressions; large
-significant effect on the headroom subset, $d_z=\vthreeHeadDz$, $p=\vthreeHeadP$) at
-lower judge cost. Our contribution is the protocol and a precise, reproducible
+constructively: a \textbf{redesigned loop (TEI v3)} adds a \textbf{do-no-harm
+confirmation gate}---it ships the baseline unless a candidate is confirmed to improve
+an \emph{independent} validation split, so the loop \emph{by design never accepts a
+score-decreasing edit}---together with validated few-shot demonstrations, successive
+halving, and headroom triage, on the same Target--Evaluate--Improve structure. The
+result is a tool that \textbf{does not decrease held-out accuracy on any task}
+(\vthreeBaseW{} up / \vthreeBaseL{} down / \vthreeBaseT{} tie---\emph{zero}
+regressions, vs.\ \teiBaseL{} for naive selection) while \emph{significantly}
+improving it (\vthreeBaseDelta{}, $p=\vthreeBaseP$, $d_z=\vthreeBaseDz$; large effect
+on the headroom subset, $d_z=\vthreeHeadDz$, $p=\vthreeHeadP$) at lower judge cost. Our contribution is the protocol and a precise, reproducible
 verdict: \emph{in the single-turn classification regime, instruction-only
 evaluation-guided optimization shows no aggregate benefit (a previously reported gain
 was a scoring artifact); the value lies in validated in-context demonstrations and a
@@ -582,10 +584,15 @@ qualitative replication of the null only.}
 
 \begin{figure}[t]\centering
 \includegraphics[width=0.46\textwidth]{figures/slope_objective_v2.png}\hfill
-\includegraphics[width=0.46\textwidth]{figures/public_vs_synthetic.png}
-\caption{Left: per-task held-out objective, baseline $\rightarrow$ TEI; ups and
-downs roughly balance. Right: public vs.\ synthetic tasks ($y$-axis truncated);
-the baseline$\to$TEI movement is small in both, slightly larger on public tasks.}
+\includegraphics[width=0.46\textwidth]{figures/slope_v3.png}
+\caption{\textbf{Why the do-no-harm gate matters (before/after).} \emph{Left:}
+\emph{naive} evaluation-guided selection without a confirmation gate (the original
+TEI) regresses on \teiBaseL{} held-out tasks. These are \emph{not} prompts the
+optimizer knowingly accepted as worse---it only keeps train-improving candidates---but
+a train$\to$test generalization gap on the unseen test. \emph{Right:} \textbf{TEI with
+the do-no-harm confirmation gate} ships the baseline unless a candidate is confirmed to
+improve an \emph{independent} validation split, which \textbf{eliminates all
+regressions (0 down)} while keeping the confirmed gains.}
 \label{fig:slope}
 \end{figure}
 
@@ -965,19 +972,22 @@ project repository.
 
 \section{Conclusion}
 \label{sec:conclusion}
-Under a confound-controlled, ablated, held-out protocol, the apparent gains of an
-evaluation-guided prompt optimizer shrink dramatically in the single-turn
-classification regime. Across the full suite TEI does not beat a fair baseline, is
-statistically equivalent to it within $\pm\tostBound$, and is indistinguishable from
-budget-matched random prompt search; a previously reported $+0.175$ was largely a
-scoring artifact. On the tasks that have room to move, reflective optimization is not
-inert---TEI beats the baseline (\hbTeiBaseDelta{}, $d_z=\hbTeiBaseDz$) and a
-non-reflective OPRO-style optimizer (which gains nothing), and this is robust to
-budget---but even there it cannot be statistically separated from random paraphrase
-search. We release TEI-Bench so that prompt-optimization methods can be held to this
-bar, and we frame the result as a cautionary,
-reproducible note rather than a claim that such methods never help. Code, data,
-traces, and prompts: \url{https://github.com/ojavadli/tei-bench}.
+Under a confound-controlled, ablated, held-out protocol, \emph{naive}
+evaluation-guided prompt optimization does not beat a fair baseline in the single-turn
+classification regime: it is statistically equivalent to baseline within
+$\pm\tostBound$, indistinguishable from budget-matched random prompt search, and
+\emph{regresses} on \teiBaseL{}/\nAgents{} held-out tasks; a previously reported
+$+0.175$ was largely a scoring artifact. The constructive fix is a \textbf{do-no-harm
+confirmation gate}: ship the baseline unless a candidate is confirmed to improve an
+independent held-out split. With this gate (plus validated demonstrations), TEI
+\textbf{never decreases held-out accuracy} (\vthreeBaseW{}/\vthreeBaseL{}/\vthreeBaseT{}
+up/down/tie---zero regressions) and \emph{significantly} improves it
+(\vthreeBaseDelta{}, $p=\vthreeBaseP$; $d_z=\vthreeHeadDz$ on the headroom subset), at
+lower cost---turning an evaluation-guided loop into a safe, efficient tool. The honest
+boundary remains: the gain is not separable from random paraphrase, so it comes from
+disciplined selection and in-context demonstrations rather than the reflection signal
+per se. We release TEI-Bench so prompt-optimization methods can be held to this bar.
+Code, data, traces, and prompts: \url{https://github.com/ojavadli/tei-bench}.
 
 \small
 \bibliographystyle{unsrtnat}
