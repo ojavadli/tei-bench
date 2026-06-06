@@ -1,11 +1,10 @@
-\documentclass[10pt,twocolumn]{article}
-\usepackage[margin=0.78in]{geometry}
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
 \usepackage{booktabs}
 \usepackage{graphicx}
 \usepackage{amsmath,amssymb}
 \usepackage{xcolor}
 \usepackage{authblk}
-\usepackage{balance}
 \usepackage{microtype}
 \usepackage{algorithm}
 \usepackage[noend]{algpseudocode}
@@ -14,13 +13,12 @@
 \usepackage[numbers,sort&compress]{natbib}
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
 
-\lstset{basicstyle=\ttfamily\scriptsize,breaklines=true,breakatwhitespace=false,
+\lstset{basicstyle=\ttfamily\footnotesize,breaklines=true,breakatwhitespace=false,
   columns=fullflexible,keepspaces=true,frame=single,framesep=2pt,rulecolor=\color{gray!50},
   xleftmargin=3pt,xrightmargin=3pt,aboveskip=5pt,belowskip=5pt,showstringspaces=false,
   postbreak=\mbox{\textcolor{gray}{$\hookrightarrow$}\space}}
 
 \renewcommand{\arraystretch}{1.08}
-\setlength{\columnsep}{0.28in}
 
 \input{numbers_v2}
 \input{numbers_hb}
@@ -462,7 +460,7 @@ the two arms; $\Delta=A-B$. \emph{No} contrast survives Holm correction.}
 \end{table}
 
 \begin{figure}[t]\centering
-\includegraphics[width=\linewidth]{figures/ablation_arms.png}
+\includegraphics[width=0.62\textwidth]{figures/ablation_arms.png}
 \caption{Held-out accuracy by optimization arm (mean; whiskers are 95\% CIs). The
 \textbf{$y$-axis is truncated} to make the $\le0.015$ differences visible; even so,
 the confidence intervals overlap almost completely and no pairwise difference
@@ -475,7 +473,16 @@ TEI exceeds the baseline by only \teiBaseDelta{} (95\% CI
 $[\teiBaseCIlo,\teiBaseCIhi]$, $t=\teiBaseT$, $p=\teiBaseP$, $d_z=\teiBaseDz$),
 which does not survive multiplicity correction (Holm $p=\holmTeiBaseP$). The
 direction is inconsistent across tasks: \teiBaseW{} wins, \teiBaseL{} losses,
-\teiBaseTie{} ties (sign test $p=\signP$; permutation $p=\permP$). A two one-sided
+\teiBaseTie{} ties (sign test $p=\signP$; permutation $p=\permP$). \emph{The
+\teiBaseL{} losses are not prompts the optimizer knowingly accepted as worse}: like
+GEPA, APE, OPRO, and MIPRO, the loop only ever keeps a candidate that improves the
+score \emph{on the data it can see} (the train/selection split). The losses are a
+\textbf{train$\to$test generalization gap}---a prompt that genuinely improved on
+train regressed on the unseen held-out test. Scoring in-sample (on the selection
+data) would show \emph{zero} regressions, but that is precisely the inflated
+evaluation this benchmark is built to avoid; no optimizer can guarantee held-out
+improvement without seeing held-out data. \S\ref{sec:teiv3} closes this gap with an
+independent confirmation split, yielding \vthreeRegress{} regressions. A two one-sided
 test (TOST) against a $\pm\tostBound$ margin finds the arms statistically
 \emph{equivalent} ($p=\tostP$). We stress the honest caveat: the full-suite test is
 \emph{underpowered}---\nCeiling{} of \nAgents{} tasks sit at ceiling ($\geq0.999$
@@ -515,7 +522,7 @@ Fig.~\ref{fig:headroom} shows the per-task picture at the practical budget: gain
 concentrate on a few subjective tasks, several are flat, and two regress.
 
 \begin{figure}[t]\centering
-\includegraphics[width=0.92\linewidth]{figures/headroom_forest.png}
+\includegraphics[width=0.6\textwidth]{figures/headroom_forest.png}
 \caption{Per-task TEI$-$baseline on the headroom subset (baseline $<0.9$). The mean
 is positive and medium-sized but not significant; gains concentrate in a few
 subjective tasks while two tasks regress.}
@@ -573,14 +580,14 @@ qualitative replication of the null only.}
 \input{tables/xprovider}
 \end{table}
 
-\begin{figure*}[t]\centering
-\includegraphics[width=0.40\textwidth]{figures/slope_objective_v2.png}\hfill
-\includegraphics[width=0.40\textwidth]{figures/public_vs_synthetic.png}
+\begin{figure}[t]\centering
+\includegraphics[width=0.46\textwidth]{figures/slope_objective_v2.png}\hfill
+\includegraphics[width=0.46\textwidth]{figures/public_vs_synthetic.png}
 \caption{Left: per-task held-out objective, baseline $\rightarrow$ TEI; ups and
 downs roughly balance. Right: public vs.\ synthetic tasks ($y$-axis truncated);
 the baseline$\to$TEI movement is small in both, slightly larger on public tasks.}
 \label{fig:slope}
-\end{figure*}
+\end{figure}
 
 \begin{table}[t]\centering
 \caption{Secondary endpoint: Evaluation-dimensions judge, baseline vs.\ TEI
@@ -594,14 +601,14 @@ The full per-task results for all \nAgents{} tasks and four arms are in
 Table~\ref{tab:per}; per-task bootstrap CIs and per-dimension breakdowns are in
 Appendices~\ref{app:pertask}--\ref{app:gpadims}.
 
-\begin{table*}[t]\centering
+\begin{table}[t]\centering
 \caption{Per-task held-out objective accuracy by arm, all \nAgents{} tasks
 (Base = baseline, Rand = random search, ObjRef = objective-only reflection,
 TEI = full). Full bootstrap CIs in Appendix~\ref{app:pertask}.}
-\label{tab:per}\scriptsize
-\setlength{\tabcolsep}{4pt}
+\label{tab:per}\footnotesize
+\setlength{\tabcolsep}{6pt}
 \input{tables/per_agent_v2}
-\end{table*}
+\end{table}
 
 \paragraph{What does optimization actually produce?}
 Inspecting the optimized prompts (all reproduced in Appendix~\ref{app:prompts})
@@ -858,14 +865,14 @@ splits. Arm means (top) and paired contrasts (bottom).}
 \end{table}
 
 \begin{figure}[t]\centering
-\includegraphics[width=0.92\linewidth]{figures/teiv3_arms.png}
+\includegraphics[width=0.6\textwidth]{figures/teiv3_arms.png}
 \caption{Held-out accuracy on the full suite for every arm including the redesigned
 TEI~v3 ($y$-axis truncated; whiskers are 95\% CIs).}
 \label{fig:teiv3}
 \end{figure}
 
 \begin{figure}[t]\centering
-\includegraphics[width=0.92\linewidth]{figures/teiv3_forest.png}
+\includegraphics[width=0.6\textwidth]{figures/teiv3_forest.png}
 \caption{Per-task TEI~v3 $-$ baseline (held-out). Tasks the loop triaged or gated to
 the baseline contribute exactly zero (omitted); the do-no-harm gate suppresses the
 regressions that dragged the v2 aggregate.}
@@ -972,7 +979,6 @@ bar, and we frame the result as a cautionary,
 reproducible note rather than a claim that such methods never help. Code, data,
 traces, and prompts: \url{https://github.com/ojavadli/tei-bench}.
 
-\balance
 \small
 \bibliographystyle{unsrtnat}
 \bibliography{references}
