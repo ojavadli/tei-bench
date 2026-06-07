@@ -482,4 +482,162 @@ async def optimize(
     }
 
 
-__all__ = ["optimize", "optimize_v3", "Candidate"]
+_PROMPT_OPT_SYSTEM = """You are optimizing the WORDING and CONTENT of a task agent's
+SYSTEM PROMPT whose overall section STRUCTURE is already fixed. You are given the
+current prompt, several failing validation examples (input, the agent's wrong output,
+the reference answer), the weakest evaluation dimension, and a short memory of how
+your previous edits changed the validation score.
+
+Improve the instructions, label definitions, decision rules, and phrasing to maximize
+accuracy. Keep the existing section structure; do NOT hard-code answers to the
+specific examples. Return ONLY the improved system prompt text, nothing else."""
+
+
+async def optimize_two_phase(
+    llm: LLM,
+    *,
+    agent_model: str,
+    judge_model: str,
+    optimizer_model: str,
+    task,
+    baseline_prompt: str,
+    train: list,
+    struct_iters: int = 30,
+    prompt_iters: int = 30,
+    seed: int = 0,
+    ship_threshold: float = 0.70,
+    log: Optional[list] = None,
+) -> dict:
+    """Two-phase TEI: (A) <struct_iters> iterations of STRUCTURAL fixes, deploy the
+    highest-scoring structure; then (B) starting from that, <prompt_iters> iterations
+    of PROMPT optimizations, deploy the highest-scoring prompt. Candidates are scored
+    on a held-out validation split V; a final do-no-harm gate confirms the winner on
+    an INDEPENDENT split Vconf (ship baseline unless confirmed better), so the loop
+    never deploys a score-decreasing change. The TEST split is never touched here."""
+    rng = random.Random(seed)
+    log = log if log is not None else []
+    idx = list(range(len(train))); rng.shuffle(idx)
+    nconf = max(5, round(len(train) * 0.3))
+    Vconf = [train[i] for i in idx[:nconf]] if len(train) >= 8 else list(train)
+    V = [train[i] for i in idx[nconf:]] if len(train) >= 8 else list(train)
+    R = V
+    Vscreen = V[: min(5, len(V))]
+
+    async def ev_obj(prompt, examples):
+        return await evaluate_split(llm, agent_model=agent_model, judge_model=judge_model,
+                                    system_prompt=prompt, task=task, examples=examples, run_judge=False)
+
+    async def ev_full(prompt, examples):
+        return await evaluate_split(llm, agent_model=agent_model, judge_model=judge_model,
+                                    system_prompt=prompt, task=task, examples=examples, run_judge=True)
+
+    base_full = await ev_full(baseline_prompt, V)
+    base_conf = await ev_obj(baseline_prompt, Vconf)
+    base = Candidate(baseline_prompt, base_full.objective_mean, base_full.gpa_mean, 0, "baseline")
+    log.append(f"  [2phase] baseline V obj={base.objective:.3f} (nV={len(V)} nConf={len(Vconf)})")
+
+    # Short-circuit: if the baseline is already perfect on validation, no candidate
+    # can score higher, so the highest-scoring deploy IS the baseline. Skip both
+    # phases (saves budget on saturated agents) rather than burn 60 iterations.
+    if base.objective >= 0.999:
+        log.append("  [2phase] baseline already perfect on V; ship baseline (no headroom).")
+        return {"mode": "two_phase", "best_prompt": baseline_prompt,
+                "baseline_val": base.objective, "struct_best_val": base.objective,
+                "prompt_best_val": base.objective, "final_val": base.objective,
+                "shipped_baseline": True, "ship_prob_better": 0.0,
+                "deployed_phase": "baseline(ceiling)", "struct_iters": 0, "prompt_iters": 0,
+                "struct_prompt": baseline_prompt, "trajA": [], "trajB": []}
+
+    async def run_phase(name, start, iters, gen_fn):
+        best = start
+        last = await ev_full(start.prompt, V)   # failing examples + weakest dim for reflection
+        why, traj = [], [{"iter": 0, "val_obj": best.objective}]
+        for it in range(1, iters + 1):
+            prompt = (await gen_fn(best, last, why, it) or "").strip()
+            if len(prompt) < 20:
+                continue
+            scr = await ev_obj(prompt, Vscreen)               # successive-halving screen
+            if scr.objective_mean < best.objective - _se(best.objective, len(Vscreen)):
+                traj.append({"iter": it, "screened": True}); continue
+            ev = await ev_obj(prompt, V)                       # full validation score
+            cand = Candidate(prompt, ev.objective_mean, 0.0, it, name)
+            improved = cand.objective > best.objective
+            if improved:
+                best = cand
+                last = await ev_full(prompt, V)               # refresh reflection from new best
+            why.append(f"iter {it}: V acc {cand.objective:.3f} ({'kept' if improved else 'rejected'}; best {best.objective:.3f})")
+            traj.append({"iter": it, "val_obj": cand.objective, "kept": improved})
+        log.append(f"  [2phase:{name}] best V obj={best.objective:.3f} after {iters} iters")
+        return best, traj
+
+    # ---- Phase A: structural fixes ----
+    async def gen_struct(best, last, why, it):
+        fails = _failures(last, k=4)
+        fb = "\n\n".join(f"QUERY: {f.query}\nAGENT OUTPUT: {f.output[:240]}\nREFERENCE: {f.gold}" for f in fails)
+        wd, wv = _weakest_dim(getattr(last, "gpa_dims", {}) or {})
+        mem = "\n".join(why[-5:]) or "(no prior edits yet)"
+        return await llm.complete(
+            model=optimizer_model, system=_STRUCT_SYSTEM,
+            user=(f"TASK: {task.instruction}\n\nCURRENT SYSTEM PROMPT:\n{best.prompt}"
+                  f"\n\nWEAKEST EVALUATION DIMENSION: {wd} ({wv:.2f})"
+                  f"\n\nHOW PRIOR EDITS MOVED VALIDATION:\n{mem}"
+                  f"\n\nFAILING VALIDATION EXAMPLES:\n{fb}"
+                  f"\n\nMake a STRUCTURAL fix. Return the improved system prompt only."),
+            temperature=0.8, max_tokens=1500, nonce=f"2pA-{seed}-{it}")
+
+    best_struct, trajA = await run_phase("struct", base, struct_iters, gen_struct)
+
+    # ---- Phase B: prompt optimization on top of the deployed structure ----
+    async def gen_prompt(best, last, why, it):
+        if rng.random() < 0.4 and R:                          # few-shot demonstration variant
+            demos = _make_demos(R, task, k=min(6, max(2, len(R))), rng=rng)
+            if demos.strip():
+                stem = best.prompt.split("\n\nHere are solved examples")[0]
+                return stem + "\n\nHere are solved examples to follow:\n\n" + demos
+        fails = _failures(last, k=4)
+        fb = "\n\n".join(f"QUERY: {f.query}\nAGENT OUTPUT: {f.output[:240]}\nREFERENCE: {f.gold}" for f in fails)
+        wd, wv = _weakest_dim(getattr(last, "gpa_dims", {}) or {})
+        mem = "\n".join(why[-5:]) or "(no prior edits yet)"
+        return await llm.complete(
+            model=optimizer_model, system=_PROMPT_OPT_SYSTEM,
+            user=(f"TASK: {task.instruction}\n\nCURRENT SYSTEM PROMPT (keep its structure):\n{best.prompt}"
+                  f"\n\nWEAKEST EVALUATION DIMENSION: {wd} ({wv:.2f})"
+                  f"\n\nHOW PRIOR EDITS MOVED VALIDATION:\n{mem}"
+                  f"\n\nFAILING VALIDATION EXAMPLES:\n{fb}"
+                  f"\n\nOptimize the wording/content. Return the improved system prompt only."),
+            temperature=0.8, max_tokens=1600, nonce=f"2pB-{seed}-{it}")
+
+    best_prompt_c, trajB = await run_phase("prompt", best_struct, prompt_iters, gen_prompt)
+
+    # ---- final do-no-harm confirmation on the independent split ----
+    final = best_prompt_c
+    if final is base:
+        ship_prob, shipped_baseline, best = 0.0, True, base
+    else:
+        cc = await ev_obj(final.prompt, Vconf)
+        ship_prob = prob_better(cc.objective_mean, len(Vconf), base_conf.objective_mean, len(Vconf), rng)
+        shipped_baseline = ship_prob < ship_threshold
+        best = base if shipped_baseline else final
+
+    if shipped_baseline:
+        phase = "baseline"
+    elif best_prompt_c.objective > best_struct.objective + 1e-9:
+        phase = "structural+prompt"
+    elif best_struct.objective > base.objective + 1e-9:
+        phase = "structural-only"
+    else:
+        phase = "baseline"
+
+    log.append(f"  [2phase] FINAL phase={phase} ship_prob={ship_prob:.2f} "
+               f"-> {'baseline' if shipped_baseline else 'candidate'} (val {best.objective:.3f})")
+    return {
+        "mode": "two_phase", "best_prompt": best.prompt,
+        "baseline_val": base.objective, "struct_best_val": best_struct.objective,
+        "prompt_best_val": best_prompt_c.objective, "final_val": best.objective,
+        "shipped_baseline": shipped_baseline, "ship_prob_better": ship_prob,
+        "deployed_phase": phase, "struct_iters": struct_iters, "prompt_iters": prompt_iters,
+        "struct_prompt": best_struct.prompt, "trajA": trajA, "trajB": trajB,
+    }
+
+
+__all__ = ["optimize", "optimize_v3", "optimize_two_phase", "Candidate"]

@@ -1,0 +1,736 @@
+{
+  "task_id": "legal_contract_clause",
+  "industry": "Legal",
+  "metric": "classification",
+  "source": "Authored for TEI-Bench (Sonnet-generated, Sonnet-validated; kept only label-agreed examples).",
+  "is_public": false,
+  "n_train": 15,
+  "n_test": 24,
+  "agent_model": "claude-haiku-4-5",
+  "judge_model": "claude-sonnet-4-6",
+  "optimizer_model": "claude-sonnet-4-6",
+  "seed": 0,
+  "arms": {
+    "baseline": {
+      "objective_mean": 1.0,
+      "objective_ci95": [
+        1.0,
+        1.0
+      ],
+      "gpa_mean": 0.9512499999999997,
+      "gpa_dims": {
+        "target_alignment": 0.9479166666666662,
+        "reasoning_soundness": 0.9366666666666664,
+        "execution_accuracy": 0.9374999999999997,
+        "output_integrity": 0.9829166666666668
+      },
+      "prompt": "You are a contract-clause classifier. Classify the contract clause into its clause type. Classify into one of these categories: indemnification, termination, confidentiality, governing_law, limitation_of_liability, payment_terms.",
+      "examples": [
+        {
+          "query": "This Agreement shall be construed and enforced in accordance with the laws of the State of Delaware, without regard to its conflict of laws provisions.",
+          "gold": "governing_law",
+          "output": "This clause specifies which state's laws will govern the interpretation and enforcement of the agreement. It explicitly states that Delaware law applies and excludes conflict of laws principles.\n\nFINAL: governing_law",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.98,
+            "aggregate": 0.9574999999999999,
+            "rationale": "The agent correctly identified the clause type as 'governing_law', matching the reference answer, with sound reasoning explaining why Delaware law applies and the exclusion of conflict of laws princip"
+          }
+        },
+        {
+          "query": "The maximum amount recoverable by Licensee from Licensor for all claims combined shall be limited to the license fees paid in the six months prior to the first event giving rise to such claims.",
+          "gold": "limitation_of_liability",
+          "output": "This clause limits the financial exposure of the Licensor by capping the maximum amount that the Licensee can recover from the Licensor across all claims. The clause specifies that recovery is restricted to license fees paid in the six months preceding the claim event.\n\nThis is a classic limitation of liability clause, as it:\n1. Restricts the amount of damages recoverable\n2. Sets a monetary cap on liability\n3. Applies to \"all claims combined\"\n\nFINAL: limitation_of_liability",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly identified the clause as 'limitation_of_liability', matching the reference answer, with sound reasoning and proper format."
+          }
+        },
+        {
+          "query": "The purchase price of $250,000 shall be paid as follows: (i) $75,000 deposit upon signing; (ii) $100,000 upon substantial completion; and (iii) $75,000 within 15 days of final inspection approval.",
+          "gold": "payment_terms",
+          "output": "This clause specifies the payment schedule and amounts for a purchase agreement. It breaks down the total price of $250,000 into three installments tied to specific milestones: initial deposit upon signing, payment upon substantial completion, and final payment after inspection approval.\n\nThis is clearly a payment terms clause as it defines when and how much payment is due at different stages of the transaction.\n\nFINAL: payment_terms",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.9,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified the clause as 'payment_terms', matching the reference answer, with sound reasoning explaining the milestone-based payment structure, though the verbose explanation was u"
+          }
+        },
+        {
+          "query": "The Company undertakes to reimburse and protect the Executive from any losses, expenses, or liabilities (including reasonable attorney's fees) that the Executive may incur in connection with any action, suit, or proceeding arising out of the Executive's performance of duties on behalf of the Company, except where such actions constitute willful misconduct or gross negligence.",
+          "gold": "indemnification",
+          "output": "This clause describes the Company's obligation to reimburse and protect the Executive from losses, expenses, and liabilities arising from the Executive's performance of duties. This is a classic indemnification provision, where one party (the Company) agrees to compensate and defend another party (the Executive) against claims and costs, with a carve-out for willful misconduct or gross negligence.\n\nFINAL: indemnification",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.98,
+            "aggregate": 0.9574999999999999,
+            "rationale": "The agent correctly identified the clause as an indemnification provision, matching the reference answer, with sound reasoning explaining the key elements (reimbursement, defense, carve-out) and prope"
+          }
+        },
+        {
+          "query": "This Agreement shall automatically expire on December 31, 2025, unless earlier terminated in accordance with the provisions set forth herein or extended by mutual written consent of both parties.",
+          "gold": "termination",
+          "output": "This clause addresses the automatic expiration of the agreement on a specific date (December 31, 2025) and allows for early termination under certain conditions or extension by mutual consent. These are core elements of contract termination provisions.\n\nFINAL: termination",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly identified the clause type as 'termination,' matching the reference answer, with sound reasoning about the expiration and early termination elements."
+          }
+        },
+        {
+          "query": "Consultant acknowledges that during the engagement, they may have access to sensitive materials including financial records, product designs, and strategic plans, all of which must be kept strictly private and not shared with any external entities.",
+          "gold": "confidentiality",
+          "output": "This clause addresses the protection of sensitive information that the Consultant may access during their engagement. The key elements are:\n\n1. **Identification of sensitive materials**: Financial records, product designs, and strategic plans\n2. **Obligation**: Must be kept strictly private\n3. **Restriction**: Cannot be shared with external entities\n\nThis is clearly a confidentiality clause, as it establishes obligations to maintain the secrecy of proprietary and sensitive information disclosed during the business relationship.\n\nFINAL: confidentiality",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.9,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified the clause as a confidentiality clause, matching the reference answer, with sound reasoning and clear identification of the key elements, though the verbose breakdown wa"
+          }
+        },
+        {
+          "query": "This Agreement is made under and shall be governed by and construed in accordance with the laws of the Federal Republic of Germany.",
+          "gold": "governing_law",
+          "output": "This clause specifies which jurisdiction's laws will govern the interpretation and enforcement of the agreement. It establishes that German law applies to the contract.\n\nFINAL: governing_law",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.95,
+            "aggregate": 0.925,
+            "rationale": "The agent correctly identified the clause type as 'governing_law', matching the reference answer, with sound reasoning explaining why German law governs the contract."
+          }
+        },
+        {
+          "query": "In no event shall either party be liable for any indirect, incidental, special, consequential, or punitive damages, including but not limited to loss of profits, revenue, data, or use, whether in an action in contract or tort, even if such party has been advised of the possibility of such damages.",
+          "gold": "limitation_of_liability",
+          "output": "This clause limits the liability of both parties by excluding certain types of damages from recovery. It specifically carves out indirect, incidental, special, consequential, and punitive damages, regardless of whether the claim arises from contract or tort. This is a classic limitation of liability provision that caps the exposure of the parties to direct damages only.\n\nFINAL: limitation_of_liability",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.98,
+            "aggregate": 0.9574999999999999,
+            "rationale": "The agent correctly identified the clause as 'limitation_of_liability', matching the reference answer exactly, with sound reasoning and proper explanation of the clause's scope."
+          }
+        },
+        {
+          "query": "The total contract value of $1.2 million shall be distributed across 24 monthly payments of $50,000 each, commencing on the first day of the month following system deployment and continuing for the duration of the term.",
+          "gold": "payment_terms",
+          "output": "This clause specifies how and when payments will be made under the contract. It details:\n- The total contract value ($1.2 million)\n- The payment structure (24 monthly installments)\n- The payment amount ($50,000 per month)\n- The payment schedule (starting the first day of the month following deployment)\n- The duration (24 months)\n\nThis is clearly a payment terms clause, as it establishes the financial obligations and payment schedule between the parties.\n\nFINAL: payment_terms",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly identified the clause as 'payment_terms' matching the reference answer, with sound reasoning and proper format, though the verbose breakdown was unnecessary for the task."
+          }
+        },
+        {
+          "query": "Licensee shall be solely responsible for and shall indemnify, defend, and hold Licensor harmless from and against any claims, suits, losses, damages, costs, fees, and expenses arising out of or relating to any allegations that the Licensee's modifications to the licensed materials violate any applicable laws or regulations.",
+          "gold": "indemnification",
+          "output": "This clause establishes that the Licensee must indemnify and hold the Licensor harmless from claims and damages arising from allegations that the Licensee's modifications violate applicable laws or regulations. The key elements are:\n\n1. The Licensee assumes responsibility for indemnification\n2. The Licensee must defend and hold the Licensor harmless\n3. The indemnification covers claims, suits, losses, damages, costs, fees, and expenses\n4. The trigger is allegations of legal violations related to the Licensee's modifications\n\nThis is a classic indemnification clause where one party (Licensee) agrees to compensate and protect the other party (Licensor) from specified liabilities.\n\nFINAL: indemnification",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.98,
+            "aggregate": 0.9574999999999999,
+            "rationale": "The agent correctly identified the clause as an indemnification clause, matching the reference answer, with sound reasoning and proper identification of key elements."
+          }
+        },
+        {
+          "query": "Upon dissolution, bankruptcy, or insolvency proceedings initiated by or against either party, the non-affected party may immediately discontinue performance under this Agreement by providing written notification.",
+          "gold": "termination",
+          "output": "This clause addresses the circumstances under which a party can end their obligations under the agreement. It specifies that if dissolution, bankruptcy, or insolvency proceedings occur, the unaffected party has the right to immediately stop performing and terminate the agreement by providing written notice.\n\nThis is clearly a termination clause, as it deals with the conditions and procedures for ending the contractual relationship.\n\nFINAL: termination",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.98,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly identified the clause as a termination clause, matching the reference answer, with sound reasoning and proper explanation of the clause's content."
+          }
+        },
+        {
+          "query": "All information marked as 'Proprietary' or 'Confidential' exchanged between the parties shall be protected with the same degree of care used to protect each party's own sensitive information, but in no case less than reasonable care.",
+          "gold": "confidentiality",
+          "output": "This clause establishes obligations regarding the protection of sensitive information exchanged between parties. It requires that proprietary or confidential information be safeguarded with reasonable care at minimum, and with the same level of care each party uses for its own sensitive information.\n\nThis is a confidentiality clause, as it:\n- Identifies information as \"Proprietary\" or \"Confidential\"\n- Establishes duties to protect such information\n- Sets a standard of care for handling sensitive data\n\nFINAL: confidentiality",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly identified the clause as a confidentiality clause, matching the reference answer, with sound reasoning and proper explanation of the key elements."
+          }
+        },
+        {
+          "query": "All matters arising out of or relating to this Agreement are governed by and construed in accordance with the internal laws of the State of California without giving effect to any choice or conflict of law provision or rule.",
+          "gold": "governing_law",
+          "output": "This clause specifies that the agreement will be interpreted and governed by the internal laws of California, and explicitly excludes conflict of law provisions. This is a clear statement about which jurisdiction's laws apply to disputes and interpretation of the contract.\n\nFINAL: governing_law",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.98,
+            "aggregate": 0.9574999999999999,
+            "rationale": "The agent correctly identified the clause as 'governing_law', matching the reference answer, with sound reasoning explaining why California law applies and conflict of law provisions are excluded."
+          }
+        },
+        {
+          "query": "Except for breaches of confidentiality obligations, the liability of either party for any claim shall be capped at the lesser of actual damages proven or one million dollars ($1,000,000).",
+          "gold": "limitation_of_liability",
+          "output": "This clause establishes a cap on liability for claims between the parties, limiting recovery to the lesser of actual damages or $1,000,000. The clause explicitly carves out an exception for confidentiality breaches, meaning those claims are not subject to this cap.\n\nThe primary purpose of this clause is to limit the financial exposure of both parties by placing a ceiling on damages awards. This is a classic limitation of liability provision.\n\nFINAL: limitation_of_liability",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly identified the clause as 'limitation_of_liability', matching the reference answer exactly, with sound reasoning about the cap on damages and the confidentiality carve-out."
+          }
+        },
+        {
+          "query": "The Client shall remit compensation within thirty (30) days following receipt of invoice. All invoices shall be submitted monthly and include detailed breakdowns of services rendered during the billing period.",
+          "gold": "payment_terms",
+          "output": "This clause specifies when and how the Client must pay for services rendered. It establishes:\n- A payment deadline of 30 days after invoice receipt\n- Monthly invoicing schedule\n- Requirement for detailed service breakdowns on invoices\n\nThese are all characteristics of payment terms, which govern the financial obligations and timing of payments between parties.\n\nFINAL: payment_terms",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.9,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified the clause as 'payment_terms' matching the reference answer, with sound reasoning and proper final label, though the verbose explanation was unnecessary for a classifica"
+          }
+        },
+        {
+          "query": "Tenant shall indemnify Landlord from and against all liabilities, claims, suits, costs, expenses, damages, or judgments arising from injuries to persons or damage to property occurring in or about the leased premises to the extent caused by any act, omission, or negligence of Tenant or Tenant's agents, employees, or invitees.",
+          "gold": "indemnification",
+          "output": "This clause requires the Tenant to indemnify (hold harmless and defend) the Landlord against various liabilities and claims arising from injuries or property damage caused by the Tenant's negligence or actions. The clause explicitly uses the term \"indemnify\" and outlines the scope of indemnification obligations, including the types of losses covered (liabilities, claims, suits, costs, expenses, damages, judgments) and the triggering events (injuries to persons or damage to property caused by Tenant's acts, omissions, or negligence).\n\nFINAL: indemnification",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.98,
+            "aggregate": 0.9574999999999999,
+            "rationale": "The agent correctly identified the clause as an indemnification clause, matching the reference answer, with sound reasoning and proper format."
+          }
+        },
+        {
+          "query": "In the event of a Force Majeure condition lasting more than six (6) consecutive months, either party may elect to discontinue this Agreement without penalty by providing written notice to the other party.",
+          "gold": "termination",
+          "output": "This clause addresses the circumstances under which either party can end the agreement. It specifies a condition (Force Majeure lasting more than 6 months) that triggers the right to discontinue the contract without penalty, provided written notice is given.\n\nThe core function is to establish when and how the agreement can be terminated, which is the defining characteristic of a termination clause.\n\nFINAL: termination",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.98,
+            "aggregate": 0.9574999999999999,
+            "rationale": "The agent correctly identified the clause as a termination clause, matching the reference answer, with sound reasoning explaining why the Force Majeure exit provision constitutes a termination clause."
+          }
+        },
+        {
+          "query": "The Receiving Party agrees not to disclose any proprietary information, trade secrets, or business data received from the Disclosing Party to any third parties without prior written consent, except as required by law.",
+          "gold": "confidentiality",
+          "output": "This clause establishes obligations regarding the protection and non-disclosure of sensitive information shared between parties. The key elements are:\n\n1. The Receiving Party is restricted from disclosing proprietary information, trade secrets, and business data\n2. Disclosure to third parties is prohibited without prior written consent\n3. There is a standard exception for legally required disclosures\n\nThese are the hallmarks of a confidentiality clause, which governs how confidential or proprietary information must be handled and protected during and after a business relationship.\n\nFINAL: confidentiality",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.9,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified the clause as a confidentiality clause, matching the reference answer, with sound reasoning and clear explanation of the key elements, though the verbose breakdown was u"
+          }
+        },
+        {
+          "query": "Each party irrevocably agrees that the courts of New South Wales, Australia shall have exclusive jurisdiction to settle any dispute arising out of or in connection with this Agreement and that the laws of New South Wales shall govern.",
+          "gold": "governing_law",
+          "output": "This clause establishes two key legal provisions:\n\n1. **Jurisdiction**: It specifies that courts in New South Wales, Australia have exclusive jurisdiction to settle disputes\n2. **Governing Law**: It designates that the laws of New South Wales shall govern the agreement\n\nWhile the clause contains elements related to dispute resolution procedures (jurisdiction), the primary substantive legal provision is the selection of governing law. The clause explicitly states \"the laws of New South Wales shall govern,\" which is the defining characteristic of a governing law clause.\n\nFINAL: governing_law",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.78,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.92,
+            "aggregate": 0.8875,
+            "rationale": "The agent correctly identifies the clause as 'governing_law' matching the reference answer, though it over-explains by noting jurisdiction elements while still arriving at the correct classification."
+          }
+        },
+        {
+          "query": "Notwithstanding anything to the contrary in this Agreement, Provider's liability shall be limited to direct damages only and shall not exceed the total amount paid by Customer in the preceding calendar year.",
+          "gold": "limitation_of_liability",
+          "output": "This clause limits the Provider's liability exposure in two ways:\n1. It restricts the types of damages recoverable to \"direct damages only\" (excluding indirect, consequential, or punitive damages)\n2. It caps the maximum liability amount to the total fees paid in the preceding calendar year\n\nThis is a classic limitation of liability clause that protects the service provider by constraining both the scope and amount of potential damages.\n\nFINAL: limitation_of_liability",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.97,
+            "rationale": "The agent correctly identified the clause as 'limitation_of_liability' matching the reference answer, with sound reasoning explaining both the damage-type restriction and the monetary cap, and the fin"
+          }
+        },
+        {
+          "query": "All amounts owed under this contract shall be paid via wire transfer to the account specified in Exhibit B. Payments received after the 15th of the month will incur a 2% surcharge.",
+          "gold": "payment_terms",
+          "output": "This clause specifies how payments should be made (wire transfer to a designated account) and establishes timing requirements with associated penalties (2% surcharge for late payments after the 15th of the month). These are core elements of payment terms in a contract.\n\nFINAL: payment_terms",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.98,
+            "aggregate": 0.9574999999999999,
+            "rationale": "The agent correctly identified the clause as 'payment_terms', matching the reference answer, with sound reasoning explaining the payment method and timing/penalty elements that justify the classificat"
+          }
+        },
+        {
+          "query": "Supplier agrees to indemnify and hold Client harmless from any third-party claims alleging that the delivered software infringes upon any patent, copyright, trademark, or trade secret, and shall pay all damages, costs, and attorney fees finally awarded against Client in connection with any such claim.",
+          "gold": "indemnification",
+          "output": "This clause establishes that the Supplier will protect the Client from third-party intellectual property infringement claims related to the delivered software. The Supplier assumes responsibility for defending the Client and covering all associated costs and damages if the software infringes on patents, copyrights, trademarks, or trade secrets.\n\nThis is a classic indemnification clause, as it requires one party (Supplier) to compensate and defend another party (Client) against losses arising from specified claims or liabilities.\n\nFINAL: indemnification",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly identified the clause as an indemnification clause, matching the reference answer, with sound reasoning and proper explanation of the clause's elements."
+          }
+        },
+        {
+          "query": "Either party shall have the right to withdraw from this Agreement for convenience by providing one hundred twenty (120) days prior written notice, with all pending obligations to be fulfilled before the effective cessation date.",
+          "gold": "termination",
+          "output": "This clause addresses the ability of either party to exit the agreement by providing advance notice and completing outstanding obligations before the termination becomes effective. The key elements are:\n\n1. Right to withdraw/exit the agreement\n2. Requirement for 120 days prior written notice\n3. Obligation to fulfill pending obligations before cessation\n\nThis is clearly a termination clause, as it establishes the conditions and procedures under which either party can end the contractual relationship.\n\nFINAL: termination",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly identified the clause as a termination clause, matching the reference answer, with sound reasoning that accurately identified the key elements of the clause."
+          }
+        },
+        {
+          "query": "The obligations set forth in this section shall survive termination of the agreement and continue for a period of three years, during which time all confidential materials must be returned or destroyed upon request.",
+          "gold": "confidentiality",
+          "output": "This clause addresses what happens to obligations after the agreement ends. It specifies that certain obligations (related to confidential materials) survive the termination of the agreement and continue for a defined period (three years), with requirements for return or destruction of confidential materials.\n\nWhile the clause mentions \"termination,\" its primary focus is on the post-termination survival of confidentiality obligations and the handling of confidential materials. The core substance deals with protecting confidential information even after the agreement ends.\n\nFINAL: confidentiality",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly identified the clause type as 'confidentiality,' matching the reference answer, with sound reasoning that acknowledged the survival/termination language while correctly prioritizin"
+          }
+        }
+      ]
+    },
+    "two_phase": {
+      "objective_mean": 1.0,
+      "objective_ci95": [
+        1.0,
+        1.0
+      ],
+      "gpa_mean": 0.9512499999999997,
+      "gpa_dims": {
+        "target_alignment": 0.9479166666666662,
+        "reasoning_soundness": 0.9366666666666664,
+        "execution_accuracy": 0.9374999999999997,
+        "output_integrity": 0.9829166666666668
+      },
+      "prompt": "You are a contract-clause classifier. Classify the contract clause into its clause type. Classify into one of these categories: indemnification, termination, confidentiality, governing_law, limitation_of_liability, payment_terms.",
+      "examples": [
+        {
+          "query": "This Agreement shall be construed and enforced in accordance with the laws of the State of Delaware, without regard to its conflict of laws provisions.",
+          "gold": "governing_law",
+          "output": "This clause specifies which state's laws will govern the interpretation and enforcement of the agreement. It explicitly states that Delaware law applies and excludes conflict of laws principles.\n\nFINAL: governing_law",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.98,
+            "aggregate": 0.9574999999999999,
+            "rationale": "The agent correctly identified the clause type as 'governing_law', matching the reference answer, with sound reasoning explaining why Delaware law applies and the exclusion of conflict of laws princip"
+          }
+        },
+        {
+          "query": "The maximum amount recoverable by Licensee from Licensor for all claims combined shall be limited to the license fees paid in the six months prior to the first event giving rise to such claims.",
+          "gold": "limitation_of_liability",
+          "output": "This clause limits the financial exposure of the Licensor by capping the maximum amount that the Licensee can recover from the Licensor across all claims. The clause specifies that recovery is restricted to license fees paid in the six months preceding the claim event.\n\nThis is a classic limitation of liability clause, as it:\n1. Restricts the amount of damages recoverable\n2. Sets a monetary cap on liability\n3. Applies to \"all claims combined\"\n\nFINAL: limitation_of_liability",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly identified the clause as 'limitation_of_liability', matching the reference answer, with sound reasoning and proper format."
+          }
+        },
+        {
+          "query": "The purchase price of $250,000 shall be paid as follows: (i) $75,000 deposit upon signing; (ii) $100,000 upon substantial completion; and (iii) $75,000 within 15 days of final inspection approval.",
+          "gold": "payment_terms",
+          "output": "This clause specifies the payment schedule and amounts for a purchase agreement. It breaks down the total price of $250,000 into three installments tied to specific milestones: initial deposit upon signing, payment upon substantial completion, and final payment after inspection approval.\n\nThis is clearly a payment terms clause as it defines when and how much payment is due at different stages of the transaction.\n\nFINAL: payment_terms",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.9,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified the clause as 'payment_terms', matching the reference answer, with sound reasoning explaining the milestone-based payment structure, though the verbose explanation was u"
+          }
+        },
+        {
+          "query": "The Company undertakes to reimburse and protect the Executive from any losses, expenses, or liabilities (including reasonable attorney's fees) that the Executive may incur in connection with any action, suit, or proceeding arising out of the Executive's performance of duties on behalf of the Company, except where such actions constitute willful misconduct or gross negligence.",
+          "gold": "indemnification",
+          "output": "This clause describes the Company's obligation to reimburse and protect the Executive from losses, expenses, and liabilities arising from the Executive's performance of duties. This is a classic indemnification provision, where one party (the Company) agrees to compensate and defend another party (the Executive) against claims and costs, with a carve-out for willful misconduct or gross negligence.\n\nFINAL: indemnification",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.98,
+            "aggregate": 0.9574999999999999,
+            "rationale": "The agent correctly identified the clause as an indemnification provision, matching the reference answer, with sound reasoning explaining the key elements (reimbursement, defense, carve-out) and prope"
+          }
+        },
+        {
+          "query": "This Agreement shall automatically expire on December 31, 2025, unless earlier terminated in accordance with the provisions set forth herein or extended by mutual written consent of both parties.",
+          "gold": "termination",
+          "output": "This clause addresses the automatic expiration of the agreement on a specific date (December 31, 2025) and allows for early termination under certain conditions or extension by mutual consent. These are core elements of contract termination provisions.\n\nFINAL: termination",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly identified the clause type as 'termination,' matching the reference answer, with sound reasoning about the expiration and early termination elements."
+          }
+        },
+        {
+          "query": "Consultant acknowledges that during the engagement, they may have access to sensitive materials including financial records, product designs, and strategic plans, all of which must be kept strictly private and not shared with any external entities.",
+          "gold": "confidentiality",
+          "output": "This clause addresses the protection of sensitive information that the Consultant may access during their engagement. The key elements are:\n\n1. **Identification of sensitive materials**: Financial records, product designs, and strategic plans\n2. **Obligation**: Must be kept strictly private\n3. **Restriction**: Cannot be shared with external entities\n\nThis is clearly a confidentiality clause, as it establishes obligations to maintain the secrecy of proprietary and sensitive information disclosed during the business relationship.\n\nFINAL: confidentiality",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.9,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified the clause as a confidentiality clause, matching the reference answer, with sound reasoning and clear identification of the key elements, though the verbose breakdown wa"
+          }
+        },
+        {
+          "query": "This Agreement is made under and shall be governed by and construed in accordance with the laws of the Federal Republic of Germany.",
+          "gold": "governing_law",
+          "output": "This clause specifies which jurisdiction's laws will govern the interpretation and enforcement of the agreement. It establishes that German law applies to the contract.\n\nFINAL: governing_law",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.95,
+            "aggregate": 0.925,
+            "rationale": "The agent correctly identified the clause type as 'governing_law', matching the reference answer, with sound reasoning explaining why German law governs the contract."
+          }
+        },
+        {
+          "query": "In no event shall either party be liable for any indirect, incidental, special, consequential, or punitive damages, including but not limited to loss of profits, revenue, data, or use, whether in an action in contract or tort, even if such party has been advised of the possibility of such damages.",
+          "gold": "limitation_of_liability",
+          "output": "This clause limits the liability of both parties by excluding certain types of damages from recovery. It specifically carves out indirect, incidental, special, consequential, and punitive damages, regardless of whether the claim arises from contract or tort. This is a classic limitation of liability provision that caps the exposure of the parties to direct damages only.\n\nFINAL: limitation_of_liability",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.98,
+            "aggregate": 0.9574999999999999,
+            "rationale": "The agent correctly identified the clause as 'limitation_of_liability', matching the reference answer exactly, with sound reasoning and proper explanation of the clause's scope."
+          }
+        },
+        {
+          "query": "The total contract value of $1.2 million shall be distributed across 24 monthly payments of $50,000 each, commencing on the first day of the month following system deployment and continuing for the duration of the term.",
+          "gold": "payment_terms",
+          "output": "This clause specifies how and when payments will be made under the contract. It details:\n- The total contract value ($1.2 million)\n- The payment structure (24 monthly installments)\n- The payment amount ($50,000 per month)\n- The payment schedule (starting the first day of the month following deployment)\n- The duration (24 months)\n\nThis is clearly a payment terms clause, as it establishes the financial obligations and payment schedule between the parties.\n\nFINAL: payment_terms",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly identified the clause as 'payment_terms' matching the reference answer, with sound reasoning and proper format, though the verbose breakdown was unnecessary for the task."
+          }
+        },
+        {
+          "query": "Licensee shall be solely responsible for and shall indemnify, defend, and hold Licensor harmless from and against any claims, suits, losses, damages, costs, fees, and expenses arising out of or relating to any allegations that the Licensee's modifications to the licensed materials violate any applicable laws or regulations.",
+          "gold": "indemnification",
+          "output": "This clause establishes that the Licensee must indemnify and hold the Licensor harmless from claims and damages arising from allegations that the Licensee's modifications violate applicable laws or regulations. The key elements are:\n\n1. The Licensee assumes responsibility for indemnification\n2. The Licensee must defend and hold the Licensor harmless\n3. The indemnification covers claims, suits, losses, damages, costs, fees, and expenses\n4. The trigger is allegations of legal violations related to the Licensee's modifications\n\nThis is a classic indemnification clause where one party (Licensee) agrees to compensate and protect the other party (Licensor) from specified liabilities.\n\nFINAL: indemnification",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.98,
+            "aggregate": 0.9574999999999999,
+            "rationale": "The agent correctly identified the clause as an indemnification clause, matching the reference answer, with sound reasoning and proper identification of key elements."
+          }
+        },
+        {
+          "query": "Upon dissolution, bankruptcy, or insolvency proceedings initiated by or against either party, the non-affected party may immediately discontinue performance under this Agreement by providing written notification.",
+          "gold": "termination",
+          "output": "This clause addresses the circumstances under which a party can end their obligations under the agreement. It specifies that if dissolution, bankruptcy, or insolvency proceedings occur, the unaffected party has the right to immediately stop performing and terminate the agreement by providing written notice.\n\nThis is clearly a termination clause, as it deals with the conditions and procedures for ending the contractual relationship.\n\nFINAL: termination",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.98,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly identified the clause as a termination clause, matching the reference answer, with sound reasoning and proper explanation of the clause's content."
+          }
+        },
+        {
+          "query": "All information marked as 'Proprietary' or 'Confidential' exchanged between the parties shall be protected with the same degree of care used to protect each party's own sensitive information, but in no case less than reasonable care.",
+          "gold": "confidentiality",
+          "output": "This clause establishes obligations regarding the protection of sensitive information exchanged between parties. It requires that proprietary or confidential information be safeguarded with reasonable care at minimum, and with the same level of care each party uses for its own sensitive information.\n\nThis is a confidentiality clause, as it:\n- Identifies information as \"Proprietary\" or \"Confidential\"\n- Establishes duties to protect such information\n- Sets a standard of care for handling sensitive data\n\nFINAL: confidentiality",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly identified the clause as a confidentiality clause, matching the reference answer, with sound reasoning and proper explanation of the key elements."
+          }
+        },
+        {
+          "query": "All matters arising out of or relating to this Agreement are governed by and construed in accordance with the internal laws of the State of California without giving effect to any choice or conflict of law provision or rule.",
+          "gold": "governing_law",
+          "output": "This clause specifies that the agreement will be interpreted and governed by the internal laws of California, and explicitly excludes conflict of law provisions. This is a clear statement about which jurisdiction's laws apply to disputes and interpretation of the contract.\n\nFINAL: governing_law",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.98,
+            "aggregate": 0.9574999999999999,
+            "rationale": "The agent correctly identified the clause as 'governing_law', matching the reference answer, with sound reasoning explaining why California law applies and conflict of law provisions are excluded."
+          }
+        },
+        {
+          "query": "Except for breaches of confidentiality obligations, the liability of either party for any claim shall be capped at the lesser of actual damages proven or one million dollars ($1,000,000).",
+          "gold": "limitation_of_liability",
+          "output": "This clause establishes a cap on liability for claims between the parties, limiting recovery to the lesser of actual damages or $1,000,000. The clause explicitly carves out an exception for confidentiality breaches, meaning those claims are not subject to this cap.\n\nThe primary purpose of this clause is to limit the financial exposure of both parties by placing a ceiling on damages awards. This is a classic limitation of liability provision.\n\nFINAL: limitation_of_liability",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly identified the clause as 'limitation_of_liability', matching the reference answer exactly, with sound reasoning about the cap on damages and the confidentiality carve-out."
+          }
+        },
+        {
+          "query": "The Client shall remit compensation within thirty (30) days following receipt of invoice. All invoices shall be submitted monthly and include detailed breakdowns of services rendered during the billing period.",
+          "gold": "payment_terms",
+          "output": "This clause specifies when and how the Client must pay for services rendered. It establishes:\n- A payment deadline of 30 days after invoice receipt\n- Monthly invoicing schedule\n- Requirement for detailed service breakdowns on invoices\n\nThese are all characteristics of payment terms, which govern the financial obligations and timing of payments between parties.\n\nFINAL: payment_terms",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.9,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified the clause as 'payment_terms' matching the reference answer, with sound reasoning and proper final label, though the verbose explanation was unnecessary for a classifica"
+          }
+        },
+        {
+          "query": "Tenant shall indemnify Landlord from and against all liabilities, claims, suits, costs, expenses, damages, or judgments arising from injuries to persons or damage to property occurring in or about the leased premises to the extent caused by any act, omission, or negligence of Tenant or Tenant's agents, employees, or invitees.",
+          "gold": "indemnification",
+          "output": "This clause requires the Tenant to indemnify (hold harmless and defend) the Landlord against various liabilities and claims arising from injuries or property damage caused by the Tenant's negligence or actions. The clause explicitly uses the term \"indemnify\" and outlines the scope of indemnification obligations, including the types of losses covered (liabilities, claims, suits, costs, expenses, damages, judgments) and the triggering events (injuries to persons or damage to property caused by Tenant's acts, omissions, or negligence).\n\nFINAL: indemnification",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.98,
+            "aggregate": 0.9574999999999999,
+            "rationale": "The agent correctly identified the clause as an indemnification clause, matching the reference answer, with sound reasoning and proper format."
+          }
+        },
+        {
+          "query": "In the event of a Force Majeure condition lasting more than six (6) consecutive months, either party may elect to discontinue this Agreement without penalty by providing written notice to the other party.",
+          "gold": "termination",
+          "output": "This clause addresses the circumstances under which either party can end the agreement. It specifies a condition (Force Majeure lasting more than 6 months) that triggers the right to discontinue the contract without penalty, provided written notice is given.\n\nThe core function is to establish when and how the agreement can be terminated, which is the defining characteristic of a termination clause.\n\nFINAL: termination",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.98,
+            "aggregate": 0.9574999999999999,
+            "rationale": "The agent correctly identified the clause as a termination clause, matching the reference answer, with sound reasoning explaining why the Force Majeure exit provision constitutes a termination clause."
+          }
+        },
+        {
+          "query": "The Receiving Party agrees not to disclose any proprietary information, trade secrets, or business data received from the Disclosing Party to any third parties without prior written consent, except as required by law.",
+          "gold": "confidentiality",
+          "output": "This clause establishes obligations regarding the protection and non-disclosure of sensitive information shared between parties. The key elements are:\n\n1. The Receiving Party is restricted from disclosing proprietary information, trade secrets, and business data\n2. Disclosure to third parties is prohibited without prior written consent\n3. There is a standard exception for legally required disclosures\n\nThese are the hallmarks of a confidentiality clause, which governs how confidential or proprietary information must be handled and protected during and after a business relationship.\n\nFINAL: confidentiality",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.9,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified the clause as a confidentiality clause, matching the reference answer, with sound reasoning and clear explanation of the key elements, though the verbose breakdown was u"
+          }
+        },
+        {
+          "query": "Each party irrevocably agrees that the courts of New South Wales, Australia shall have exclusive jurisdiction to settle any dispute arising out of or in connection with this Agreement and that the laws of New South Wales shall govern.",
+          "gold": "governing_law",
+          "output": "This clause establishes two key legal provisions:\n\n1. **Jurisdiction**: It specifies that courts in New South Wales, Australia have exclusive jurisdiction to settle disputes\n2. **Governing Law**: It designates that the laws of New South Wales shall govern the agreement\n\nWhile the clause contains elements related to dispute resolution procedures (jurisdiction), the primary substantive legal provision is the selection of governing law. The clause explicitly states \"the laws of New South Wales shall govern,\" which is the defining characteristic of a governing law clause.\n\nFINAL: governing_law",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.78,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.92,
+            "aggregate": 0.8875,
+            "rationale": "The agent correctly identifies the clause as 'governing_law' matching the reference answer, though it over-explains by noting jurisdiction elements while still arriving at the correct classification."
+          }
+        },
+        {
+          "query": "Notwithstanding anything to the contrary in this Agreement, Provider's liability shall be limited to direct damages only and shall not exceed the total amount paid by Customer in the preceding calendar year.",
+          "gold": "limitation_of_liability",
+          "output": "This clause limits the Provider's liability exposure in two ways:\n1. It restricts the types of damages recoverable to \"direct damages only\" (excluding indirect, consequential, or punitive damages)\n2. It caps the maximum liability amount to the total fees paid in the preceding calendar year\n\nThis is a classic limitation of liability clause that protects the service provider by constraining both the scope and amount of potential damages.\n\nFINAL: limitation_of_liability",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.97,
+            "rationale": "The agent correctly identified the clause as 'limitation_of_liability' matching the reference answer, with sound reasoning explaining both the damage-type restriction and the monetary cap, and the fin"
+          }
+        },
+        {
+          "query": "All amounts owed under this contract shall be paid via wire transfer to the account specified in Exhibit B. Payments received after the 15th of the month will incur a 2% surcharge.",
+          "gold": "payment_terms",
+          "output": "This clause specifies how payments should be made (wire transfer to a designated account) and establishes timing requirements with associated penalties (2% surcharge for late payments after the 15th of the month). These are core elements of payment terms in a contract.\n\nFINAL: payment_terms",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.98,
+            "aggregate": 0.9574999999999999,
+            "rationale": "The agent correctly identified the clause as 'payment_terms', matching the reference answer, with sound reasoning explaining the payment method and timing/penalty elements that justify the classificat"
+          }
+        },
+        {
+          "query": "Supplier agrees to indemnify and hold Client harmless from any third-party claims alleging that the delivered software infringes upon any patent, copyright, trademark, or trade secret, and shall pay all damages, costs, and attorney fees finally awarded against Client in connection with any such claim.",
+          "gold": "indemnification",
+          "output": "This clause establishes that the Supplier will protect the Client from third-party intellectual property infringement claims related to the delivered software. The Supplier assumes responsibility for defending the Client and covering all associated costs and damages if the software infringes on patents, copyrights, trademarks, or trade secrets.\n\nThis is a classic indemnification clause, as it requires one party (Supplier) to compensate and defend another party (Client) against losses arising from specified claims or liabilities.\n\nFINAL: indemnification",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly identified the clause as an indemnification clause, matching the reference answer, with sound reasoning and proper explanation of the clause's elements."
+          }
+        },
+        {
+          "query": "Either party shall have the right to withdraw from this Agreement for convenience by providing one hundred twenty (120) days prior written notice, with all pending obligations to be fulfilled before the effective cessation date.",
+          "gold": "termination",
+          "output": "This clause addresses the ability of either party to exit the agreement by providing advance notice and completing outstanding obligations before the termination becomes effective. The key elements are:\n\n1. Right to withdraw/exit the agreement\n2. Requirement for 120 days prior written notice\n3. Obligation to fulfill pending obligations before cessation\n\nThis is clearly a termination clause, as it establishes the conditions and procedures under which either party can end the contractual relationship.\n\nFINAL: termination",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly identified the clause as a termination clause, matching the reference answer, with sound reasoning that accurately identified the key elements of the clause."
+          }
+        },
+        {
+          "query": "The obligations set forth in this section shall survive termination of the agreement and continue for a period of three years, during which time all confidential materials must be returned or destroyed upon request.",
+          "gold": "confidentiality",
+          "output": "This clause addresses what happens to obligations after the agreement ends. It specifies that certain obligations (related to confidential materials) survive the termination of the agreement and continue for a defined period (three years), with requirements for return or destruction of confidential materials.\n\nWhile the clause mentions \"termination,\" its primary focus is on the post-termination survival of confidentiality obligations and the handling of confidential materials. The core substance deals with protecting confidential information even after the agreement ends.\n\nFINAL: confidentiality",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly identified the clause type as 'confidentiality,' matching the reference answer, with sound reasoning that acknowledged the survival/termination language while correctly prioritizin"
+          }
+        }
+      ],
+      "optimization": {
+        "baseline_val": 1.0,
+        "struct_best_val": 1.0,
+        "prompt_best_val": 1.0,
+        "final_val": 1.0,
+        "shipped_baseline": true,
+        "ship_prob_better": 0.0,
+        "deployed_phase": "baseline(ceiling)",
+        "struct_iters": 0,
+        "prompt_iters": 0,
+        "struct_prompt": "You are a contract-clause classifier. Classify the contract clause into its clause type. Classify into one of these categories: indemnification, termination, confidentiality, governing_law, limitation_of_liability, payment_terms.",
+        "trajA": [],
+        "trajB": []
+      }
+    }
+  },
+  "duration_s": 11.4
+}

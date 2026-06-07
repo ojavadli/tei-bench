@@ -1,0 +1,736 @@
+{
+  "task_id": "saas_ticket_priority",
+  "industry": "B2B SaaS",
+  "metric": "classification",
+  "source": "Authored for TEI-Bench (Sonnet-generated, Sonnet-validated; kept only label-agreed examples).",
+  "is_public": false,
+  "n_train": 15,
+  "n_test": 24,
+  "agent_model": "claude-haiku-4-5",
+  "judge_model": "claude-sonnet-4-6",
+  "optimizer_model": "claude-sonnet-4-6",
+  "seed": 0,
+  "arms": {
+    "baseline": {
+      "objective_mean": 0.9583333333333334,
+      "objective_ci95": [
+        0.875,
+        1.0
+      ],
+      "gpa_mean": 0.9328124999999998,
+      "gpa_dims": {
+        "target_alignment": 0.933333333333333,
+        "reasoning_soundness": 0.9220833333333331,
+        "execution_accuracy": 0.9166666666666664,
+        "output_integrity": 0.9591666666666666
+      },
+      "prompt": "You are a support-priority classifier. Classify the support ticket into a priority/type bucket. Classify into one of these categories: outage_critical, data_loss, billing, feature_request, how_to, integration.",
+      "examples": [
+        {
+          "query": "Would it be possible to add a dark mode option to the dashboard? Many of our team members work late hours and the current bright interface causes eye strain during evening sessions.",
+          "gold": "feature_request",
+          "output": "This is a request for a new feature to be added to the product. The user is asking for a dark mode option to improve the user experience for their team, particularly for those working during evening hours. This is not reporting an outage, data loss, billing issue, or asking for help with existing functionality—it's a suggestion for enhanced functionality.\n\nFINAL: feature_request",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly identified the ticket as a feature_request, matching the gold answer exactly, with sound reasoning that clearly distinguishes it from other ticket types."
+          }
+        },
+        {
+          "query": "Could you walk me through the process of customizing the dashboard widgets? I'd like to rearrange them and maybe hide some that we don't use.",
+          "gold": "how_to",
+          "output": "This is a straightforward request for guidance on how to use an existing feature. The user is asking for instructions on customizing their dashboard by rearranging and hiding widgets.\n\nThis falls under \"how_to\" - they need help understanding how to perform a task within the product.\n\nFINAL: how_to",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly classified the ticket as 'how_to', matching the reference answer, with sound reasoning that the user is asking for instructions on using an existing feature."
+          }
+        },
+        {
+          "query": "I'm trying to connect our Slack workspace to your service but keep getting 'invalid scope' errors during the OAuth flow. We need read and write permissions but the authorization screen only shows read access.",
+          "gold": "integration",
+          "output": "This appears to be an integration issue where the OAuth scope configuration isn't properly requesting the necessary permissions during the Slack authorization flow. The user is unable to complete the integration setup due to a mismatch between required permissions (read and write) and what's being presented (read only).\n\nThis is blocking their ability to connect Slack to the service, making it an integration problem rather than a how-to question, since it involves troubleshooting a technical configuration issue with a third-party service connection.\n\nFINAL: integration",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly classified the ticket as 'integration' matching the reference answer, with coherent reasoning about OAuth scope misconfiguration and Slack connectivity issues."
+          }
+        },
+        {
+          "query": "The main application server cluster is unresponsive. All customer-facing services are down and we're experiencing 100% failure rate on all requests. Zero users can access the system right now.",
+          "gold": "outage_critical",
+          "output": "This is a critical production outage affecting all customer-facing services with complete system unavailability. The entire application server cluster is down, resulting in 100% request failure rate and zero user access.\n\nThis clearly requires immediate emergency response and represents the highest priority level.\n\nFINAL: outage_critical",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.9,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified and labeled the ticket as 'outage_critical' matching the reference answer, with sound reasoning about complete system unavailability, though the verbose explanation befo"
+          }
+        },
+        {
+          "query": "After the system update yesterday, approximately 2,000 transaction entries are no longer visible in our dashboard. The files seem to have vanished and we can't find them anywhere in the system.",
+          "gold": "data_loss",
+          "output": "This ticket describes a situation where a significant volume of data (2,000 transaction entries) has become inaccessible or disappeared following a system update. The user cannot locate these files anywhere in the system.\n\nThis is a critical issue involving potential data loss. While it's possible the data still exists but is hidden or inaccessible due to a bug introduced in the update, the user's inability to find the data anywhere suggests actual data loss or severe data integrity problems.\n\nThis requires immediate investigation and should be treated with the highest priority.\n\nFINAL: data_loss",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.98,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly identified the ticket as 'data_loss' matching the reference answer, with sound reasoning about the severity and nature of the issue, though the verbose explanation was not strictly"
+          }
+        },
+        {
+          "query": "The invoice we received shows incorrect pricing compared to what was quoted during our sales call last week. Please review and send a corrected version.",
+          "gold": "billing",
+          "output": "This ticket is about an invoice discrepancy where the customer received pricing that doesn't match their sales quote. This is a billing-related issue that needs to be reviewed and corrected.\n\nFINAL: billing",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly classified the ticket as 'billing', matching the reference answer, with sound reasoning and proper format."
+          }
+        },
+        {
+          "query": "Any chance of adding a mobile app? Our field technicians need to access the system while on-site and the mobile web version is difficult to navigate on smaller screens.",
+          "gold": "feature_request",
+          "output": "This is a feature request from a user asking for a native mobile app to improve usability for field technicians. The request describes a legitimate use case (on-site access) and identifies a current limitation (mobile web navigation challenges), but it's asking for a new capability rather than reporting a problem with existing functionality.\n\nFINAL: feature_request",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.98,
+            "aggregate": 0.9574999999999999,
+            "rationale": "The agent correctly classified the ticket as 'feature_request' matching the gold answer, with sound reasoning explaining why it's a feature request rather than a bug report, and proper format with a c"
+          }
+        },
+        {
+          "query": "I'm trying to set up email notifications for new orders but can't find where to configure the SMTP settings. Could you point me to the right section in the admin panel?",
+          "gold": "how_to",
+          "output": "This is a support ticket asking for guidance on how to configure a specific feature (email notifications via SMTP settings) within the admin panel. The user is looking for help navigating the system to accomplish a task.\n\nThis falls under the \"how_to\" category - it's a request for help understanding how to use an existing feature rather than reporting a problem, requesting a new feature, or dealing with billing/outage issues.\n\nFINAL: how_to",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly classified the ticket as 'how_to', matching the reference answer, with sound reasoning that the user is seeking guidance on using an existing feature rather than reporting a bug or"
+          }
+        },
+        {
+          "query": "Can someone help us understand why the Microsoft Teams bot we built using your SDK isn't receiving message events? The bot appears online but doesn't respond to any commands we send it.",
+          "gold": "integration",
+          "output": "This ticket describes a technical issue where a Microsoft Teams bot integration isn't functioning properly - specifically, the bot isn't receiving message events despite appearing online. This is a problem with an existing integration that's preventing it from working as expected.\n\nThe user is asking for help troubleshooting why their bot built with the SDK isn't receiving events, which is an integration-related support issue rather than a feature request (they're not asking for new functionality) or a how-to question (they're reporting a broken integration).\n\nFINAL: integration",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly classified the ticket as 'integration', matching the reference answer, with sound reasoning that distinguished it from feature requests or how-to questions."
+          }
+        },
+        {
+          "query": "Website is completely unreachable - returning timeout errors for everyone. We've tested from multiple locations and networks. All traffic is dead and our business is at a halt.",
+          "gold": "outage_critical",
+          "output": "This is a critical service outage affecting all users with complete loss of availability. The ticket describes:\n- Website completely unreachable\n- Timeout errors across all access attempts\n- Multiple location/network verification confirming widespread impact\n- Business operations halted\n\nThis is a production outage requiring immediate attention.\n\nFINAL: outage_critical",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.9,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly classified the ticket as 'outage_critical' matching the reference answer, with sound reasoning based on the described symptoms, though the verbose explanation was unnecessary for a"
+          }
+        },
+        {
+          "query": "The export we ran last week appears to have corrupted all our inventory records. When we try to open them, we get error messages and the numbers don't match our backup counts.",
+          "gold": "data_loss",
+          "output": "This ticket describes a serious issue where data has been corrupted or lost following an export operation. The customer reports:\n- Exported inventory records are corrupted (error messages when opening)\n- Data integrity problem (numbers don't match backups)\n- This affects critical business data (inventory records)\n\nThis is a data loss/corruption incident that requires immediate investigation and remediation. It's not an outage of the service itself, but rather data integrity damage that occurred during an operation.\n\nFINAL: data_loss",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.98,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly classified the ticket as 'data_loss' matching the reference answer, with sound reasoning about data corruption and integrity issues, though the verbose explanation was not required"
+          }
+        },
+        {
+          "query": "We're being charged for 50 user seats but we only have 35 active users on our account. Can someone explain this discrepancy?",
+          "gold": "billing",
+          "output": "This ticket is about a billing discrepancy where the customer is being charged for more user seats (50) than they actually have active (35). This is a straightforward billing issue that needs investigation and resolution regarding their invoice or subscription.\n\nFINAL: billing",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.9,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly classified the ticket as 'billing' matching the reference answer, with sound reasoning about the nature of the discrepancy, though the verbose explanation before the final label wa"
+          }
+        },
+        {
+          "query": "Is there any way you could implement two-factor authentication for admin accounts? Our security team is requiring this for all our SaaS tools and we'd hate to have to switch platforms.",
+          "gold": "feature_request",
+          "output": "This is a feature request from a security-conscious customer whose organization has a mandate for two-factor authentication on admin accounts. They're expressing that this feature is important enough that its absence could drive them to a competitor.\n\nWhile this is framed as a question, the underlying need is clear: they're requesting that the platform add 2FA capability for admin accounts to meet their security requirements.\n\nFINAL: feature_request",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9550000000000001,
+            "rationale": "The agent correctly identified the ticket as a feature_request, matching the gold answer, with sound reasoning about the nature of the request and appropriate classification."
+          }
+        },
+        {
+          "query": "How do I create automated workflows that trigger when a form submission comes in? I want to automatically assign tasks to specific team members based on the submission type.",
+          "gold": "how_to",
+          "output": "This is a question about using the platform's workflow automation capabilities in response to form submissions. The user is asking for guidance on:\n\n1. Creating automated workflows triggered by form submissions\n2. Implementing conditional logic to route tasks based on submission type\n3. Assigning tasks to specific team members automatically\n\nThis is a \"how-to\" question - the user is asking for help understanding how to use existing features to accomplish a specific goal. They're not reporting a bug, requesting a new feature, experiencing an outage, or dealing with billing/data loss issues.\n\nFINAL: how_to",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly classified the ticket as 'how_to', matching the reference answer, with clear and valid reasoning explaining why it's not a bug, feature request, or other category."
+          }
+        },
+        {
+          "query": "Our data warehouse ETL job that pulls from your GraphQL API started failing this morning with 'rate limit exceeded' errors, even though we're only making 50 requests per minute and the limit is 100.",
+          "gold": "integration",
+          "output": "This ticket describes a service issue affecting a customer's production ETL pipeline. The customer reports that their GraphQL API requests are hitting rate limit errors despite being well below the stated limit (50 req/min vs 100 req/min limit).\n\nThis is a critical outage scenario because:\n1. A production data pipeline is failing\n2. The issue is preventing normal operations\n3. It's not a feature request or how-to question\n4. While it involves an integration, the core problem is service availability\n\nThe customer is experiencing unexpected API behavior that's blocking their workflow, which qualifies as an outage-level issue.\n\nFINAL: outage_critical",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.55,
+            "reasoning_soundness": 0.6,
+            "execution_accuracy": 0.5,
+            "output_integrity": 0.2,
+            "aggregate": 0.46249999999999997,
+            "rationale": "The agent classified the ticket as 'outage_critical' rather than the correct 'integration' label, and while the reasoning about production impact is plausible, it misidentifies the core category, resu"
+          }
+        },
+        {
+          "query": "Database connection failures across all our services starting 20 minutes ago. Nothing is working - no queries are going through and all application functionality is frozen for every user.",
+          "gold": "outage_critical",
+          "output": "This is a critical production outage affecting all services and users. The database connection failures are preventing any queries from executing, which means the entire application stack is non-functional. This requires immediate attention and resolution.\n\nFINAL: outage_critical",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.98,
+            "aggregate": 0.9574999999999999,
+            "rationale": "The agent correctly classified the ticket as 'outage_critical' matching the reference answer, with sound reasoning about the severity and scope of the issue, though the verbose explanation before the "
+          }
+        },
+        {
+          "query": "Critical issue: product images for about 300 items in our catalog have disappeared overnight. The database shows the entries but the actual image files are nowhere to be found.",
+          "gold": "data_loss",
+          "output": "This is a serious issue involving missing product image files. Let me analyze:\n\n**Key indicators:**\n- 300 items affected (significant scope)\n- Database records exist but files are missing\n- Occurred suddenly (\"overnight\")\n- This impacts business operations and customer-facing catalog\n\n**Classification reasoning:**\nThis could potentially fit multiple categories:\n- **data_loss**: Files have disappeared, which is data loss\n- **outage_critical**: If the product catalog is non-functional without images, this could be critical\n\nHowever, the core issue is that actual data (image files) has been lost from the system. While this may impact service availability, the primary problem is the loss of data assets themselves. This is fundamentally a **data loss** situation - the images existed and are now gone, requiring recovery or restoration.\n\nFINAL: data_loss",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly classified the ticket as 'data_loss' matching the reference answer, with sound reasoning that acknowledged alternative classifications before correctly identifying the core issue a"
+          }
+        },
+        {
+          "query": "I was charged twice this month for my subscription and need a refund for the duplicate transaction that appeared on my credit card statement.",
+          "gold": "billing",
+          "output": "This is a billing issue where the customer has been charged twice for their subscription in a single month and is requesting a refund for the duplicate charge. This is a clear billing problem that needs to be addressed by the billing/finance team.\n\nFINAL: billing",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.9,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly classified the ticket as 'billing' matching the reference answer, with sound reasoning and appropriate explanation, though the verbose explanation was unnecessary for a simple clas"
+          }
+        },
+        {
+          "query": "Could the search functionality be enhanced to include filtering by multiple tags simultaneously? Right now we can only filter by one tag at a time which makes finding specific items tedious.",
+          "gold": "feature_request",
+          "output": "This ticket is requesting an enhancement to the search functionality to allow filtering by multiple tags at once, rather than being limited to single-tag filtering. The user is describing a limitation in the current feature set and asking for an improvement to make the product more efficient for their use case.\n\nThis is clearly a feature request - the system is working as designed, but the user wants additional capability added to make it more powerful.\n\nFINAL: feature_request",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly identified the ticket as a feature_request, matching the reference answer, with sound reasoning that the system works as designed but the user wants additional capability."
+          }
+        },
+        {
+          "query": "What's the correct procedure for transferring ownership of a project to another user? I'm leaving the team and need to hand off my projects.",
+          "gold": "how_to",
+          "output": "This is a straightforward procedural question about how to transfer project ownership within the system. The user is asking for guidance on the steps needed to complete this administrative task before leaving their team.\n\nThis is a \"how_to\" request - they need instructions on performing a specific action (transferring project ownership) rather than reporting a system problem, requesting a new feature, dealing with billing, or experiencing data loss.\n\nFINAL: how_to",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly identified the ticket as 'how_to', matching the reference answer, with sound reasoning that the user is seeking procedural guidance rather than reporting a bug or requesting a feat"
+          }
+        },
+        {
+          "query": "Our Salesforce connector stopped syncing customer data yesterday afternoon. We're getting a 401 authentication error when trying to establish the connection, even though our API credentials haven't changed.",
+          "gold": "integration",
+          "output": "This is an integration issue where a previously working connector has stopped functioning. The 401 authentication error indicates a connection/authentication problem with the Salesforce integration, which is preventing data synchronization.\n\nWhile this is impacting their workflow, it's not a complete system outage affecting all users, nor is there confirmed data loss. The issue is specific to the Salesforce connector authentication and falls under integration troubleshooting.\n\nFINAL: integration",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly classified the ticket as 'integration' matching the reference answer, with sound reasoning about the 401 error and Salesforce connector context, and appropriate format with a clear"
+          }
+        },
+        {
+          "query": "URGENT: All API endpoints are returning 503 errors since 3:15 AM EST. Our mobile app is completely non-functional and millions of users cannot log in or access any services whatsoever.",
+          "gold": "outage_critical",
+          "output": "This is a critical service outage affecting core functionality and a large user base. The symptoms indicate:\n\n- Widespread API failures (503 errors across all endpoints)\n- Complete service unavailability for end users\n- Time-sensitive impact on millions of users\n- Immediate business impact (mobile app non-functional)\n\nThis clearly falls into the most severe priority category as it represents a complete service outage requiring immediate incident response.\n\nFINAL: outage_critical",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.9,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified the ticket as 'outage_critical' matching the reference answer, with sound reasoning based on the described symptoms, though the verbose explanation was not strictly requ"
+          }
+        },
+        {
+          "query": "The spreadsheet with all our vendor contracts has become unreadable. Every time we try to access it, we see garbled characters instead of the actual data we entered.",
+          "gold": "data_loss",
+          "output": "This ticket describes a critical issue where important business data (vendor contracts) is inaccessible and corrupted in the spreadsheet. The user cannot read or retrieve the data they entered, which suggests potential data loss or severe data corruption.\n\nThis falls under the **data_loss** category because:\n- The data is no longer readable/accessible in its original form\n- Critical business information (vendor contracts) is affected\n- The integrity of stored data has been compromised\n\nFINAL: data_loss",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9550000000000001,
+            "rationale": "The agent correctly classified the ticket as 'data_loss' matching the reference answer, with sound reasoning about data corruption and inaccessibility, though the verbose explanation was not strictly "
+          }
+        },
+        {
+          "query": "The automatic renewal charged us for the premium tier, but we wanted to downgrade to basic before the renewal date. Can this be adjusted?",
+          "gold": "billing",
+          "output": "This is a billing issue. The customer is reporting an unexpected charge due to automatic renewal when they intended to downgrade their subscription tier before the renewal occurred. This involves account adjustments, refunds, or subscription management - all billing-related concerns.\n\nFINAL: billing",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly classified the ticket as 'billing', matching the reference answer, with sound reasoning and proper format."
+          }
+        }
+      ]
+    },
+    "two_phase": {
+      "objective_mean": 0.9583333333333334,
+      "objective_ci95": [
+        0.875,
+        1.0
+      ],
+      "gpa_mean": 0.9328124999999998,
+      "gpa_dims": {
+        "target_alignment": 0.933333333333333,
+        "reasoning_soundness": 0.9220833333333331,
+        "execution_accuracy": 0.9166666666666664,
+        "output_integrity": 0.9591666666666666
+      },
+      "prompt": "You are a support-priority classifier. Classify the support ticket into a priority/type bucket. Classify into one of these categories: outage_critical, data_loss, billing, feature_request, how_to, integration.",
+      "examples": [
+        {
+          "query": "Would it be possible to add a dark mode option to the dashboard? Many of our team members work late hours and the current bright interface causes eye strain during evening sessions.",
+          "gold": "feature_request",
+          "output": "This is a request for a new feature to be added to the product. The user is asking for a dark mode option to improve the user experience for their team, particularly for those working during evening hours. This is not reporting an outage, data loss, billing issue, or asking for help with existing functionality—it's a suggestion for enhanced functionality.\n\nFINAL: feature_request",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly identified the ticket as a feature_request, matching the gold answer exactly, with sound reasoning that clearly distinguishes it from other ticket types."
+          }
+        },
+        {
+          "query": "Could you walk me through the process of customizing the dashboard widgets? I'd like to rearrange them and maybe hide some that we don't use.",
+          "gold": "how_to",
+          "output": "This is a straightforward request for guidance on how to use an existing feature. The user is asking for instructions on customizing their dashboard by rearranging and hiding widgets.\n\nThis falls under \"how_to\" - they need help understanding how to perform a task within the product.\n\nFINAL: how_to",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly classified the ticket as 'how_to', matching the reference answer, with sound reasoning that the user is asking for instructions on using an existing feature."
+          }
+        },
+        {
+          "query": "I'm trying to connect our Slack workspace to your service but keep getting 'invalid scope' errors during the OAuth flow. We need read and write permissions but the authorization screen only shows read access.",
+          "gold": "integration",
+          "output": "This appears to be an integration issue where the OAuth scope configuration isn't properly requesting the necessary permissions during the Slack authorization flow. The user is unable to complete the integration setup due to a mismatch between required permissions (read and write) and what's being presented (read only).\n\nThis is blocking their ability to connect Slack to the service, making it an integration problem rather than a how-to question, since it involves troubleshooting a technical configuration issue with a third-party service connection.\n\nFINAL: integration",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly classified the ticket as 'integration' matching the reference answer, with coherent reasoning about OAuth scope misconfiguration and Slack connectivity issues."
+          }
+        },
+        {
+          "query": "The main application server cluster is unresponsive. All customer-facing services are down and we're experiencing 100% failure rate on all requests. Zero users can access the system right now.",
+          "gold": "outage_critical",
+          "output": "This is a critical production outage affecting all customer-facing services with complete system unavailability. The entire application server cluster is down, resulting in 100% request failure rate and zero user access.\n\nThis clearly requires immediate emergency response and represents the highest priority level.\n\nFINAL: outage_critical",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.9,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified and labeled the ticket as 'outage_critical' matching the reference answer, with sound reasoning about complete system unavailability, though the verbose explanation befo"
+          }
+        },
+        {
+          "query": "After the system update yesterday, approximately 2,000 transaction entries are no longer visible in our dashboard. The files seem to have vanished and we can't find them anywhere in the system.",
+          "gold": "data_loss",
+          "output": "This ticket describes a situation where a significant volume of data (2,000 transaction entries) has become inaccessible or disappeared following a system update. The user cannot locate these files anywhere in the system.\n\nThis is a critical issue involving potential data loss. While it's possible the data still exists but is hidden or inaccessible due to a bug introduced in the update, the user's inability to find the data anywhere suggests actual data loss or severe data integrity problems.\n\nThis requires immediate investigation and should be treated with the highest priority.\n\nFINAL: data_loss",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.98,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly identified the ticket as 'data_loss' matching the reference answer, with sound reasoning about the severity and nature of the issue, though the verbose explanation was not strictly"
+          }
+        },
+        {
+          "query": "The invoice we received shows incorrect pricing compared to what was quoted during our sales call last week. Please review and send a corrected version.",
+          "gold": "billing",
+          "output": "This ticket is about an invoice discrepancy where the customer received pricing that doesn't match their sales quote. This is a billing-related issue that needs to be reviewed and corrected.\n\nFINAL: billing",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly classified the ticket as 'billing', matching the reference answer, with sound reasoning and proper format."
+          }
+        },
+        {
+          "query": "Any chance of adding a mobile app? Our field technicians need to access the system while on-site and the mobile web version is difficult to navigate on smaller screens.",
+          "gold": "feature_request",
+          "output": "This is a feature request from a user asking for a native mobile app to improve usability for field technicians. The request describes a legitimate use case (on-site access) and identifies a current limitation (mobile web navigation challenges), but it's asking for a new capability rather than reporting a problem with existing functionality.\n\nFINAL: feature_request",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.98,
+            "aggregate": 0.9574999999999999,
+            "rationale": "The agent correctly classified the ticket as 'feature_request' matching the gold answer, with sound reasoning explaining why it's a feature request rather than a bug report, and proper format with a c"
+          }
+        },
+        {
+          "query": "I'm trying to set up email notifications for new orders but can't find where to configure the SMTP settings. Could you point me to the right section in the admin panel?",
+          "gold": "how_to",
+          "output": "This is a support ticket asking for guidance on how to configure a specific feature (email notifications via SMTP settings) within the admin panel. The user is looking for help navigating the system to accomplish a task.\n\nThis falls under the \"how_to\" category - it's a request for help understanding how to use an existing feature rather than reporting a problem, requesting a new feature, or dealing with billing/outage issues.\n\nFINAL: how_to",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly classified the ticket as 'how_to', matching the reference answer, with sound reasoning that the user is seeking guidance on using an existing feature rather than reporting a bug or"
+          }
+        },
+        {
+          "query": "Can someone help us understand why the Microsoft Teams bot we built using your SDK isn't receiving message events? The bot appears online but doesn't respond to any commands we send it.",
+          "gold": "integration",
+          "output": "This ticket describes a technical issue where a Microsoft Teams bot integration isn't functioning properly - specifically, the bot isn't receiving message events despite appearing online. This is a problem with an existing integration that's preventing it from working as expected.\n\nThe user is asking for help troubleshooting why their bot built with the SDK isn't receiving events, which is an integration-related support issue rather than a feature request (they're not asking for new functionality) or a how-to question (they're reporting a broken integration).\n\nFINAL: integration",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly classified the ticket as 'integration', matching the reference answer, with sound reasoning that distinguished it from feature requests or how-to questions."
+          }
+        },
+        {
+          "query": "Website is completely unreachable - returning timeout errors for everyone. We've tested from multiple locations and networks. All traffic is dead and our business is at a halt.",
+          "gold": "outage_critical",
+          "output": "This is a critical service outage affecting all users with complete loss of availability. The ticket describes:\n- Website completely unreachable\n- Timeout errors across all access attempts\n- Multiple location/network verification confirming widespread impact\n- Business operations halted\n\nThis is a production outage requiring immediate attention.\n\nFINAL: outage_critical",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.9,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly classified the ticket as 'outage_critical' matching the reference answer, with sound reasoning based on the described symptoms, though the verbose explanation was unnecessary for a"
+          }
+        },
+        {
+          "query": "The export we ran last week appears to have corrupted all our inventory records. When we try to open them, we get error messages and the numbers don't match our backup counts.",
+          "gold": "data_loss",
+          "output": "This ticket describes a serious issue where data has been corrupted or lost following an export operation. The customer reports:\n- Exported inventory records are corrupted (error messages when opening)\n- Data integrity problem (numbers don't match backups)\n- This affects critical business data (inventory records)\n\nThis is a data loss/corruption incident that requires immediate investigation and remediation. It's not an outage of the service itself, but rather data integrity damage that occurred during an operation.\n\nFINAL: data_loss",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.98,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly classified the ticket as 'data_loss' matching the reference answer, with sound reasoning about data corruption and integrity issues, though the verbose explanation was not required"
+          }
+        },
+        {
+          "query": "We're being charged for 50 user seats but we only have 35 active users on our account. Can someone explain this discrepancy?",
+          "gold": "billing",
+          "output": "This ticket is about a billing discrepancy where the customer is being charged for more user seats (50) than they actually have active (35). This is a straightforward billing issue that needs investigation and resolution regarding their invoice or subscription.\n\nFINAL: billing",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.9,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly classified the ticket as 'billing' matching the reference answer, with sound reasoning about the nature of the discrepancy, though the verbose explanation before the final label wa"
+          }
+        },
+        {
+          "query": "Is there any way you could implement two-factor authentication for admin accounts? Our security team is requiring this for all our SaaS tools and we'd hate to have to switch platforms.",
+          "gold": "feature_request",
+          "output": "This is a feature request from a security-conscious customer whose organization has a mandate for two-factor authentication on admin accounts. They're expressing that this feature is important enough that its absence could drive them to a competitor.\n\nWhile this is framed as a question, the underlying need is clear: they're requesting that the platform add 2FA capability for admin accounts to meet their security requirements.\n\nFINAL: feature_request",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9550000000000001,
+            "rationale": "The agent correctly identified the ticket as a feature_request, matching the gold answer, with sound reasoning about the nature of the request and appropriate classification."
+          }
+        },
+        {
+          "query": "How do I create automated workflows that trigger when a form submission comes in? I want to automatically assign tasks to specific team members based on the submission type.",
+          "gold": "how_to",
+          "output": "This is a question about using the platform's workflow automation capabilities in response to form submissions. The user is asking for guidance on:\n\n1. Creating automated workflows triggered by form submissions\n2. Implementing conditional logic to route tasks based on submission type\n3. Assigning tasks to specific team members automatically\n\nThis is a \"how-to\" question - the user is asking for help understanding how to use existing features to accomplish a specific goal. They're not reporting a bug, requesting a new feature, experiencing an outage, or dealing with billing/data loss issues.\n\nFINAL: how_to",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly classified the ticket as 'how_to', matching the reference answer, with clear and valid reasoning explaining why it's not a bug, feature request, or other category."
+          }
+        },
+        {
+          "query": "Our data warehouse ETL job that pulls from your GraphQL API started failing this morning with 'rate limit exceeded' errors, even though we're only making 50 requests per minute and the limit is 100.",
+          "gold": "integration",
+          "output": "This ticket describes a service issue affecting a customer's production ETL pipeline. The customer reports that their GraphQL API requests are hitting rate limit errors despite being well below the stated limit (50 req/min vs 100 req/min limit).\n\nThis is a critical outage scenario because:\n1. A production data pipeline is failing\n2. The issue is preventing normal operations\n3. It's not a feature request or how-to question\n4. While it involves an integration, the core problem is service availability\n\nThe customer is experiencing unexpected API behavior that's blocking their workflow, which qualifies as an outage-level issue.\n\nFINAL: outage_critical",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.55,
+            "reasoning_soundness": 0.6,
+            "execution_accuracy": 0.5,
+            "output_integrity": 0.2,
+            "aggregate": 0.46249999999999997,
+            "rationale": "The agent classified the ticket as 'outage_critical' rather than the correct 'integration' label, and while the reasoning about production impact is plausible, it misidentifies the core category, resu"
+          }
+        },
+        {
+          "query": "Database connection failures across all our services starting 20 minutes ago. Nothing is working - no queries are going through and all application functionality is frozen for every user.",
+          "gold": "outage_critical",
+          "output": "This is a critical production outage affecting all services and users. The database connection failures are preventing any queries from executing, which means the entire application stack is non-functional. This requires immediate attention and resolution.\n\nFINAL: outage_critical",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.98,
+            "aggregate": 0.9574999999999999,
+            "rationale": "The agent correctly classified the ticket as 'outage_critical' matching the reference answer, with sound reasoning about the severity and scope of the issue, though the verbose explanation before the "
+          }
+        },
+        {
+          "query": "Critical issue: product images for about 300 items in our catalog have disappeared overnight. The database shows the entries but the actual image files are nowhere to be found.",
+          "gold": "data_loss",
+          "output": "This is a serious issue involving missing product image files. Let me analyze:\n\n**Key indicators:**\n- 300 items affected (significant scope)\n- Database records exist but files are missing\n- Occurred suddenly (\"overnight\")\n- This impacts business operations and customer-facing catalog\n\n**Classification reasoning:**\nThis could potentially fit multiple categories:\n- **data_loss**: Files have disappeared, which is data loss\n- **outage_critical**: If the product catalog is non-functional without images, this could be critical\n\nHowever, the core issue is that actual data (image files) has been lost from the system. While this may impact service availability, the primary problem is the loss of data assets themselves. This is fundamentally a **data loss** situation - the images existed and are now gone, requiring recovery or restoration.\n\nFINAL: data_loss",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly classified the ticket as 'data_loss' matching the reference answer, with sound reasoning that acknowledged alternative classifications before correctly identifying the core issue a"
+          }
+        },
+        {
+          "query": "I was charged twice this month for my subscription and need a refund for the duplicate transaction that appeared on my credit card statement.",
+          "gold": "billing",
+          "output": "This is a billing issue where the customer has been charged twice for their subscription in a single month and is requesting a refund for the duplicate charge. This is a clear billing problem that needs to be addressed by the billing/finance team.\n\nFINAL: billing",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.9,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly classified the ticket as 'billing' matching the reference answer, with sound reasoning and appropriate explanation, though the verbose explanation was unnecessary for a simple clas"
+          }
+        },
+        {
+          "query": "Could the search functionality be enhanced to include filtering by multiple tags simultaneously? Right now we can only filter by one tag at a time which makes finding specific items tedious.",
+          "gold": "feature_request",
+          "output": "This ticket is requesting an enhancement to the search functionality to allow filtering by multiple tags at once, rather than being limited to single-tag filtering. The user is describing a limitation in the current feature set and asking for an improvement to make the product more efficient for their use case.\n\nThis is clearly a feature request - the system is working as designed, but the user wants additional capability added to make it more powerful.\n\nFINAL: feature_request",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly identified the ticket as a feature_request, matching the reference answer, with sound reasoning that the system works as designed but the user wants additional capability."
+          }
+        },
+        {
+          "query": "What's the correct procedure for transferring ownership of a project to another user? I'm leaving the team and need to hand off my projects.",
+          "gold": "how_to",
+          "output": "This is a straightforward procedural question about how to transfer project ownership within the system. The user is asking for guidance on the steps needed to complete this administrative task before leaving their team.\n\nThis is a \"how_to\" request - they need instructions on performing a specific action (transferring project ownership) rather than reporting a system problem, requesting a new feature, dealing with billing, or experiencing data loss.\n\nFINAL: how_to",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly identified the ticket as 'how_to', matching the reference answer, with sound reasoning that the user is seeking procedural guidance rather than reporting a bug or requesting a feat"
+          }
+        },
+        {
+          "query": "Our Salesforce connector stopped syncing customer data yesterday afternoon. We're getting a 401 authentication error when trying to establish the connection, even though our API credentials haven't changed.",
+          "gold": "integration",
+          "output": "This is an integration issue where a previously working connector has stopped functioning. The 401 authentication error indicates a connection/authentication problem with the Salesforce integration, which is preventing data synchronization.\n\nWhile this is impacting their workflow, it's not a complete system outage affecting all users, nor is there confirmed data loss. The issue is specific to the Salesforce connector authentication and falls under integration troubleshooting.\n\nFINAL: integration",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly classified the ticket as 'integration' matching the reference answer, with sound reasoning about the 401 error and Salesforce connector context, and appropriate format with a clear"
+          }
+        },
+        {
+          "query": "URGENT: All API endpoints are returning 503 errors since 3:15 AM EST. Our mobile app is completely non-functional and millions of users cannot log in or access any services whatsoever.",
+          "gold": "outage_critical",
+          "output": "This is a critical service outage affecting core functionality and a large user base. The symptoms indicate:\n\n- Widespread API failures (503 errors across all endpoints)\n- Complete service unavailability for end users\n- Time-sensitive impact on millions of users\n- Immediate business impact (mobile app non-functional)\n\nThis clearly falls into the most severe priority category as it represents a complete service outage requiring immediate incident response.\n\nFINAL: outage_critical",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.9,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified the ticket as 'outage_critical' matching the reference answer, with sound reasoning based on the described symptoms, though the verbose explanation was not strictly requ"
+          }
+        },
+        {
+          "query": "The spreadsheet with all our vendor contracts has become unreadable. Every time we try to access it, we see garbled characters instead of the actual data we entered.",
+          "gold": "data_loss",
+          "output": "This ticket describes a critical issue where important business data (vendor contracts) is inaccessible and corrupted in the spreadsheet. The user cannot read or retrieve the data they entered, which suggests potential data loss or severe data corruption.\n\nThis falls under the **data_loss** category because:\n- The data is no longer readable/accessible in its original form\n- Critical business information (vendor contracts) is affected\n- The integrity of stored data has been compromised\n\nFINAL: data_loss",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9550000000000001,
+            "rationale": "The agent correctly classified the ticket as 'data_loss' matching the reference answer, with sound reasoning about data corruption and inaccessibility, though the verbose explanation was not strictly "
+          }
+        },
+        {
+          "query": "The automatic renewal charged us for the premium tier, but we wanted to downgrade to basic before the renewal date. Can this be adjusted?",
+          "gold": "billing",
+          "output": "This is a billing issue. The customer is reporting an unexpected charge due to automatic renewal when they intended to downgrade their subscription tier before the renewal occurred. This involves account adjustments, refunds, or subscription management - all billing-related concerns.\n\nFINAL: billing",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly classified the ticket as 'billing', matching the reference answer, with sound reasoning and proper format."
+          }
+        }
+      ],
+      "optimization": {
+        "baseline_val": 1.0,
+        "struct_best_val": 1.0,
+        "prompt_best_val": 1.0,
+        "final_val": 1.0,
+        "shipped_baseline": true,
+        "ship_prob_better": 0.0,
+        "deployed_phase": "baseline(ceiling)",
+        "struct_iters": 0,
+        "prompt_iters": 0,
+        "struct_prompt": "You are a support-priority classifier. Classify the support ticket into a priority/type bucket. Classify into one of these categories: outage_critical, data_loss, billing, feature_request, how_to, integration.",
+        "trajA": [],
+        "trajB": []
+      }
+    }
+  },
+  "duration_s": 18.8
+}

@@ -23,6 +23,7 @@
 \input{numbers_v2}
 \input{numbers_hb}
 \input{numbers_v3}
+\input{numbers_v4}
 
 \title{\bfseries Does Evaluation-Guided Prompt Optimization Beat a Fair Baseline?\\
 \large A Confound-Controlled, Ablated Study of the Target--Evaluate--Improve Loop\\
@@ -915,6 +916,23 @@ optimization steps: more candidates over the same small split mostly add chances
 overfit it. We therefore fix the budget at $14$ iterations, and identify
 \emph{larger per-task held-out sets} (so the confirmation gate can confidently ship
 the real gains) as the highest-value next investment---more so than additional search.
+
+\paragraph{Neither is depth or optimizer strength (two-phase, Sonnet-4.6).}
+We also tested the most-requested heavier design: an explicit \emph{two-phase} loop
+per agent---$30$ iterations of \emph{structural} fixes (deploy the highest-scoring
+structure), then $30$ iterations of \emph{prompt} optimization on top (deploy the
+highest-scoring prompt)---with a stronger optimizer (\texttt{claude-sonnet-4-6})
+(recorded in \texttt{results\_v4/}, \vfourStructIters{}+\vfourPromptIters{} iters,
+$\sim$\$24). It is \emph{worse}, not better: \vfourDelta{} over baseline
+($p=\vfourP$, $d_z=\vfourDz$; \vfourUp{} up / \vfourDown{} down / \vfourTie{} tie,
+including one regression), versus the lighter v3's \vthreeBaseDelta{}
+(\vthreeBaseW/\vthreeBaseL/\vthreeBaseT) at $\sim$6$\times$ less cost. The second
+(prompt) phase deployed a distinct change only on \vfourPromptAdded{}/\vfourN{} agents;
+the structural phase did essentially all the work, and the heavier search re-introduced
+the same \texttt{platform\_toxicity} regression. Three independent levers---budget
+($6\!\to\!20\!\to\!30$ iters), \emph{depth} (two sequential phases), and \emph{optimizer
+model} (Sonnet-4.5$\to$4.6)---all fail to improve on the lighter loop, which pins the
+binding constraint squarely on \emph{per-task data}, not the optimization procedure.
 
 \section{Limitations}
 \label{sec:limitations}

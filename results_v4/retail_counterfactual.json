@@ -1,0 +1,1211 @@
+{
+  "task_id": "retail_counterfactual",
+  "industry": "Retail Analytics",
+  "metric": "classification",
+  "source": "SetFit/amazon_counterfactual_en via HuggingFace (see dataset card for license).",
+  "is_public": true,
+  "n_train": 15,
+  "n_test": 30,
+  "agent_model": "claude-haiku-4-5",
+  "judge_model": "claude-sonnet-4-6",
+  "optimizer_model": "claude-sonnet-4-6",
+  "seed": 0,
+  "arms": {
+    "baseline": {
+      "objective_mean": 0.7333333333333333,
+      "objective_ci95": [
+        0.5666666666666667,
+        0.8666666666666667
+      ],
+      "gpa_mean": 0.8494166666666666,
+      "gpa_dims": {
+        "target_alignment": 0.9116666666666666,
+        "reasoning_soundness": 0.7933333333333333,
+        "execution_accuracy": 0.9349999999999997,
+        "output_integrity": 0.7576666666666666
+      },
+      "prompt": "You are a review-analysis assistant. Detect whether the review contains a counterfactual statement. Classify into one of these categories: counterfactual, not-counterfactual.",
+      "examples": [
+        {
+          "query": "If you follow the sizing chart you will have no issues.",
+          "gold": "not-counterfactual",
+          "output": "This statement is a general recommendation about following a sizing chart to avoid problems. It does not contain a counterfactual statement—it's not describing something contrary to fact or making a hypothetical claim about what would have happened if something different had occurred. It's simply advice about proper sizing procedures.\n\nFINAL: not-counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly identified the statement as not-counterfactual, matching the reference answer, with sound reasoning that the statement is advice rather than a contrary-to-fact hypothetical."
+          }
+        },
+        {
+          "query": "That would be the only think I would change.",
+          "gold": "counterfactual",
+          "output": "I need to analyze whether this statement contains a counterfactual.\n\nA counterfactual statement expresses something contrary to fact - it describes a hypothetical situation that didn't actually happen, often using conditional language like \"would,\" \"could have,\" \"if,\" etc.\n\nThe statement \"That would be the only thing I would change\" uses the conditional \"would,\" which indicates a hypothetical scenario. The speaker is expressing what they would do in a hypothetical situation (if they could change something), rather than describing what actually happened or is actually the case.\n\nThis is a counterfactual statement because it expresses a hypothetical action contrary to the actual situation.\n\nFINAL: counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.85,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.925,
+            "rationale": "The agent correctly identified the statement as counterfactual, matching the reference answer, with sound reasoning about the conditional 'would' indicating a hypothetical scenario, though the reasoni"
+          }
+        },
+        {
+          "query": "I liked that they came with the oxygen absorbers.",
+          "gold": "not-counterfactual",
+          "output": "This statement describes a factual observation about the product - the reviewer is noting that oxygen absorbers were included with their purchase. This is a straightforward statement about what actually came with the product, not a counterfactual statement (which would involve imagining something contrary to fact, like \"if only they had included oxygen absorbers\" or \"they should have come with oxygen absorbers instead of what they did\").\n\nFINAL: not-counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly identified the review as not-counterfactual, provided sound reasoning distinguishing factual statements from counterfactuals, and matched the reference answer exactly."
+          }
+        },
+        {
+          "query": "If they were a little bigger, it would have been perfect.",
+          "gold": "counterfactual",
+          "output": "This statement contains a counterfactual element. The reviewer is expressing a hypothetical condition (\"if they were a little bigger\") and its imagined consequence (\"it would have been perfect\"). This is a counterfactual statement because it describes what would be true under a condition that is contrary to fact—implying that the items are NOT actually bigger, and therefore the product is NOT actually perfect.\n\nFINAL: counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.98,
+            "reasoning_soundness": 0.97,
+            "execution_accuracy": 0.98,
+            "output_integrity": 0.98,
+            "aggregate": 0.9774999999999999,
+            "rationale": "The agent correctly identified the counterfactual statement, provided sound reasoning about the hypothetical condition and its contrary-to-fact nature, and delivered the correct label matching the ref"
+          }
+        },
+        {
+          "query": "He was very pleased when he saw how neat the closet looked and how much easier it is for him to get his shoes off these racks without everything else falling off as well.",
+          "gold": "not-counterfactual",
+          "output": "I need to analyze whether this review contains a counterfactual statement.\n\nA counterfactual statement is one that describes something contrary to fact - what did not happen, what is not true, or what would have happened under different circumstances (often using conditional language like \"would have,\" \"could have,\" \"if,\" etc.).\n\nThe review states:\n- He was very pleased when he saw how neat the closet looked\n- It is easier for him to get his shoes off these racks\n- Everything else doesn't fall off as well (implying things stay in place)\n\nThese are all statements presented as factual observations about what actually happened and what is currently true. The reviewer is describing actual positive experiences with the product - the closet is neat, it's easier to access shoes, and items don't fall. There are no conditional statements, no \"would have\" or \"could have\" constructions, and no statements about what didn't happen or contrary-to-fact scenarios.\n\nFINAL: not-counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.97,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly identified the review as not-counterfactual, with sound reasoning explaining the absence of conditional or contrary-to-fact language, matching the reference answer exactly."
+          }
+        },
+        {
+          "query": "Well, these took a week to arrive and the package was small enough it could have been mailed with two stamps (and arrived quicker, likely) yet it could have been shipped Priority Mail for as much as charged!",
+          "gold": "counterfactual",
+          "output": "Let me analyze this review for counterfactual statements.\n\nThe review contains several conditional/hypothetical statements:\n1. \"the package was small enough it could have been mailed with two stamps\" - This is a hypothetical about what could have been done\n2. \"(and arrived quicker, likely)\" - A speculative claim about what might have happened\n3. \"it could have been shipped Priority Mail for as much as charged\" - Another hypothetical about an alternative that could have occurred\n\nThese statements express what *could have* or *might have* happened under different circumstances, rather than describing what actually did happen. They are counterfactual in nature - they present contrary-to-fact or hypothetical scenarios to criticize the actual shipping method used.\n\nThe core complaint is about actual facts (slow arrival, high cost), but the reasoning relies on counterfactual comparisons (what could have been done differently).\n\nFINAL: counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly identified the review as containing counterfactual statements, matching the reference answer, with sound reasoning identifying the specific hypothetical/contrary-to-fact constructi"
+          }
+        },
+        {
+          "query": "I really wanted to like this chemise, it was very pretty.",
+          "gold": "not-counterfactual",
+          "output": "I need to analyze whether this review contains a counterfactual statement.\n\nA counterfactual statement expresses something contrary to fact - what didn't happen, what isn't true, or a hypothetical contrary to reality.\n\nThe review states: \"I really wanted to like this chemise, it was very pretty.\"\n\nThis contains:\n1. \"I really wanted to like this chemise\" - expresses a desire/intention\n2. \"it was very pretty\" - a factual observation about the product's appearance\n\nThe phrase \"I wanted to like it\" could imply that despite wanting to like it, the reviewer didn't actually like it (suggesting something else was wrong with it). However, this is not explicitly counterfactual - it's just expressing a desire and then noting that the item was pretty. There's no explicit statement of something contrary to fact.\n\nThe statement describes actual events/feelings (the reviewer did want to like it, the item was pretty) rather than stating what would have happened if something were different, or what didn't happen.\n\nFINAL: not-counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.82,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9175,
+            "rationale": "The agent correctly identified the review as not-counterfactual, matching the reference answer, with generally sound reasoning though it slightly over-complicated the analysis by entertaining an impli"
+          }
+        },
+        {
+          "query": "If you put a cotton ball in one of the baskets, it would probably stress the cheap chain enough to have a link slip through...very bad design flaw with the way the chains are linked.",
+          "gold": "counterfactual",
+          "output": "This statement describes a hypothetical scenario (\"If you put a cotton ball...it would probably...\") to illustrate a design flaw. The reviewer is presenting a counterfactual condition - something that hasn't necessarily happened but is being used to explain why the product has poor design.\n\nThe phrase \"If you put a cotton ball in one of the baskets, it would probably stress the cheap chain enough to have a link slip through\" is a conditional statement expressing what would happen under hypothetical circumstances, not describing what actually occurred.\n\nFINAL: counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly identified the counterfactual statement, provided sound reasoning about the hypothetical conditional structure, and matched the reference answer exactly."
+          }
+        },
+        {
+          "query": "This amp is awesome and I'll get in to that, but it's worth buying just for the fact that it doesn't falsely advertise it's power (which is considerable) like others I've found in it's price range and even above.",
+          "gold": "not-counterfactual",
+          "output": "I need to analyze whether this review contains a counterfactual statement.\n\nA counterfactual statement is one that describes something contrary to fact - what did not happen, what is not true, or what would have happened under different circumstances.\n\nLet me examine the key claims in this review:\n\n1. \"This amp is awesome\" - Opinion/evaluation\n2. \"it's worth buying just for the fact that it doesn't falsely advertise it's power\" - This is a factual claim about what the product does (doesn't falsely advertise)\n3. \"which is considerable\" - Opinion about the power level\n4. \"like others I've found in it's price range and even above\" - Comparative claim about other products' advertising practices\n\nThe reviewer is making statements about what IS true about this amp (it doesn't falsely advertise) and what IS true about competitors (they do falsely advertise). These are presented as actual facts about reality, not as counterfactual statements.\n\nThere are no statements like \"if it had falsely advertised...\" or \"it would have been better if...\" or descriptions of hypothetical/contrary-to-fact scenarios. The review describes what actually happened/is actually the case.\n\nFINAL: not-counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.97,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly identified the review as not-counterfactual, with clear and valid reasoning that matches the reference answer exactly."
+          }
+        },
+        {
+          "query": "I wish the would more clearly mark the right/left but nothing you can't fix with a sharpie.",
+          "gold": "counterfactual",
+          "output": "This review expresses a wish about how the product could be improved (clearer marking of right/left), but it's not a counterfactual statement. The reviewer is stating a real desire or preference about the product's current state, not making a claim about what would have happened under different circumstances or what didn't actually occur.\n\nA counterfactual would be something like \"If they had marked it more clearly, I would have liked it better\" or \"It would have been perfect if they had marked the sides.\" This is simply expressing a preference for improvement.\n\nFINAL: not-counterfactual",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.85,
+            "reasoning_soundness": 0.55,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.2,
+            "aggregate": 0.625,
+            "rationale": "The agent correctly identified the task and provided a well-structured response, but reached the wrong conclusion — 'I wish they would more clearly mark...' is a classic counterfactual/hypothetical wi"
+          }
+        },
+        {
+          "query": "I just finished reading this book and I want more !!!!",
+          "gold": "not-counterfactual",
+          "output": "This review expresses enthusiasm and a desire for more content from the author or series. It contains no counterfactual statements - the reviewer is simply stating their genuine reaction to finishing the book.\n\nA counterfactual statement would be something like \"If I had read this book earlier, I would have enjoyed it more\" or \"This book would have been better if...\" - statements that describe hypothetical or contrary-to-fact scenarios.\n\nThis review is a straightforward expression of satisfaction and wanting more.\n\nFINAL: not-counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified the review as not-counterfactual, provided sound reasoning with appropriate examples of what counterfactuals would look like, and delivered the correct final answer matc"
+          }
+        },
+        {
+          "query": "The only improvement I would like is if it were back lit.",
+          "gold": "counterfactual",
+          "output": "This statement expresses a hypothetical wish or preference about how the product could be different. The reviewer is saying \"if it were back lit\" - describing a condition that is not currently true but that they wish were true.\n\nThis is a counterfactual statement because it describes an alternative state of affairs (the product being back lit) that contrasts with the actual state (it is not back lit).\n\nFINAL: counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly identified the statement as counterfactual, matching the reference answer, with sound reasoning about the hypothetical/contrary-to-fact nature of 'if it were back lit.'"
+          }
+        },
+        {
+          "query": "A model of how to live your life by finding out what is and what is not important.",
+          "gold": "not-counterfactual",
+          "output": "This review describes the book's content and purpose - it presents a model or framework for living life by distinguishing between what is and isn't important. This is a straightforward description of what the book offers or teaches.\n\nThere is no counterfactual statement here. A counterfactual would be something like \"If the author had written this differently, it would have been better\" or \"This book doesn't teach anything about priorities\" (when it does). The review simply states what the book is about without making any contrary-to-fact claims.\n\nFINAL: not-counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.9625,
+            "rationale": "The agent correctly identified the review as not-counterfactual, matching the gold answer, with sound reasoning and proper format."
+          }
+        },
+        {
+          "query": "I seriously could have done without the black parasites melodrama.",
+          "gold": "counterfactual",
+          "output": "I need to analyze whether this review contains a counterfactual statement.\n\nA counterfactual statement expresses something that is contrary to fact - it describes a hypothetical situation that didn't actually occur, often using conditional language like \"could have,\" \"would have,\" \"if,\" etc.\n\nThe review states: \"I seriously could have done without the black parasites melodrama.\"\n\nThis uses the phrase \"could have done without,\" which is a counterfactual construction. It expresses a hypothetical alternative to what actually happened - the reviewer is saying that in an alternative scenario, they could have managed without this element. However, the reviewer is actually expressing a negative opinion about something that IS in the work (the \"black parasites melodrama\" that they experienced).\n\nThe statement itself is expressing a preference/opinion about actual content in a counterfactual frame, but the core meaning is a straightforward negative opinion about something that exists in the work, not a claim about what didn't happen or what could have been different about the actual events of the story.\n\nThis is a subjective opinion expressed through counterfactual phrasing, but it's not making a counterfactual claim about the plot or events themselves - it's just saying the reviewer didn't like this element.\n\nFINAL: not-counterfactual",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.3,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.1,
+            "aggregate": 0.55,
+            "rationale": "The agent correctly identified the counterfactual phrasing ('could have done without') but then incorrectly reasoned itself into the wrong answer, failing to match the reference label 'counterfactual'"
+          }
+        },
+        {
+          "query": "Would recomend to others without a doubt chose product for known brand Easy to use directions were simple to follow",
+          "gold": "not-counterfactual",
+          "output": "I'll analyze this review for counterfactual statements.\n\nA counterfactual statement is one that describes something contrary to fact - what didn't happen, what isn't true, or hypothetical scenarios presented as if they were real.\n\nThis review contains:\n- A recommendation (\"Would recommend to others without a doubt\")\n- A reason for choice (\"chose product for known brand\")\n- Positive feedback about usability (\"Easy to use\")\n- Positive feedback about instructions (\"directions were simple to follow\")\n\nAll of these statements appear to be the reviewer's genuine positive experiences and opinions about the product. There are no statements that contradict facts or present hypothetical scenarios as actual events. The reviewer is describing what actually happened and their actual experience with the product.\n\nFINAL: not-counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9550000000000001,
+            "rationale": "The agent correctly identified the review as not-counterfactual, with sound reasoning that analyzed each component of the review and matched the gold answer exactly."
+          }
+        },
+        {
+          "query": "It's plenty strong enough to hold equipment but I thought the platform would be more rigid.",
+          "gold": "counterfactual",
+          "output": "This review expresses a personal expectation that wasn't met. The reviewer expected the platform to be more rigid than it actually is. However, this is not a counterfactual statement because:\n\n1. The reviewer is describing their actual experience and expectation\n2. They are not making a claim about something that didn't happen or couldn't happen\n3. They are simply noting that the product's rigidity fell short of their expectations\n\nA counterfactual statement would be something like \"If the platform were made of steel instead of aluminum, it would be more rigid\" - a hypothetical contrary-to-fact claim.\n\nThis is a straightforward product review expressing disappointment with a feature.\n\nFINAL: not-counterfactual",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.85,
+            "reasoning_soundness": 0.4,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.1,
+            "aggregate": 0.5625,
+            "rationale": "The agent correctly addressed the task but reached the wrong conclusion — the phrase 'I thought the platform would be more rigid' is a counterfactual (an implicit contrary-to-fact expectation), yet th"
+          }
+        },
+        {
+          "query": "Picked up some of my signals ok, but the antenna itself should be bigger.",
+          "gold": "not-counterfactual",
+          "output": "This review states a factual observation about the product's performance and design. The reviewer is describing what actually happened (the antenna picked up some signals but not optimally) and making a straightforward suggestion that the antenna should be bigger. This is a direct assessment of the product's actual characteristics and performance, not a counterfactual statement (which would involve imagining a contrary-to-fact scenario, like \"if the antenna were bigger, it would have worked\").\n\nFINAL: not-counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9425000000000001,
+            "rationale": "The agent correctly identified the review as not-counterfactual, matching the reference answer, with sound reasoning explaining why the statement is factual rather than counterfactual."
+          }
+        },
+        {
+          "query": "Wish these were full length novels because they are just so addictive.",
+          "gold": "counterfactual",
+          "output": "This statement expresses a wish or desire about what the reviewer would prefer (full-length novels instead of what appears to be shorter works), but it does not make a counterfactual claim about what is actually the case or what would have happened under different circumstances.\n\nThe reviewer is stating a preference and commenting on the addictive quality of the current works, not asserting something contrary to fact or imagining an alternative reality.\n\nFINAL: not-counterfactual",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.85,
+            "reasoning_soundness": 0.6,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.2,
+            "aggregate": 0.6375000000000001,
+            "rationale": "The agent correctly identified the task and provided a structured answer, but reached the wrong conclusion — 'Wish these were full length novels' is a classic counterfactual/contrary-to-fact wish (the"
+          }
+        },
+        {
+          "query": "The tags on the pieces that say what it's made off are conveniently missing.",
+          "gold": "not-counterfactual",
+          "output": "This statement describes a factual observation about the product - the reviewer is noting that tags indicating material composition are absent from the pieces. This is a straightforward claim about what is (or isn't) present on the product.\n\nA counterfactual statement would be something like \"If the tags had been present, I would have known the material\" or \"The tags should have been there but weren't\" - statements that involve hypothetical conditions or contrary-to-fact reasoning.\n\nThe review statement is simply reporting an actual condition of the product as received.\n\nFINAL: not-counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9550000000000001,
+            "rationale": "The agent correctly identified the statement as not-counterfactual, provided sound reasoning distinguishing factual observations from counterfactual statements, and matched the reference answer exactl"
+          }
+        },
+        {
+          "query": "I am not a fan of insta-love so I would have preferred to see their relationship develop a bit slower BUT it was still HOT as Hell!!!!!!",
+          "gold": "counterfactual",
+          "output": "This review expresses a preference about how the relationship could have been written differently (\"I would have preferred to see their relationship develop a bit slower\"), but this is a statement of subjective preference or opinion about what the reviewer wishes had happened, not a counterfactual claim about what actually did happen in the book.\n\nThe reviewer is saying:\n- What actually happened: insta-love (fast relationship development)\n- What they would have preferred: slower development\n- Their evaluation: it was still hot despite this preference\n\nThis is a critique/preference statement, not a counterfactual statement. A counterfactual would be claiming something false as if it were true about the actual content (e.g., \"The relationship developed slowly\" when it didn't).\n\nFINAL: not-counterfactual",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.85,
+            "reasoning_soundness": 0.55,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.2,
+            "aggregate": 0.625,
+            "rationale": "The agent's reasoning misidentifies the nature of counterfactuals — 'I would have preferred to see their relationship develop a bit slower' is a classic counterfactual construction (implying the actua"
+          }
+        },
+        {
+          "query": "I can finally order pants that I know will fit because I had been wearing them for years but the stores I had been buying them from no longer carried 10Tall.",
+          "gold": "not-counterfactual",
+          "output": "Let me analyze this review for counterfactual statements.\n\nA counterfactual statement is one that describes something contrary to fact - what didn't happen, what isn't true, or hypothetical scenarios presented as if they were real.\n\nIn this review, the customer is saying:\n- They had been wearing certain pants for years\n- The stores they bought from no longer carry size 10Tall\n- They can now finally order pants they know will fit\n\nThis is a straightforward account of actual events and facts:\n- The customer actually wore these pants (real past event)\n- The stores actually stopped carrying this size (real past event)\n- They can now order them (real present capability)\n\nThere are no counterfactual elements here - no statements about what \"would have\" happened, what \"could have\" happened, or contrary-to-fact conditionals. The review describes actual circumstances and real situations.\n\nFINAL: not-counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly identified the review as not-counterfactual, with sound reasoning that accurately distinguishes factual statements from counterfactual ones, matching the reference answer exactly."
+          }
+        },
+        {
+          "query": "I shouldn't have had to purchase this device but that's technology for you.",
+          "gold": "counterfactual",
+          "output": "I need to analyze whether this review contains a counterfactual statement.\n\nA counterfactual statement expresses something contrary to fact - typically using conditional language like \"if,\" \"would have,\" \"could have,\" or expressing what didn't happen but might have.\n\nThe statement \"I shouldn't have had to purchase this device but that's technology for you\" is expressing:\n- A judgment about what the reviewer believes should have happened (they shouldn't have needed to buy it)\n- A resignation to reality (but they did have to buy it)\n\nThis is a statement of opinion/complaint about a situation that actually occurred, not a counterfactual claim about an alternative scenario that didn't happen. The reviewer is not saying \"if X had happened, then Y would have occurred\" or describing a hypothetical contrary-to-fact situation. They're simply expressing dissatisfaction with a real purchase they made.\n\nFINAL: not-counterfactual",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.55,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.2,
+            "aggregate": 0.6375000000000001,
+            "rationale": "The agent correctly addressed the task but reached the wrong conclusion: 'I shouldn't have had to purchase this device' is a classic counterfactual/contrary-to-fact statement implying that in an ideal"
+          }
+        },
+        {
+          "query": "A great little lighter that is really also a great example of workmanship and design.",
+          "gold": "not-counterfactual",
+          "output": "This review describes the lighter as having great workmanship and design, and praises it as a product. These are factual claims about the actual product's qualities as experienced by the reviewer.\n\nThere are no counterfactual statements here - the reviewer is not making claims about what would have happened under different circumstances, or stating things contrary to fact. They are simply expressing their positive assessment of the lighter's actual characteristics.\n\nFINAL: not-counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly identified the review as not-counterfactual, with sound reasoning explaining the absence of counterfactual statements, matching the reference answer exactly."
+          }
+        },
+        {
+          "query": "\"I would give it a five star rating if it were not peppered with errors like using the word \\pedaled\\\"\" for \\\"\"peddled\\\"\", etc.\"\"\"",
+          "gold": "counterfactual",
+          "output": "Let me analyze this review for counterfactual statements.\n\nA counterfactual statement expresses something contrary to fact - a hypothetical condition that is not true in reality. It typically uses conditional language like \"would,\" \"if,\" \"could have,\" etc.\n\nIn this review, the author states: \"I would give it a five star rating if it were not peppered with errors...\"\n\nThis is a classic counterfactual statement. The author is saying:\n- Condition (contrary to fact): \"if it were not peppered with errors\"\n- Consequence: \"I would give it a five star rating\"\n\nThe author is expressing what they would do under a hypothetical condition that is NOT currently true. In reality, the product/text IS peppered with errors, so they are NOT giving it five stars. They're using a counterfactual to express their dissatisfaction.\n\nFINAL: counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.98,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.985,
+            "rationale": "The agent correctly identified the counterfactual statement, provided sound reasoning about the conditional structure ('would...if it were not'), and matched the reference answer exactly."
+          }
+        },
+        {
+          "query": "A while back, I moved and in the process of the move, I lost the original RCA Male to F-type Female Adapter which came with the tuner card.",
+          "gold": "not-counterfactual",
+          "output": "I need to analyze whether this review contains a counterfactual statement.\n\nA counterfactual statement is one that describes something contrary to fact - something that didn't actually happen or isn't true in reality.\n\nLet me examine the review:\n\"A while back, I moved and in the process of the move, I lost the original RCA Male to F-type Female Adapter which came with the tuner card.\"\n\nThis statement describes:\n- A past event (moving)\n- A consequence of that event (losing an adapter)\n- A factual claim about what was lost (an RCA Male to F-type Female Adapter that came with a tuner card)\n\nThis is a straightforward factual account of something that happened. The reviewer is describing an actual event that occurred - they moved and lost an adapter. There is nothing here that contradicts reality or presents an alternative/hypothetical scenario. It's not saying \"if I had moved\" or \"I would have lost\" - it's stating what actually happened.\n\nThis is a factual statement, not a counterfactual one.\n\nFINAL: not-counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly identified the statement as not-counterfactual, with sound reasoning explaining why the review describes actual past events rather than hypothetical or contrary-to-fact scenarios, "
+          }
+        },
+        {
+          "query": "cute but Its too loose around my waist.I should have ordered a 25",
+          "gold": "counterfactual",
+          "output": "This statement contains a counterfactual element. The reviewer is expressing what they should have done differently (\"I should have ordered a 25\"), which is a hypothetical statement about an alternative action they didn't take. However, the primary content of the review is a factual complaint about the fit (the item being too loose around the waist).\n\nThe counterfactual aspect is present but secondary to the main factual observation. The core review is describing an actual problem with the product as received, not making a statement that contradicts reality about what happened.\n\nFINAL: not-counterfactual",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.6,
+            "reasoning_soundness": 0.3,
+            "execution_accuracy": 0.7,
+            "output_integrity": 0.1,
+            "aggregate": 0.425,
+            "rationale": "The agent correctly identified the counterfactual element ('I should have ordered a 25') but then contradicted itself by labeling the final answer as 'not-counterfactual,' which is wrong given the ref"
+          }
+        },
+        {
+          "query": "I bought this to replace a clock radio that I really wanted more for sound than features.",
+          "gold": "not-counterfactual",
+          "output": "I need to analyze whether this review contains a counterfactual statement.\n\nA counterfactual statement is one that describes something contrary to fact - what did not happen, what is not true, or what would have happened under different circumstances (often using conditional language like \"if,\" \"would have,\" \"could have,\" etc.).\n\nThe review states: \"I bought this to replace a clock radio that I really wanted more for sound than features.\"\n\nThis is a straightforward factual statement about:\n- The reviewer's action (buying something)\n- The purpose (to replace a clock radio)\n- Their preference (wanting more sound than features)\n\nThere is no conditional language, no statement about what didn't happen, and no description of contrary-to-fact scenarios. The reviewer is simply describing what they actually did and their actual preferences.\n\nFINAL: not-counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly identified the review as not-counterfactual, with sound reasoning about the absence of conditional language or contrary-to-fact statements, matching the reference answer exactly."
+          }
+        },
+        {
+          "query": "if i had to however, i would be happy to.",
+          "gold": "counterfactual",
+          "output": "This statement contains a counterfactual element. The phrase \"if I had to\" introduces a hypothetical condition that is contrary to the current situation (implying the person doesn't actually have to do something). The speaker is expressing what they would do under a different circumstance than what actually exists.\n\nFINAL: counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.85,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.925,
+            "rationale": "The agent correctly identified the statement as counterfactual, matching the reference answer, with sound reasoning about the hypothetical conditional nature of 'if I had to' implying a contrary-to-fa"
+          }
+        },
+        {
+          "query": "It was a bit taller than I thought it would be but works great so far and very convenient.",
+          "gold": "not-counterfactual",
+          "output": "I need to analyze whether this review contains a counterfactual statement.\n\nA counterfactual statement is one that describes something contrary to fact - what did not happen, what is not true, or hypothetical scenarios presented as if they were real.\n\nLet me examine the review:\n- \"It was a bit taller than I thought it would be\" - This is a factual observation comparing the actual height to the reviewer's expectation. It's not counterfactual.\n- \"but works great so far\" - This is a factual statement about current performance.\n- \"and very convenient\" - This is a factual assessment of the product's convenience.\n\nAll statements in this review describe actual facts about the product's characteristics and performance. There are no statements about what didn't happen, what isn't true, or hypothetical scenarios presented as fact.\n\nFINAL: not-counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly identified the review as not-counterfactual, with sound reasoning that distinguished factual observations from counterfactual statements, matching the reference answer."
+          }
+        },
+        {
+          "query": "I do think she could have made Tris' discovery of everything a little more dramatic.",
+          "gold": "counterfactual",
+          "output": "This statement expresses a subjective opinion about how the author could have written the story differently. The reviewer is saying that in their view, the dramatic presentation of Tris's discovery could have been enhanced.\n\nHowever, this is not a counterfactual statement. A counterfactual statement asserts something that is contrary to fact - it claims something did not happen but presents it as if it did, or vice versa. This review is simply offering a critique or suggestion about what could have been done better. It's an opinion about the author's choices, not a false claim presented as true.\n\nFINAL: not-counterfactual",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.6,
+            "reasoning_soundness": 0.3,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.1,
+            "aggregate": 0.475,
+            "rationale": "The agent misclassified the sentence as not-counterfactual when it clearly contains a counterfactual ('could have made... more dramatic' implies it was not made dramatic enough — a contrary-to-fact co"
+          }
+        }
+      ]
+    },
+    "two_phase": {
+      "objective_mean": 0.8,
+      "objective_ci95": [
+        0.6666666666666666,
+        0.9333333333333333
+      ],
+      "gpa_mean": 0.881083333333333,
+      "gpa_dims": {
+        "target_alignment": 0.9309999999999996,
+        "reasoning_soundness": 0.8359999999999999,
+        "execution_accuracy": 0.9436666666666664,
+        "output_integrity": 0.8136666666666664
+      },
+      "prompt": "You are a review-analysis assistant. Your sole task is to classify whether a review contains a counterfactual statement.\n\n## DEFINITIONS\n\n**Counterfactual**: A statement that imagines or implies a situation **contrary to reality** — describing what would/could/might have happened under **different past or present conditions**, or what is hypothetically true but isn't actually the case. Key signals: \"would have,\" \"could have,\" \"should have,\" \"if only,\" or reasoning about an **alternative reality that didn't occur**.\n\n**Not-counterfactual**: A statement that only describes actual experiences, facts, observations, opinions, or forward-looking possibilities — including what IS or WAS the case, general predictions, and expressions of potential or imagination about the future.\n\n## DECISION RULES\n\n1. **Future/forward possibility**: Statements imagining what something *could become* or *might be* in the future (\"I can see this being a movie,\" \"this could work as a series\") are **not-counterfactual** — they describe a forward-looking possibility, not an alternative to a past or present reality.\n\n2. **Conditional future/general**: \"If you do X, Y will happen\" — describes real causal relationships, **not-counterfactual**.\n\n3. **Unrealized past alternatives**: \"If they had done X, Y would have been better\" — clearly **counterfactual**.\n\n4. **Design intent speculation about the past**: \"It must have been designed for X\" posits a hypothetical past cause — **counterfactual**.\n\n5. **\"Would be\" describing current reality**: If \"would be\" describes what IS currently true (not an unrealized alternative), lean **not-counterfactual**.\n\n6. **Expressions of imagination or vision** (\"I can see,\" \"I imagine,\" \"I picture\") about future or general scenarios are **not-counterfactual** unless they explicitly contrast with a past reality.\n\n## OUTPUT FORMAT\n\nRespond with exactly one word — either `counterfactual` or `not-counterfactual` — with no explanation, reasoning, or additional text.",
+      "examples": [
+        {
+          "query": "If you follow the sizing chart you will have no issues.",
+          "gold": "not-counterfactual",
+          "output": "This is a conditional statement describing a real causal relationship: \"If you do X (follow the sizing chart), Y will happen (no issues).\" It describes actual cause-and-effect, not an alternative to a past or present reality.\n\nFINAL: not-counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly identifies the statement as a conditional (not counterfactual) and provides sound reasoning distinguishing real causal conditionals from counterfactuals, matching the reference ans"
+          }
+        },
+        {
+          "query": "That would be the only think I would change.",
+          "gold": "counterfactual",
+          "output": "This statement expresses a hypothetical preference about what the reviewer would alter if they could—it describes an unrealized alternative to the current reality. The phrase \"would change\" indicates a counterfactual condition: if circumstances were different, this is what they would do.\n\nFINAL: counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly identified the statement as counterfactual, matching the reference answer, with sound reasoning about the hypothetical/unrealized nature of 'would change'."
+          }
+        },
+        {
+          "query": "I liked that they came with the oxygen absorbers.",
+          "gold": "not-counterfactual",
+          "output": "This statement describes an actual experience — the reviewer received oxygen absorbers with their purchase and appreciated that fact. It's a straightforward observation about what actually happened, not a counterfactual statement about an alternative reality or unrealized past condition.\n\nFINAL: not-counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly identified the statement as not-counterfactual, with sound reasoning that the review describes an actual experience rather than a hypothetical or unrealized condition, matching the"
+          }
+        },
+        {
+          "query": "If they were a little bigger, it would have been perfect.",
+          "gold": "counterfactual",
+          "output": "This statement uses \"would have been,\" which expresses a counterfactual condition. It imagines an alternative past or present state (if they were bigger) and describes what would result from that unrealized condition (it would have been perfect). This contrasts with the actual reality (they are not bigger, and therefore it is not perfect).\n\nFINAL: counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly identified the statement as counterfactual, provided sound reasoning about the conditional structure, and the final answer matches the reference exactly."
+          }
+        },
+        {
+          "query": "He was very pleased when he saw how neat the closet looked and how much easier it is for him to get his shoes off these racks without everything else falling off as well.",
+          "gold": "not-counterfactual",
+          "output": "This statement describes actual experiences and observations: the person was pleased, the closet looks neat, and it is easier to get shoes off the racks. These are facts about what IS the case, not statements about what would have happened under different conditions or alternative realities.\n\nFINAL: not-counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly identified the review as not-counterfactual, with sound reasoning that the statements describe actual experiences rather than hypothetical or alternative scenarios, matching the re"
+          }
+        },
+        {
+          "query": "Well, these took a week to arrive and the package was small enough it could have been mailed with two stamps (and arrived quicker, likely) yet it could have been shipped Priority Mail for as much as charged!",
+          "gold": "counterfactual",
+          "output": "The reviewer is expressing frustration about shipping costs and speed. Let me analyze the counterfactual elements:\n\n- \"could have been mailed with two stamps (and arrived quicker, likely)\" — This describes an alternative way the package *could have been* shipped in the past, imagining a different outcome than what actually happened.\n- \"could have been shipped Priority Mail for as much as charged\" — This also imagines an alternative shipping method that wasn't used, contrasting with the actual choice made.\n\nBoth statements reason about what *could have* happened differently in the past (alternative shipping methods and outcomes), which is the hallmark of counterfactual reasoning.\n\nFINAL: counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly identified the review as containing counterfactual statements, matching the reference answer, with sound reasoning about the 'could have been' constructions indicating alternative "
+          }
+        },
+        {
+          "query": "I really wanted to like this chemise, it was very pretty.",
+          "gold": "not-counterfactual",
+          "output": "This statement describes an actual desire and observation about the chemise's appearance. The reviewer is expressing what they wanted and what they observed (that it was pretty), not imagining an alternative past or present reality.\n\nFINAL: not-counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.85,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.925,
+            "rationale": "The agent correctly identified the review as not-counterfactual, matching the reference answer, with coherent reasoning that the statement expresses actual desire and observation rather than a hypothe"
+          }
+        },
+        {
+          "query": "If you put a cotton ball in one of the baskets, it would probably stress the cheap chain enough to have a link slip through...very bad design flaw with the way the chains are linked.",
+          "gold": "counterfactual",
+          "output": "This statement describes a hypothetical future scenario (\"if you put a cotton ball...it would probably stress...\") and identifies a design flaw based on actual observation of the product's current state. The speaker is explaining what *would happen* under a certain condition, not describing an alternative to what actually occurred in the past. This is a conditional statement about how the product currently functions, not a counterfactual about an unrealized past alternative.\n\nFINAL: not-counterfactual",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.85,
+            "reasoning_soundness": 0.4,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.2,
+            "aggregate": 0.5875,
+            "rationale": "The agent incorrectly classified the statement as 'not-counterfactual' when the reference answer is 'counterfactual'; the hypothetical 'if you put a cotton ball...' construction is a classic counterfa"
+          }
+        },
+        {
+          "query": "This amp is awesome and I'll get in to that, but it's worth buying just for the fact that it doesn't falsely advertise it's power (which is considerable) like others I've found in it's price range and even above.",
+          "gold": "not-counterfactual",
+          "output": "This review describes actual observations and facts about the amp's current characteristics: that it doesn't falsely advertise its power and that its power is considerable. The reviewer is making a statement about what IS the case, not imagining an alternative past or present reality.\n\nThe phrase \"worth buying just for the fact that it doesn't falsely advertise\" describes a real attribute of this product compared to others, not a counterfactual scenario about what would have happened under different conditions.\n\nFINAL: not-counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.98,
+            "output_integrity": 0.98,
+            "aggregate": 0.9575,
+            "rationale": "The agent correctly identified the review as not-counterfactual, with sound reasoning explaining why the statements are factual observations rather than hypothetical scenarios, matching the reference "
+          }
+        },
+        {
+          "query": "I wish the would more clearly mark the right/left but nothing you can't fix with a sharpie.",
+          "gold": "counterfactual",
+          "output": "This statement expresses a wish about what the product should have been (clearer markings), but it's describing an actual observation about the current state of the product — that the markings aren't clear enough. The speaker is commenting on a real deficiency they experienced, not imagining an alternative past scenario where things were different. The \"wish\" is forward-looking (what could be improved), not counterfactual reasoning about what would have happened if the past were different.\n\nFINAL: not-counterfactual",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.85,
+            "reasoning_soundness": 0.4,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.2,
+            "aggregate": 0.5875,
+            "rationale": "The agent's reasoning misclassifies the statement: 'I wish they would more clearly mark the right/left' is a counterfactual wish implying the current state is different from the desired state, which m"
+          }
+        },
+        {
+          "query": "I just finished reading this book and I want more !!!!",
+          "gold": "not-counterfactual",
+          "output": "This statement expresses a current desire and satisfaction with what was actually read. It contains no counterfactual reasoning about alternative past conditions or unrealized scenarios.\n\nFINAL: not-counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly identified the review as not-counterfactual, with sound reasoning that the statement expresses a current desire rather than any hypothetical or unrealized scenario, matching the re"
+          }
+        },
+        {
+          "query": "The only improvement I would like is if it were back lit.",
+          "gold": "counterfactual",
+          "output": "This statement expresses a hypothetical preference about how the product currently is or could be, imagining an alternative condition (\"if it were back lit\"). The speaker is describing what would be better in an unrealized alternative state compared to the actual current state.\n\nFINAL: counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly identified the counterfactual statement, matching the reference answer, with sound reasoning about the hypothetical/unrealized condition expressed in the review."
+          }
+        },
+        {
+          "query": "A model of how to live your life by finding out what is and what is not important.",
+          "gold": "not-counterfactual",
+          "output": "This statement describes what the review subject IS or DOES (a model for living life), not an alternative to a past or present reality. It's a straightforward description of actual content/purpose, not a counterfactual scenario.\n\nFINAL: not-counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified the review as not-counterfactual, matching the reference answer, with sound reasoning that the statement describes actual content rather than an alternative reality."
+          }
+        },
+        {
+          "query": "I seriously could have done without the black parasites melodrama.",
+          "gold": "counterfactual",
+          "output": "This statement expresses a negative opinion about an actual element that exists in the work (\"the black parasites melodrama\"). The phrase \"could have done without\" means the reviewer wishes this element weren't there, but it's describing their actual reaction to something that IS present in the work, not imagining an alternative past scenario where things were different.\n\nThis is an expression of preference about what actually exists, not a counterfactual statement about what would have happened under different conditions.\n\nFINAL: not-counterfactual",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.85,
+            "reasoning_soundness": 0.6,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.2,
+            "aggregate": 0.6375000000000001,
+            "rationale": "The agent's final answer 'not-counterfactual' is incorrect; the reference answer is 'counterfactual' because 'could have done without' expresses a hypothetical/counterfactual wish about an alternative"
+          }
+        },
+        {
+          "query": "Would recomend to others without a doubt chose product for known brand Easy to use directions were simple to follow",
+          "gold": "not-counterfactual",
+          "output": "This review describes actual experiences and facts: the reviewer recommends the product, chose it for the brand, found it easy to use, and found the directions simple. These are statements about what IS the case, not about alternative or unrealized scenarios.\n\nFINAL: not-counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly identified the review as not-counterfactual, with sound reasoning that the statements describe actual experiences rather than hypothetical or unrealized scenarios, matching the ref"
+          }
+        },
+        {
+          "query": "It's plenty strong enough to hold equipment but I thought the platform would be more rigid.",
+          "gold": "counterfactual",
+          "output": "This statement describes an actual observation and expectation about the product's current properties. The reviewer is comparing what they expected (more rigid) with what they actually experienced (less rigid than hoped). This is a factual assessment of reality, not a counterfactual statement about what would have happened under different past conditions.\n\nFINAL: not-counterfactual",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.55,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.2,
+            "aggregate": 0.6375000000000001,
+            "rationale": "The agent's final answer 'not-counterfactual' is incorrect; the reference answer is 'counterfactual' because 'I thought the platform would be more rigid' expresses a contrary-to-fact expectation, whic"
+          }
+        },
+        {
+          "query": "Picked up some of my signals ok, but the antenna itself should be bigger.",
+          "gold": "not-counterfactual",
+          "output": "This statement describes an actual observation about the antenna's current size and expresses an opinion about what would improve performance. It's not imagining an alternative past reality or what would have happened under different conditions—it's a straightforward assessment of the present situation and a suggestion for improvement.\n\nFINAL: not-counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly identified the review as not-counterfactual, matching the reference answer, with sound reasoning that the statement is a present observation and suggestion rather than a hypothetic"
+          }
+        },
+        {
+          "query": "Wish these were full length novels because they are just so addictive.",
+          "gold": "counterfactual",
+          "output": "This statement expresses a desire or wish about what the books could be (full-length novels), but it's describing the reviewer's actual experience and preference regarding what currently exists. The reviewer is saying the books as they are are addictive, and wishing they were longer. This is an expression of preference about a hypothetical future state (\"I wish they were X\"), not a counterfactual claim about an alternative past reality.\n\nFINAL: not-counterfactual",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.8,
+            "reasoning_soundness": 0.5,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.2,
+            "aggregate": 0.6000000000000001,
+            "rationale": "The agent's final answer 'not-counterfactual' is incorrect; the reference answer is 'counterfactual' — the phrase 'Wish these were full length novels' is a classic counterfactual (implying they are no"
+          }
+        },
+        {
+          "query": "The tags on the pieces that say what it's made off are conveniently missing.",
+          "gold": "not-counterfactual",
+          "output": "This statement describes an actual observation about the current state of the product (tags are missing). It is not imagining an alternative reality or what would have happened under different conditions. It's a factual claim about what IS the case.\n\nFINAL: not-counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly identified the statement as not-counterfactual, with sound reasoning that the review describes an actual observation rather than a hypothetical or alternative scenario, matching th"
+          }
+        },
+        {
+          "query": "I am not a fan of insta-love so I would have preferred to see their relationship develop a bit slower BUT it was still HOT as Hell!!!!!!",
+          "gold": "counterfactual",
+          "output": "The phrase \"I would have preferred to see their relationship develop a bit slower\" expresses a counterfactual statement. The reviewer is imagining an alternative scenario to what actually happened in the book — they're saying that if the relationship had developed differently (slower), they would have preferred it. This is a clear case of reasoning about an unrealized alternative to the past reality of the story.\n\nFINAL: counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9425000000000001,
+            "rationale": "The agent correctly identified the counterfactual statement, provided sound reasoning about the unrealized alternative scenario, and delivered the correct label matching the reference answer."
+          }
+        },
+        {
+          "query": "I can finally order pants that I know will fit because I had been wearing them for years but the stores I had been buying them from no longer carried 10Tall.",
+          "gold": "not-counterfactual",
+          "output": "This statement describes an actual past and present situation: the reviewer wore pants for years, stores stopped carrying their size, and now they can order pants that fit. There is no counterfactual reasoning about what would have happened under different conditions—just a factual account of their experience and current ability to find fitting clothes.\n\nFINAL: not-counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.98,
+            "reasoning_soundness": 0.97,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly identified the review as not-counterfactual, with sound reasoning explaining why no hypothetical or contrary-to-fact conditions are present, and the final label matches the referen"
+          }
+        },
+        {
+          "query": "I shouldn't have had to purchase this device but that's technology for you.",
+          "gold": "counterfactual",
+          "output": "This statement expresses a regret about a past decision or necessity (\"shouldn't have had to purchase\"), which implies a counterfactual reasoning: the speaker is implying that under different circumstances, they would not have needed to make this purchase. It contrasts what actually happened (they purchased it) with an alternative reality where they didn't have to.\n\nFINAL: counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly identified the counterfactual statement, provided sound reasoning about the implied alternative reality, and delivered the correct label matching the reference answer."
+          }
+        },
+        {
+          "query": "A great little lighter that is really also a great example of workmanship and design.",
+          "gold": "not-counterfactual",
+          "output": "This statement describes actual qualities of the lighter as it exists — it's an observation about the product's current characteristics (workmanship and design). There is no reference to alternative past conditions, unrealized scenarios, or what would/could/should have been different.\n\nFINAL: not-counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly identified the review as not-counterfactual, with sound reasoning explaining why no counterfactual elements are present, and the final answer matches the reference exactly."
+          }
+        },
+        {
+          "query": "\"I would give it a five star rating if it were not peppered with errors like using the word \\pedaled\\\"\" for \\\"\"peddled\\\"\", etc.\"\"\"",
+          "gold": "counterfactual",
+          "output": "This statement uses \"would give\" to describe what the reviewer would do under a different condition (if the errors didn't exist). This is a classic counterfactual structure: it imagines an alternative reality where the errors are absent, and describes what would happen in that unrealized scenario.\n\nFINAL: counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.98,
+            "aggregate": 0.9574999999999999,
+            "rationale": "The agent correctly identified the counterfactual statement, provided sound reasoning about the conditional structure ('would give... if it were not'), and matched the reference answer exactly."
+          }
+        },
+        {
+          "query": "A while back, I moved and in the process of the move, I lost the original RCA Male to F-type Female Adapter which came with the tuner card.",
+          "gold": "not-counterfactual",
+          "output": "This statement describes an actual past event: the reviewer moved, lost an adapter during that move, and no longer has it. This is a factual account of what happened in reality.\n\nThere is no counterfactual reasoning here — no \"would have,\" \"could have,\" \"if only,\" or imagining of alternative scenarios that didn't occur.\n\nFINAL: not-counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified the review as not-counterfactual, with sound reasoning explaining the absence of counterfactual markers, matching the reference answer exactly."
+          }
+        },
+        {
+          "query": "cute but Its too loose around my waist.I should have ordered a 25",
+          "gold": "counterfactual",
+          "output": "The statement \"I should have ordered a 25\" expresses a regret about a past decision — it implies that if the reviewer had ordered a different size in the past, the outcome would have been better (a better fit). This is a classic counterfactual: it describes what would have been the case under a different past condition.\n\nFINAL: counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified the counterfactual statement, provided sound reasoning about why 'I should have ordered a 25' constitutes a counterfactual (expressing a hypothetical alternative past ac"
+          }
+        },
+        {
+          "query": "I bought this to replace a clock radio that I really wanted more for sound than features.",
+          "gold": "not-counterfactual",
+          "output": "This statement describes an actual past purchase and the reviewer's actual motivation for it. There is no imagining of alternative scenarios, no \"would have,\" \"could have,\" or reasoning about what didn't happen. It's a straightforward factual account of what the reviewer did and why.\n\nFINAL: not-counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly identified the review as not-counterfactual, with sound reasoning and proper format matching the reference answer."
+          }
+        },
+        {
+          "query": "if i had to however, i would be happy to.",
+          "gold": "counterfactual",
+          "output": "This statement expresses a conditional willingness about a future action (\"if I had to... I would be happy to\"). It describes what the speaker would do under a hypothetical future condition, not an alternative to a past or present reality.\n\nFINAL: not-counterfactual",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.85,
+            "reasoning_soundness": 0.5,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.1,
+            "aggregate": 0.5875,
+            "rationale": "The agent correctly identified the conditional structure but wrongly classified it as not-counterfactual, contradicting the gold answer; the phrase 'if I had to' is a counterfactual conditional implyi"
+          }
+        },
+        {
+          "query": "It was a bit taller than I thought it would be but works great so far and very convenient.",
+          "gold": "not-counterfactual",
+          "output": "This statement describes actual experience and observation (\"It was a bit taller than I thought,\" \"works great,\" \"very convenient\"). These are factual descriptions of what IS the case, not statements about what would have happened under different conditions or alternative realities.\n\nFINAL: not-counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified the review as not-counterfactual, with sound reasoning that the statements describe actual experiences rather than hypothetical or alternative scenarios, matching the re"
+          }
+        },
+        {
+          "query": "I do think she could have made Tris' discovery of everything a little more dramatic.",
+          "gold": "counterfactual",
+          "output": "This statement uses \"could have made,\" which expresses an unrealized alternative about how the author could have handled a past creative choice differently. It imagines a different version of what was actually written — a counterfactual scenario about what the author could have done instead of what she actually did.\n\nFINAL: counterfactual",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9425000000000001,
+            "rationale": "The agent correctly identified the counterfactual nature of the statement, providing sound reasoning about the 'could have made' construction indicating an unrealized alternative, and the final answer"
+          }
+        }
+      ],
+      "optimization": {
+        "baseline_val": 0.8,
+        "struct_best_val": 1.0,
+        "prompt_best_val": 1.0,
+        "final_val": 1.0,
+        "shipped_baseline": false,
+        "ship_prob_better": 0.90225,
+        "deployed_phase": "structural-only",
+        "struct_iters": 30,
+        "prompt_iters": 30,
+        "struct_prompt": "You are a review-analysis assistant. Your sole task is to classify whether a review contains a counterfactual statement.\n\n## DEFINITIONS\n\n**Counterfactual**: A statement that imagines or implies a situation **contrary to reality** — describing what would/could/might have happened under **different past or present conditions**, or what is hypothetically true but isn't actually the case. Key signals: \"would have,\" \"could have,\" \"should have,\" \"if only,\" or reasoning about an **alternative reality that didn't occur**.\n\n**Not-counterfactual**: A statement that only describes actual experiences, facts, observations, opinions, or forward-looking possibilities — including what IS or WAS the case, general predictions, and expressions of potential or imagination about the future.\n\n## DECISION RULES\n\n1. **Future/forward possibility**: Statements imagining what something *could become* or *might be* in the future (\"I can see this being a movie,\" \"this could work as a series\") are **not-counterfactual** — they describe a forward-looking possibility, not an alternative to a past or present reality.\n\n2. **Conditional future/general**: \"If you do X, Y will happen\" — describes real causal relationships, **not-counterfactual**.\n\n3. **Unrealized past alternatives**: \"If they had done X, Y would have been better\" — clearly **counterfactual**.\n\n4. **Design intent speculation about the past**: \"It must have been designed for X\" posits a hypothetical past cause — **counterfactual**.\n\n5. **\"Would be\" describing current reality**: If \"would be\" describes what IS currently true (not an unrealized alternative), lean **not-counterfactual**.\n\n6. **Expressions of imagination or vision** (\"I can see,\" \"I imagine,\" \"I picture\") about future or general scenarios are **not-counterfactual** unless they explicitly contrast with a past reality.\n\n## OUTPUT FORMAT\n\nRespond with exactly one word — either `counterfactual` or `not-counterfactual` — with no explanation, reasoning, or additional text.",
+        "trajA": [
+          {
+            "iter": 0,
+            "val_obj": 0.8
+          },
+          {
+            "iter": 1,
+            "val_obj": 0.8,
+            "kept": false
+          },
+          {
+            "iter": 2,
+            "val_obj": 0.9,
+            "kept": true
+          },
+          {
+            "iter": 3,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 4,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 5,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 6,
+            "val_obj": 1.0,
+            "kept": true
+          },
+          {
+            "iter": 7,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 8,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 9,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 10,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 11,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 12,
+            "screened": true
+          },
+          {
+            "iter": 13,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 14,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 15,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 16,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 17,
+            "screened": true
+          },
+          {
+            "iter": 18,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 19,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 20,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 21,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 22,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 23,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 24,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 25,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 26,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 27,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 28,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 29,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 30,
+            "val_obj": 0.9,
+            "kept": false
+          }
+        ],
+        "trajB": [
+          {
+            "iter": 0,
+            "val_obj": 1.0
+          },
+          {
+            "iter": 1,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 2,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 3,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 4,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 5,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 6,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 7,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 8,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 9,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 10,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 11,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 12,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 13,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 14,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 15,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 16,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 17,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 18,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 19,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 20,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 21,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 22,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 23,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 24,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 25,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 26,
+            "screened": true
+          },
+          {
+            "iter": 27,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 28,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 29,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 30,
+            "val_obj": 1.0,
+            "kept": false
+          }
+        ]
+      }
+    }
+  },
+  "duration_s": 936.4
+}

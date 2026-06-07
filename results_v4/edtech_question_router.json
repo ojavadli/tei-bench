@@ -1,0 +1,1214 @@
+{
+  "task_id": "edtech_question_router",
+  "industry": "EdTech",
+  "metric": "classification",
+  "source": "SetFit/student-question-categories via HuggingFace (see dataset card for license).",
+  "is_public": true,
+  "n_train": 15,
+  "n_test": 30,
+  "agent_model": "claude-haiku-4-5",
+  "judge_model": "claude-sonnet-4-6",
+  "optimizer_model": "claude-sonnet-4-6",
+  "seed": 0,
+  "arms": {
+    "baseline": {
+      "objective_mean": 0.7333333333333333,
+      "objective_ci95": [
+        0.5666666666666667,
+        0.8666666666666667
+      ],
+      "gpa_mean": 0.8056666666666665,
+      "gpa_dims": {
+        "target_alignment": 0.7836666666666667,
+        "reasoning_soundness": 0.842333333333333,
+        "execution_accuracy": 0.8033333333333332,
+        "output_integrity": 0.7933333333333331
+      },
+      "prompt": "You are a student-question routing assistant. Route the student's question to the correct category. Classify into one of these categories: Biology, Chemistry, Maths, Physics.",
+      "examples": [
+        {
+          "query": "The compounds shown below have similar weights but significantly different boiling points. Match the compound with its boiling point. (Boiling points \\( \\left.\\left(^{o} C\\right) 28,57,100,141\\right) \\) A. Methyl acetate=100, 2-butanol=141, 2-methyl butane=28, Propanoic acid=57 B. Methyl acetate=57, 2-butanol=100, 2-methyl butane=28, Propanoic acid=141 c. Methyl acetate=28, 2-butanol=100, 2-methyl butane=57, Propanoic acid=141 D. Methyl acetate=141, 2-butanol=57, 2-methy butane=28, Propanoic acid=100",
+          "gold": "Chemistry",
+          "output": "I need to match compounds with similar molecular weights to their boiling points based on intermolecular forces.\n\n**Analyzing the compounds:**\n\n1. **2-methyl butane (C₅H₁₂)**: MW ≈ 72\n   - Only dispersion forces (nonpolar hydrocarbon)\n   - Weakest intermolecular forces → lowest boiling point\n\n2. **Methyl acetate (C₃H₆O₂)**: MW ≈ 74\n   - Polar molecule with dipole-dipole interactions\n   - No hydrogen bonding\n   - Moderate boiling point\n\n3. **Propanoic acid (C₃H₆O₂)**: MW ≈ 74\n   - Carboxylic acid with strong hydrogen bonding\n   - Can form dimers through H-bonding\n   - High boiling point\n\n4. **2-butanol (C₄H₁₀O)**: MW ≈ 74\n   - Alcohol with hydrogen bonding capability\n   - Strong intermolecular forces\n   - High boiling point\n\n**Expected boiling point order:**\n- 2-methyl butane: **28°C** (only dispersion forces)\n- Methyl acetate: **57°C** (dipole-dipole, no H-bonding)\n- 2-butanol: **100°C** (hydrogen bonding from -OH)\n- Propanoic acid: **141°C** (strong hydrogen bonding, dimer formation)\n\n**Checking the options:**\n- Option A: Methyl acetate=100 ✗ (too high)\n- Option B: Methyl acetate=57 ✓, 2-butanol=100 ✓, 2-methyl butane=28 ✓, Propanoic acid=141 ✓\n- Option C: 2-methyl butane=57 ✗ (too high)\n- Option D: Methyl acetate=141 ✗ (too high)\n\nFINAL: B",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.3,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.7,
+            "output_integrity": 0.3,
+            "aggregate": 0.5499999999999999,
+            "rationale": "The reference answer is simply 'Chemistry' (a routing/categorization task), but the agent solved the chemistry problem in detail instead of routing it to the correct category; the agent's answer is su"
+          }
+        },
+        {
+          "query": "Which of the following is true for Krebs cycle? A. Isocitrate \\( \\rightarrow \\) Fumrate \\( \\rightarrow \\alpha \\) ketoglutarate B. \\( \\alpha \\) Ketoglutarate \\( \\rightarrow \\) Oxalosuccinate \\( \\rightarrow \\) Isocitrate c. oxalosuccinate \\( \\rightarrow \\) Isocitrate \\( \\rightarrow \\alpha \\) ketoglutarate D. Isocitrate \\( \\rightarrow \\alpha \\) ketoglutarate \\( \\rightarrow \\) Succinate",
+          "gold": "Biology",
+          "output": "This question is asking about the sequence of intermediates in the Krebs cycle (also called the citric acid cycle or TCA cycle).\n\nLet me trace through the relevant portion of the Krebs cycle:\n\nThe Krebs cycle sequence includes:\n- Citrate → Isocitrate → α-ketoglutarate → Succinyl-CoA → Succinate → Fumarate → Malate → Oxaloacetate\n\nNow let me evaluate each option:\n\n**A. Isocitrate → Fumarate → α-ketoglutarate**\n- This is incorrect. The sequence should be Isocitrate → α-ketoglutarate (not directly to Fumarate), and Fumarate comes much later.\n\n**B. α-Ketoglutarate → Oxalosuccinate → Isocitrate**\n- This is incorrect. This reverses the direction. The correct direction is Isocitrate → Oxalosuccinate → α-ketoglutarate (going forward in the cycle).\n\n**C. Oxalosuccinate → Isocitrate → α-ketoglutarate**\n- This is incorrect. Oxalosuccinate is an intermediate that forms between Isocitrate and α-ketoglutarate, but the sequence shown here is backwards.\n\n**D. Isocitrate → α-ketoglutarate → Succinate**\n- This is correct! The sequence is: Isocitrate → α-ketoglutarate → Succinyl-CoA → Succinate. While Succinyl-CoA is technically an intermediate between α-ketoglutarate and Succinate, this option correctly shows the major intermediates in the proper order.\n\nFINAL: Biology",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.82,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.9,
+            "aggregate": 0.9049999999999999,
+            "rationale": "The agent correctly routed the question to Biology and identified the correct answer (D), with sound reasoning about the Krebs cycle sequence, though it slightly glossed over the fact that Succinyl-Co"
+          }
+        },
+        {
+          "query": "Find the value of \\( x \\) if \\( \\sin \\left\\{\\sin ^{-1} \\frac{1}{5}+\\cos ^{-1} x\\right\\}=1 \\)",
+          "gold": "Maths",
+          "output": "I need to find the value of x given that $\\sin \\left\\{\\sin ^{-1} \\frac{1}{5}+\\cos ^{-1} x\\right\\}=1$.\n\n**Reasoning:**\n\nFor $\\sin(\\theta) = 1$, we need $\\theta = \\frac{\\pi}{2}$ (within the principal range).\n\nSo: $\\sin ^{-1} \\frac{1}{5}+\\cos ^{-1} x = \\frac{\\pi}{2}$\n\nThis gives us: $\\cos ^{-1} x = \\frac{\\pi}{2} - \\sin ^{-1} \\frac{1}{5}$\n\n**Using the complementary angle identity:**\n\nI know that $\\sin^{-1}(a) + \\cos^{-1}(a) = \\frac{\\pi}{2}$ for $a \\in [-1,1]$.\n\nThis means: $\\cos^{-1}(a) = \\frac{\\pi}{2} - \\sin^{-1}(a)$\n\nTherefore: $\\frac{\\pi}{2} - \\sin ^{-1} \\frac{1}{5} = \\cos^{-1}\\left(\\frac{1}{5}\\right)$\n\n**Solving for x:**\n\nFrom $\\cos ^{-1} x = \\cos^{-1}\\left(\\frac{1}{5}\\right)$\n\nWe get: $x = \\frac{1}{5}$\n\n**Verification:**\n- $\\sin^{-1}\\frac{1}{5} + \\cos^{-1}\\frac{1}{5} = \\frac{\\pi}{2}$ ✓\n- $\\sin\\left(\\frac{\\pi}{2}\\right) = 1$ ✓\n\nThis is a mathematics problem involving inverse trigonometric functions and trigonometric equations.\n\nFINAL: Maths",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.97,
+            "rationale": "The agent correctly solved the inverse trig problem, arrived at x = 1/5, and properly routed the question to the 'Maths' category matching the reference answer."
+          }
+        },
+        {
+          "query": "A uniform solid cylinder of mass \\( 2 k g \\) and radius \\( 0.2 m \\) is released from the rest at the top of a semicircular track of radius \\( 0.7 m \\) cut in block of mass \\( M= \\) \\( 3 k g \\) as shown. The block is resting on a smooth horizontal surface and the cylinder rolls down without slipping. The distance moved by the block when the cylinder reaches the bottom of the track is: \\( \\mathbf{A} \\cdot 0.3 m \\) B. \\( 0.5 m \\) c. \\( 0.7 m \\) D. \\( 0.2 m \\)",
+          "gold": "Physics",
+          "output": "I need to analyze this problem involving a cylinder rolling down a semicircular track on a movable block.\n\n**Given Information:**\n- Cylinder: mass m = 2 kg, radius r = 0.2 m\n- Block: mass M = 3 kg\n- Track radius: R = 0.7 m\n- Cylinder rolls without slipping\n- Block is on a smooth (frictionless) horizontal surface\n- Cylinder starts from rest at the top\n\n**Key Physics Concepts:**\n\nSince the horizontal surface is smooth (frictionless), there are no external horizontal forces on the system. Therefore, the center of mass of the system doesn't move horizontally.\n\n**Using Conservation of Momentum:**\n\nInitial momentum = 0 (everything at rest)\n\nWhen the cylinder reaches the bottom:\n- Let v_c = velocity of cylinder (relative to ground)\n- Let v_b = velocity of block (relative to ground)\n\nHorizontal momentum conservation:\n$$m \\cdot v_c + M \\cdot v_b = 0$$\n$$2v_c + 3v_b = 0$$\n$$v_c = -1.5v_b$$\n\nThe negative sign indicates opposite directions.\n\n**Using Center of Mass Position:**\n\nThe center of mass of the system doesn't move horizontally. If the block moves distance x to the right, the cylinder's center of mass must move such that:\n\n$$m \\cdot x_c + M \\cdot x_b = 0$$\n\nwhere x_c is the displacement of the cylinder's center and x_b is the displacement of the block.\n\nThe cylinder descends a vertical distance R = 0.7 m along the track. Relative to the block, the cylinder moves from the top to the bottom of the semicircle.\n\nIf the block moves distance x to the right, the cylinder's center moves distance (R - x) to the left relative to the ground (approximately, considering the geometry).\n\nActually, more precisely: the cylinder's center moves horizontally by some amount relative to the block. If the block moves x to the right, and the cylinder's center moves distance d to the left relative to ground:\n\n$$2(-d) + 3(x) = 0$$\n$$3x = 2d$$\n\nThe cylinder descends R = 0.7 m vertically. The horizontal displacement of the cylinder relative to the block is approximately R (from the geometry of the semicircle).\n\nSo: $d + x = R = 0.7$ m\n\nFrom momentum: $d = 1.5x$\n\nSubstituting:\n$$1.5x + x = 0.7$$\n$$2.5x = 0.7$$\n$$x = 0.28 \\approx 0.3 \\text{ m}$$\n\n**Verification:**\n- Block moves: x = 0.3 m\n- Cylinder moves left: d = 0.45 m\n- Total relative motion: 0.3 + 0.45 = 0.75 m ≈ 0.7 m ✓\n\nThe answer is **A. 0.3 m**\n\nFINAL: Physics",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.72,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.95,
+            "aggregate": 0.8799999999999999,
+            "rationale": "The agent correctly identified the category as Physics and matched the reference answer, though the reasoning contains some approximations and slight inconsistencies in the geometric analysis (using R"
+          }
+        },
+        {
+          "query": "If the same element is forming oxides in different oxidation states, then, which of the following statement is incorrect? This question has multiple correct options A. Oxide will be neutral in nature in which element is in its highest oxidation state B. Oxide will be highly acidic in nature in which element is in its highest oxidation state c. oxide will be amphoteric in nature in which element is in its highest oxidation state D. oxide will be highly basic in nature in which element is in its highest oxidation state",
+          "gold": "Chemistry",
+          "output": "Let me analyze this question about oxides formed by the same element in different oxidation states.\n\n**Key Concept:** When an element forms oxides in different oxidation states, the nature of the oxide depends on the oxidation state:\n- Higher oxidation state → more acidic character\n- Lower oxidation state → more basic character\n\n**Analyzing each statement:**\n\n**A. Oxide will be neutral in nature in which element is in its highest oxidation state**\n- INCORRECT. When an element is in its highest oxidation state, the oxide is typically acidic (or amphoteric at best), not neutral.\n- Example: Cl in +7 oxidation state forms Cl₂O₇ (highly acidic), not neutral\n\n**B. Oxide will be highly acidic in nature in which element is in its highest oxidation state**\n- CORRECT. This is a general trend. Higher oxidation states produce more acidic oxides.\n- Example: N⁺⁵ in N₂O₅ is highly acidic; S⁺⁶ in SO₃ is highly acidic\n\n**C. Oxide will be amphoteric in nature in which element is in its highest oxidation state**\n- INCORRECT in general. Amphoteric oxides typically occur at intermediate oxidation states, not the highest.\n- Example: Al₂O₃ (Al in +3) is amphoteric, but this isn't the highest possible oxidation state for all elements\n\n**D. Oxide will be highly basic in nature in which element is in its highest oxidation state**\n- INCORRECT. Basic oxides form when elements are in lower oxidation states.\n- Example: Na₂O (Na in +1) is basic, not when Na is in highest oxidation state\n\n**Most clearly incorrect statements:** A and D are definitively wrong, while B is correct.\n\nFINAL: Chemistry",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.85,
+            "reasoning_soundness": 0.72,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.85,
+            "aggregate": 0.83,
+            "rationale": "The agent correctly routed the question to 'Chemistry' matching the gold answer, but spent unnecessary effort analyzing the multiple-choice question content rather than simply categorizing it; the rou"
+          }
+        },
+        {
+          "query": "Very short answer type: What is double fertilization?",
+          "gold": "Biology",
+          "output": "Double fertilization is a unique reproductive process in flowering plants (angiosperms) where two fertilization events occur simultaneously within the embryo sac:\n\n1. **First fertilization**: One sperm nucleus fuses with the egg cell to form the diploid zygote, which develops into the embryo.\n\n2. **Second fertilization**: The second sperm nucleus fuses with the two polar nuclei (or central cell) to form a triploid nucleus, which develops into the endosperm (nutritive tissue).\n\nThis process is characteristic of angiosperms and distinguishes them from gymnosperms.\n\nFINAL: Biology",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.5,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.5,
+            "output_integrity": 0.9,
+            "aggregate": 0.7,
+            "rationale": "The agent correctly identified the category as Biology (matching the reference), but provided an extensive explanation of double fertilization when the task only required routing to a category, making"
+          }
+        },
+        {
+          "query": "Find the root of \\( 2 x+\\frac{x}{2}=20 \\)",
+          "gold": "Maths",
+          "output": "I need to find the value of x that satisfies this equation.\n\n**Solving the equation:**\n\n$$2x + \\frac{x}{2} = 20$$\n\nFirst, I'll combine the terms on the left side by finding a common denominator:\n\n$$\\frac{4x}{2} + \\frac{x}{2} = 20$$\n\n$$\\frac{5x}{2} = 20$$\n\nMultiply both sides by 2:\n\n$$5x = 40$$\n\nDivide both sides by 5:\n\n$$x = 8$$\n\n**Verification:**\n$$2(8) + \\frac{8}{2} = 16 + 4 = 20$$ ✓\n\nThe root is **x = 8**.\n\nFINAL: Maths",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9575,
+            "rationale": "The agent correctly routed the question to 'Maths' matching the reference answer, and also solved the equation correctly with sound reasoning and proper verification, though the task only required rou"
+          }
+        },
+        {
+          "query": "In the spectrum of white light by a prism, the colour at the extreme end opposite to the base of prism is: A . violet B. yellow \\( c \\cdot \\) red D. blue",
+          "gold": "Physics",
+          "output": "This question is asking about the dispersion of white light through a prism and which color appears at the extreme end opposite to the base.\n\nWhen white light passes through a prism:\n- Different wavelengths of light refract (bend) by different amounts\n- Violet light (shortest wavelength) refracts the most\n- Red light (longest wavelength) refracts the least\n- This causes white light to separate into its component colors (spectrum)\n\nThe spectrum order from least to most refraction is: Red, Orange, Yellow, Green, Blue, Indigo, Violet (ROYGBIV)\n\nWhen light enters a prism and exits, the color that bends the most (violet) deviates the most from its original path and appears at the extreme end away from the base of the prism. Red, being refracted the least, appears closest to the base.\n\nTherefore, the answer is **A. violet**\n\nFINAL: Physics",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.85,
+            "execution_accuracy": 0.85,
+            "output_integrity": 0.9,
+            "aggregate": 0.875,
+            "rationale": "The agent correctly routed the question to Physics and provided a correct explanation, matching the reference answer, though the verbose reasoning about prism dispersion was unnecessary for a routing "
+          }
+        },
+        {
+          "query": "A sealed gas cylinder is left outside on a hot, sunny day. What happens to the average speed of the gas molecules and to the pressure of the gas in the cylinder as the temperature of the gas rises? Average speed of \\( \\quad \\) Pressure of gas gas molecules \\( \\quad \\) in cylinder Decreases Decreases Decreases Increases Increases Decreases Increases \\( A \\cdot A \\) B. B \\( c \\cdot c \\) D. D",
+          "gold": "Chemistry",
+          "output": "Let me reason through this problem:\n\nWhen temperature increases in a sealed gas cylinder:\n\n1. **Average speed of gas molecules**: According to kinetic theory, the average kinetic energy of gas molecules is directly proportional to absolute temperature. Since KE ∝ v², when temperature increases, the average speed of molecules increases.\n\n2. **Pressure of gas in cylinder**: Using Gay-Lussac's Law (for a fixed volume and amount of gas), pressure is directly proportional to absolute temperature: P ∝ T. When temperature increases, pressure increases.\n\nTherefore:\n- Average speed of gas molecules: **Increases**\n- Pressure of gas in cylinder: **Increases**\n\nThis corresponds to option **D** (Increases, Increases).\n\nThis is a question about gas behavior and the kinetic molecular theory, which falls under the study of how gases respond to temperature changes.\n\nFINAL: Physics",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.2,
+            "reasoning_soundness": 0.85,
+            "execution_accuracy": 0.2,
+            "output_integrity": 0.2,
+            "aggregate": 0.3625,
+            "rationale": "The agent's scientific reasoning is sound and the answer to the physics problem is correct, but the final category label is 'Physics' while the reference answer is 'Chemistry', making the routing outp"
+          }
+        },
+        {
+          "query": "Professor Birbal Sahani discovered 100 million years old fossil plant from fossi forest at Rajmahal Hills, Bihar. This plant was A. Rhynia B. Horneophyton c. williamsonia D. Red alga",
+          "gold": "Biology",
+          "output": "This question is asking about the identification of a fossil plant discovered by Professor Birbal Sahani at Rajmahal Hills, Bihar, which is approximately 100 million years old.\n\nLet me analyze the options:\n- **Rhynia**: An early vascular plant from the Devonian period\n- **Horneophyton**: Another early vascular plant from the Devonian period\n- **Williamsonia**: A Bennettite (extinct gymnosperm) from the Mesozoic era\n- **Red alga**: Marine algae\n\nThe Rajmahal Hills fossil forest in Bihar is famous for containing fossils from the Mesozoic era (particularly the Jurassic period), approximately 100-200 million years old. The most notable fossils found there are **Williamsonia**, which are extinct seed plants (Bennettites) that were common during the Mesozoic era.\n\nThis question pertains to the study of fossils, paleobotany, and the history of plant evolution on Earth - all core topics within **Biology**.\n\nFINAL: Biology",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly routed the question to 'Biology' matching the reference answer, with sound reasoning about paleobotany and fossil plants, though it went beyond the routing task by also answering t"
+          }
+        },
+        {
+          "query": "In a geometrical progression first term and common ratio are both \\( \\frac{1}{2}(\\sqrt{3}+i) \\) Then the absolute value of the nth term of the progression is \\( \\mathbf{A} \\cdot 2^{n} \\) B . \\( 4^{n} \\) \\( c \\) D. none of these",
+          "gold": "Maths",
+          "output": "I need to find the absolute value of the nth term of a geometric progression where both the first term and common ratio are $\\frac{1}{2}(\\sqrt{3}+i)$.\n\n**Finding the absolute value of the first term and common ratio:**\n\nLet $a = \\frac{1}{2}(\\sqrt{3}+i)$\n\n$|a| = \\frac{1}{2}\\sqrt{(\\sqrt{3})^2 + 1^2} = \\frac{1}{2}\\sqrt{3+1} = \\frac{1}{2}\\sqrt{4} = \\frac{1}{2} \\cdot 2 = 1$\n\nSo both the first term and common ratio have absolute value 1.\n\n**Finding the nth term:**\n\nIn a geometric progression, the nth term is:\n$$T_n = a \\cdot r^{n-1}$$\n\nwhere $a$ is the first term and $r$ is the common ratio.\n\nHere, $a = r = \\frac{1}{2}(\\sqrt{3}+i)$\n\nTherefore:\n$$T_n = \\frac{1}{2}(\\sqrt{3}+i) \\cdot \\left[\\frac{1}{2}(\\sqrt{3}+i)\\right]^{n-1}$$\n\n$$T_n = \\left[\\frac{1}{2}(\\sqrt{3}+i)\\right]^n$$\n\n**Finding the absolute value of the nth term:**\n\n$$|T_n| = \\left|\\left[\\frac{1}{2}(\\sqrt{3}+i)\\right]^n\\right|$$\n\n$$|T_n| = \\left|\\frac{1}{2}(\\sqrt{3}+i)\\right|^n$$\n\n$$|T_n| = 1^n = 1$$\n\nWait, let me reconsider the options. Looking at the given options, they seem incomplete in the problem statement. However, based on my calculation, the absolute value of the nth term is **1** for all n.\n\nIf the options were meant to be different, the answer would be **D. none of these** since the absolute value is constantly 1, not $2^n$ or $4^n$.\n\nFINAL: Maths",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.9,
+            "aggregate": 0.9175,
+            "rationale": "The agent correctly routed the question to 'Maths' matching the reference answer, and also provided sound mathematical reasoning showing |T_n| = 1 and correctly concluding 'D. none of these', with all"
+          }
+        },
+        {
+          "query": "In a metallic conductor, electric current is thought to be due to the movement of A . ions B. amperes c. electrons D. protons",
+          "gold": "Physics",
+          "output": "This question is asking about the nature of electric current in metallic conductors.\n\nIn metallic conductors, electric current is caused by the movement of free electrons through the conductor. Here's why:\n\n- **Electrons (C)**: Metallic conductors have free electrons in their outer shells that can move freely through the material. When a potential difference is applied, these electrons drift and create electric current.\n\n- **Ions (A)**: While ions do carry current in solutions or plasmas, in solid metallic conductors, the ions are fixed in the lattice and don't move significantly.\n\n- **Amperes (B)**: An ampere is a unit of current measurement, not a charge carrier.\n\n- **Protons (D)**: Protons are bound within atomic nuclei and cannot move freely in metallic conductors.\n\nThe correct answer is **C. electrons**\n\nFINAL: Physics",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.95,
+            "aggregate": 0.925,
+            "rationale": "The agent correctly routed the question to 'Physics' matching the reference answer, and also correctly identified the answer as electrons with sound reasoning, though the extra explanation was beyond "
+          }
+        },
+        {
+          "query": "In the reaction \\( 2 N a_{2} S_{2} O_{3}+I_{2} \\rightarrow \\) \\( N a_{2} S_{4} O_{6}+2 N a I, \\) the oxidation state of sulphur is : A. decreased B. increased c. unchanged D. none of these",
+          "gold": "Chemistry",
+          "output": "I need to determine how the oxidation state of sulfur changes in this reaction.\n\nLet me analyze the oxidation states of sulfur on both sides:\n\n**Reactants: Na₂S₂O₃ (sodium thiosulfate)**\n- In S₂O₃²⁻: We have 2 sulfur atoms and 3 oxygen atoms\n- Oxygen is -2, so: 2(S) + 3(-2) = -2\n- 2S - 6 = -2\n- 2S = +4\n- S = +2 (average oxidation state)\n\nHowever, in thiosulfate, sulfur has mixed oxidation states:\n- One S is in -2 state (sulfide-like)\n- One S is in +6 state (sulfite-like)\n- Average: (+6 + (-2))/2 = +2\n\n**Products: Na₂S₄O₆ (sodium tetrathionate)**\n- In S₄O₆²⁻: We have 4 sulfur atoms and 6 oxygen atoms\n- 4(S) + 6(-2) = -2\n- 4S - 12 = -2\n- 4S = +10\n- S = +2.5 (average oxidation state)\n\n**Comparison:**\n- Average oxidation state in Na₂S₂O₃: +2\n- Average oxidation state in Na₂S₄O₆: +2.5\n\nThe oxidation state of sulfur has **increased** from +2 to +2.5 on average.\n\nThis makes sense chemically: I₂ is being reduced (I goes from 0 to -1 in NaI), so something must be oxidized. The sulfur in thiosulfate is being oxidized to tetrathionate.\n\nFINAL: B. increased",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.88,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9325000000000001,
+            "rationale": "The agent correctly identified the category implicitly through solving the chemistry problem, arrived at the correct answer (B. increased), and provided sound reasoning about oxidation states, though "
+          }
+        },
+        {
+          "query": "Who is responsible for the sex of offspring-male of female? Why?",
+          "gold": "Biology",
+          "output": "This question is asking about the biological mechanism that determines the sex of offspring.\n\nThe answer involves genetics and reproduction: In humans and most mammals, the **male parent is responsible** for determining the offspring's sex. This is because:\n\n1. **Chromosomes**: Females have XX chromosomes, while males have XY chromosomes\n2. **Sperm variation**: Males produce two types of sperm - some carrying an X chromosome and some carrying a Y chromosome\n3. **Fertilization**: When a sperm fertilizes an egg (which always carries an X chromosome):\n   - X sperm + X egg = XX (female offspring)\n   - Y sperm + X egg = XY (male offspring)\n\nSince the male's sperm determines whether an X or Y chromosome is contributed, the male parent is responsible for the sex of the offspring.\n\nFINAL: Biology",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.95,
+            "aggregate": 0.925,
+            "rationale": "The agent correctly routed the question to 'Biology' matching the reference answer, and provided accurate, well-reasoned supporting explanation about sex determination via chromosomes, though the task"
+          }
+        },
+        {
+          "query": "Simplify: \\( \\left[3 a^{2}-2 a^{2}+9 a^{2}-\\left\\{6 a^{2}-\\right.\\right. \\) \\( \\left.\\left(-2 a^{2}+3 a^{2}\\right)\\right\\} \\)",
+          "gold": "Maths",
+          "output": "I need to simplify this algebraic expression step by step.\n\nLet me work from the innermost brackets outward:\n\n**Step 1: Simplify the innermost parentheses**\n$(-2a^2 + 3a^2) = a^2$\n\n**Step 2: Substitute back and simplify the curly braces**\n$6a^2 - (a^2) = 6a^2 - a^2 = 5a^2$\n\n**Step 3: Substitute back into the square brackets**\n$3a^2 - 2a^2 + 9a^2 - \\{5a^2\\}$\n$= 3a^2 - 2a^2 + 9a^2 - 5a^2$\n\n**Step 4: Combine like terms**\n$= (3 - 2 + 9 - 5)a^2$\n$= 5a^2$\n\nThis is a mathematics problem involving algebraic simplification.\n\nFINAL: Maths",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.95,
+            "aggregate": 0.925,
+            "rationale": "The agent correctly routed the question to 'Maths' matching the reference answer, and additionally provided a correct step-by-step simplification of the algebraic expression, though the task only requ"
+          }
+        },
+        {
+          "query": "An ebonite rod rubbed with fur and a glass rod rubbed with silk cloth are brought nearer to each other. Then: A. they will attract each other B. they will repel each other C. nothing will happen to them, D. they will get heated up",
+          "gold": "Physics",
+          "output": "Let me reason through this step by step.\n\nWhen an ebonite rod is rubbed with fur:\n- Ebonite becomes negatively charged (it gains electrons from the fur)\n\nWhen a glass rod is rubbed with silk cloth:\n- Glass becomes positively charged (it loses electrons to the silk)\n\nAccording to the fundamental law of electrostatics:\n- Opposite charges attract each other\n- Like charges repel each other\n\nSince the ebonite rod has a negative charge and the glass rod has a positive charge, they carry opposite charges.\n\nTherefore, when brought near each other, they will **attract each other**.\n\nThe answer is **A. they will attract each other**\n\nThis is a question about electrostatics and the behavior of charged objects, which falls under the Physics category.\n\nFINAL: Physics",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.97,
+            "rationale": "The agent correctly identified the category as Physics, matching the reference answer, and provided sound electrostatics reasoning to support the classification."
+          }
+        },
+        {
+          "query": "Ammonia gas on passing through copper sulphate solution gives: A. yellow colour solution B. blue colour solution c. brown colour solution D. red colour solution",
+          "gold": "Chemistry",
+          "output": "Let me analyze this chemistry question about ammonia gas reacting with copper sulphate solution.\n\nWhen ammonia gas (NH₃) is passed through copper sulphate (CuSO₄) solution:\n\n1. Copper sulphate solution is naturally **blue** in color due to the Cu²⁺ ions in solution.\n\n2. When ammonia is added, it acts as a ligand and forms a complex with Cu²⁺ ions:\n   - Cu²⁺ + 4NH₃ → [Cu(NH₃)₄]²⁺\n\n3. The complex ion [Cu(NH₃)₄]²⁺ is **deep blue** or **dark blue** in color, which is more intense than the original pale blue of CuSO₄ solution.\n\n4. Initially, a light blue precipitate of Cu(OH)₂ may form, but with excess ammonia, this dissolves to form the soluble complex.\n\nThe answer is **B. blue colour solution** (specifically a deep/dark blue solution due to the formation of the tetraamminecopper(II) complex ion).\n\nFINAL: Chemistry",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.88,
+            "execution_accuracy": 0.85,
+            "output_integrity": 0.9,
+            "aggregate": 0.8825,
+            "rationale": "The agent correctly routed the question to Chemistry and provided accurate supporting reasoning about the tetraamminecopper(II) complex, matching the reference answer."
+          }
+        },
+        {
+          "query": "Importance of ecosystem lies in A . Cycling opmaterials B. Flow of energy c. Both A and B D. None of the above",
+          "gold": "Biology",
+          "output": "This question is asking about the fundamental functions and importance of ecosystems.\n\nLet me analyze the options:\n\n**A. Cycling of materials** - This refers to biogeochemical cycles (carbon, nitrogen, phosphorus, water cycles, etc.) where nutrients are recycled through ecosystems. This is indeed a crucial function of ecosystems.\n\n**B. Flow of energy** - This refers to how energy from the sun enters ecosystems through producers and flows through consumers. Energy flow is fundamental to ecosystem functioning.\n\n**C. Both A and B** - Both cycling of materials and flow of energy are essential processes that make ecosystems important and functional.\n\n**D. None of the above** - This is incorrect since A and B are both important.\n\nThe correct answer is **C. Both A and B** because ecosystems depend on both:\n- Energy flow (unidirectional, from sun through organisms)\n- Material cycling (circular, nutrients recycled)\n\nThese are the two fundamental processes that sustain all life in ecosystems.\n\nThis question is about ecosystem ecology and ecological processes.\n\nFINAL: Biology",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.72,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.75,
+            "output_integrity": 0.95,
+            "aggregate": 0.8300000000000001,
+            "rationale": "The agent correctly identified the category as Biology and provided a thorough, accurate explanation of the answer (C), but the response included unnecessary content analysis of the MCQ options rather"
+          }
+        },
+        {
+          "query": "Solve the equation: \\( 6 x=12 \\)",
+          "gold": "Maths",
+          "output": "This is a straightforward algebraic equation that requires solving for the variable x.\n\nStarting with: 6x = 12\n\nDivide both sides by 6:\nx = 12/6\nx = 2\n\nThis is a basic linear equation problem.\n\nFINAL: Maths",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.95,
+            "aggregate": 0.925,
+            "rationale": "The agent correctly routed the question to 'Maths' matching the reference answer, and provided valid supporting reasoning, though the task only required routing/categorization rather than solving the "
+          }
+        },
+        {
+          "query": "The valency of impurity element for making n-type semiconductor is A . 3 B. 5 \\( c \\cdot 4 \\) \\( D \\)",
+          "gold": "Physics",
+          "output": "This question is asking about the valency (number of valence electrons) of impurity elements used to create n-type semiconductors.\n\nIn semiconductor doping:\n- **n-type semiconductors** are created by adding donor impurities (pentavalent elements with 5 valence electrons)\n- **p-type semiconductors** are created by adding acceptor impurities (trivalent elements with 3 valence electrons)\n\nFor n-type semiconductors, the impurity element must have a valency of **5** (pentavalent), such as Phosphorus (P), Arsenic (As), or Antimony (Sb). These elements have 5 valence electrons, and when doped into a tetravalent semiconductor like Silicon or Germanium, they provide extra free electrons, making it n-type.\n\nThe correct answer is **B. 5**\n\nThis question relates to semiconductor physics and solid-state electronics.\n\nFINAL: Physics",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.95,
+            "aggregate": 0.925,
+            "rationale": "The agent correctly routed the question to Physics, provided accurate reasoning about n-type semiconductors and pentavalent dopants, and the final category matches the reference answer."
+          }
+        },
+        {
+          "query": "The sequence of bases on \\( \\mathrm{m} \\) -RNA molecule synthesized on the GCATATGGA strand of DNA is A. cGuAUACCU в. СGтАТАСст c. тАсяссятс D. Атсясятт",
+          "gold": "Chemistry",
+          "output": "I need to determine which mRNA sequence would be synthesized from the given DNA strand.\n\n**Given DNA strand:** GCATATGGA\n\n**Key principles:**\n1. mRNA is synthesized from the template (antisense) strand of DNA\n2. mRNA synthesis follows base pairing rules: A↔U, T↔A, G↔C, C↔G\n3. mRNA is synthesized in the 5' to 3' direction (antiparallel to template)\n\n**Process:**\nThe DNA strand given (GCATATGGA) appears to be the template strand.\n\nReading the template strand from 3' to 5' direction (as RNA polymerase reads it):\n- Template: 3'-AGGTATACG-5' (reverse of GCATATGGA)\n\nComplementary mRNA (5' to 3'):\n- G → C\n- C → G\n- A → U\n- T → A\n- A → U\n- T → A\n- G → C\n- C → G\n- A → U\n\nThis gives: **CCUAUACCU** or reading from the original direction: **UCCAUAUGG**\n\nWait, let me reconsider. If GCATATGGA is the template strand read 3' to 5':\n- G pairs with C\n- C pairs with G\n- A pairs with U\n- T pairs with A\n- A pairs with U\n- T pairs with A\n- G pairs with C\n- G pairs with C\n- A pairs with U\n\nmRNA: **CCUAUACCU** (reading 5' to 3')\n\nLooking at the options, **option A: CGUAUACCU** is closest, though there's a slight variation. However, examining more carefully, if we read GCATATGGA as written and apply complementary base pairing:\n\nThe answer that matches the expected mRNA sequence is **A. CGUAUACCU**\n\nThis question is about **molecular biology**, specifically transcription and mRNA synthesis.\n\nFINAL: Biology",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.85,
+            "reasoning_soundness": 0.45,
+            "execution_accuracy": 0.6,
+            "output_integrity": 0.3,
+            "aggregate": 0.5499999999999999,
+            "rationale": "The agent correctly identified the topic as biology/molecular biology but the reference answer is Chemistry, so output_integrity is low; additionally the reasoning contains errors and contradictions i"
+          }
+        },
+        {
+          "query": "Plants with joined stem and hollow internodes are known as A. Culms B. Scape c. Ephemerals D. Lianas",
+          "gold": "Biology",
+          "output": "This question is asking about botanical terminology related to plant stem characteristics.\n\nLet me analyze the key terms:\n- \"Joined stem\" refers to nodes (joints) in the stem\n- \"Hollow internodes\" means the segments between nodes are hollow/empty\n\nThe term that specifically describes stems with distinct joints/nodes and hollow internodes is **culm**. Culms are characteristic of grasses (Poaceae family) and sedges, where the stem has visible nodes and the spaces between them (internodes) are typically hollow.\n\nLet me verify the other options:\n- **Scape**: A leafless or nearly leafless flower stalk\n- **Ephemerals**: Short-lived plants\n- **Lianas**: Climbing woody vines\n\nThe correct answer is **A. Culms**\n\nThis is a Biology question, as it deals with plant morphology and botanical terminology.\n\nFINAL: Biology",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly identified the category as Biology, matching the reference answer, and provided sound botanical reasoning to support the classification."
+          }
+        },
+        {
+          "query": "If \\( \\sum_{r=0}^{25}\\left\\{^{50} C_{r} .^{50-r} C_{25-r}\\right\\}=K\\left(^{50} C_{25}\\right) \\) then \\( K \\) is equal to: A \\( \\cdot 2^{25}-1 \\) B . \\( (25)^{2} \\) \\( c \\cdot 2^{25} \\) \\( D \\cdot 2^{2} \\)",
+          "gold": "Maths",
+          "output": "I need to find the value of K in the equation:\n$$\\sum_{r=0}^{25}\\binom{50}{r}\\binom{50-r}{25-r}=K\\binom{50}{25}$$\n\n**Using Vandermonde's Identity and Combinatorial Interpretation:**\n\nLet me use the identity: $\\binom{n}{k}\\binom{k}{j} = \\binom{n}{j}\\binom{n-j}{k-j}$\n\nRewriting the general term:\n$$\\binom{50}{r}\\binom{50-r}{25-r}$$\n\nI can use the identity: $\\binom{50}{r}\\binom{50-r}{25-r} = \\binom{50}{25}\\binom{25}{r}$\n\n**Verification of this identity:**\n$$\\binom{50}{r}\\binom{50-r}{25-r} = \\frac{50!}{r!(50-r)!} \\cdot \\frac{(50-r)!}{(25-r)!(25)!}$$\n\n$$= \\frac{50!}{r!(25-r)!(25)!} = \\frac{50!}{25!(25)!} \\cdot \\frac{25!}{r!(25-r)!}$$\n\n$$= \\binom{50}{25}\\binom{25}{r}$$\n\n**Now the sum becomes:**\n$$\\sum_{r=0}^{25}\\binom{50}{25}\\binom{25}{r} = \\binom{50}{25}\\sum_{r=0}^{25}\\binom{25}{r}$$\n\n**Evaluating the inner sum:**\n$$\\sum_{r=0}^{25}\\binom{25}{r} = 2^{25}$$\n\nThis is the binomial expansion of $(1+1)^{25}$.\n\n**Therefore:**\n$$\\sum_{r=0}^{25}\\binom{50}{r}\\binom{50-r}{25-r} = \\binom{50}{25} \\cdot 2^{25}$$\n\nComparing with $K\\binom{50}{25}$:\n$$K = 2^{25}$$\n\nFINAL: C",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.72,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.85,
+            "output_integrity": 0.75,
+            "aggregate": 0.805,
+            "rationale": "The agent correctly solved the math problem and arrived at K = 2^25 (answer C), but the task was to route the question to a category, not solve it; however, the final routing label 'C' doesn't match t"
+          }
+        },
+        {
+          "query": "Plane electromagnetic wave of intensity S are incident normally on a flat surface.Only a fraction \\( f \\) of the incident energy is absorbed.What is the radiation pressure?",
+          "gold": "Physics",
+          "output": "Let me work through this radiation pressure problem step by step.\n\n**Given Information:**\n- Plane electromagnetic wave with intensity S\n- Normal incidence on a flat surface\n- Fraction f of incident energy is absorbed\n- Fraction (1-f) is reflected\n\n**Key Physics:**\nRadiation pressure arises from momentum transfer. Electromagnetic waves carry momentum p = E/c, where E is energy and c is speed of light.\n\n**Analysis:**\n\nFor incident radiation with intensity S:\n- Energy flux (intensity) = S\n- Momentum flux of incident wave = S/c\n\nWhen the wave interacts with the surface:\n1. **Absorbed portion (fraction f):** \n   - Momentum transferred = f × (S/c)\n   - This momentum is completely absorbed\n\n2. **Reflected portion (fraction 1-f):**\n   - The reflected wave carries momentum in the opposite direction\n   - Momentum change for reflected part = 2(1-f) × (S/c)\n   - (Factor of 2 because momentum reverses direction)\n\n**Total Radiation Pressure:**\n\nThe total momentum transfer per unit area per unit time equals the pressure:\n\n$$P = \\frac{S}{c}[f + 2(1-f)]$$\n\n$$P = \\frac{S}{c}[f + 2 - 2f]$$\n\n$$P = \\frac{S}{c}(2 - f)$$\n\nThis can also be written as:\n$$P = \\frac{S}{c}[1 + (1-f)]$$\n\nThe result makes physical sense: if f=1 (complete absorption), P = S/c; if f=0 (complete reflection), P = 2S/c.\n\n**This is a Physics problem** involving electromagnetic radiation, momentum transfer, and pressure—core concepts in classical electromagnetism and optics.\n\nFINAL: Physics",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.85,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.85,
+            "output_integrity": 0.9,
+            "aggregate": 0.8875,
+            "rationale": "The agent correctly identified the category as Physics (matching the reference answer) and provided thorough, correct reasoning for the radiation pressure problem, though the task only required routin"
+          }
+        },
+        {
+          "query": "Write the examples of animal fiber",
+          "gold": "Chemistry",
+          "output": "This question is asking for examples of animal fibers, which are fibers derived from animals. This topic covers the characteristics and sources of natural fibers obtained from animals, including their structure and properties.\n\nThis falls under the study of natural materials and their biological origins, which is part of Biology. Animal fibers include wool (from sheep), silk (from silkworms), mohair (from goats), and cashmere (from cashmere goats).\n\nFINAL: Biology",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.6,
+            "reasoning_soundness": 0.55,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.2,
+            "aggregate": 0.5625,
+            "rationale": "The agent correctly performed the routing task mechanically but assigned 'Biology' instead of the correct category 'Chemistry,' which is where animal fibers (natural fibers) are typically classified i"
+          }
+        },
+        {
+          "query": "A tendril of a pea plant and phylloclade of Opuntia are homologous. A. True B. False",
+          "gold": "Biology",
+          "output": "Let me analyze this statement about homologous structures.\n\n**Homologous structures** are organs/structures that have the same evolutionary origin and similar basic structure, though they may have different functions in different organisms.\n\n**Tendrils of pea plant:**\n- Modified leaves\n- Used for climbing/support\n- Derived from leaf tissue\n\n**Phylloclade of Opuntia (prickly pear cactus):**\n- Modified stems\n- Flattened, leaf-like appearance\n- Used for photosynthesis\n- Derived from stem tissue\n\n**Key difference:**\n- Pea tendrils originate from **leaf tissue** (modified leaves)\n- Opuntia phylloclades originate from **stem tissue** (modified stems)\n\nSince they have **different embryological origins** (one from leaves, one from stems), they are **analogous structures** (similar function/appearance but different evolutionary origin), NOT homologous structures.\n\nThese are examples of **convergent evolution** - both plants adapted to their environments by modifying different structures to serve similar purposes.\n\n**FINAL: B**",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.2,
+            "reasoning_soundness": 0.7,
+            "execution_accuracy": 0.2,
+            "output_integrity": 0.2,
+            "aggregate": 0.32499999999999996,
+            "rationale": "The task asked the agent to route the question to a category (the correct answer is 'Biology'), but instead the agent answered the question itself, completely missing the routing task."
+          }
+        },
+        {
+          "query": "Construct a \\( 2 \\times 3 \\) matrix \\( A=\\left[a_{i j}\\right] \\) whose elements are given by \\( \\boldsymbol{a}_{\\boldsymbol{i} j}= \\) \\( \\mathbf{2}(\\boldsymbol{i}-\\boldsymbol{j}) \\) В. \\( \\left[\\begin{array}{ccc}0 & -2 & 4 \\\\ 2 & 0 & -2\\end{array}\\right] \\) \\( \\begin{array}{lll}\\text { c. } & {\\left[\\begin{array}{ccc}0 & -2 & -4 \\\\ 2 & 0 & 2\\end{array}\\right]} \\\\ & \\text { I }\\end{array} \\) D. \\( \\left[\\begin{array}{ccc}0 & -2 & 4 \\\\ 2 & 0 & 2\\end{array}\\right] \\)",
+          "gold": "Maths",
+          "output": "I need to construct a 2×3 matrix A where each element is given by the formula: a_{ij} = 2(i - j)\n\nLet me calculate each element systematically.\n\nFor a 2×3 matrix, i ranges from 1 to 2 (rows) and j ranges from 1 to 3 (columns).\n\n**Row 1 (i = 1):**\n- a₁₁ = 2(1 - 1) = 2(0) = 0\n- a₁₂ = 2(1 - 2) = 2(-1) = -2\n- a₁₃ = 2(1 - 3) = 2(-2) = -4\n\n**Row 2 (i = 2):**\n- a₂₁ = 2(2 - 1) = 2(1) = 2\n- a₂₂ = 2(2 - 2) = 2(0) = 0\n- a₂₃ = 2(2 - 3) = 2(-1) = -2\n\nTherefore, the matrix is:\n$$A = \\begin{bmatrix} 0 & -2 & -4 \\\\ 2 & 0 & -2 \\end{bmatrix}$$\n\nComparing with the options:\n- Option B: [0, -2, 4; 2, 0, -2] ✗ (a₁₃ = 4 is wrong)\n- Option C: [0, -2, -4; 2, 0, 2] ✗ (a₂₃ = 2 is wrong)\n- Option D: [0, -2, 4; 2, 0, 2] ✗ (both a₁₃ and a₂₃ are wrong)\n\nThe correct answer is **C** with the correct matrix being [0, -2, -4; 2, 0, -2], though there appears to be a typo in option C as written.\n\nFINAL: Maths",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.85,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.9,
+            "aggregate": 0.8875,
+            "rationale": "The agent correctly identified the category as 'Maths' matching the reference answer, and also correctly computed the matrix elements, though it noted a discrepancy in the provided options."
+          }
+        },
+        {
+          "query": "A vector \\( \\vec{A} \\) of length 10 units makes an angle of \\( 60^{\\circ} \\) with a vector \\( \\vec{B} \\) of length 6 units. Find the magnitude of the vector difference \\( \\vec{A}-\\vec{B} \\& \\) the angle it makes with vector \\( \\vec{A} \\). A \\( \\cdot 2 \\sqrt{19}, \\tan ^{-1}\\left(\\frac{3 \\sqrt{3}}{7}\\right) \\) в. \\( \\sqrt{19}, \\tan ^{-1}\\left(\\frac{3 \\sqrt{3}}{7}\\right) \\) c. \\( 2 \\sqrt{19}, \\tan ^{-1}\\left(\\frac{\\sqrt{3}}{7}\\right) \\) D. \\( \\sqrt{19}, \\tan ^{-1}\\left(\\frac{\\sqrt{3}}{7}\\right) \\)",
+          "gold": "Physics",
+          "output": "I need to find the magnitude of $\\vec{A} - \\vec{B}$ and the angle it makes with $\\vec{A}$.\n\n**Given Information:**\n- $|\\vec{A}| = 10$ units\n- $|\\vec{B}| = 6$ units\n- Angle between $\\vec{A}$ and $\\vec{B}$ is $60°$\n\n**Finding the magnitude of $\\vec{A} - \\vec{B}$:**\n\nUsing the formula: $|\\vec{A} - \\vec{B}|^2 = |\\vec{A}|^2 + |\\vec{B}|^2 - 2|\\vec{A}||\\vec{B}|\\cos(60°)$\n\n$$|\\vec{A} - \\vec{B}|^2 = 10^2 + 6^2 - 2(10)(6)\\cos(60°)$$\n\n$$= 100 + 36 - 120 \\cdot \\frac{1}{2}$$\n\n$$= 136 - 60 = 76$$\n\n$$|\\vec{A} - \\vec{B}| = \\sqrt{76} = 2\\sqrt{19}$$\n\n**Finding the angle with $\\vec{A}$:**\n\nLet $\\theta$ be the angle between $\\vec{A} - \\vec{B}$ and $\\vec{A}$.\n\nUsing the dot product:\n$$(\\vec{A} - \\vec{B}) \\cdot \\vec{A} = |\\vec{A} - \\vec{B}||\\vec{A}|\\cos\\theta$$\n\n$$\\vec{A} \\cdot \\vec{A} - \\vec{B} \\cdot \\vec{A} = |\\vec{A} - \\vec{B}||\\vec{A}|\\cos\\theta$$\n\n$$|\\vec{A}|^2 - |\\vec{A}||\\vec{B}|\\cos(60°) = |\\vec{A} - \\vec{B}||\\vec{A}|\\cos\\theta$$\n\n$$100 - 10(6)\\cos(60°) = 2\\sqrt{19}(10)\\cos\\theta$$\n\n$$100 - 60 \\cdot \\frac{1}{2} = 20\\sqrt{19}\\cos\\theta$$\n\n$$100 - 30 = 20\\sqrt{19}\\cos\\theta$$\n\n$$70 = 20\\sqrt{19}\\cos\\theta$$\n\n$$\\cos\\theta = \\frac{70}{20\\sqrt{19}} = \\frac{7}{2\\sqrt{19}}$$\n\n**Finding $\\sin\\theta$:**\n\n$$\\sin^2\\theta = 1 - \\cos^2\\theta = 1 - \\frac{49}{4(19)} = 1 - \\frac{49}{76} = \\frac{27}{76}$$\n\n$$\\sin\\theta = \\frac{3\\sqrt{3}}{2\\sqrt{19}}$$\n\n**Finding $\\tan\\theta$:**\n\n$$\\tan\\theta = \\frac{\\sin\\theta}{\\cos\\theta} = \\frac{\\frac{3\\sqrt{3}}{2\\sqrt{19}}}{\\frac{7}{2\\sqrt{19}}} = \\frac{3\\sqrt{3}}{7}$$\n\nTherefore: $\\theta = \\",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.3,
+            "reasoning_soundness": 0.72,
+            "execution_accuracy": 0.3,
+            "output_integrity": 0.3,
+            "aggregate": 0.405,
+            "rationale": "The task asked the agent to route the question to the correct category (the answer should be 'Physics'), but instead the agent solved the math problem in detail, completely missing the routing task; h"
+          }
+        },
+        {
+          "query": "Reaction of \\( \\boldsymbol{O}_{2} \\) is faster with \\( \\boldsymbol{C} \\boldsymbol{a} \\) or \\( \\boldsymbol{M} \\boldsymbol{g} \\) ? \\( \\mathbf{A} \\cdot M g \\) в. \\( C a \\) c. Equally react D. Do not react",
+          "gold": "Chemistry",
+          "output": "This question asks about the reactivity of two elements (Calcium and Magnesium) with oxygen, specifically which one reacts faster.\n\nThis is a chemistry question because it deals with:\n- Chemical reactions between elements and oxygen\n- Reactivity trends of metals\n- Chemical properties of Ca and Mg\n\nThe answer relates to periodic trends: Magnesium (Mg) is more reactive with oxygen than Calcium (Ca) because Mg is smaller and has higher charge density, making it more reactive despite being higher in Group 2. However, the question asks about reaction *speed* with O₂. In practice, Mg reacts more vigorously and faster with oxygen, especially at elevated temperatures, forming MgO more readily than Ca forms CaO under similar conditions.\n\nFINAL: Chemistry",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.82,
+            "reasoning_soundness": 0.45,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.9,
+            "aggregate": 0.7675,
+            "rationale": "The agent correctly identifies the category as Chemistry matching the reference answer, though it includes unnecessary extra content and contains a chemistry error (Ca is actually more reactive than M"
+          }
+        },
+        {
+          "query": "Which of the following statement is correct? A. First trimester abortions are riskier than the second trimester. B. Second trimester abortions are riskier than the first trimester. C. Abortions can be carried at any of the stages of pregnancy. D. None of the above.",
+          "gold": "Biology",
+          "output": "This question is asking about the medical safety and feasibility of abortion procedures at different stages of pregnancy.\n\nLet me analyze each statement:\n\n**A. First trimester abortions are riskier than the second trimester.**\n- This is FALSE. First trimester abortions are actually SAFER than second trimester abortions. Early abortions have lower complication rates.\n\n**B. Second trimester abortions are riskier than the first trimester.**\n- This is TRUE. Second trimester abortions carry higher risks of complications compared to first trimester procedures. The risk increases with gestational age.\n\n**C. Abortions can be carried at any of the stages of pregnancy.**\n- This is FALSE. Abortion availability and legality vary by jurisdiction and gestational age. Medical practice typically becomes more restricted as pregnancy progresses, and third trimester abortions are extremely rare and heavily restricted in most places.\n\n**D. None of the above.**\n- This would only be correct if B were false, but B is accurate.\n\nThe correct answer is **B** - Second trimester abortions are riskier than first trimester abortions. This is a well-established medical fact: earlier procedures have lower complication rates, and risk increases with advancing gestational age.\n\nThis question falls under the study of human reproduction, pregnancy, and medical procedures related to pregnancy.\n\nFINAL: Biology",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.82,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.95,
+            "aggregate": 0.8925000000000001,
+            "rationale": "The agent correctly routed the question to Biology and provided a well-reasoned analysis identifying option B as correct, matching the reference answer, though the response included unnecessary extra "
+          }
+        }
+      ]
+    },
+    "two_phase": {
+      "objective_mean": 0.8666666666666667,
+      "objective_ci95": [
+        0.7333333333333333,
+        0.9666666666666667
+      ],
+      "gpa_mean": 0.8879166666666665,
+      "gpa_dims": {
+        "target_alignment": 0.8766666666666665,
+        "reasoning_soundness": 0.8883333333333331,
+        "execution_accuracy": 0.9049999999999996,
+        "output_integrity": 0.8816666666666666
+      },
+      "prompt": "You are a student-question routing assistant. Your sole task is to output the correct category label for the student's question — nothing else.\n\n---\n\n## Categories\n\n- **Biology** — living organisms, cells, genetics, ecology, evolution, physiology, biochemistry (enzymes, inhibition, metabolism, etc.)\n- **Chemistry** — chemical reactions, elements, compounds, bonding, thermodynamics, stoichiometry, organic/inorganic chemistry\n- **Maths** — arithmetic, algebra, calculus, differential equations, geometry, statistics, proofs\n- **Physics** — mechanics, electricity, magnetism, optics, waves, thermodynamics (physical), relativity, motion\n\n---\n\n## Decision Rules\n\n1. **Enzyme questions** (active site, inhibition, catalysis, metabolism) → **Biology**, not Chemistry.\n2. **Differential equations, integrals, derivatives** used as mathematical problems → **Maths**, not Physics.\n3. **Thermodynamics**: if the context is physical systems (heat engines, gas laws as physics) → **Physics**; if chemical reactions (enthalpy, entropy of reactions) → **Chemistry**.\n4. When a topic could belong to multiple fields, use the **primary subject framing** of the question.\n\n---\n\n## Output Format\n\nRespond with **exactly one word**: the category name.\n\n`Biology` | `Chemistry` | `Maths` | `Physics`\n\nNo explanation. No punctuation beyond the single word.",
+      "examples": [
+        {
+          "query": "The compounds shown below have similar weights but significantly different boiling points. Match the compound with its boiling point. (Boiling points \\( \\left.\\left(^{o} C\\right) 28,57,100,141\\right) \\) A. Methyl acetate=100, 2-butanol=141, 2-methyl butane=28, Propanoic acid=57 B. Methyl acetate=57, 2-butanol=100, 2-methyl butane=28, Propanoic acid=141 c. Methyl acetate=28, 2-butanol=100, 2-methyl butane=57, Propanoic acid=141 D. Methyl acetate=141, 2-butanol=57, 2-methy butane=28, Propanoic acid=100",
+          "gold": "Chemistry",
+          "output": "This question asks about matching compounds with their boiling points based on intermolecular forces and molecular structure. The key concept is understanding how different types of intermolecular interactions (hydrogen bonding, dipole-dipole, London dispersion forces) affect boiling points.\n\nLet me analyze each compound:\n\n1. **2-methyl butane** — nonpolar hydrocarbon, only London dispersion forces → lowest boiling point (28°C)\n\n2. **Methyl acetate** — polar ester with dipole-dipole interactions, but no hydrogen bonding → moderate boiling point (57°C)\n\n3. **2-butanol** — alcohol with hydrogen bonding capability → higher boiling point (100°C)\n\n4. **Propanoic acid** — carboxylic acid with strong hydrogen bonding (including dimer formation) → highest boiling point (141°C)\n\nThe ranking by boiling point should be:\n2-methyl butane (28) < Methyl acetate (57) < 2-butanol (100) < Propanoic acid (141)\n\nThis matches **Option B**.\n\nFINAL: Chemistry",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.85,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.9,
+            "aggregate": 0.8999999999999999,
+            "rationale": "The agent correctly identified the category as Chemistry and provided sound reasoning about intermolecular forces leading to the correct answer (Option B), matching the reference gold answer of 'Chemi"
+          }
+        },
+        {
+          "query": "Which of the following is true for Krebs cycle? A. Isocitrate \\( \\rightarrow \\) Fumrate \\( \\rightarrow \\alpha \\) ketoglutarate B. \\( \\alpha \\) Ketoglutarate \\( \\rightarrow \\) Oxalosuccinate \\( \\rightarrow \\) Isocitrate c. oxalosuccinate \\( \\rightarrow \\) Isocitrate \\( \\rightarrow \\alpha \\) ketoglutarate D. Isocitrate \\( \\rightarrow \\alpha \\) ketoglutarate \\( \\rightarrow \\) Succinate",
+          "gold": "Biology",
+          "output": "This question asks about the sequence of intermediates in the Krebs cycle (citric acid cycle), which is a central metabolic pathway in cells. The question is testing knowledge of biochemistry and cellular metabolism.\n\nThe Krebs cycle is a fundamental biological process involving enzyme-catalyzed reactions and metabolic pathways within living organisms.\n\nFINAL: Biology",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly identified the question as Biology, matching the reference answer, with sound reasoning about the Krebs cycle being a biological/biochemical topic."
+          }
+        },
+        {
+          "query": "Find the value of \\( x \\) if \\( \\sin \\left\\{\\sin ^{-1} \\frac{1}{5}+\\cos ^{-1} x\\right\\}=1 \\)",
+          "gold": "Maths",
+          "output": "This question involves inverse trigonometric functions and solving for a variable using trigonometric identities.\n\nThe problem asks to find x given: sin{sin⁻¹(1/5) + cos⁻¹(x)} = 1\n\nThis is a pure mathematics problem involving:\n- Inverse trigonometric functions (sin⁻¹, cos⁻¹)\n- Algebraic manipulation\n- Trigonometric identities\n\nThis falls under the domain of mathematics, specifically trigonometry and algebra.\n\nFINAL: Maths",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified the category as 'Maths' matching the reference answer, with sound reasoning about the mathematical nature of the problem involving inverse trigonometric functions."
+          }
+        },
+        {
+          "query": "A uniform solid cylinder of mass \\( 2 k g \\) and radius \\( 0.2 m \\) is released from the rest at the top of a semicircular track of radius \\( 0.7 m \\) cut in block of mass \\( M= \\) \\( 3 k g \\) as shown. The block is resting on a smooth horizontal surface and the cylinder rolls down without slipping. The distance moved by the block when the cylinder reaches the bottom of the track is: \\( \\mathbf{A} \\cdot 0.3 m \\) B. \\( 0.5 m \\) c. \\( 0.7 m \\) D. \\( 0.2 m \\)",
+          "gold": "Physics",
+          "output": "This is a mechanics problem involving:\n- A rolling cylinder (rotational and translational motion)\n- Conservation of momentum (smooth horizontal surface = no external horizontal forces)\n- Conservation of energy (rolling without slipping)\n- Relative motion between the cylinder and the block\n\nThe key physics concepts are:\n- Rolling motion (moment of inertia of a solid cylinder)\n- Center of mass considerations\n- Momentum conservation in the horizontal direction\n\nThis is a **Physics** problem dealing with classical mechanics.\n\nFINAL: Physics",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified the category as Physics, matching the reference answer, with coherent reasoning about the relevant mechanics concepts."
+          }
+        },
+        {
+          "query": "If the same element is forming oxides in different oxidation states, then, which of the following statement is incorrect? This question has multiple correct options A. Oxide will be neutral in nature in which element is in its highest oxidation state B. Oxide will be highly acidic in nature in which element is in its highest oxidation state c. oxide will be amphoteric in nature in which element is in its highest oxidation state D. oxide will be highly basic in nature in which element is in its highest oxidation state",
+          "gold": "Chemistry",
+          "output": "This question asks about the properties of oxides formed by the same element in different oxidation states, specifically focusing on the nature (acidic, basic, amphoteric, neutral) of these oxides.\n\nThis is a chemistry question because it deals with:\n- Chemical compounds (oxides)\n- Oxidation states\n- Chemical properties (acidic, basic, amphoteric nature)\n- Trends in oxide chemistry\n\nThe question is asking which statement is **incorrect** regarding oxide properties based on oxidation state. This is fundamentally about chemical behavior and properties of inorganic compounds.\n\nFINAL: Chemistry",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly identified the category as Chemistry, matching the reference answer, with sound reasoning about why the question belongs to chemistry (oxidation states, oxide properties, inorganic"
+          }
+        },
+        {
+          "query": "Very short answer type: What is double fertilization?",
+          "gold": "Biology",
+          "output": "Double fertilization is a reproductive process in flowering plants where two fertilization events occur:\n\n1. One sperm nucleus fuses with the egg cell to form the diploid zygote (which develops into the embryo)\n2. The second sperm nucleus fuses with the two polar nuclei to form the triploid endosperm (nutritive tissue)\n\nThis is a characteristic feature of angiosperms (flowering plants).\n\nFINAL: Biology",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.6,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.6,
+            "output_integrity": 0.95,
+            "aggregate": 0.7625,
+            "rationale": "The agent correctly identified the category as Biology (matching the reference), but added extensive explanatory content beyond what the routing task required, making the response partially off-target"
+          }
+        },
+        {
+          "query": "Find the root of \\( 2 x+\\frac{x}{2}=20 \\)",
+          "gold": "Maths",
+          "output": "This is an algebraic equation requiring solving for x using algebraic manipulation.\n\nFINAL: Maths",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly routed the question to 'Maths' matching the reference answer, with sound reasoning that the equation requires algebraic manipulation."
+          }
+        },
+        {
+          "query": "In the spectrum of white light by a prism, the colour at the extreme end opposite to the base of prism is: A . violet B. yellow \\( c \\cdot \\) red D. blue",
+          "gold": "Physics",
+          "output": "This question is about the dispersion of white light through a prism, which is a fundamental concept in optics (a branch of Physics).\n\nWhen white light passes through a prism, it disperses into its component colors due to different wavelengths having different refractive indices in the prism material. Red light (longest wavelength) bends the least, while violet light (shortest wavelength) bends the most. Therefore, violet appears at the extreme end opposite to the base of the prism.\n\nFINAL: Physics",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly routed the question to 'Physics' matching the reference answer, provided sound reasoning about light dispersion through a prism, and correctly identified violet as the color at the"
+          }
+        },
+        {
+          "query": "A sealed gas cylinder is left outside on a hot, sunny day. What happens to the average speed of the gas molecules and to the pressure of the gas in the cylinder as the temperature of the gas rises? Average speed of \\( \\quad \\) Pressure of gas gas molecules \\( \\quad \\) in cylinder Decreases Decreases Decreases Increases Increases Decreases Increases \\( A \\cdot A \\) B. B \\( c \\cdot c \\) D. D",
+          "gold": "Chemistry",
+          "output": "This question asks about the relationship between temperature, molecular speed, and pressure in a gas system. These are fundamental concepts in kinetic theory and gas laws, which are core topics in physics.\n\nThe question involves:\n- Average speed of gas molecules (kinetic theory of gases)\n- Pressure changes with temperature (gas laws, specifically Gay-Lussac's Law)\n- Physical behavior of gases under thermal conditions\n\nThis is a **Physics** question about thermodynamics and gas behavior.\n\nFINAL: Physics",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.3,
+            "reasoning_soundness": 0.55,
+            "execution_accuracy": 0.7,
+            "output_integrity": 0.2,
+            "aggregate": 0.4375,
+            "rationale": "The agent correctly identified the topic domain but assigned 'Physics' when the reference answer is 'Chemistry'; gas laws and kinetic theory are taught in both disciplines but the gold standard here i"
+          }
+        },
+        {
+          "query": "Professor Birbal Sahani discovered 100 million years old fossil plant from fossi forest at Rajmahal Hills, Bihar. This plant was A. Rhynia B. Horneophyton c. williamsonia D. Red alga",
+          "gold": "Biology",
+          "output": "This question is asking about fossil plant identification and paleobotany — specifically about ancient plant species and their discovery in geological history.\n\nThe question involves:\n- Fossil plants and their classification\n- Paleobotany (study of ancient plants)\n- Plant evolution and history\n- Identification of extinct plant species\n\nThis is fundamentally a **Biology** question, as it concerns living organisms (plants), their evolutionary history, and paleontological classification.\n\nFINAL: Biology",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified the category as Biology, matching the reference answer, with sound reasoning about paleobotany and plant classification."
+          }
+        },
+        {
+          "query": "In a geometrical progression first term and common ratio are both \\( \\frac{1}{2}(\\sqrt{3}+i) \\) Then the absolute value of the nth term of the progression is \\( \\mathbf{A} \\cdot 2^{n} \\) B . \\( 4^{n} \\) \\( c \\) D. none of these",
+          "gold": "Maths",
+          "output": "This question involves a geometric progression where both the first term and common ratio are complex numbers of the form $\\frac{1}{2}(\\sqrt{3}+i)$.\n\nTo find the absolute value of the nth term, I need to:\n\n1. Recognize that for a geometric progression, the nth term is $a \\cdot r^{n-1}$ where $a$ is the first term and $r$ is the common ratio.\n\n2. Here, $a = r = \\frac{1}{2}(\\sqrt{3}+i)$\n\n3. The nth term is: $\\left[\\frac{1}{2}(\\sqrt{3}+i)\\right]^n$\n\n4. Find the absolute value: $|a_n| = \\left|\\frac{1}{2}(\\sqrt{3}+i)\\right|^n$\n\n5. Calculate $\\left|\\frac{1}{2}(\\sqrt{3}+i)\\right|$:\n   - $\\left|\\frac{1}{2}(\\sqrt{3}+i)\\right| = \\frac{1}{2}\\sqrt{(\\sqrt{3})^2 + 1^2} = \\frac{1}{2}\\sqrt{3+1} = \\frac{1}{2}\\sqrt{4} = \\frac{1}{2} \\cdot 2 = 1$\n\n6. Therefore: $|a_n| = 1^n = 1$\n\nThis is a mathematical problem involving sequences, complex numbers, and absolute values—all core topics in mathematics.\n\nFINAL: Maths",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.9,
+            "aggregate": 0.93,
+            "rationale": "The agent correctly routed the question to 'Maths' matching the reference answer, and also provided sound mathematical reasoning showing the absolute value equals 1 (which corresponds to answer D 'non"
+          }
+        },
+        {
+          "query": "In a metallic conductor, electric current is thought to be due to the movement of A . ions B. amperes c. electrons D. protons",
+          "gold": "Physics",
+          "output": "This question asks about the mechanism of electric current in metallic conductors—specifically what particles carry the current.\n\nIn metallic conductors, electric current is due to the movement of free electrons through the conductor lattice. This is a fundamental concept in electromagnetism and the physics of electrical conduction.\n\n- Ions: not the primary charge carriers in metals\n- Amperes: a unit of current, not a particle\n- Electrons: the correct answer—free electrons move through the metal\n- Protons: bound in nuclei, do not move freely in metals\n\nThis is a **Physics** question about electrical conduction and the nature of electric current.\n\nFINAL: Physics",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.98,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.97,
+            "rationale": "The agent correctly identified the category as Physics, provided sound reasoning about electron conduction in metals, and matched the reference answer exactly."
+          }
+        },
+        {
+          "query": "In the reaction \\( 2 N a_{2} S_{2} O_{3}+I_{2} \\rightarrow \\) \\( N a_{2} S_{4} O_{6}+2 N a I, \\) the oxidation state of sulphur is : A. decreased B. increased c. unchanged D. none of these",
+          "gold": "Chemistry",
+          "output": "This question asks about the oxidation state of sulfur in a redox reaction.\n\nLet me analyze the oxidation states:\n\n**In Na₂S₂O₃ (sodium thiosulfate):**\n- Na: +1\n- O: -2\n- For S: 2(+1) + 2(S) + 3(-2) = 0\n- 2 + 2S - 6 = 0\n- 2S = 4, so S = +2\n\n**In Na₂S₄O₆ (sodium tetrathionate):**\n- Na: +1\n- O: -2\n- For S: 2(+1) + 4(S) + 6(-2) = 0\n- 2 + 4S - 12 = 0\n- 4S = 10, so S = +2.5 (average)\n\nMore precisely, in S₄O₆²⁻, the sulfur atoms have mixed oxidation states: two are +5 and two are 0, giving an average of +2.5.\n\nSince sulfur goes from +2 in the reactant to an average of +2.5 in the product, the oxidation state of sulfur **increases**.\n\nThis is a redox reaction where I₂ is reduced (from 0 to -1 in NaI) and sulfur is oxidized.\n\nFINAL: Chemistry",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.8,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9125000000000001,
+            "rationale": "The agent correctly routed the question to Chemistry and provided a detailed analysis showing sulfur's oxidation state increases, matching the reference answer; minor issue is the claim about mixed ox"
+          }
+        },
+        {
+          "query": "Who is responsible for the sex of offspring-male of female? Why?",
+          "gold": "Biology",
+          "output": "This question asks about the biological determination of offspring sex, which involves genetics and reproduction.\n\nFINAL: Biology",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly identified the category as Biology, with sound reasoning about genetics and reproduction, matching the reference answer exactly."
+          }
+        },
+        {
+          "query": "Simplify: \\( \\left[3 a^{2}-2 a^{2}+9 a^{2}-\\left\\{6 a^{2}-\\right.\\right. \\) \\( \\left.\\left(-2 a^{2}+3 a^{2}\\right)\\right\\} \\)",
+          "gold": "Maths",
+          "output": "This is an algebraic simplification problem involving combining like terms with nested brackets and braces. It requires understanding of algebraic notation and arithmetic operations on variables.\n\nFINAL: Maths",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified the category as 'Maths' matching the reference answer, with sound reasoning about the algebraic nature of the problem."
+          }
+        },
+        {
+          "query": "An ebonite rod rubbed with fur and a glass rod rubbed with silk cloth are brought nearer to each other. Then: A. they will attract each other B. they will repel each other C. nothing will happen to them, D. they will get heated up",
+          "gold": "Physics",
+          "output": "This question is about electrostatic charge and the forces between charged objects.\n\nWhen an ebonite rod is rubbed with fur, it becomes negatively charged. When a glass rod is rubbed with silk, it becomes positively charged. Since opposite charges attract each other, the two rods will attract.\n\nThis is a fundamental concept in electrostatics, which falls under Physics.\n\nFINAL: Physics",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified the category as Physics, provided sound reasoning about electrostatics, and the final answer matches the reference exactly."
+          }
+        },
+        {
+          "query": "Ammonia gas on passing through copper sulphate solution gives: A. yellow colour solution B. blue colour solution c. brown colour solution D. red colour solution",
+          "gold": "Chemistry",
+          "output": "This question is asking about the color change that occurs when ammonia gas is passed through copper sulfate solution. This is a chemical reaction involving:\n\n- Copper sulfate (CuSO₄) — an inorganic compound\n- Ammonia (NH₃) — a base\n- The formation of a complex ion [Cu(NH₃)₄]²⁺\n\nThe reaction involves chemical bonding, complex formation, and the properties of inorganic compounds. This is fundamentally a **Chemistry** question about chemical reactions and compound properties.\n\nFINAL: Chemistry",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified the category as Chemistry, matching the reference answer, with sound reasoning about the chemical reaction involved."
+          }
+        },
+        {
+          "query": "Importance of ecosystem lies in A . Cycling opmaterials B. Flow of energy c. Both A and B D. None of the above",
+          "gold": "Biology",
+          "output": "This question asks about the fundamental functions and importance of ecosystems, specifically addressing material cycling and energy flow through ecological systems.\n\nMaterial cycling (nutrient cycles, carbon cycle, water cycle, etc.) and energy flow (through food chains and trophic levels) are core concepts in **ecology**, which is a branch of Biology.\n\nFINAL: Biology",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly identified the question as belonging to Biology, with sound reasoning about ecology being a branch of biology, matching the reference answer exactly."
+          }
+        },
+        {
+          "query": "Solve the equation: \\( 6 x=12 \\)",
+          "gold": "Maths",
+          "output": "This is a basic algebraic equation requiring solving for x.\n\nFINAL: Maths",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly identified the category as 'Maths' matching the reference answer, with sound reasoning that the equation is algebraic in nature."
+          }
+        },
+        {
+          "query": "The valency of impurity element for making n-type semiconductor is A . 3 B. 5 \\( c \\cdot 4 \\) \\( D \\)",
+          "gold": "Physics",
+          "output": "This question is asking about the valency (number of valence electrons) of impurity elements used to create n-type semiconductors.\n\nIn semiconductor physics, n-type semiconductors are created by doping a pure semiconductor (like silicon, which has 4 valence electrons) with donor impurities. These donor impurities must have 5 valence electrons (pentavalent elements like phosphorus, arsenic, or antimony). The extra electron becomes a free charge carrier, creating the n-type (negative) conductivity.\n\nThis is a **Physics** question because it deals with semiconductor properties, electronic conduction, and the physics of doped materials used in electronic devices.\n\nFINAL: Physics",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified the question as Physics, matching the reference answer, with sound reasoning about n-type semiconductors and appropriate routing."
+          }
+        },
+        {
+          "query": "The sequence of bases on \\( \\mathrm{m} \\) -RNA molecule synthesized on the GCATATGGA strand of DNA is A. cGuAUACCU в. СGтАТАСст c. тАсяссятс D. Атсясятт",
+          "gold": "Chemistry",
+          "output": "This question is asking about mRNA synthesis from a DNA template strand. Specifically, it's asking what mRNA sequence would be transcribed from the given DNA strand (GCATATGGA).\n\nThis involves:\n- Understanding DNA-to-RNA transcription\n- Base pairing rules (A-U in RNA, complementary to DNA)\n- The directionality of transcription\n\nThis is a fundamental molecular biology concept dealing with gene expression and nucleic acid synthesis.\n\nFINAL: Biology",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.85,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.85,
+            "output_integrity": 0.3,
+            "aggregate": 0.725,
+            "rationale": "The agent correctly identified the topic as molecular biology/biochemistry but classified it as 'Biology' rather than the reference answer 'Chemistry', which is a meaningful discrepancy given that nuc"
+          }
+        },
+        {
+          "query": "Plants with joined stem and hollow internodes are known as A. Culms B. Scape c. Ephemerals D. Lianas",
+          "gold": "Biology",
+          "output": "This question is asking about plant morphology and terminology—specifically about the classification of plant stems based on their structural characteristics (joined stems with hollow internodes).\n\nThis is a botanical/biological question about plant anatomy and classification.\n\nFINAL: Biology",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified the question as belonging to the Biology category, matching the reference answer, with sound reasoning about plant morphology and anatomy."
+          }
+        },
+        {
+          "query": "If \\( \\sum_{r=0}^{25}\\left\\{^{50} C_{r} .^{50-r} C_{25-r}\\right\\}=K\\left(^{50} C_{25}\\right) \\) then \\( K \\) is equal to: A \\( \\cdot 2^{25}-1 \\) B . \\( (25)^{2} \\) \\( c \\cdot 2^{25} \\) \\( D \\cdot 2^{2} \\)",
+          "gold": "Maths",
+          "output": "This is a combinatorics problem involving binomial coefficients and summation. The question asks to find the value of K in an equation involving sums of products of binomial coefficients.\n\nThe problem requires:\n- Understanding binomial coefficient notation (C_r or \"n choose r\")\n- Manipulating summation formulas\n- Using combinatorial identities\n\nThis is a pure mathematical problem involving algebraic manipulation and combinatorial identities, not applied to any physical, chemical, or biological system.\n\nFINAL: Maths",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified the question as a Maths problem, matching the reference answer, with sound reasoning about the combinatorial nature of the problem."
+          }
+        },
+        {
+          "query": "Plane electromagnetic wave of intensity S are incident normally on a flat surface.Only a fraction \\( f \\) of the incident energy is absorbed.What is the radiation pressure?",
+          "gold": "Physics",
+          "output": "This question asks about radiation pressure when an electromagnetic wave is incident on a surface, with only a fraction of energy being absorbed.\n\nKey concepts:\n- Electromagnetic waves carrying energy and momentum\n- Incident intensity S\n- Fraction f of energy absorbed\n- Radiation pressure (force per unit area)\n\nThis is a **Physics** problem because it deals with:\n- Electromagnetic radiation (waves)\n- Momentum transfer from photons\n- Pressure as a physical phenomenon\n- Properties of light interacting with matter\n\nThe solution involves relating the intensity of the electromagnetic wave to the momentum it carries, and calculating the pressure based on how much energy is absorbed.\n\nFINAL: Physics",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified the category as Physics, matching the reference answer, with coherent reasoning about electromagnetic waves and radiation pressure."
+          }
+        },
+        {
+          "query": "Write the examples of animal fiber",
+          "gold": "Chemistry",
+          "output": "This question asks for examples of animal fiber, which relates to materials derived from animals—a topic in biology covering animal products, their structure, and properties.\n\nFINAL: Biology",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.6,
+            "reasoning_soundness": 0.55,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.2,
+            "aggregate": 0.5625,
+            "rationale": "The agent correctly performed the routing task mechanically but assigned 'Biology' instead of the correct category 'Chemistry,' where animal fibers (wool, silk, etc.) are studied as natural polymers a"
+          }
+        },
+        {
+          "query": "A tendril of a pea plant and phylloclade of Opuntia are homologous. A. True B. False",
+          "gold": "Biology",
+          "output": "This question is asking about homologous structures in plants — specifically whether tendrils (in pea plants) and phylloclades (in Opuntia/prickly pear) are homologous organs.\n\nThis is a question about plant morphology, evolution, and comparative anatomy — all core topics in **Biology**. It requires understanding of evolutionary relationships and structural homology in living organisms.\n\nFINAL: Biology",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly routed the question to Biology and provided sound reasoning about plant morphology and homology, matching the reference answer exactly."
+          }
+        },
+        {
+          "query": "Construct a \\( 2 \\times 3 \\) matrix \\( A=\\left[a_{i j}\\right] \\) whose elements are given by \\( \\boldsymbol{a}_{\\boldsymbol{i} j}= \\) \\( \\mathbf{2}(\\boldsymbol{i}-\\boldsymbol{j}) \\) В. \\( \\left[\\begin{array}{ccc}0 & -2 & 4 \\\\ 2 & 0 & -2\\end{array}\\right] \\) \\( \\begin{array}{lll}\\text { c. } & {\\left[\\begin{array}{ccc}0 & -2 & -4 \\\\ 2 & 0 & 2\\end{array}\\right]} \\\\ & \\text { I }\\end{array} \\) D. \\( \\left[\\begin{array}{ccc}0 & -2 & 4 \\\\ 2 & 0 & 2\\end{array}\\right] \\)",
+          "gold": "Maths",
+          "output": "This question asks me to construct a 2×3 matrix using the formula for its elements: a_ij = 2(i - j).\n\nThis is a straightforward matrix construction problem, which is a fundamental topic in linear algebra/mathematics.\n\nLet me verify by computing the elements:\n- a₁₁ = 2(1-1) = 0\n- a₁₂ = 2(1-2) = -2\n- a₁₃ = 2(1-3) = -4\n- a₂₁ = 2(2-1) = 2\n- a₂₂ = 2(2-2) = 0\n- a₂₃ = 2(2-3) = -2\n\nThis is a mathematics problem involving matrix operations and algebra.\n\nFINAL: Maths",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified the question as a mathematics problem, matched the reference answer 'Maths', and even verified the matrix elements correctly (matching option C), demonstrating sound rea"
+          }
+        },
+        {
+          "query": "A vector \\( \\vec{A} \\) of length 10 units makes an angle of \\( 60^{\\circ} \\) with a vector \\( \\vec{B} \\) of length 6 units. Find the magnitude of the vector difference \\( \\vec{A}-\\vec{B} \\& \\) the angle it makes with vector \\( \\vec{A} \\). A \\( \\cdot 2 \\sqrt{19}, \\tan ^{-1}\\left(\\frac{3 \\sqrt{3}}{7}\\right) \\) в. \\( \\sqrt{19}, \\tan ^{-1}\\left(\\frac{3 \\sqrt{3}}{7}\\right) \\) c. \\( 2 \\sqrt{19}, \\tan ^{-1}\\left(\\frac{\\sqrt{3}}{7}\\right) \\) D. \\( \\sqrt{19}, \\tan ^{-1}\\left(\\frac{\\sqrt{3}}{7}\\right) \\)",
+          "gold": "Physics",
+          "output": "I need to find the magnitude of vector difference $\\vec{A} - \\vec{B}$ and the angle it makes with vector $\\vec{A}$.\n\n**Given:**\n- $|\\vec{A}| = 10$ units\n- $|\\vec{B}| = 6$ units\n- Angle between $\\vec{A}$ and $\\vec{B}$ is $60°$\n\n**Finding magnitude of $\\vec{A} - \\vec{B}$:**\n\n$$|\\vec{A} - \\vec{B}|^2 = |\\vec{A}|^2 + |\\vec{B}|^2 - 2|\\vec{A}||\\vec{B}|\\cos(60°)$$\n\n$$= 10^2 + 6^2 - 2(10)(6)\\cos(60°)$$\n\n$$= 100 + 36 - 120 \\cdot \\frac{1}{2}$$\n\n$$= 136 - 60 = 76$$\n\n$$|\\vec{A} - \\vec{B}| = \\sqrt{76} = 2\\sqrt{19}$$\n\n**Finding the angle with $\\vec{A}$:**\n\nLet $\\theta$ be the angle between $\\vec{A} - \\vec{B}$ and $\\vec{A}$.\n\nUsing the dot product:\n$$(\\vec{A} - \\vec{B}) \\cdot \\vec{A} = |\\vec{A} - \\vec{B}||\\vec{A}|\\cos\\theta$$\n\n$$\\vec{A} \\cdot \\vec{A} - \\vec{B} \\cdot \\vec{A} = |\\vec{A} - \\vec{B}||\\vec{A}|\\cos\\theta$$\n\n$$|\\vec{A}|^2 - |\\vec{A}||\\vec{B}|\\cos(60°) = |\\vec{A} - \\vec{B}||\\vec{A}|\\cos\\theta$$\n\n$$100 - 10 \\cdot 6 \\cdot \\frac{1}{2} = 2\\sqrt{19} \\cdot 10 \\cdot \\cos\\theta$$\n\n$$100 - 30 = 20\\sqrt{19}\\cos\\theta$$\n\n$$70 = 20\\sqrt{19}\\cos\\theta$$\n\n$$\\cos\\theta = \\frac{70}{20\\sqrt{19}} = \\frac{7}{2\\sqrt{19}}$$\n\nTo find $\\tan\\theta$, I need $\\sin\\theta$:\n\n$$\\sin^2\\theta = 1 - \\cos^2\\theta = 1 - \\frac{49}{4 \\cdot 19} = 1 - \\frac{49}{76} = \\frac{27}{76}$$\n\n$$\\sin\\theta = \\frac{3\\sqrt{3}}{2\\sqrt{19}}$$\n\n$$\\tan\\theta = \\frac{\\sin\\theta}{\\cos\\theta} = \\frac{\\frac{3\\sqrt{3}}{2\\sqrt{19}}}{\\frac{7}{2\\sqrt{19}}} = \\frac{3\\sqrt{3}}{7}$$\n\nTherefore: $\\theta = \\tan^{-1}\\left(\\frac{3\\sqrt{3}}{7}\\right)$\n\nThe answer is: $",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.3,
+            "reasoning_soundness": 0.85,
+            "execution_accuracy": 0.4,
+            "output_integrity": 0.3,
+            "aggregate": 0.46249999999999997,
+            "rationale": "The task asked the agent to route the question to the correct category (Physics), but instead the agent solved the math problem; the reference answer is simply 'Physics'."
+          }
+        },
+        {
+          "query": "Reaction of \\( \\boldsymbol{O}_{2} \\) is faster with \\( \\boldsymbol{C} \\boldsymbol{a} \\) or \\( \\boldsymbol{M} \\boldsymbol{g} \\) ? \\( \\mathbf{A} \\cdot M g \\) в. \\( C a \\) c. Equally react D. Do not react",
+          "gold": "Chemistry",
+          "output": "This question asks about the reactivity of two chemical elements (Calcium and Magnesium) with oxygen, comparing their reaction rates.\n\nThis is fundamentally a **Chemistry** question because it concerns:\n- Chemical reactions between elements and oxygen\n- Relative reactivity of different elements\n- Chemical properties and behavior of substances\n\nWhile reactivity trends relate to periodic table position and atomic structure, the question is framed as a chemical reaction comparison, not as a physics or biology problem.\n\nFINAL: Chemistry",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified the category as Chemistry, matching the reference answer, with sound reasoning about chemical reactivity and appropriate format."
+          }
+        },
+        {
+          "query": "Which of the following statement is correct? A. First trimester abortions are riskier than the second trimester. B. Second trimester abortions are riskier than the first trimester. C. Abortions can be carried at any of the stages of pregnancy. D. None of the above.",
+          "gold": "Biology",
+          "output": "This question is asking about the medical safety and feasibility of abortion procedures at different stages of pregnancy. It concerns human reproduction, pregnancy physiology, and medical procedures related to the human body.\n\nThis is a **Biology** question, as it deals with human physiology, pregnancy stages (trimesters), and biological/medical facts about reproductive health.\n\nFINAL: Biology",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified the category as Biology, matching the reference answer, with sound reasoning about human physiology and reproductive health."
+          }
+        }
+      ],
+      "optimization": {
+        "baseline_val": 0.8,
+        "struct_best_val": 1.0,
+        "prompt_best_val": 1.0,
+        "final_val": 1.0,
+        "shipped_baseline": false,
+        "ship_prob_better": 0.83375,
+        "deployed_phase": "structural-only",
+        "struct_iters": 30,
+        "prompt_iters": 30,
+        "struct_prompt": "You are a student-question routing assistant. Your sole task is to output the correct category label for the student's question — nothing else.\n\n---\n\n## Categories\n\n- **Biology** — living organisms, cells, genetics, ecology, evolution, physiology, biochemistry (enzymes, inhibition, metabolism, etc.)\n- **Chemistry** — chemical reactions, elements, compounds, bonding, thermodynamics, stoichiometry, organic/inorganic chemistry\n- **Maths** — arithmetic, algebra, calculus, differential equations, geometry, statistics, proofs\n- **Physics** — mechanics, electricity, magnetism, optics, waves, thermodynamics (physical), relativity, motion\n\n---\n\n## Decision Rules\n\n1. **Enzyme questions** (active site, inhibition, catalysis, metabolism) → **Biology**, not Chemistry.\n2. **Differential equations, integrals, derivatives** used as mathematical problems → **Maths**, not Physics.\n3. **Thermodynamics**: if the context is physical systems (heat engines, gas laws as physics) → **Physics**; if chemical reactions (enthalpy, entropy of reactions) → **Chemistry**.\n4. When a topic could belong to multiple fields, use the **primary subject framing** of the question.\n\n---\n\n## Output Format\n\nRespond with **exactly one word**: the category name.\n\n`Biology` | `Chemistry` | `Maths` | `Physics`\n\nNo explanation. No punctuation beyond the single word.",
+        "trajA": [
+          {
+            "iter": 0,
+            "val_obj": 0.8
+          },
+          {
+            "iter": 1,
+            "val_obj": 1.0,
+            "kept": true
+          },
+          {
+            "iter": 2,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 3,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 4,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 5,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 6,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 7,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 8,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 9,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 10,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 11,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 12,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 13,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 14,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 15,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 16,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 17,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 18,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 19,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 20,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 21,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 22,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 23,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 24,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 25,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 26,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 27,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 28,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 29,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 30,
+            "val_obj": 1.0,
+            "kept": false
+          }
+        ],
+        "trajB": [
+          {
+            "iter": 0,
+            "val_obj": 1.0
+          },
+          {
+            "iter": 1,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 2,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 3,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 4,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 5,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 6,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 7,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 8,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 9,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 10,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 11,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 12,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 13,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 14,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 15,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 16,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 17,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 18,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 19,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 20,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 21,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 22,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 23,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 24,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 25,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 26,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 27,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 28,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 29,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 30,
+            "val_obj": 1.0,
+            "kept": false
+          }
+        ]
+      }
+    }
+  },
+  "duration_s": 617.7
+}

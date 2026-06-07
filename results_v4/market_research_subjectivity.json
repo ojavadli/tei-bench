@@ -1,0 +1,1214 @@
+{
+  "task_id": "market_research_subjectivity",
+  "industry": "Market Research",
+  "metric": "classification",
+  "source": "SetFit/subj via HuggingFace (see dataset card for license).",
+  "is_public": true,
+  "n_train": 15,
+  "n_test": 30,
+  "agent_model": "claude-haiku-4-5",
+  "judge_model": "claude-sonnet-4-6",
+  "optimizer_model": "claude-sonnet-4-6",
+  "seed": 0,
+  "arms": {
+    "baseline": {
+      "objective_mean": 0.6666666666666666,
+      "objective_ci95": [
+        0.5,
+        0.8333333333333334
+      ],
+      "gpa_mean": 0.8359166666666664,
+      "gpa_dims": {
+        "target_alignment": 0.9166666666666664,
+        "reasoning_soundness": 0.8016666666666664,
+        "execution_accuracy": 0.923333333333333,
+        "output_integrity": 0.702
+      },
+      "prompt": "You are a subjectivity-analysis assistant. Classify whether the sentence is subjective or objective. Classify into one of these categories: objective, subjective.",
+      "examples": [
+        {
+          "query": "it is her destiny to sing in the movies a final wish before the afterlife .",
+          "gold": "objective",
+          "output": "This sentence contains subjective elements that make it subjective rather than objective.\n\nThe phrase \"it is her destiny\" expresses a belief or interpretation about fate, which is subjective. Additionally, \"a final wish before the afterlife\" involves metaphysical and personal interpretations that cannot be verified objectively. These elements reflect personal judgment, belief, or opinion rather than factual, verifiable information.\n\nFINAL: subjective",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.6,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.1,
+            "aggregate": 0.625,
+            "rationale": "The agent classified the sentence as subjective, but the reference answer is objective; while the reasoning about 'destiny' and 'afterlife' has surface plausibility, it leads to the wrong conclusion, "
+          }
+        },
+        {
+          "query": "its portrait of a very unsung sector of society is refreshingly honest and entertaining .",
+          "gold": "subjective",
+          "output": "This sentence contains several subjective elements:\n\n1. \"unsung\" - a value judgment about how recognized the sector is\n2. \"refreshingly\" - an evaluative adverb expressing approval\n3. \"honest\" - a subjective assessment of the portrayal's quality\n4. \"entertaining\" - a subjective opinion about whether something is enjoyable\n\nThese are all expressions of personal opinion, taste, and judgment rather than factual statements. The sentence is making claims about the quality and appeal of something rather than stating objective facts.\n\nFINAL: subjective",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.97,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9675,
+            "rationale": "The agent correctly classified the sentence as subjective, provided well-reasoned justification identifying specific subjective language elements, and matched the reference answer exactly."
+          }
+        },
+        {
+          "query": "young juan antonio has been challenged to defend the honor of the beautiful yet devilish carmen , by se & # 241 ; or maximiliano , a decorated military officer who has just returned from the spanish-american war .",
+          "gold": "objective",
+          "output": "I need to analyze whether this sentence is subjective or objective.\n\nLet me examine the language used:\n\n**Objective elements:**\n- \"young juan antonio\" - factual descriptor\n- \"has been challenged to defend the honor\" - describes an action/plot point\n- \"señor maximiliano\" - proper name\n- \"a decorated military officer\" - factual descriptor\n- \"who has just returned from the spanish-american war\" - factual historical reference\n\n**Subjective elements:**\n- \"beautiful yet devilish carmen\" - \"beautiful\" and \"devilish\" are subjective value judgments about Carmen's appearance and character\n- The phrase \"beautiful yet devilish\" uses emotionally charged language that expresses opinions rather than facts\n\nThe sentence contains evaluative language (\"beautiful,\" \"devilish\") that reflects subjective opinions about the character Carmen, rather than purely factual descriptions. While much of the sentence describes plot points objectively, the inclusion of these subjective character descriptors makes the overall sentence subjective in nature.\n\nFINAL: subjective",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.7,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.3,
+            "aggregate": 0.7,
+            "rationale": "The agent correctly identified subjective-sounding language but misclassified the sentence as subjective when the reference answer is objective; descriptors like 'beautiful' and 'devilish' in a plot s"
+          }
+        },
+        {
+          "query": "a moving and stark reminder that the casualties of war reach much further than we imagine .",
+          "gold": "subjective",
+          "output": "This sentence contains evaluative language and personal interpretation that reflect a subjective viewpoint. Phrases like \"moving and stark reminder\" express emotional reactions and aesthetic judgments. The claim that casualties \"reach much further than we imagine\" is a generalization about human perception that cannot be objectively verified—different people imagine different things. The sentence presents an opinion about the scope and impact of war rather than stating verifiable facts.\n\nFINAL: subjective",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.98,
+            "aggregate": 0.9500000000000001,
+            "rationale": "The agent correctly classified the sentence as subjective, provided sound reasoning about evaluative language and unverifiable generalizations, and matched the reference answer exactly."
+          }
+        },
+        {
+          "query": "sara , recently divorced and mourning the loss of her only child , rents her basement to bogdan , a serbian musician who brings the whole band along .",
+          "gold": "objective",
+          "output": "This sentence is primarily **objective** in nature. It presents factual information about:\n- Sara's recent divorce\n- The loss of her child\n- Her action of renting her basement\n- Bogdan's nationality and profession\n- The fact that he brings his band members\n\nWhile the phrase \"mourning the loss of her only child\" contains an emotional descriptor, it is still stating an objective fact about Sara's emotional state rather than expressing a subjective opinion or judgment. The sentence reports events and circumstances without making evaluative claims or expressing personal opinions.\n\nFINAL: objective",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.88,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9325000000000001,
+            "rationale": "The agent correctly identifies the sentence as objective, matching the reference answer, with sound reasoning about factual vs. evaluative content, though the verbose breakdown was unnecessary for the"
+          }
+        },
+        {
+          "query": "for all the wit and hoopla , festival in cannes offers rare insight into the structure of relationships .",
+          "gold": "subjective",
+          "output": "This sentence contains subjective elements that make it subjective overall.\n\nThe phrase \"for all the wit and hoopla\" is evaluative language that expresses the author's judgment about the festival. The word \"rare\" is also subjective, as it's a value judgment about how uncommon or special the insight is. The claim that the festival \"offers insight into the structure of relationships\" presents an interpretive assessment rather than a factual statement.\n\nWhile the sentence references a real event (Cannes festival), the way it characterizes that event and its value is based on the author's opinion and perspective rather than objective fact.\n\nFINAL: subjective",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.95,
+            "aggregate": 0.9299999999999999,
+            "rationale": "The agent correctly classified the sentence as subjective, matching the reference answer, and provided sound reasoning identifying evaluative language ('wit and hoopla', 'rare') and interpretive claim"
+          }
+        },
+        {
+          "query": "for years he has been happy here , content and prolific , but now he is at odds with his work and is unable to paint .",
+          "gold": "objective",
+          "output": "This sentence contains both objective and subjective elements:\n\n**Objective elements:** \"for years,\" \"now,\" \"unable to paint\" - these are factual, verifiable statements about time and capability.\n\n**Subjective elements:** \"happy,\" \"content,\" \"prolific,\" \"at odds with his work\" - these are interpretations and judgments about emotional states and internal conditions that cannot be directly verified.\n\nHowever, the dominant framing of the sentence relies on subjective characterizations of the subject's emotional and psychological state. The core claim involves describing his feelings and mental condition rather than presenting purely factual information.\n\nFINAL: subjective",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.7,
+            "reasoning_soundness": 0.55,
+            "execution_accuracy": 0.8,
+            "output_integrity": 0.2,
+            "aggregate": 0.5625,
+            "rationale": "The agent classified the sentence as subjective, which contradicts the gold answer of objective; while the reasoning about emotional language has some surface plausibility, it leads to the wrong concl"
+          }
+        },
+        {
+          "query": ". . . think of it as american pie on valium .",
+          "gold": "subjective",
+          "output": "This sentence is making a subjective comparison. The phrase \"think of it as\" introduces a subjective characterization, and comparing something to \"American Pie on valium\" is a subjective judgment that relies on personal interpretation and opinion about tone, mood, and style. The use of \"valium\" as a metaphorical descriptor for slowness or sedation is evaluative rather than factual.\n\nFINAL: subjective",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly classified the sentence as subjective, matching the reference answer, with sound reasoning about the evaluative and metaphorical nature of the comparison."
+          }
+        },
+        {
+          "query": "when her aunt sends her a pair of shoes instead of the money to start up the restaurant , she angrily sells the useless gift for spare change .",
+          "gold": "objective",
+          "output": "This sentence contains subjective language that reveals the character's emotional perspective rather than stating objective facts.\n\nKey subjective elements:\n- \"useless gift\" - This is a judgment call. The shoes may have value to others; calling them \"useless\" reflects the character's opinion, not an objective fact.\n- \"angrily sells\" - While \"sells\" is objective, \"angrily\" describes an emotional state and interpretation of her motivation.\n- The overall framing presents the situation from the character's subjective viewpoint (that the shoes are worthless, that she's upset about receiving them instead of money).\n\nAn objective version would be: \"When her aunt sends her a pair of shoes instead of money to start up the restaurant, she sells the shoes for spare change.\"\n\nFINAL: subjective",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.7,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.2,
+            "aggregate": 0.675,
+            "rationale": "The agent correctly addressed the classification task and provided coherent reasoning, but reached the wrong conclusion — the reference answer is 'objective,' yet the agent classified it as 'subjectiv"
+          }
+        },
+        {
+          "query": "thank goodness writer-director michael kalesniko found someone as verbally nimble as kenneth branagh to keep the whole enterprise afloat . he manages , but just barely .",
+          "gold": "subjective",
+          "output": "This sentence contains subjective elements:\n\n1. \"thank goodness\" - expresses personal relief/gratitude, a subjective opinion\n2. \"verbally nimble\" - evaluative language about Branagh's acting ability\n3. \"keeps the whole enterprise afloat\" - suggests the film would fail without him, an interpretive judgment\n4. \"manages, but just barely\" - implies the film barely succeeds, a subjective assessment of quality\n\nWhile the sentence references factual elements (the director's name, the actor's name), the overall statement is evaluating and judging the film's quality and the performances, which are matters of opinion rather than verifiable fact.\n\nFINAL: subjective",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly classified the sentence as subjective, matching the reference answer, and provided well-reasoned justification identifying specific subjective language elements."
+          }
+        },
+        {
+          "query": "marked by past scars and quickly running out of time , graham finds himself tangled in a heap of madness , sacrificing his work , his family , and above all his own life , to put an end to pure evil .",
+          "gold": "objective",
+          "output": "This sentence contains several subjective elements that reveal opinion and interpretation rather than objective fact:\n\n1. \"marked by past scars\" - interpretive description of Graham's condition\n2. \"quickly running out of time\" - subjective assessment of urgency\n3. \"tangled in a heap of madness\" - figurative, emotionally charged language\n4. \"pure evil\" - a moral judgment rather than a factual description\n5. The overall framing presents Graham's actions as noble sacrifice against evil, which is an interpretive narrative rather than factual reporting\n\nWhile it may be describing plot points from a work of fiction, the language used is heavily laden with subjective interpretation, emotional language, and value judgments rather than neutral, factual description.\n\nFINAL: subjective",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.7,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.1,
+            "aggregate": 0.65,
+            "rationale": "The agent's classification of 'subjective' contradicts the gold answer of 'objective'; despite plausible-sounding reasoning about figurative language, the final answer is simply wrong."
+          }
+        },
+        {
+          "query": "the work of an artist tormented by his heritage , using his storytelling ability to honor the many faceless victims .",
+          "gold": "subjective",
+          "output": "This sentence contains several subjective elements:\n\n1. \"tormented by his heritage\" - uses emotionally charged language that interprets the artist's internal state\n2. \"using his storytelling ability to honor\" - \"honor\" is a value judgment about the artist's intentions\n3. \"faceless victims\" - while \"victims\" is somewhat factual, the overall framing is interpretive\n\nThe sentence presents an evaluative characterization of an artist's work and motivations rather than stating objective facts. It makes claims about the artist's emotional state and moral purpose that reflect subjective interpretation.\n\nFINAL: subjective",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9550000000000001,
+            "rationale": "The agent correctly classified the sentence as subjective, matching the reference answer, and provided well-reasoned justification identifying specific subjective elements in the text."
+          }
+        },
+        {
+          "query": "there , they plot revenge on those who made fun of them , and especially the power-hungry christine .",
+          "gold": "objective",
+          "output": "This sentence contains subjective language and interpretations:\n\n1. \"plot revenge\" - describes character motivations in a dramatic, emotionally-charged way\n2. \"made fun of them\" - a subjective characterization of others' actions\n3. \"power-hungry christine\" - uses a subjective descriptor (\"power-hungry\") that reflects judgment about Christine's character and motivations rather than stating objective facts\n\nWhile the sentence may describe events from a narrative, the language used to characterize those events and the characters involved relies on subjective interpretation and evaluation rather than neutral, factual description.\n\nFINAL: subjective",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.65,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.2,
+            "aggregate": 0.6625000000000001,
+            "rationale": "The agent classified the sentence as subjective, but the reference answer is objective; while the agent's reasoning about subjective-sounding language has some surface plausibility, it reaches the wro"
+          }
+        },
+        {
+          "query": "nachtwey clears the cynicism right out of you . he makes you realize that deep inside righteousness can be found a tough beauty .",
+          "gold": "subjective",
+          "output": "This sentence contains several subjective elements:\n\n1. \"clears the cynicism right out of you\" - This is a generalized claim about how Nachtwey affects people emotionally, which varies by individual.\n\n2. \"he makes you realize\" - This presupposes a universal realization that may not apply to all readers.\n\n3. \"deep inside righteousness can be found a tough beauty\" - This is an interpretive, evaluative statement about aesthetic and moral qualities. Words like \"beauty\" are inherently subjective judgments.\n\n4. The overall tone is one of personal appreciation and admiration rather than factual description.\n\nThe sentence expresses the writer's personal opinion and emotional response to Nachtwey's work rather than stating objective facts.\n\nFINAL: subjective",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9425000000000001,
+            "rationale": "The agent correctly classified the sentence as subjective, matching the reference answer, with well-reasoned justification identifying specific subjective elements in the text."
+          }
+        },
+        {
+          "query": "a librarian begins a passionate affair with a mysterious woman who walks into his library .",
+          "gold": "objective",
+          "output": "This sentence describes a narrative scenario that contains subjective language and interpretive elements.\n\nThe phrase \"passionate affair\" is subjective—it characterizes the relationship with emotional language that conveys intensity and romance. The word \"mysterious\" is also subjective, as it describes the woman based on interpretation rather than objective fact. These descriptive terms reflect judgment and emotional perspective rather than neutral, verifiable information.\n\nWhile the basic plot elements (a librarian, a woman entering a library) could be stated objectively, the way this sentence frames the situation uses evaluative language that appeals to emotion and interpretation.\n\nFINAL: subjective",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.7,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.2,
+            "aggregate": 0.675,
+            "rationale": "The agent's classification of 'subjective' contradicts the reference answer of 'objective'; while the reasoning about 'passionate' and 'mysterious' being evaluative words has some surface plausibility"
+          }
+        },
+        {
+          "query": "some motion pictures portray ultimate passion ; others create ultimate thrills . men in black ii achieves ultimate insignificance -- it 's the sci-fi comedy spectacle as whiffle-ball epic .",
+          "gold": "subjective",
+          "output": "This sentence contains multiple subjective elements:\n\n1. \"ultimate passion,\" \"ultimate thrills,\" and \"ultimate insignificance\" are evaluative judgments about the quality and impact of films\n2. The characterization of Men in Black II as achieving \"insignificance\" is a negative value judgment\n3. The comparison to a \"whiffle-ball epic\" is a metaphorical criticism implying the film is trivial or lightweight\n4. The overall tone expresses the reviewer's personal opinion about the film's worth\n\nWhile the sentence references factual films, it is fundamentally expressing subjective critical opinions and aesthetic judgments rather than stating objective facts.\n\nFINAL: subjective",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly classified the sentence as subjective, matching the reference answer, with well-reasoned supporting points identifying evaluative language, metaphorical criticism, and personal opi"
+          }
+        },
+        {
+          "query": "nicklas passes out , and the next day when he returns to school he notices that nobody seems to notice him .",
+          "gold": "objective",
+          "output": "This sentence describes a sequence of events: Nicklas passes out, returns to school the next day, and observes that nobody notices him. These are factual statements about what happens in what appears to be a narrative or story.\n\nHowever, the phrase \"nobody seems to notice him\" contains an element of interpretation. It reports Nicklas's perception or observation rather than an objective fact that could be independently verified. The word \"seems\" indicates this is based on his subjective experience.\n\nThat said, the sentence primarily functions as a plot summary stating what occurs in a narrative, presented in a straightforward, factual manner without evaluative language, emotional language, or opinion.\n\nFINAL: objective",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.75,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.9,
+            "aggregate": 0.8624999999999999,
+            "rationale": "The agent correctly classified the sentence as objective, matching the reference answer, though the reasoning was somewhat meandering and over-analyzed the word 'seems' before arriving at the correct "
+          }
+        },
+        {
+          "query": "as broad and cartoonish as the screenplay is , there is an accuracy of observation in the work of the director , frank novak , that keeps the film grounded in an undeniable social realism .",
+          "gold": "subjective",
+          "output": "This sentence contains subjective elements that outweigh objective ones.\n\nThe phrase \"as broad and cartoonish as the screenplay is\" presents a subjective judgment about the screenplay's style. The phrase \"there is an accuracy of observation\" is a subjective claim about the director's work. Most importantly, \"keeps the film grounded in an undeniable social realism\" uses evaluative language (\"undeniable,\" \"grounded\") that reflects the author's opinion rather than verifiable fact.\n\nWhile the sentence references concrete elements (a screenplay, a director named Frank Novak, a film), the overall assessment of these elements—their quality, accuracy, and effect—is based on the reviewer's subjective interpretation and judgment.\n\nFINAL: subjective",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.95,
+            "aggregate": 0.9299999999999999,
+            "rationale": "The agent correctly classified the sentence as subjective, matching the reference answer, and provided well-reasoned justification identifying specific subjective language elements while acknowledging"
+          }
+        },
+        {
+          "query": "determined to reveal his new findings and theories to the world , the awkward yet sincere bodybuilder realizes he has no choice but to get back in supreme shape , compete in the ultimate `` mr .",
+          "gold": "objective",
+          "output": "This sentence contains subjective language and evaluative descriptions:\n\n- \"awkward yet sincere\" - These are subjective character judgments\n- \"ultimate\" - This is a superlative that expresses opinion rather than fact\n- The overall framing presents interpretations of the character's motivations and qualities rather than objective facts\n\nWhile the sentence does contain some factual elements (a bodybuilder competing), the predominant use of subjective descriptors and evaluative language makes this sentence subjective overall.\n\nFINAL: subjective",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.7,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.2,
+            "aggregate": 0.675,
+            "rationale": "The agent's reasoning about subjective language has some merit, but the final answer 'subjective' contradicts the ground truth 'objective,' resulting in a wrong classification despite a coherent-sound"
+          }
+        },
+        {
+          "query": "one of the film 's strongest achievements is the way it manages to get so much mileage out of such a simple concept as spirals .",
+          "gold": "subjective",
+          "output": "This sentence contains evaluative language and subjective judgment. Phrases like \"strongest achievements\" and \"so much mileage\" are expressions of opinion about the film's quality and effectiveness. The speaker is making a value judgment about how well the film executed its concept, rather than stating a factual observation.\n\nFINAL: subjective",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly classified the sentence as subjective, with sound reasoning identifying evaluative language like 'strongest achievements' and 'so much mileage' as opinion-based expressions, matchi"
+          }
+        },
+        {
+          "query": "the joy has gone out of phil 's and penny 's life , but when an unexpected tragedy occurs , they are brought together to rediscover their love .",
+          "gold": "objective",
+          "output": "This sentence contains subjective language and interpretations:\n\n1. \"the joy has gone out of phil's and penny's life\" - This is a subjective characterization of their emotional state. It's an interpretation rather than a factual statement.\n\n2. \"unexpected tragedy\" - While \"tragedy\" can be factual, the framing here is interpretive.\n\n3. \"brought together to rediscover their love\" - This describes emotional/relational outcomes in subjective terms.\n\nThe sentence reads like a plot summary that includes emotional judgments and narrative interpretation rather than objective facts. It presents opinions about the characters' emotional states and the significance of events.\n\nFINAL: subjective",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.55,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.1,
+            "aggregate": 0.6125,
+            "rationale": "The agent correctly addressed the classification task but arrived at the wrong answer ('subjective') when the reference answer is 'objective'; the reasoning, while internally coherent, misidentifies n"
+          }
+        },
+        {
+          "query": "williams creates a stunning , taxi driver-esque portrayal of a man teetering on the edge of sanity .",
+          "gold": "subjective",
+          "output": "This sentence contains subjective language and evaluative judgments:\n\n- \"stunning\" is a subjective aesthetic evaluation\n- \"taxi driver-esque\" is a comparative judgment that relies on interpretation\n- \"teetering on the edge of sanity\" is a subjective characterization of the character's mental state\n\nWhile the sentence references factual elements (that Williams creates a portrayal of a man), the overall assessment uses subjective descriptors and interpretive language rather than presenting objective facts.\n\nFINAL: subjective",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly classified the sentence as subjective, matching the reference answer, with well-supported reasoning identifying specific subjective language elements."
+          }
+        },
+        {
+          "query": "since many people are dead , the tall man is able to make thousands of dwarf slaves for his planet daily in the mormon mausoleum .",
+          "gold": "objective",
+          "output": "This sentence contains multiple elements that indicate subjectivity:\n\n1. **Fictional/fantastical claims**: The statement describes a scenario involving a \"tall man\" making \"dwarf slaves\" on a planet within a \"mormon mausoleum\" - this is not a factual, verifiable claim about reality.\n\n2. **Unverified assertions**: The premise that \"many people are dead\" and that someone is creating slaves is presented without evidence or factual basis.\n\n3. **Imaginative framing**: The entire scenario appears to be a creative or fictional construction rather than a statement of objective fact.\n\n4. **Lack of objectivity**: An objective statement would present verifiable facts, whereas this presents an implausible narrative as if it were fact.\n\nFINAL: subjective",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.8,
+            "reasoning_soundness": 0.4,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.2,
+            "aggregate": 0.5750000000000001,
+            "rationale": "The agent classified the sentence as 'subjective' but the gold answer is 'objective'; the sentence, while bizarre, makes declarative factual-style claims without expressing opinions or feelings, and t"
+          }
+        },
+        {
+          "query": "a muddle splashed with bloody beauty as vivid as any scorsese has ever given us .",
+          "gold": "subjective",
+          "output": "This sentence contains several subjective elements:\n\n1. \"muddle\" - a vague, evaluative descriptor\n2. \"bloody beauty\" - an aesthetic judgment combining contradictory concepts\n3. \"vivid\" - a subjective assessment of intensity\n4. \"as any scorsese has ever given us\" - a comparative value judgment about a filmmaker's work\n\nThe sentence expresses personal opinion and aesthetic evaluation rather than stating objective facts. It's making claims about artistic quality and beauty, which are inherently subjective matters.\n\nFINAL: subjective",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly classified the sentence as subjective, provided well-reasoned justification identifying specific subjective elements, and matched the reference answer exactly."
+          }
+        },
+        {
+          "query": "one day a man named donny ( morris chestnut ) infiltrates a prison with a band of crooks looking for 200 million dollars worth of us gold .",
+          "gold": "objective",
+          "output": "This sentence describes a plot point from what appears to be a movie or story. It presents factual information about what happens in the narrative - a character named Donny (played by Morris Chestnut) infiltrates a prison with others to search for gold. These are objective statements about the plot events and cast, not opinions or judgments about quality, value, or interpretation.\n\nFINAL: objective",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.88,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9325000000000001,
+            "rationale": "The agent correctly classified the sentence as objective and provided coherent reasoning about why it describes factual plot events rather than opinions, matching the reference answer."
+          }
+        },
+        {
+          "query": "as i settled into my world war ii memories , i found myself strangely moved by even the corniest and most hackneyed contrivances .",
+          "gold": "subjective",
+          "output": "This sentence contains several subjective elements:\n\n1. \"strangely moved\" - expresses the speaker's emotional reaction\n2. \"corniest and most hackneyed\" - these are evaluative judgments about the quality/originality of the contrivances, not objective facts\n3. The overall reflection on personal feelings and reactions to memories is inherently subjective\n\nWhile the sentence describes a factual event (settling into memories), the language used to characterize that experience and the contrivances involves personal interpretation, emotion, and aesthetic judgment.\n\nFINAL: subjective",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly classified the sentence as subjective, provided well-reasoned supporting evidence identifying emotional language and evaluative judgments, and matched the reference answer exactly."
+          }
+        },
+        {
+          "query": "the decisions he makes when confronted with this new truth will affect him forever .",
+          "gold": "objective",
+          "output": "This sentence makes a claim about the consequences of decisions in a hypothetical scenario. While it uses definitive language (\"will affect him forever\"), it is making a general statement about cause and effect that could apply to many situations.\n\nHowever, the phrase \"affect him forever\" is somewhat subjective in its absoluteness - it's a value judgment about the permanence and significance of impact rather than a purely factual observation. The sentence presents an interpretation of how consequential these decisions would be.\n\nThat said, the core structure is making a logical claim about causality (decisions → lasting effects) which is more objective in nature, even if the specific framing is somewhat interpretive.\n\nFINAL: objective",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.85,
+            "reasoning_soundness": 0.6,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.85,
+            "aggregate": 0.8,
+            "rationale": "The agent reached the correct final answer (objective) matching the reference, but the reasoning was meandering and self-contradictory, spending significant effort arguing the sentence is 'somewhat su"
+          }
+        },
+        {
+          "query": "drags along in a dazed and enervated , drenched-in-the- past numbness .",
+          "gold": "subjective",
+          "output": "This sentence contains highly subjective language and emotional characterization. Phrases like \"dazed and enervated,\" \"drenched-in-the-past,\" and \"numbness\" are interpretive descriptions that convey the writer's emotional judgment and perspective rather than factual, verifiable information. These are evaluative adjectives that reflect a subjective assessment of a state or condition.\n\nFINAL: subjective",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.98,
+            "aggregate": 0.9500000000000001,
+            "rationale": "The agent correctly classified the sentence as subjective, provided sound reasoning about the evaluative and emotional language used, and matched the reference answer exactly."
+          }
+        },
+        {
+          "query": "in an attempt to prove the 58 million dollar claim on the ship is false , she flies to argentina and becomes embroiled in a dangerous web of deceit , lies , murder and lost love .",
+          "gold": "objective",
+          "output": "This sentence describes a plot summary with narrative elements. Let me analyze its subjectivity:\n\nThe sentence contains factual plot points (she flies to Argentina, becomes embroiled in events) but also uses evaluative language like \"dangerous web of deceit\" which characterizes the situation with subjective judgment. However, the core content is describing what happens in a story—these are plot events that can be objectively stated as occurring in the narrative.\n\nThe phrase \"dangerous web\" is somewhat subjective in tone, but it's describing the plot's content rather than making a judgment about quality or value. It's the kind of language typically used in objective plot summaries or synopses.\n\nFINAL: objective",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.72,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.8800000000000001,
+            "rationale": "The agent correctly identifies the sentence as objective and matches the reference answer, though its reasoning somewhat hedges by noting subjective-sounding language before correctly concluding it is"
+          }
+        },
+        {
+          "query": "a very familiar tale , one that 's been told by countless filmmakers about italian- , chinese- , irish- , latin- , indian- , russian- and other hyphenate american young men struggling to balance conflicting cultural messages .",
+          "gold": "subjective",
+          "output": "This sentence contains evaluative language and interpretive judgment that reflects the author's perspective rather than purely factual reporting.\n\nKey indicators of subjectivity:\n- \"very familiar tale\" - uses the subjective descriptor \"very familiar\" to characterize the story\n- The framing of what the tale is \"about\" involves interpretive judgment about themes and struggles\n- The selection and emphasis of which cultural groups to mention reflects editorial choice\n- The characterization of these narratives as dealing with \"conflicting cultural messages\" is an interpretive analysis rather than a neutral fact\n\nWhile the sentence references factual elements (that films have been made about these topics), the overall assessment of the tale as \"very familiar\" and the thematic interpretation constitute subjective analysis.\n\nFINAL: subjective",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.88,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9325000000000001,
+            "rationale": "The agent correctly classified the sentence as subjective and provided well-reasoned supporting evidence, matching the reference answer."
+          }
+        }
+      ]
+    },
+    "two_phase": {
+      "objective_mean": 0.6666666666666666,
+      "objective_ci95": [
+        0.5,
+        0.8333333333333334
+      ],
+      "gpa_mean": 0.8359166666666664,
+      "gpa_dims": {
+        "target_alignment": 0.9166666666666664,
+        "reasoning_soundness": 0.8016666666666664,
+        "execution_accuracy": 0.923333333333333,
+        "output_integrity": 0.702
+      },
+      "prompt": "You are a subjectivity-analysis assistant. Classify whether the sentence is subjective or objective. Classify into one of these categories: objective, subjective.",
+      "examples": [
+        {
+          "query": "it is her destiny to sing in the movies a final wish before the afterlife .",
+          "gold": "objective",
+          "output": "This sentence contains subjective elements that make it subjective rather than objective.\n\nThe phrase \"it is her destiny\" expresses a belief or interpretation about fate, which is subjective. Additionally, \"a final wish before the afterlife\" involves metaphysical and personal interpretations that cannot be verified objectively. These elements reflect personal judgment, belief, or opinion rather than factual, verifiable information.\n\nFINAL: subjective",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.6,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.1,
+            "aggregate": 0.625,
+            "rationale": "The agent classified the sentence as subjective, but the reference answer is objective; while the reasoning about 'destiny' and 'afterlife' has surface plausibility, it leads to the wrong conclusion, "
+          }
+        },
+        {
+          "query": "its portrait of a very unsung sector of society is refreshingly honest and entertaining .",
+          "gold": "subjective",
+          "output": "This sentence contains several subjective elements:\n\n1. \"unsung\" - a value judgment about how recognized the sector is\n2. \"refreshingly\" - an evaluative adverb expressing approval\n3. \"honest\" - a subjective assessment of the portrayal's quality\n4. \"entertaining\" - a subjective opinion about whether something is enjoyable\n\nThese are all expressions of personal opinion, taste, and judgment rather than factual statements. The sentence is making claims about the quality and appeal of something rather than stating objective facts.\n\nFINAL: subjective",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.97,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9675,
+            "rationale": "The agent correctly classified the sentence as subjective, provided well-reasoned justification identifying specific subjective language elements, and matched the reference answer exactly."
+          }
+        },
+        {
+          "query": "young juan antonio has been challenged to defend the honor of the beautiful yet devilish carmen , by se & # 241 ; or maximiliano , a decorated military officer who has just returned from the spanish-american war .",
+          "gold": "objective",
+          "output": "I need to analyze whether this sentence is subjective or objective.\n\nLet me examine the language used:\n\n**Objective elements:**\n- \"young juan antonio\" - factual descriptor\n- \"has been challenged to defend the honor\" - describes an action/plot point\n- \"señor maximiliano\" - proper name\n- \"a decorated military officer\" - factual descriptor\n- \"who has just returned from the spanish-american war\" - factual historical reference\n\n**Subjective elements:**\n- \"beautiful yet devilish carmen\" - \"beautiful\" and \"devilish\" are subjective value judgments about Carmen's appearance and character\n- The phrase \"beautiful yet devilish\" uses emotionally charged language that expresses opinions rather than facts\n\nThe sentence contains evaluative language (\"beautiful,\" \"devilish\") that reflects subjective opinions about the character Carmen, rather than purely factual descriptions. While much of the sentence describes plot points objectively, the inclusion of these subjective character descriptors makes the overall sentence subjective in nature.\n\nFINAL: subjective",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.7,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.3,
+            "aggregate": 0.7,
+            "rationale": "The agent correctly identified subjective-sounding language but misclassified the sentence as subjective when the reference answer is objective; descriptors like 'beautiful' and 'devilish' in a plot s"
+          }
+        },
+        {
+          "query": "a moving and stark reminder that the casualties of war reach much further than we imagine .",
+          "gold": "subjective",
+          "output": "This sentence contains evaluative language and personal interpretation that reflect a subjective viewpoint. Phrases like \"moving and stark reminder\" express emotional reactions and aesthetic judgments. The claim that casualties \"reach much further than we imagine\" is a generalization about human perception that cannot be objectively verified—different people imagine different things. The sentence presents an opinion about the scope and impact of war rather than stating verifiable facts.\n\nFINAL: subjective",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.98,
+            "aggregate": 0.9500000000000001,
+            "rationale": "The agent correctly classified the sentence as subjective, provided sound reasoning about evaluative language and unverifiable generalizations, and matched the reference answer exactly."
+          }
+        },
+        {
+          "query": "sara , recently divorced and mourning the loss of her only child , rents her basement to bogdan , a serbian musician who brings the whole band along .",
+          "gold": "objective",
+          "output": "This sentence is primarily **objective** in nature. It presents factual information about:\n- Sara's recent divorce\n- The loss of her child\n- Her action of renting her basement\n- Bogdan's nationality and profession\n- The fact that he brings his band members\n\nWhile the phrase \"mourning the loss of her only child\" contains an emotional descriptor, it is still stating an objective fact about Sara's emotional state rather than expressing a subjective opinion or judgment. The sentence reports events and circumstances without making evaluative claims or expressing personal opinions.\n\nFINAL: objective",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.88,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9325000000000001,
+            "rationale": "The agent correctly identifies the sentence as objective, matching the reference answer, with sound reasoning about factual vs. evaluative content, though the verbose breakdown was unnecessary for the"
+          }
+        },
+        {
+          "query": "for all the wit and hoopla , festival in cannes offers rare insight into the structure of relationships .",
+          "gold": "subjective",
+          "output": "This sentence contains subjective elements that make it subjective overall.\n\nThe phrase \"for all the wit and hoopla\" is evaluative language that expresses the author's judgment about the festival. The word \"rare\" is also subjective, as it's a value judgment about how uncommon or special the insight is. The claim that the festival \"offers insight into the structure of relationships\" presents an interpretive assessment rather than a factual statement.\n\nWhile the sentence references a real event (Cannes festival), the way it characterizes that event and its value is based on the author's opinion and perspective rather than objective fact.\n\nFINAL: subjective",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.95,
+            "aggregate": 0.9299999999999999,
+            "rationale": "The agent correctly classified the sentence as subjective, matching the reference answer, and provided sound reasoning identifying evaluative language ('wit and hoopla', 'rare') and interpretive claim"
+          }
+        },
+        {
+          "query": "for years he has been happy here , content and prolific , but now he is at odds with his work and is unable to paint .",
+          "gold": "objective",
+          "output": "This sentence contains both objective and subjective elements:\n\n**Objective elements:** \"for years,\" \"now,\" \"unable to paint\" - these are factual, verifiable statements about time and capability.\n\n**Subjective elements:** \"happy,\" \"content,\" \"prolific,\" \"at odds with his work\" - these are interpretations and judgments about emotional states and internal conditions that cannot be directly verified.\n\nHowever, the dominant framing of the sentence relies on subjective characterizations of the subject's emotional and psychological state. The core claim involves describing his feelings and mental condition rather than presenting purely factual information.\n\nFINAL: subjective",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.7,
+            "reasoning_soundness": 0.55,
+            "execution_accuracy": 0.8,
+            "output_integrity": 0.2,
+            "aggregate": 0.5625,
+            "rationale": "The agent classified the sentence as subjective, which contradicts the gold answer of objective; while the reasoning about emotional language has some surface plausibility, it leads to the wrong concl"
+          }
+        },
+        {
+          "query": ". . . think of it as american pie on valium .",
+          "gold": "subjective",
+          "output": "This sentence is making a subjective comparison. The phrase \"think of it as\" introduces a subjective characterization, and comparing something to \"American Pie on valium\" is a subjective judgment that relies on personal interpretation and opinion about tone, mood, and style. The use of \"valium\" as a metaphorical descriptor for slowness or sedation is evaluative rather than factual.\n\nFINAL: subjective",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly classified the sentence as subjective, matching the reference answer, with sound reasoning about the evaluative and metaphorical nature of the comparison."
+          }
+        },
+        {
+          "query": "when her aunt sends her a pair of shoes instead of the money to start up the restaurant , she angrily sells the useless gift for spare change .",
+          "gold": "objective",
+          "output": "This sentence contains subjective language that reveals the character's emotional perspective rather than stating objective facts.\n\nKey subjective elements:\n- \"useless gift\" - This is a judgment call. The shoes may have value to others; calling them \"useless\" reflects the character's opinion, not an objective fact.\n- \"angrily sells\" - While \"sells\" is objective, \"angrily\" describes an emotional state and interpretation of her motivation.\n- The overall framing presents the situation from the character's subjective viewpoint (that the shoes are worthless, that she's upset about receiving them instead of money).\n\nAn objective version would be: \"When her aunt sends her a pair of shoes instead of money to start up the restaurant, she sells the shoes for spare change.\"\n\nFINAL: subjective",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.7,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.2,
+            "aggregate": 0.675,
+            "rationale": "The agent correctly addressed the classification task and provided coherent reasoning, but reached the wrong conclusion — the reference answer is 'objective,' yet the agent classified it as 'subjectiv"
+          }
+        },
+        {
+          "query": "thank goodness writer-director michael kalesniko found someone as verbally nimble as kenneth branagh to keep the whole enterprise afloat . he manages , but just barely .",
+          "gold": "subjective",
+          "output": "This sentence contains subjective elements:\n\n1. \"thank goodness\" - expresses personal relief/gratitude, a subjective opinion\n2. \"verbally nimble\" - evaluative language about Branagh's acting ability\n3. \"keeps the whole enterprise afloat\" - suggests the film would fail without him, an interpretive judgment\n4. \"manages, but just barely\" - implies the film barely succeeds, a subjective assessment of quality\n\nWhile the sentence references factual elements (the director's name, the actor's name), the overall statement is evaluating and judging the film's quality and the performances, which are matters of opinion rather than verifiable fact.\n\nFINAL: subjective",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly classified the sentence as subjective, matching the reference answer, and provided well-reasoned justification identifying specific subjective language elements."
+          }
+        },
+        {
+          "query": "marked by past scars and quickly running out of time , graham finds himself tangled in a heap of madness , sacrificing his work , his family , and above all his own life , to put an end to pure evil .",
+          "gold": "objective",
+          "output": "This sentence contains several subjective elements that reveal opinion and interpretation rather than objective fact:\n\n1. \"marked by past scars\" - interpretive description of Graham's condition\n2. \"quickly running out of time\" - subjective assessment of urgency\n3. \"tangled in a heap of madness\" - figurative, emotionally charged language\n4. \"pure evil\" - a moral judgment rather than a factual description\n5. The overall framing presents Graham's actions as noble sacrifice against evil, which is an interpretive narrative rather than factual reporting\n\nWhile it may be describing plot points from a work of fiction, the language used is heavily laden with subjective interpretation, emotional language, and value judgments rather than neutral, factual description.\n\nFINAL: subjective",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.7,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.1,
+            "aggregate": 0.65,
+            "rationale": "The agent's classification of 'subjective' contradicts the gold answer of 'objective'; despite plausible-sounding reasoning about figurative language, the final answer is simply wrong."
+          }
+        },
+        {
+          "query": "the work of an artist tormented by his heritage , using his storytelling ability to honor the many faceless victims .",
+          "gold": "subjective",
+          "output": "This sentence contains several subjective elements:\n\n1. \"tormented by his heritage\" - uses emotionally charged language that interprets the artist's internal state\n2. \"using his storytelling ability to honor\" - \"honor\" is a value judgment about the artist's intentions\n3. \"faceless victims\" - while \"victims\" is somewhat factual, the overall framing is interpretive\n\nThe sentence presents an evaluative characterization of an artist's work and motivations rather than stating objective facts. It makes claims about the artist's emotional state and moral purpose that reflect subjective interpretation.\n\nFINAL: subjective",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9550000000000001,
+            "rationale": "The agent correctly classified the sentence as subjective, matching the reference answer, and provided well-reasoned justification identifying specific subjective elements in the text."
+          }
+        },
+        {
+          "query": "there , they plot revenge on those who made fun of them , and especially the power-hungry christine .",
+          "gold": "objective",
+          "output": "This sentence contains subjective language and interpretations:\n\n1. \"plot revenge\" - describes character motivations in a dramatic, emotionally-charged way\n2. \"made fun of them\" - a subjective characterization of others' actions\n3. \"power-hungry christine\" - uses a subjective descriptor (\"power-hungry\") that reflects judgment about Christine's character and motivations rather than stating objective facts\n\nWhile the sentence may describe events from a narrative, the language used to characterize those events and the characters involved relies on subjective interpretation and evaluation rather than neutral, factual description.\n\nFINAL: subjective",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.65,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.2,
+            "aggregate": 0.6625000000000001,
+            "rationale": "The agent classified the sentence as subjective, but the reference answer is objective; while the agent's reasoning about subjective-sounding language has some surface plausibility, it reaches the wro"
+          }
+        },
+        {
+          "query": "nachtwey clears the cynicism right out of you . he makes you realize that deep inside righteousness can be found a tough beauty .",
+          "gold": "subjective",
+          "output": "This sentence contains several subjective elements:\n\n1. \"clears the cynicism right out of you\" - This is a generalized claim about how Nachtwey affects people emotionally, which varies by individual.\n\n2. \"he makes you realize\" - This presupposes a universal realization that may not apply to all readers.\n\n3. \"deep inside righteousness can be found a tough beauty\" - This is an interpretive, evaluative statement about aesthetic and moral qualities. Words like \"beauty\" are inherently subjective judgments.\n\n4. The overall tone is one of personal appreciation and admiration rather than factual description.\n\nThe sentence expresses the writer's personal opinion and emotional response to Nachtwey's work rather than stating objective facts.\n\nFINAL: subjective",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9425000000000001,
+            "rationale": "The agent correctly classified the sentence as subjective, matching the reference answer, with well-reasoned justification identifying specific subjective elements in the text."
+          }
+        },
+        {
+          "query": "a librarian begins a passionate affair with a mysterious woman who walks into his library .",
+          "gold": "objective",
+          "output": "This sentence describes a narrative scenario that contains subjective language and interpretive elements.\n\nThe phrase \"passionate affair\" is subjective—it characterizes the relationship with emotional language that conveys intensity and romance. The word \"mysterious\" is also subjective, as it describes the woman based on interpretation rather than objective fact. These descriptive terms reflect judgment and emotional perspective rather than neutral, verifiable information.\n\nWhile the basic plot elements (a librarian, a woman entering a library) could be stated objectively, the way this sentence frames the situation uses evaluative language that appeals to emotion and interpretation.\n\nFINAL: subjective",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.7,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.2,
+            "aggregate": 0.675,
+            "rationale": "The agent's classification of 'subjective' contradicts the reference answer of 'objective'; while the reasoning about 'passionate' and 'mysterious' being evaluative words has some surface plausibility"
+          }
+        },
+        {
+          "query": "some motion pictures portray ultimate passion ; others create ultimate thrills . men in black ii achieves ultimate insignificance -- it 's the sci-fi comedy spectacle as whiffle-ball epic .",
+          "gold": "subjective",
+          "output": "This sentence contains multiple subjective elements:\n\n1. \"ultimate passion,\" \"ultimate thrills,\" and \"ultimate insignificance\" are evaluative judgments about the quality and impact of films\n2. The characterization of Men in Black II as achieving \"insignificance\" is a negative value judgment\n3. The comparison to a \"whiffle-ball epic\" is a metaphorical criticism implying the film is trivial or lightweight\n4. The overall tone expresses the reviewer's personal opinion about the film's worth\n\nWhile the sentence references factual films, it is fundamentally expressing subjective critical opinions and aesthetic judgments rather than stating objective facts.\n\nFINAL: subjective",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly classified the sentence as subjective, matching the reference answer, with well-reasoned supporting points identifying evaluative language, metaphorical criticism, and personal opi"
+          }
+        },
+        {
+          "query": "nicklas passes out , and the next day when he returns to school he notices that nobody seems to notice him .",
+          "gold": "objective",
+          "output": "This sentence describes a sequence of events: Nicklas passes out, returns to school the next day, and observes that nobody notices him. These are factual statements about what happens in what appears to be a narrative or story.\n\nHowever, the phrase \"nobody seems to notice him\" contains an element of interpretation. It reports Nicklas's perception or observation rather than an objective fact that could be independently verified. The word \"seems\" indicates this is based on his subjective experience.\n\nThat said, the sentence primarily functions as a plot summary stating what occurs in a narrative, presented in a straightforward, factual manner without evaluative language, emotional language, or opinion.\n\nFINAL: objective",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.75,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.9,
+            "aggregate": 0.8624999999999999,
+            "rationale": "The agent correctly classified the sentence as objective, matching the reference answer, though the reasoning was somewhat meandering and over-analyzed the word 'seems' before arriving at the correct "
+          }
+        },
+        {
+          "query": "as broad and cartoonish as the screenplay is , there is an accuracy of observation in the work of the director , frank novak , that keeps the film grounded in an undeniable social realism .",
+          "gold": "subjective",
+          "output": "This sentence contains subjective elements that outweigh objective ones.\n\nThe phrase \"as broad and cartoonish as the screenplay is\" presents a subjective judgment about the screenplay's style. The phrase \"there is an accuracy of observation\" is a subjective claim about the director's work. Most importantly, \"keeps the film grounded in an undeniable social realism\" uses evaluative language (\"undeniable,\" \"grounded\") that reflects the author's opinion rather than verifiable fact.\n\nWhile the sentence references concrete elements (a screenplay, a director named Frank Novak, a film), the overall assessment of these elements—their quality, accuracy, and effect—is based on the reviewer's subjective interpretation and judgment.\n\nFINAL: subjective",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.95,
+            "aggregate": 0.9299999999999999,
+            "rationale": "The agent correctly classified the sentence as subjective, matching the reference answer, and provided well-reasoned justification identifying specific subjective language elements while acknowledging"
+          }
+        },
+        {
+          "query": "determined to reveal his new findings and theories to the world , the awkward yet sincere bodybuilder realizes he has no choice but to get back in supreme shape , compete in the ultimate `` mr .",
+          "gold": "objective",
+          "output": "This sentence contains subjective language and evaluative descriptions:\n\n- \"awkward yet sincere\" - These are subjective character judgments\n- \"ultimate\" - This is a superlative that expresses opinion rather than fact\n- The overall framing presents interpretations of the character's motivations and qualities rather than objective facts\n\nWhile the sentence does contain some factual elements (a bodybuilder competing), the predominant use of subjective descriptors and evaluative language makes this sentence subjective overall.\n\nFINAL: subjective",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.7,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.2,
+            "aggregate": 0.675,
+            "rationale": "The agent's reasoning about subjective language has some merit, but the final answer 'subjective' contradicts the ground truth 'objective,' resulting in a wrong classification despite a coherent-sound"
+          }
+        },
+        {
+          "query": "one of the film 's strongest achievements is the way it manages to get so much mileage out of such a simple concept as spirals .",
+          "gold": "subjective",
+          "output": "This sentence contains evaluative language and subjective judgment. Phrases like \"strongest achievements\" and \"so much mileage\" are expressions of opinion about the film's quality and effectiveness. The speaker is making a value judgment about how well the film executed its concept, rather than stating a factual observation.\n\nFINAL: subjective",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly classified the sentence as subjective, with sound reasoning identifying evaluative language like 'strongest achievements' and 'so much mileage' as opinion-based expressions, matchi"
+          }
+        },
+        {
+          "query": "the joy has gone out of phil 's and penny 's life , but when an unexpected tragedy occurs , they are brought together to rediscover their love .",
+          "gold": "objective",
+          "output": "This sentence contains subjective language and interpretations:\n\n1. \"the joy has gone out of phil's and penny's life\" - This is a subjective characterization of their emotional state. It's an interpretation rather than a factual statement.\n\n2. \"unexpected tragedy\" - While \"tragedy\" can be factual, the framing here is interpretive.\n\n3. \"brought together to rediscover their love\" - This describes emotional/relational outcomes in subjective terms.\n\nThe sentence reads like a plot summary that includes emotional judgments and narrative interpretation rather than objective facts. It presents opinions about the characters' emotional states and the significance of events.\n\nFINAL: subjective",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.55,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.1,
+            "aggregate": 0.6125,
+            "rationale": "The agent correctly addressed the classification task but arrived at the wrong answer ('subjective') when the reference answer is 'objective'; the reasoning, while internally coherent, misidentifies n"
+          }
+        },
+        {
+          "query": "williams creates a stunning , taxi driver-esque portrayal of a man teetering on the edge of sanity .",
+          "gold": "subjective",
+          "output": "This sentence contains subjective language and evaluative judgments:\n\n- \"stunning\" is a subjective aesthetic evaluation\n- \"taxi driver-esque\" is a comparative judgment that relies on interpretation\n- \"teetering on the edge of sanity\" is a subjective characterization of the character's mental state\n\nWhile the sentence references factual elements (that Williams creates a portrayal of a man), the overall assessment uses subjective descriptors and interpretive language rather than presenting objective facts.\n\nFINAL: subjective",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly classified the sentence as subjective, matching the reference answer, with well-supported reasoning identifying specific subjective language elements."
+          }
+        },
+        {
+          "query": "since many people are dead , the tall man is able to make thousands of dwarf slaves for his planet daily in the mormon mausoleum .",
+          "gold": "objective",
+          "output": "This sentence contains multiple elements that indicate subjectivity:\n\n1. **Fictional/fantastical claims**: The statement describes a scenario involving a \"tall man\" making \"dwarf slaves\" on a planet within a \"mormon mausoleum\" - this is not a factual, verifiable claim about reality.\n\n2. **Unverified assertions**: The premise that \"many people are dead\" and that someone is creating slaves is presented without evidence or factual basis.\n\n3. **Imaginative framing**: The entire scenario appears to be a creative or fictional construction rather than a statement of objective fact.\n\n4. **Lack of objectivity**: An objective statement would present verifiable facts, whereas this presents an implausible narrative as if it were fact.\n\nFINAL: subjective",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.8,
+            "reasoning_soundness": 0.4,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.2,
+            "aggregate": 0.5750000000000001,
+            "rationale": "The agent classified the sentence as 'subjective' but the gold answer is 'objective'; the sentence, while bizarre, makes declarative factual-style claims without expressing opinions or feelings, and t"
+          }
+        },
+        {
+          "query": "a muddle splashed with bloody beauty as vivid as any scorsese has ever given us .",
+          "gold": "subjective",
+          "output": "This sentence contains several subjective elements:\n\n1. \"muddle\" - a vague, evaluative descriptor\n2. \"bloody beauty\" - an aesthetic judgment combining contradictory concepts\n3. \"vivid\" - a subjective assessment of intensity\n4. \"as any scorsese has ever given us\" - a comparative value judgment about a filmmaker's work\n\nThe sentence expresses personal opinion and aesthetic evaluation rather than stating objective facts. It's making claims about artistic quality and beauty, which are inherently subjective matters.\n\nFINAL: subjective",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly classified the sentence as subjective, provided well-reasoned justification identifying specific subjective elements, and matched the reference answer exactly."
+          }
+        },
+        {
+          "query": "one day a man named donny ( morris chestnut ) infiltrates a prison with a band of crooks looking for 200 million dollars worth of us gold .",
+          "gold": "objective",
+          "output": "This sentence describes a plot point from what appears to be a movie or story. It presents factual information about what happens in the narrative - a character named Donny (played by Morris Chestnut) infiltrates a prison with others to search for gold. These are objective statements about the plot events and cast, not opinions or judgments about quality, value, or interpretation.\n\nFINAL: objective",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.88,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9325000000000001,
+            "rationale": "The agent correctly classified the sentence as objective and provided coherent reasoning about why it describes factual plot events rather than opinions, matching the reference answer."
+          }
+        },
+        {
+          "query": "as i settled into my world war ii memories , i found myself strangely moved by even the corniest and most hackneyed contrivances .",
+          "gold": "subjective",
+          "output": "This sentence contains several subjective elements:\n\n1. \"strangely moved\" - expresses the speaker's emotional reaction\n2. \"corniest and most hackneyed\" - these are evaluative judgments about the quality/originality of the contrivances, not objective facts\n3. The overall reflection on personal feelings and reactions to memories is inherently subjective\n\nWhile the sentence describes a factual event (settling into memories), the language used to characterize that experience and the contrivances involves personal interpretation, emotion, and aesthetic judgment.\n\nFINAL: subjective",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly classified the sentence as subjective, provided well-reasoned supporting evidence identifying emotional language and evaluative judgments, and matched the reference answer exactly."
+          }
+        },
+        {
+          "query": "the decisions he makes when confronted with this new truth will affect him forever .",
+          "gold": "objective",
+          "output": "This sentence makes a claim about the consequences of decisions in a hypothetical scenario. While it uses definitive language (\"will affect him forever\"), it is making a general statement about cause and effect that could apply to many situations.\n\nHowever, the phrase \"affect him forever\" is somewhat subjective in its absoluteness - it's a value judgment about the permanence and significance of impact rather than a purely factual observation. The sentence presents an interpretation of how consequential these decisions would be.\n\nThat said, the core structure is making a logical claim about causality (decisions → lasting effects) which is more objective in nature, even if the specific framing is somewhat interpretive.\n\nFINAL: objective",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.85,
+            "reasoning_soundness": 0.6,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.85,
+            "aggregate": 0.8,
+            "rationale": "The agent reached the correct final answer (objective) matching the reference, but the reasoning was meandering and self-contradictory, spending significant effort arguing the sentence is 'somewhat su"
+          }
+        },
+        {
+          "query": "drags along in a dazed and enervated , drenched-in-the- past numbness .",
+          "gold": "subjective",
+          "output": "This sentence contains highly subjective language and emotional characterization. Phrases like \"dazed and enervated,\" \"drenched-in-the-past,\" and \"numbness\" are interpretive descriptions that convey the writer's emotional judgment and perspective rather than factual, verifiable information. These are evaluative adjectives that reflect a subjective assessment of a state or condition.\n\nFINAL: subjective",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.98,
+            "aggregate": 0.9500000000000001,
+            "rationale": "The agent correctly classified the sentence as subjective, provided sound reasoning about the evaluative and emotional language used, and matched the reference answer exactly."
+          }
+        },
+        {
+          "query": "in an attempt to prove the 58 million dollar claim on the ship is false , she flies to argentina and becomes embroiled in a dangerous web of deceit , lies , murder and lost love .",
+          "gold": "objective",
+          "output": "This sentence describes a plot summary with narrative elements. Let me analyze its subjectivity:\n\nThe sentence contains factual plot points (she flies to Argentina, becomes embroiled in events) but also uses evaluative language like \"dangerous web of deceit\" which characterizes the situation with subjective judgment. However, the core content is describing what happens in a story—these are plot events that can be objectively stated as occurring in the narrative.\n\nThe phrase \"dangerous web\" is somewhat subjective in tone, but it's describing the plot's content rather than making a judgment about quality or value. It's the kind of language typically used in objective plot summaries or synopses.\n\nFINAL: objective",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.72,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.8800000000000001,
+            "rationale": "The agent correctly identifies the sentence as objective and matches the reference answer, though its reasoning somewhat hedges by noting subjective-sounding language before correctly concluding it is"
+          }
+        },
+        {
+          "query": "a very familiar tale , one that 's been told by countless filmmakers about italian- , chinese- , irish- , latin- , indian- , russian- and other hyphenate american young men struggling to balance conflicting cultural messages .",
+          "gold": "subjective",
+          "output": "This sentence contains evaluative language and interpretive judgment that reflects the author's perspective rather than purely factual reporting.\n\nKey indicators of subjectivity:\n- \"very familiar tale\" - uses the subjective descriptor \"very familiar\" to characterize the story\n- The framing of what the tale is \"about\" involves interpretive judgment about themes and struggles\n- The selection and emphasis of which cultural groups to mention reflects editorial choice\n- The characterization of these narratives as dealing with \"conflicting cultural messages\" is an interpretive analysis rather than a neutral fact\n\nWhile the sentence references factual elements (that films have been made about these topics), the overall assessment of the tale as \"very familiar\" and the thematic interpretation constitute subjective analysis.\n\nFINAL: subjective",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.88,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9325000000000001,
+            "rationale": "The agent correctly classified the sentence as subjective and provided well-reasoned supporting evidence, matching the reference answer."
+          }
+        }
+      ],
+      "optimization": {
+        "baseline_val": 0.4,
+        "struct_best_val": 1.0,
+        "prompt_best_val": 1.0,
+        "final_val": 0.4,
+        "shipped_baseline": true,
+        "ship_prob_better": 0.5095,
+        "deployed_phase": "baseline",
+        "struct_iters": 30,
+        "prompt_iters": 30,
+        "struct_prompt": "You are a subjectivity-analysis assistant.\n\n## Role\nClassify whether a sentence is **subjective** or **objective** based on its primary communicative function.\n\n## Label Definitions\n\n- **objective**: The sentence primarily reports facts, events, descriptions, or plot summaries — even if it contains evaluative-sounding words, figurative language, or narrative framing. Movie plot descriptions, biographical facts, and event summaries are typically objective.\n- **subjective**: The sentence primarily expresses a personal opinion, judgment, feeling, or evaluation that reflects the author's viewpoint rather than reportable facts.\n\n## Decision Rules for Commonly Confused Cases\n\n1. **Descriptive language in factual contexts**: Words like \"lighthearted,\" \"best friend,\" \"unfortunately,\" or \"salt-of-the-earth\" embedded in a factual description do NOT make a sentence subjective. Ask: *Is the sentence's main purpose to report something, or to express an opinion?*\n2. **Figurative/idiomatic language** (e.g., \"fate was not on his side\"): This is still objective if the sentence is reporting what happened.\n3. **Plot/event summaries**: Sentences describing what characters do or what happened are objective, even if they use colorful or characterizing language.\n4. **True subjectivity**: The sentence must primarily assert a personal opinion or evaluation (e.g., \"This film is brilliant,\" \"The acting was terrible\").\n\n## Output Format\n\nRespond with a single word only: `objective` or `subjective`\n\nDo NOT explain your reasoning. Do NOT add any other text.",
+        "trajA": [
+          {
+            "iter": 0,
+            "val_obj": 0.4
+          },
+          {
+            "iter": 1,
+            "val_obj": 1.0,
+            "kept": true
+          },
+          {
+            "iter": 2,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 3,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 4,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 5,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 6,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 7,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 8,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 9,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 10,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 11,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 12,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 13,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 14,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 15,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 16,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 17,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 18,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 19,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 20,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 21,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 22,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 23,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 24,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 25,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 26,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 27,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 28,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 29,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 30,
+            "val_obj": 1.0,
+            "kept": false
+          }
+        ],
+        "trajB": [
+          {
+            "iter": 0,
+            "val_obj": 1.0
+          },
+          {
+            "iter": 1,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 2,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 3,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 4,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 5,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 6,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 7,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 8,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 9,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 10,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 11,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 12,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 13,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 14,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 15,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 16,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 17,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 18,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 19,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 20,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 21,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 22,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 23,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 24,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 25,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 26,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 27,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 28,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 29,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 30,
+            "val_obj": 1.0,
+            "kept": false
+          }
+        ]
+      }
+    }
+  },
+  "duration_s": 669.1
+}

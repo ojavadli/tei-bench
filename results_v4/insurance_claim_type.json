@@ -1,0 +1,736 @@
+{
+  "task_id": "insurance_claim_type",
+  "industry": "Insurance",
+  "metric": "classification",
+  "source": "Authored for TEI-Bench (Sonnet-generated, Sonnet-validated; kept only label-agreed examples).",
+  "is_public": false,
+  "n_train": 15,
+  "n_test": 24,
+  "agent_model": "claude-haiku-4-5",
+  "judge_model": "claude-sonnet-4-6",
+  "optimizer_model": "claude-sonnet-4-6",
+  "seed": 0,
+  "arms": {
+    "baseline": {
+      "objective_mean": 1.0,
+      "objective_ci95": [
+        1.0,
+        1.0
+      ],
+      "gpa_mean": 0.9528124999999998,
+      "gpa_dims": {
+        "target_alignment": 0.9504166666666664,
+        "reasoning_soundness": 0.945833333333333,
+        "execution_accuracy": 0.9254166666666664,
+        "output_integrity": 0.9895833333333334
+      },
+      "prompt": "You are an insurance claims router. Classify the insurance claim description into its claim type. Classify into one of these categories: auto_collision, property_fire, water_damage, theft, liability, medical.",
+      "examples": [
+        {
+          "query": "Someone broke into my car last night while it was parked on the street and took my laptop, GPS device, and about $200 in cash from the center console. The driver's side window was smashed.",
+          "gold": "theft",
+          "output": "This claim involves items being taken from a vehicle without authorization. While there is property damage (the broken window), the primary loss is the theft of personal items from inside the car.\n\nThe key elements are:\n- Unauthorized entry into the vehicle\n- Stolen items (laptop, GPS, cash)\n- This is a theft claim rather than an auto collision claim (which would involve vehicle damage from an accident)\n\nFINAL: theft",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.98,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly classified the claim as 'theft' matching the reference answer, with sound reasoning distinguishing it from collision claims, though the verbose explanation was unnecessary for a cl"
+          }
+        },
+        {
+          "query": "While hosting a dinner party, my chandelier fell from the ceiling and injured one of my guests, causing a head laceration requiring surgery. The guest is pursuing compensation for their injuries.",
+          "gold": "liability",
+          "output": "This claim involves a guest being injured at the policyholder's property due to a falling chandelier. The guest is seeking compensation for medical expenses and damages resulting from the injury.\n\nThis is a liability claim because:\n- It involves bodily injury to a third party (the guest)\n- The policyholder may be held legally responsible for the injury\n- The guest is pursuing compensation against the policyholder\n- This falls under premises liability coverage\n\nWhile the guest will have medical expenses, the claim itself is being routed based on the liability exposure and the third-party injury claim.\n\nFINAL: liability",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.98,
+            "aggregate": 0.9574999999999999,
+            "rationale": "The agent correctly classified the claim as 'liability,' matching the reference answer, with sound reasoning about third-party bodily injury, premises liability, and legal responsibility."
+          }
+        },
+        {
+          "query": "Submitted bills for ambulance transport, ER visit, CT scan, and follow-up appointments related to head trauma sustained during a fall at a retail store.",
+          "gold": "medical",
+          "output": "This claim involves medical expenses resulting from an injury sustained at a retail location. The submitted bills cover ambulance transport, emergency room visit, CT scan, and follow-up medical appointments - all medical services related to treating head trauma from a fall.\n\nWhile the fall occurred at a retail store (which could potentially involve a liability component), the claim itself is being submitted for the medical costs incurred for treatment and care.\n\nFINAL: medical",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly classified the claim as 'medical' matching the reference answer, with sound reasoning about the nature of the submitted bills, and appropriately noted the potential liability nuanc"
+          }
+        },
+        {
+          "query": "I was stopped at a red light when the vehicle behind me failed to brake and rear-ended my car. The trunk won't close properly now, the rear bumper is cracked, and the taillights on both sides are broken.",
+          "gold": "auto_collision",
+          "output": "This claim describes a vehicle collision where the claimant's car was struck from behind while stationary at a traffic light. The damage includes structural damage (trunk, bumper) and broken taillights resulting from the impact.\n\nThis is clearly an auto collision claim, as it involves damage to a vehicle caused by a collision with another vehicle.\n\nFINAL: auto_collision",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.98,
+            "aggregate": 0.9574999999999999,
+            "rationale": "The agent correctly identified the claim as auto_collision, matching the reference answer, with sound reasoning and proper format."
+          }
+        },
+        {
+          "query": "Reporting damage from yesterday's incident where my living room curtains caught flame from a nearby candle. The blaze spread to the wall behind the couch before we could extinguish it. There's soot covering everything and the drywall is charred.",
+          "gold": "property_fire",
+          "output": "This claim describes damage to a residential property caused by fire. The incident involves:\n- Curtains catching flame from a candle\n- Fire spreading to walls\n- Charring of drywall\n- Soot damage throughout the living room\n\nThis is clearly a property damage claim resulting from fire/flames.\n\nFINAL: property_fire",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.9,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified the claim as 'property_fire' matching the reference answer, with sound reasoning based on the described fire damage indicators, though the verbose breakdown was unnecess"
+          }
+        },
+        {
+          "query": "We woke up this morning to find our ceiling dripping in the master bedroom. Apparently the toilet in the upstairs bathroom has been leaking overnight, and now there's significant damage to the ceiling and walls below.",
+          "gold": "water_damage",
+          "output": "This claim involves water damage to the home caused by a leaking toilet. The water has damaged the ceiling and walls in the master bedroom below the bathroom.\n\nThis is clearly a water damage claim, as it involves unintended water intrusion into the home causing structural damage.\n\nFINAL: water_damage",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.85,
+            "output_integrity": 1.0,
+            "aggregate": 0.925,
+            "rationale": "The agent correctly identified the claim type as water_damage, matching the reference answer, with sound reasoning and appropriate explanation, though the verbose format adds unnecessary content beyon"
+          }
+        },
+        {
+          "query": "I was mugged while walking home last evening. The individual threatened me and took my phone, watch, and wallet before running away.",
+          "gold": "theft",
+          "output": "This claim describes a situation where the claimant was robbed of personal belongings (phone, watch, wallet) by another person. This is a clear case of theft - the unauthorized taking of property belonging to the claimant.\n\nFINAL: theft",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.95,
+            "aggregate": 0.9299999999999999,
+            "rationale": "The agent correctly classified the claim as theft, matching the reference answer, with sound reasoning about the unauthorized taking of property, though the explanation is slightly verbose for a class"
+          }
+        },
+        {
+          "query": "A customer slipped and fell on the wet floor in my retail store yesterday, injuring their back. They are now seeking compensation for their medical bills and lost wages from the incident.",
+          "gold": "liability",
+          "output": "This claim involves a customer who was injured on the business owner's property due to a slip and fall accident. The customer is seeking compensation for medical expenses and lost wages resulting from the injury.\n\nThis is a liability claim because it involves bodily injury to a third party (the customer) that occurred due to the business owner's premises conditions or negligence. The store owner may be held legally responsible for the customer's damages.\n\nFINAL: liability",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.98,
+            "aggregate": 0.9574999999999999,
+            "rationale": "The agent correctly identified the claim as 'liability,' matching the reference answer, with sound reasoning about third-party bodily injury on business premises and proper format including a clear fi"
+          }
+        },
+        {
+          "query": "Documentation includes costs for urgent care visit, splinting, pain medication, and orthopedic follow-up for suspected fracture in wrist sustained during a slip and fall.",
+          "gold": "medical",
+          "output": "This claim involves medical treatment costs for an injury sustained in a slip and fall accident. The documentation covers urgent care services, splinting, medication, and orthopedic follow-up care for a suspected wrist fracture.\n\nThis is a medical claim, as it pertains to healthcare services and treatment expenses resulting from an injury.\n\nFINAL: medical",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.9,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly classified the claim as 'medical,' matching the reference answer, with sound reasoning and appropriate explanation, though the verbose format slightly exceeds what a simple classif"
+          }
+        },
+        {
+          "query": "I rear-ended the car in front of me when they suddenly braked for a pedestrian. My front end sustained damage including a cracked bumper, broken grille, and the radiator may be punctured as fluid is leaking underneath.",
+          "gold": "auto_collision",
+          "output": "This claim describes damage to a vehicle resulting from a collision between two cars. The claimant rear-ended another vehicle, causing damage to their front end (bumper, grille, radiator). This is a classic auto collision scenario where vehicle damage occurred due to impact with another vehicle.\n\nFINAL: auto_collision",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly identified the claim as auto_collision, matching the reference answer, with sound reasoning and proper format."
+          }
+        },
+        {
+          "query": "Need to file a claim for my rental property where tenants left the oven on overnight. It overheated and started a blaze that consumed the kitchen and damaged adjacent rooms with heat and smoke residue.",
+          "gold": "property_fire",
+          "output": "This claim involves a fire that started from an unattended oven and spread through the rental property, causing damage to the kitchen and adjacent rooms through flames, heat, and smoke.\n\nThis is clearly a property fire claim, as it involves fire damage to a building structure and its contents.\n\nFINAL: property_fire",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.9,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified the claim type as property_fire, matching the reference answer, with sound reasoning and appropriate explanation, though the verbose explanation was not strictly require"
+          }
+        },
+        {
+          "query": "Our washing machine hose disconnected during a cycle and flooded our laundry room. The water seeped into the adjacent hallway and living room, saturating the carpet and causing the laminate flooring to buckle.",
+          "gold": "water_damage",
+          "output": "This claim describes water damage resulting from a household appliance malfunction. The washing machine hose disconnection caused water to spread throughout multiple rooms, damaging carpeting and flooring materials.\n\nThis is clearly a water damage claim, as it involves unintended water intrusion into the home and resulting damage to property.\n\nFINAL: water_damage",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.9,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified the claim as water_damage, matching the reference answer, with sound reasoning and appropriate explanation, though the verbose narrative before the final label was unnec"
+          }
+        },
+        {
+          "query": "My bicycle was locked to the rack outside my apartment building, but when I came out this morning the lock had been cut and the bike was gone.",
+          "gold": "theft",
+          "output": "This claim describes a bicycle that was stolen from outside an apartment building. The lock was cut and the bike disappeared, which is clearly a theft situation.\n\nFINAL: theft",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.9,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified the claim type as theft, matching the reference answer, with sound reasoning and appropriate explanation, though the verbose explanation was not strictly required."
+          }
+        },
+        {
+          "query": "My teenage daughter was texting while driving and rear-ended a motorcyclist at a stoplight. The rider sustained serious injuries and is suing for medical costs, bike repairs, and emotional distress.",
+          "gold": "liability",
+          "output": "This claim involves a vehicle collision where the insured's daughter struck another vehicle (motorcycle), resulting in injuries and property damage to the other party. The motorcyclist is pursuing legal action for damages.\n\nWhile there are multiple elements here (vehicle damage, medical costs, emotional distress claims), the primary claim type is **liability** - this is a third-party claim where the insured is being held responsible for injuries and damages caused to another person and their property.\n\nFINAL: liability",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.98,
+            "aggregate": 0.9574999999999999,
+            "rationale": "The agent correctly identified the claim type as liability, matching the reference answer, with sound reasoning about third-party responsibility and appropriate handling of the multi-element scenario."
+          }
+        },
+        {
+          "query": "Bills submitted for emergency room evaluation, sutures for deep laceration on arm, tetanus shot, and infection prevention care after incident with broken glass.",
+          "gold": "medical",
+          "output": "This claim involves medical treatment received at an emergency room following an injury. The claimant received evaluation, sutures, a tetanus shot, and infection prevention care for a laceration caused by broken glass.\n\nThis is clearly a medical claim, as it covers healthcare services and treatment for an injury.\n\nFINAL: medical",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.9,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly classified the claim as 'medical' matching the reference answer, with sound reasoning and appropriate explanation, though the verbose format was unnecessary for a simple classifica"
+          }
+        },
+        {
+          "query": "I was making a left turn at an intersection when an oncoming vehicle, which I thought was slowing down, continued through and crashed into my front end. The entire front of my car is damaged and the engine won't start.",
+          "gold": "auto_collision",
+          "output": "This claim describes a vehicle collision at an intersection where the claimant's car was struck by another vehicle, resulting in significant front-end damage and mechanical failure. This is clearly an automobile collision claim.\n\nFINAL: auto_collision",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.98,
+            "reasoning_soundness": 0.97,
+            "execution_accuracy": 0.98,
+            "output_integrity": 0.99,
+            "aggregate": 0.98,
+            "rationale": "The agent correctly identified the claim as auto_collision, matching the reference answer exactly, with sound reasoning and proper format."
+          }
+        },
+        {
+          "query": "Our restaurant's kitchen caught flame when the exhaust hood accumulated grease ignited during dinner service. The suppression system activated, but we have significant heat damage to equipment and smoke throughout the dining area.",
+          "gold": "property_fire",
+          "output": "This claim involves a fire that started in the restaurant's kitchen exhaust hood due to accumulated grease ignition. The damage includes:\n- Heat damage to kitchen equipment\n- Smoke damage throughout the dining area\n- Activation of the fire suppression system\n\nThis is clearly a property fire claim, as it involves damage to the insured's property (restaurant equipment and structure) caused by fire.\n\nFINAL: property_fire",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly identified the claim as 'property_fire', matching the reference answer exactly, with sound reasoning and proper format."
+          }
+        },
+        {
+          "query": "Our basement is completely flooded after the heavy rainstorm last night. There's about three inches of standing water covering the entire floor, and our carpets and furniture are soaked through. We need immediate assistance.",
+          "gold": "water_damage",
+          "output": "This claim describes water damage to a residential property following a rainstorm. The key indicators are:\n\n- Heavy rainstorm caused flooding\n- Basement filled with standing water (3 inches)\n- Damage to carpets and furniture from water exposure\n\nThis is clearly a water damage claim, as it involves unintended water intrusion into the home and resulting damage to property and contents.\n\nFINAL: water_damage",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly identified the claim type as water_damage, matching the reference answer exactly, with sound reasoning based on clear evidence from the description."
+          }
+        },
+        {
+          "query": "My package containing a new tablet was delivered to my porch according to tracking, but it disappeared before I got home from work. Security camera shows someone taking it.",
+          "gold": "theft",
+          "output": "This claim involves a package that was stolen from the claimant's porch. The security camera footage confirms that someone took the package without authorization.\n\nThis is a theft claim - the loss of property due to unauthorized taking by another person.\n\nFINAL: theft",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.9,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly classified the claim as theft, matching the reference answer, with sound reasoning based on the evidence described (security camera footage, unauthorized taking), though the respon"
+          }
+        },
+        {
+          "query": "My contractor accidentally damaged the neighboring property's foundation while working on my home renovation project. The neighbor is demanding I pay for structural repairs and engineering assessments.",
+          "gold": "liability",
+          "output": "This claim involves damage to a third party's property (the neighbor's foundation) caused by work being performed on the policyholder's property. The neighbor is seeking compensation for repairs and assessments.\n\nThis is a liability claim because it involves bodily injury or property damage to someone else for which the policyholder may be legally responsible. Liability coverage typically covers damages the policyholder is legally obligated to pay due to injury or damage they cause to others.\n\nFINAL: liability",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.98,
+            "aggregate": 0.9574999999999999,
+            "rationale": "The agent correctly identified the claim as 'liability,' matching the reference answer, with sound reasoning about third-party property damage and legal responsibility, and proper format with a clear "
+          }
+        },
+        {
+          "query": "Patient underwent emergency surgery following a workplace accident that resulted in a fractured femur and severe lacerations requiring 23 stitches and overnight hospitalization.",
+          "gold": "medical",
+          "output": "This claim involves medical treatment resulting from a workplace injury. The description focuses on the medical services provided (emergency surgery, hospitalization, stitches) rather than property damage, vehicle collision, fire, water damage, or theft.\n\nFINAL: medical",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.95,
+            "aggregate": 0.9299999999999999,
+            "rationale": "The agent correctly classified the claim as 'medical' matching the reference answer, with sound reasoning distinguishing it from other claim types, though the verbose explanation was not strictly requ"
+          }
+        },
+        {
+          "query": "While backing out of a parking space at the grocery store, I didn't see a pickup truck passing behind me and hit their rear bumper. There are scratches and dents on my rear hatch and their vehicle sustained minor damage as well.",
+          "gold": "auto_collision",
+          "output": "This claim involves a vehicle collision in a parking lot where the claimant's vehicle struck another vehicle while backing up. The damage described includes scratches and dents to both vehicles resulting from the impact.\n\nThis is clearly an auto collision claim, as it involves damage to vehicles from a collision incident.\n\nFINAL: auto_collision",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.98,
+            "aggregate": 0.9574999999999999,
+            "rationale": "The agent correctly identified the claim as auto_collision, matching the reference answer, with sound reasoning and proper format."
+          }
+        },
+        {
+          "query": "Filing for damages after a space heater malfunction ignited bedding in our master bedroom. The resulting blaze scorched the walls, melted fixtures, and left heavy smoke residue throughout the upper level of our home.",
+          "gold": "property_fire",
+          "output": "This claim describes damage caused by a fire that started from a malfunctioning space heater and spread to damage the home's structure, fixtures, and contents. The key elements are:\n\n- Fire/blaze as the cause\n- Damage to building structure (walls scorched)\n- Damage to fixtures (melted)\n- Smoke damage throughout the property\n\nThis is clearly a property fire claim, as it involves fire damage to the insured's residential property.\n\nFINAL: property_fire",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.98,
+            "reasoning_soundness": 0.97,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly identified the claim as 'property_fire', matching the reference answer exactly, with sound reasoning grounded in the specific details of the claim description."
+          }
+        },
+        {
+          "query": "The bathtub in our second-floor bathroom overflowed while our teenager was running a bath and got distracted. Water came pouring through the ceiling into our kitchen below, damaging our cabinets and countertops.",
+          "gold": "water_damage",
+          "output": "This claim involves water damage to the home caused by an overflowing bathtub. The water leaked through the ceiling and damaged kitchen cabinets and countertops. This is a clear case of water damage from an internal source (the bathtub overflow).\n\nFINAL: water_damage",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.9,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified the claim type as water_damage, matching the reference answer, with sound reasoning and appropriate explanation, though the verbose explanation was not strictly required"
+          }
+        }
+      ]
+    },
+    "two_phase": {
+      "objective_mean": 1.0,
+      "objective_ci95": [
+        1.0,
+        1.0
+      ],
+      "gpa_mean": 0.9528124999999998,
+      "gpa_dims": {
+        "target_alignment": 0.9504166666666664,
+        "reasoning_soundness": 0.945833333333333,
+        "execution_accuracy": 0.9254166666666664,
+        "output_integrity": 0.9895833333333334
+      },
+      "prompt": "You are an insurance claims router. Classify the insurance claim description into its claim type. Classify into one of these categories: auto_collision, property_fire, water_damage, theft, liability, medical.",
+      "examples": [
+        {
+          "query": "Someone broke into my car last night while it was parked on the street and took my laptop, GPS device, and about $200 in cash from the center console. The driver's side window was smashed.",
+          "gold": "theft",
+          "output": "This claim involves items being taken from a vehicle without authorization. While there is property damage (the broken window), the primary loss is the theft of personal items from inside the car.\n\nThe key elements are:\n- Unauthorized entry into the vehicle\n- Stolen items (laptop, GPS, cash)\n- This is a theft claim rather than an auto collision claim (which would involve vehicle damage from an accident)\n\nFINAL: theft",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.98,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly classified the claim as 'theft' matching the reference answer, with sound reasoning distinguishing it from collision claims, though the verbose explanation was unnecessary for a cl"
+          }
+        },
+        {
+          "query": "While hosting a dinner party, my chandelier fell from the ceiling and injured one of my guests, causing a head laceration requiring surgery. The guest is pursuing compensation for their injuries.",
+          "gold": "liability",
+          "output": "This claim involves a guest being injured at the policyholder's property due to a falling chandelier. The guest is seeking compensation for medical expenses and damages resulting from the injury.\n\nThis is a liability claim because:\n- It involves bodily injury to a third party (the guest)\n- The policyholder may be held legally responsible for the injury\n- The guest is pursuing compensation against the policyholder\n- This falls under premises liability coverage\n\nWhile the guest will have medical expenses, the claim itself is being routed based on the liability exposure and the third-party injury claim.\n\nFINAL: liability",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.98,
+            "aggregate": 0.9574999999999999,
+            "rationale": "The agent correctly classified the claim as 'liability,' matching the reference answer, with sound reasoning about third-party bodily injury, premises liability, and legal responsibility."
+          }
+        },
+        {
+          "query": "Submitted bills for ambulance transport, ER visit, CT scan, and follow-up appointments related to head trauma sustained during a fall at a retail store.",
+          "gold": "medical",
+          "output": "This claim involves medical expenses resulting from an injury sustained at a retail location. The submitted bills cover ambulance transport, emergency room visit, CT scan, and follow-up medical appointments - all medical services related to treating head trauma from a fall.\n\nWhile the fall occurred at a retail store (which could potentially involve a liability component), the claim itself is being submitted for the medical costs incurred for treatment and care.\n\nFINAL: medical",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly classified the claim as 'medical' matching the reference answer, with sound reasoning about the nature of the submitted bills, and appropriately noted the potential liability nuanc"
+          }
+        },
+        {
+          "query": "I was stopped at a red light when the vehicle behind me failed to brake and rear-ended my car. The trunk won't close properly now, the rear bumper is cracked, and the taillights on both sides are broken.",
+          "gold": "auto_collision",
+          "output": "This claim describes a vehicle collision where the claimant's car was struck from behind while stationary at a traffic light. The damage includes structural damage (trunk, bumper) and broken taillights resulting from the impact.\n\nThis is clearly an auto collision claim, as it involves damage to a vehicle caused by a collision with another vehicle.\n\nFINAL: auto_collision",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.98,
+            "aggregate": 0.9574999999999999,
+            "rationale": "The agent correctly identified the claim as auto_collision, matching the reference answer, with sound reasoning and proper format."
+          }
+        },
+        {
+          "query": "Reporting damage from yesterday's incident where my living room curtains caught flame from a nearby candle. The blaze spread to the wall behind the couch before we could extinguish it. There's soot covering everything and the drywall is charred.",
+          "gold": "property_fire",
+          "output": "This claim describes damage to a residential property caused by fire. The incident involves:\n- Curtains catching flame from a candle\n- Fire spreading to walls\n- Charring of drywall\n- Soot damage throughout the living room\n\nThis is clearly a property damage claim resulting from fire/flames.\n\nFINAL: property_fire",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.9,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified the claim as 'property_fire' matching the reference answer, with sound reasoning based on the described fire damage indicators, though the verbose breakdown was unnecess"
+          }
+        },
+        {
+          "query": "We woke up this morning to find our ceiling dripping in the master bedroom. Apparently the toilet in the upstairs bathroom has been leaking overnight, and now there's significant damage to the ceiling and walls below.",
+          "gold": "water_damage",
+          "output": "This claim involves water damage to the home caused by a leaking toilet. The water has damaged the ceiling and walls in the master bedroom below the bathroom.\n\nThis is clearly a water damage claim, as it involves unintended water intrusion into the home causing structural damage.\n\nFINAL: water_damage",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.85,
+            "output_integrity": 1.0,
+            "aggregate": 0.925,
+            "rationale": "The agent correctly identified the claim type as water_damage, matching the reference answer, with sound reasoning and appropriate explanation, though the verbose format adds unnecessary content beyon"
+          }
+        },
+        {
+          "query": "I was mugged while walking home last evening. The individual threatened me and took my phone, watch, and wallet before running away.",
+          "gold": "theft",
+          "output": "This claim describes a situation where the claimant was robbed of personal belongings (phone, watch, wallet) by another person. This is a clear case of theft - the unauthorized taking of property belonging to the claimant.\n\nFINAL: theft",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.95,
+            "aggregate": 0.9299999999999999,
+            "rationale": "The agent correctly classified the claim as theft, matching the reference answer, with sound reasoning about the unauthorized taking of property, though the explanation is slightly verbose for a class"
+          }
+        },
+        {
+          "query": "A customer slipped and fell on the wet floor in my retail store yesterday, injuring their back. They are now seeking compensation for their medical bills and lost wages from the incident.",
+          "gold": "liability",
+          "output": "This claim involves a customer who was injured on the business owner's property due to a slip and fall accident. The customer is seeking compensation for medical expenses and lost wages resulting from the injury.\n\nThis is a liability claim because it involves bodily injury to a third party (the customer) that occurred due to the business owner's premises conditions or negligence. The store owner may be held legally responsible for the customer's damages.\n\nFINAL: liability",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.98,
+            "aggregate": 0.9574999999999999,
+            "rationale": "The agent correctly identified the claim as 'liability,' matching the reference answer, with sound reasoning about third-party bodily injury on business premises and proper format including a clear fi"
+          }
+        },
+        {
+          "query": "Documentation includes costs for urgent care visit, splinting, pain medication, and orthopedic follow-up for suspected fracture in wrist sustained during a slip and fall.",
+          "gold": "medical",
+          "output": "This claim involves medical treatment costs for an injury sustained in a slip and fall accident. The documentation covers urgent care services, splinting, medication, and orthopedic follow-up care for a suspected wrist fracture.\n\nThis is a medical claim, as it pertains to healthcare services and treatment expenses resulting from an injury.\n\nFINAL: medical",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.9,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly classified the claim as 'medical,' matching the reference answer, with sound reasoning and appropriate explanation, though the verbose format slightly exceeds what a simple classif"
+          }
+        },
+        {
+          "query": "I rear-ended the car in front of me when they suddenly braked for a pedestrian. My front end sustained damage including a cracked bumper, broken grille, and the radiator may be punctured as fluid is leaking underneath.",
+          "gold": "auto_collision",
+          "output": "This claim describes damage to a vehicle resulting from a collision between two cars. The claimant rear-ended another vehicle, causing damage to their front end (bumper, grille, radiator). This is a classic auto collision scenario where vehicle damage occurred due to impact with another vehicle.\n\nFINAL: auto_collision",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly identified the claim as auto_collision, matching the reference answer, with sound reasoning and proper format."
+          }
+        },
+        {
+          "query": "Need to file a claim for my rental property where tenants left the oven on overnight. It overheated and started a blaze that consumed the kitchen and damaged adjacent rooms with heat and smoke residue.",
+          "gold": "property_fire",
+          "output": "This claim involves a fire that started from an unattended oven and spread through the rental property, causing damage to the kitchen and adjacent rooms through flames, heat, and smoke.\n\nThis is clearly a property fire claim, as it involves fire damage to a building structure and its contents.\n\nFINAL: property_fire",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.9,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified the claim type as property_fire, matching the reference answer, with sound reasoning and appropriate explanation, though the verbose explanation was not strictly require"
+          }
+        },
+        {
+          "query": "Our washing machine hose disconnected during a cycle and flooded our laundry room. The water seeped into the adjacent hallway and living room, saturating the carpet and causing the laminate flooring to buckle.",
+          "gold": "water_damage",
+          "output": "This claim describes water damage resulting from a household appliance malfunction. The washing machine hose disconnection caused water to spread throughout multiple rooms, damaging carpeting and flooring materials.\n\nThis is clearly a water damage claim, as it involves unintended water intrusion into the home and resulting damage to property.\n\nFINAL: water_damage",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.9,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified the claim as water_damage, matching the reference answer, with sound reasoning and appropriate explanation, though the verbose narrative before the final label was unnec"
+          }
+        },
+        {
+          "query": "My bicycle was locked to the rack outside my apartment building, but when I came out this morning the lock had been cut and the bike was gone.",
+          "gold": "theft",
+          "output": "This claim describes a bicycle that was stolen from outside an apartment building. The lock was cut and the bike disappeared, which is clearly a theft situation.\n\nFINAL: theft",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.9,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified the claim type as theft, matching the reference answer, with sound reasoning and appropriate explanation, though the verbose explanation was not strictly required."
+          }
+        },
+        {
+          "query": "My teenage daughter was texting while driving and rear-ended a motorcyclist at a stoplight. The rider sustained serious injuries and is suing for medical costs, bike repairs, and emotional distress.",
+          "gold": "liability",
+          "output": "This claim involves a vehicle collision where the insured's daughter struck another vehicle (motorcycle), resulting in injuries and property damage to the other party. The motorcyclist is pursuing legal action for damages.\n\nWhile there are multiple elements here (vehicle damage, medical costs, emotional distress claims), the primary claim type is **liability** - this is a third-party claim where the insured is being held responsible for injuries and damages caused to another person and their property.\n\nFINAL: liability",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.98,
+            "aggregate": 0.9574999999999999,
+            "rationale": "The agent correctly identified the claim type as liability, matching the reference answer, with sound reasoning about third-party responsibility and appropriate handling of the multi-element scenario."
+          }
+        },
+        {
+          "query": "Bills submitted for emergency room evaluation, sutures for deep laceration on arm, tetanus shot, and infection prevention care after incident with broken glass.",
+          "gold": "medical",
+          "output": "This claim involves medical treatment received at an emergency room following an injury. The claimant received evaluation, sutures, a tetanus shot, and infection prevention care for a laceration caused by broken glass.\n\nThis is clearly a medical claim, as it covers healthcare services and treatment for an injury.\n\nFINAL: medical",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.9,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly classified the claim as 'medical' matching the reference answer, with sound reasoning and appropriate explanation, though the verbose format was unnecessary for a simple classifica"
+          }
+        },
+        {
+          "query": "I was making a left turn at an intersection when an oncoming vehicle, which I thought was slowing down, continued through and crashed into my front end. The entire front of my car is damaged and the engine won't start.",
+          "gold": "auto_collision",
+          "output": "This claim describes a vehicle collision at an intersection where the claimant's car was struck by another vehicle, resulting in significant front-end damage and mechanical failure. This is clearly an automobile collision claim.\n\nFINAL: auto_collision",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.98,
+            "reasoning_soundness": 0.97,
+            "execution_accuracy": 0.98,
+            "output_integrity": 0.99,
+            "aggregate": 0.98,
+            "rationale": "The agent correctly identified the claim as auto_collision, matching the reference answer exactly, with sound reasoning and proper format."
+          }
+        },
+        {
+          "query": "Our restaurant's kitchen caught flame when the exhaust hood accumulated grease ignited during dinner service. The suppression system activated, but we have significant heat damage to equipment and smoke throughout the dining area.",
+          "gold": "property_fire",
+          "output": "This claim involves a fire that started in the restaurant's kitchen exhaust hood due to accumulated grease ignition. The damage includes:\n- Heat damage to kitchen equipment\n- Smoke damage throughout the dining area\n- Activation of the fire suppression system\n\nThis is clearly a property fire claim, as it involves damage to the insured's property (restaurant equipment and structure) caused by fire.\n\nFINAL: property_fire",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly identified the claim as 'property_fire', matching the reference answer exactly, with sound reasoning and proper format."
+          }
+        },
+        {
+          "query": "Our basement is completely flooded after the heavy rainstorm last night. There's about three inches of standing water covering the entire floor, and our carpets and furniture are soaked through. We need immediate assistance.",
+          "gold": "water_damage",
+          "output": "This claim describes water damage to a residential property following a rainstorm. The key indicators are:\n\n- Heavy rainstorm caused flooding\n- Basement filled with standing water (3 inches)\n- Damage to carpets and furniture from water exposure\n\nThis is clearly a water damage claim, as it involves unintended water intrusion into the home and resulting damage to property and contents.\n\nFINAL: water_damage",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly identified the claim type as water_damage, matching the reference answer exactly, with sound reasoning based on clear evidence from the description."
+          }
+        },
+        {
+          "query": "My package containing a new tablet was delivered to my porch according to tracking, but it disappeared before I got home from work. Security camera shows someone taking it.",
+          "gold": "theft",
+          "output": "This claim involves a package that was stolen from the claimant's porch. The security camera footage confirms that someone took the package without authorization.\n\nThis is a theft claim - the loss of property due to unauthorized taking by another person.\n\nFINAL: theft",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.9,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly classified the claim as theft, matching the reference answer, with sound reasoning based on the evidence described (security camera footage, unauthorized taking), though the respon"
+          }
+        },
+        {
+          "query": "My contractor accidentally damaged the neighboring property's foundation while working on my home renovation project. The neighbor is demanding I pay for structural repairs and engineering assessments.",
+          "gold": "liability",
+          "output": "This claim involves damage to a third party's property (the neighbor's foundation) caused by work being performed on the policyholder's property. The neighbor is seeking compensation for repairs and assessments.\n\nThis is a liability claim because it involves bodily injury or property damage to someone else for which the policyholder may be legally responsible. Liability coverage typically covers damages the policyholder is legally obligated to pay due to injury or damage they cause to others.\n\nFINAL: liability",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.98,
+            "aggregate": 0.9574999999999999,
+            "rationale": "The agent correctly identified the claim as 'liability,' matching the reference answer, with sound reasoning about third-party property damage and legal responsibility, and proper format with a clear "
+          }
+        },
+        {
+          "query": "Patient underwent emergency surgery following a workplace accident that resulted in a fractured femur and severe lacerations requiring 23 stitches and overnight hospitalization.",
+          "gold": "medical",
+          "output": "This claim involves medical treatment resulting from a workplace injury. The description focuses on the medical services provided (emergency surgery, hospitalization, stitches) rather than property damage, vehicle collision, fire, water damage, or theft.\n\nFINAL: medical",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.95,
+            "aggregate": 0.9299999999999999,
+            "rationale": "The agent correctly classified the claim as 'medical' matching the reference answer, with sound reasoning distinguishing it from other claim types, though the verbose explanation was not strictly requ"
+          }
+        },
+        {
+          "query": "While backing out of a parking space at the grocery store, I didn't see a pickup truck passing behind me and hit their rear bumper. There are scratches and dents on my rear hatch and their vehicle sustained minor damage as well.",
+          "gold": "auto_collision",
+          "output": "This claim involves a vehicle collision in a parking lot where the claimant's vehicle struck another vehicle while backing up. The damage described includes scratches and dents to both vehicles resulting from the impact.\n\nThis is clearly an auto collision claim, as it involves damage to vehicles from a collision incident.\n\nFINAL: auto_collision",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.98,
+            "aggregate": 0.9574999999999999,
+            "rationale": "The agent correctly identified the claim as auto_collision, matching the reference answer, with sound reasoning and proper format."
+          }
+        },
+        {
+          "query": "Filing for damages after a space heater malfunction ignited bedding in our master bedroom. The resulting blaze scorched the walls, melted fixtures, and left heavy smoke residue throughout the upper level of our home.",
+          "gold": "property_fire",
+          "output": "This claim describes damage caused by a fire that started from a malfunctioning space heater and spread to damage the home's structure, fixtures, and contents. The key elements are:\n\n- Fire/blaze as the cause\n- Damage to building structure (walls scorched)\n- Damage to fixtures (melted)\n- Smoke damage throughout the property\n\nThis is clearly a property fire claim, as it involves fire damage to the insured's residential property.\n\nFINAL: property_fire",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.98,
+            "reasoning_soundness": 0.97,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.9824999999999999,
+            "rationale": "The agent correctly identified the claim as 'property_fire', matching the reference answer exactly, with sound reasoning grounded in the specific details of the claim description."
+          }
+        },
+        {
+          "query": "The bathtub in our second-floor bathroom overflowed while our teenager was running a bath and got distracted. Water came pouring through the ceiling into our kitchen below, damaging our cabinets and countertops.",
+          "gold": "water_damage",
+          "output": "This claim involves water damage to the home caused by an overflowing bathtub. The water leaked through the ceiling and damaged kitchen cabinets and countertops. This is a clear case of water damage from an internal source (the bathtub overflow).\n\nFINAL: water_damage",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.9,
+            "output_integrity": 1.0,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified the claim type as water_damage, matching the reference answer, with sound reasoning and appropriate explanation, though the verbose explanation was not strictly required"
+          }
+        }
+      ],
+      "optimization": {
+        "baseline_val": 1.0,
+        "struct_best_val": 1.0,
+        "prompt_best_val": 1.0,
+        "final_val": 1.0,
+        "shipped_baseline": true,
+        "ship_prob_better": 0.0,
+        "deployed_phase": "baseline(ceiling)",
+        "struct_iters": 0,
+        "prompt_iters": 0,
+        "struct_prompt": "You are an insurance claims router. Classify the insurance claim description into its claim type. Classify into one of these categories: auto_collision, property_fire, water_damage, theft, liability, medical.",
+        "trajA": [],
+        "trajB": []
+      }
+    }
+  },
+  "duration_s": 11.6
+}

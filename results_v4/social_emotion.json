@@ -1,0 +1,1205 @@
+{
+  "task_id": "social_emotion",
+  "industry": "Social Media / CX",
+  "metric": "classification",
+  "source": "SetFit/emotion via HuggingFace (see dataset card for license).",
+  "is_public": true,
+  "n_train": 15,
+  "n_test": 30,
+  "agent_model": "claude-haiku-4-5",
+  "judge_model": "claude-sonnet-4-6",
+  "optimizer_model": "claude-sonnet-4-6",
+  "seed": 0,
+  "arms": {
+    "baseline": {
+      "objective_mean": 0.43333333333333335,
+      "objective_ci95": [
+        0.26666666666666666,
+        0.6
+      ],
+      "gpa_mean": 0.7334999999999999,
+      "gpa_dims": {
+        "target_alignment": 0.7993333333333331,
+        "reasoning_soundness": 0.7020000000000001,
+        "execution_accuracy": 0.8799999999999998,
+        "output_integrity": 0.5526666666666668
+      },
+      "prompt": "You are an emotion-detection assistant. Detect the dominant emotion in the message. Classify into one of these categories: anger, fear, joy, love, sadness, surprise.",
+      "examples": [
+        {
+          "query": "i feel shy about it all and also a little concerned whether my new title will distance me away from people i care for",
+          "gold": "fear",
+          "output": "The message expresses a mix of emotions centered around social anxiety and worry about relationships. The speaker feels shy (self-conscious, hesitant) and concerned (worried, anxious) about how a new title might affect their connections with loved ones. There's an underlying fear about potential negative consequences to their relationships.\n\nThe dominant emotion here is **fear** - specifically, fear of losing closeness with people they care about and anxiety about how this change will be perceived.\n\nFINAL: fear",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly identified 'fear' as the dominant emotion, matching the reference answer, with coherent reasoning linking shyness and concern to an underlying fear of relational distance."
+          }
+        },
+        {
+          "query": "i only do unwillingly and always leaves me feeling grouchy and unsettled",
+          "gold": "anger",
+          "output": "The message expresses reluctance and negative emotional aftermath. The speaker describes doing something against their will (\"unwillingly\") and the resulting emotional state is explicitly negative (\"grouchy and unsettled\"). \n\n\"Grouchy\" suggests irritability and displeasure, while \"unsettled\" indicates discomfort and unease. This combination points to a state of dissatisfaction and mild agitation following an unwanted activity.\n\nThe dominant emotion here is **anger** - manifested as irritability and grouchiness rather than intense rage, but clearly reflecting frustration and displeasure.\n\nFINAL: anger",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.85,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.925,
+            "rationale": "The agent correctly identifies anger as the dominant emotion, matching the reference answer, with sound reasoning connecting 'grouchy' and 'unsettled' to irritability and displeasure, though the reaso"
+          }
+        },
+        {
+          "query": "i am feeling profoundly peaceful",
+          "gold": "joy",
+          "output": "The message expresses a state of deep tranquility and contentment. The word \"profoundly\" emphasizes the intensity and depth of this peaceful feeling. This is a positive emotional state that aligns most closely with joy—a sense of well-being and satisfaction.\n\nFINAL: joy",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.8,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9125000000000001,
+            "rationale": "The agent correctly identifies 'joy' as the dominant emotion matching the reference answer, with reasonable (if slightly debatable) reasoning connecting profound peacefulness to joy, and delivers the "
+          }
+        },
+        {
+          "query": "i was so focused on my heavy breathing my even strides the drops of sweat on my forehead that i forgot to feel socially awkward",
+          "gold": "sadness",
+          "output": "This message reflects someone who was deeply absorbed in physical activity (running or exercise) and found that their concentration on bodily sensations actually helped them overcome social anxiety. There's a sense of relief and positive discovery here—they realized that focusing inward on their physical experience allowed them to escape the self-consciousness they normally feel in social situations.\n\nThe dominant emotion is joy—a lighter, more subtle form of it. It's the satisfaction and pleasant surprise of discovering an unexpected benefit or escape from anxiety.\n\nFINAL: joy",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.7,
+            "reasoning_soundness": 0.6,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.25,
+            "aggregate": 0.6124999999999999,
+            "rationale": "The agent identified 'joy' as the dominant emotion, but the reference answer is 'sadness'; while the agent's reasoning about relief and positive discovery is plausible, it misses the underlying melanc"
+          }
+        },
+        {
+          "query": "i feel a little stunned but can t imagine what the folks who were working in the studio up until this morning are feeling",
+          "gold": "surprise",
+          "output": "The message expresses a sense of shock and disorientation (\"stunned\"), while also showing empathy and concern for others who experienced something more directly. The speaker is imagining that others must be feeling something even more intense than their own reaction.\n\nThis reflects surprise as the dominant emotion - the speaker is taken aback by whatever event occurred. The empathetic reflection on others' feelings doesn't change the primary emotion being expressed about their own state.\n\nFINAL: surprise",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly identified 'surprise' as the dominant emotion, matching the reference answer, with coherent reasoning about the word 'stunned' and the empathetic framing."
+          }
+        },
+        {
+          "query": "i really feel like they were gentle reminders that while god hasnt always promised an easy road he has promised to be with us as we travel the rough ones",
+          "gold": "love",
+          "output": "This message expresses a reflective, spiritual perspective on faith and divine companionship during difficult times. The speaker is finding comfort and reassurance in the belief that God provides presence and support through hardship, even if the path isn't easy.\n\nThe dominant emotion here is **love** - specifically, a sense of being loved and cared for by a higher power, combined with gratitude and trust in that relationship.\n\nFINAL: love",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.88,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9325000000000001,
+            "rationale": "The agent correctly identifies 'love' as the dominant emotion, matching the reference answer, with coherent reasoning about spiritual comfort and divine companionship supporting that conclusion."
+          }
+        },
+        {
+          "query": "i find myself feeling anxious and unsure",
+          "gold": "fear",
+          "output": "The message expresses feelings of anxiety and uncertainty. The person is describing an internal emotional state characterized by worry and lack of confidence about something.\n\nWhile anxiety could relate to fear, the dominant emotion here is more accurately captured as **fear** - the underlying concern and apprehension about an uncertain situation.\n\nFINAL: fear",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.85,
+            "reasoning_soundness": 0.72,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.8674999999999999,
+            "rationale": "The agent correctly identifies 'fear' as the dominant emotion matching the reference answer, though the reasoning is slightly circular and verbose before reaching the correct conclusion."
+          }
+        },
+        {
+          "query": "i feel completely distracted and emotionally drained",
+          "gold": "anger",
+          "output": "The message expresses a state of mental and emotional exhaustion. The person describes feeling \"completely distracted\" (cognitive overwhelm) and \"emotionally drained\" (depletion of emotional resources). This combination suggests a sense of being worn down and depleted rather than experiencing acute anger, fear, joy, love, or surprise. The dominant emotion here is sadness, which encompasses feelings of low mood, exhaustion, and emotional depletion.\n\nFINAL: sadness",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.85,
+            "reasoning_soundness": 0.8,
+            "execution_accuracy": 0.85,
+            "output_integrity": 0.2,
+            "aggregate": 0.675,
+            "rationale": "The agent's reasoning is coherent and the format is correct, but the final answer 'sadness' does not match the reference answer 'anger', resulting in a low output_integrity score despite the plausible"
+          }
+        },
+        {
+          "query": "i feel the need to compensate with only the most perfect jacket as a topper to cover where my boobs do not fulfill their duties",
+          "gold": "joy",
+          "output": "The message expresses frustration and self-criticism about body image, with a somewhat humorous or sarcastic tone (\"do not fulfill their duties\"). There's an underlying dissatisfaction and concern about appearance, which suggests the dominant emotion is a blend of insecurity and disappointment.\n\nThe primary emotion here is **sadness** — specifically the sadness/disappointment that comes with body image concerns and self-criticism.\n\nFINAL: sadness",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.7,
+            "reasoning_soundness": 0.55,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.2,
+            "aggregate": 0.5875,
+            "rationale": "The agent identified 'sadness' as the dominant emotion, but the reference answer is 'joy'; the message's humorous, self-deprecating tone about fashion and body image leans more playful/joyful than gen"
+          }
+        },
+        {
+          "query": "i never feel lonely as long as people love and support my work",
+          "gold": "sadness",
+          "output": "This message expresses gratitude and contentment about having emotional support and validation for one's work. The speaker is affirming that they feel fulfilled and connected through the love and support of others. There's a positive, warm tone reflecting appreciation and a sense of belonging.\n\nFINAL: joy",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.7,
+            "reasoning_soundness": 0.55,
+            "execution_accuracy": 0.85,
+            "output_integrity": 0.2,
+            "aggregate": 0.5750000000000001,
+            "rationale": "The agent identified 'joy' as the dominant emotion, but the reference answer is 'sadness' — the statement implies underlying loneliness and a conditional need for external validation, which the agent "
+          }
+        },
+        {
+          "query": "i feel curious because i would like to explore what is at the top of the helterskelter like plant",
+          "gold": "surprise",
+          "output": "The message expresses curiosity and a desire to explore something unknown (the top of a helter-skelter-like plant structure). The tone is inquisitive and adventurous rather than expressing strong negative emotions.\n\nHowever, \"curiosity\" is not one of the available categories. Among the given options, this sentiment is closest to **joy** - the positive, engaged feeling of wanting to discover and explore something new.\n\nFINAL: joy",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.3,
+            "reasoning_soundness": 0.4,
+            "execution_accuracy": 0.5,
+            "output_integrity": 0.2,
+            "aggregate": 0.35,
+            "rationale": "The agent identified 'joy' as the dominant emotion while the reference answer is 'surprise,' and the message explicitly states 'curious,' making the agent's reasoning about available categories unclea"
+          }
+        },
+        {
+          "query": "i feel affirmed gracious sensuous and will have less self doubt when a href http generations",
+          "gold": "love",
+          "output": "The message appears to be incomplete (cuts off mid-sentence), but from what's conveyed, the person is expressing positive feelings about themselves. They mention feeling \"affirmed,\" \"gracious,\" and \"sensuous,\" and anticipate having \"less self doubt\" - all indicators of confidence, self-acceptance, and positive self-regard.\n\nThe dominant emotion here is **joy** - a sense of contentment, confidence, and positive self-perception.\n\nFINAL: joy",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.85,
+            "reasoning_soundness": 0.75,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.45,
+            "aggregate": 0.7375,
+            "rationale": "The agent correctly identifies positive emotions and provides reasonable analysis, but labels the dominant emotion as 'joy' rather than the reference answer 'love,' which is a meaningful discrepancy i"
+          }
+        },
+        {
+          "query": "i didn t feel intimidated or overwhelmed with information though",
+          "gold": "fear",
+          "output": "The speaker is expressing a positive sentiment about their experience - they're noting that they didn't feel negatively affected by the situation. They felt comfortable and capable of handling the information presented. This suggests a sense of confidence and ease.\n\nThe dominant emotion here is **joy** - there's a sense of satisfaction and positive feeling about how they managed the experience.\n\nFINAL: joy",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.7,
+            "reasoning_soundness": 0.45,
+            "execution_accuracy": 0.8,
+            "output_integrity": 0.2,
+            "aggregate": 0.5375,
+            "rationale": "The agent identified 'joy' as the dominant emotion, but the reference answer is 'fear' — the negated fear/intimidation in the sentence still carries fear as the dominant emotional theme, and the agent"
+          }
+        },
+        {
+          "query": "i always feel a little jealous of my son because when i joined the church i went almost directly into young women so i didnt learn the primary songs",
+          "gold": "anger",
+          "output": "This message expresses a wistful, nostalgic feeling mixed with mild regret. The speaker is reflecting on missing out on a childhood experience (learning Primary songs) that their son is now having. There's a gentle longing for something they didn't get to experience themselves.\n\nThe emotion here is tinged with sadness—specifically, a bittersweet sadness about a missed experience from their own past, even though they frame it as \"jealousy\" of their son.\n\nFINAL: sadness",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.7,
+            "reasoning_soundness": 0.75,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.3,
+            "aggregate": 0.6625,
+            "rationale": "The agent identified 'sadness' as the dominant emotion, which is a reasonable interpretation, but the reference answer is 'anger,' making the final label incorrect; the agent's reasoning about wistful"
+          }
+        },
+        {
+          "query": "i feel privileged in my world",
+          "gold": "joy",
+          "output": "The message expresses a sense of gratitude and appreciation for one's circumstances. The word \"privileged\" indicates the speaker feels fortunate and blessed about their position or situation in life. This reflects a positive emotional state characterized by contentment and thankfulness.\n\nFINAL: joy",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.88,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9325000000000001,
+            "rationale": "The agent correctly identified 'joy' as the dominant emotion, matching the reference answer, with coherent reasoning about the positive sentiment conveyed by 'privileged,' though the intermediate anal"
+          }
+        },
+        {
+          "query": "i feel about these individuals but that opening line shows how inadequate simple words can be",
+          "gold": "sadness",
+          "output": "The message expresses a sense of emotional complexity and frustration with language itself. The speaker is trying to convey feelings about certain people but finds that basic vocabulary falls short of capturing the depth or nuance of what they actually feel. There's a reflective quality here—acknowledging the limitations of expression rather than displaying a single strong emotion.\n\nThe dominant emotion appears to be **frustration/inadequacy**, which doesn't fit neatly into the standard categories. However, the closest match would be the underlying **sadness** or melancholy—a sense of resignation that words cannot fully express what one feels.\n\nFINAL: sadness",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.78,
+            "reasoning_soundness": 0.72,
+            "execution_accuracy": 0.85,
+            "output_integrity": 0.82,
+            "aggregate": 0.7925,
+            "rationale": "The agent correctly identifies 'sadness' as the final answer matching the reference, though it initially hedges with 'frustration/inadequacy' before settling on the correct label, showing some reasoni"
+          }
+        },
+        {
+          "query": "i can t help feeling curious about it",
+          "gold": "surprise",
+          "output": "The message expresses a sense of curiosity and interest about something. The speaker acknowledges they have an inclination or desire to learn more, which suggests a positive emotional state. Curiosity is often associated with interest, engagement, and a mild form of joy or enthusiasm.\n\nFINAL: joy",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.6,
+            "reasoning_soundness": 0.5,
+            "execution_accuracy": 0.7,
+            "output_integrity": 0.2,
+            "aggregate": 0.5,
+            "rationale": "The agent identified 'joy' as the dominant emotion, which does not match the reference answer of 'surprise'; while 'curiosity' was mentioned in the reasoning, the final label is wrong and the reasonin"
+          }
+        },
+        {
+          "query": "i could feel hundreds of loving people all around the world connecting with earth it was simply beautiful",
+          "gold": "love",
+          "output": "The message expresses a sense of wonder and deep appreciation for a spiritual or emotional experience of global human connection. The speaker describes feeling surrounded by \"loving people\" and uses the word \"beautiful\" to characterize the experience. There's a sense of warmth, interconnectedness, and positive emotion throughout.\n\nThe dominant emotion here is joy - specifically a profound, transcendent joy that comes from feeling part of something larger and experiencing human connection and love on a global scale.\n\nFINAL: joy",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.7,
+            "reasoning_soundness": 0.55,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.35,
+            "aggregate": 0.625,
+            "rationale": "The agent correctly identifies positive emotion but labels it 'joy' rather than 'love,' which is the ground truth; the word 'loving' is the most prominent emotional descriptor in the text, making 'lov"
+          }
+        },
+        {
+          "query": "i do feel insecure sometimes but who doesnt",
+          "gold": "fear",
+          "output": "The message expresses a moment of vulnerability and self-reflection. The speaker acknowledges feeling insecure but normalizes it by noting that this is a common human experience (\"who doesn't\"). \n\nThe tone is somewhat resigned and accepting rather than deeply distressed. There's a hint of sadness or concern underlying the admission of insecurity, but it's tempered by the philosophical acceptance that this is universal.\n\nThe dominant emotion here is **sadness** - specifically a mild, reflective sadness or melancholy about personal insecurity, though it's being processed in a relatively calm, normalized way.\n\nFINAL: sadness",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.75,
+            "reasoning_soundness": 0.6,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.3,
+            "aggregate": 0.6375,
+            "rationale": "The agent correctly identified the task and provided a structured analysis, but labeled the dominant emotion as 'sadness' rather than the reference answer of 'fear,' which is the more accurate classif"
+          }
+        },
+        {
+          "query": "i am not a people person but for some fuckin reason people feel that they can come bore me with their fuckin petty garbage",
+          "gold": "anger",
+          "output": "The message expresses frustration about unwanted social interactions. The speaker is annoyed that people approach them despite not being sociable, and they're irritated by what they perceive as trivial complaints or gossip from others.\n\nThe dominant emotion here is **anger** - evidenced by the profanity, the dismissive language (\"petty garbage\"), and the clear irritation with the situation.\n\nFINAL: anger",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.98,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly identified anger as the dominant emotion, supported by sound reasoning referencing profanity and dismissive language, with a clear final answer matching the reference."
+          }
+        },
+        {
+          "query": "i think they have always been proponents of the idea and it is just slightly possible that his feelings for a particularly charming new england girl have brought him around to their way of thinking",
+          "gold": "joy",
+          "output": "This message reflects a thoughtful observation about someone's potential change in perspective, possibly influenced by romantic feelings. The tone is contemplative and somewhat amused, with a hint of gentle speculation about how personal relationships might shape beliefs.\n\nThe dominant emotion here is **joy** - there's a warm, affectionate quality to the observation about the \"charming new england girl\" and the gentle humor in suggesting that romantic feelings might have influenced someone's views. The overall sentiment is positive and somewhat delighted.\n\nFINAL: joy",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.75,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.8875,
+            "rationale": "The agent correctly identifies 'joy' as the dominant emotion matching the reference answer, with reasonable (if somewhat stretched) justification about warmth and affection in the text, and presents t"
+          }
+        },
+        {
+          "query": "i feel that they ignored the systemic nature of a pattern of sexual abuse and mishandling of reports of sexual abuse in the service of understandably wishing to defend and protect a friend and his reputation",
+          "gold": "sadness",
+          "output": "The speaker is expressing frustration and disappointment about how institutional failures were overlooked or minimized. They recognize the understandable human impulse to protect a friend, but they're clearly upset that this came at the cost of ignoring serious systemic problems with sexual abuse and mishandled reports.\n\nThe dominant emotion here is **anger** — specifically, a measured but firm anger about institutional negligence and the prioritization of reputation protection over accountability for abuse patterns.\n\nFINAL: anger",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.85,
+            "reasoning_soundness": 0.72,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.35,
+            "aggregate": 0.705,
+            "rationale": "The agent identified 'anger' as the dominant emotion, but the reference answer is 'sadness'; while the text could plausibly evoke either emotion, the agent's answer does not match the ground truth, an"
+          }
+        },
+        {
+          "query": "im feeling absolutely amazing",
+          "gold": "surprise",
+          "output": "The message expresses a very positive emotional state. The person is using the word \"amazing\" combined with \"absolutely,\" which indicates strong enthusiasm and happiness about how they're feeling.\n\nFINAL: joy",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.85,
+            "reasoning_soundness": 0.8,
+            "execution_accuracy": 0.85,
+            "output_integrity": 0.3,
+            "aggregate": 0.7,
+            "rationale": "The agent correctly identified a positive emotion and provided reasonable reasoning, but the final answer 'joy' does not match the reference answer 'surprise,' resulting in a low output_integrity scor"
+          }
+        },
+        {
+          "query": "im so proud of you no words can describe the way that makes my heart feel thank you god for my supportive amazing hubbard",
+          "gold": "love",
+          "output": "The message expresses deep affection and gratitude toward someone (referred to as \"hubbard,\" likely \"husband\"). The speaker is proud, their heart is full, and they're expressing thankfulness. The tone is warm, appreciative, and emotionally moved.\n\nThe dominant emotion here is love - both romantic love for their partner and a broader sense of loving gratitude.\n\nFINAL: love",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.98,
+            "aggregate": 0.9500000000000001,
+            "rationale": "The agent correctly identified 'love' as the dominant emotion, matching the reference answer, with sound reasoning about the affectionate and grateful tone of the message."
+          }
+        },
+        {
+          "query": "i am feeling apprehensive about it but also wildly excited",
+          "gold": "fear",
+          "output": "The message expresses two emotions: apprehension (which relates to fear) and wild excitement (which relates to joy). However, the dominant emotion appears to be the excitement, as it's described as \"wildly\" excited, suggesting intensity and enthusiasm that overshadows the apprehension.\n\nFINAL: joy",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.7,
+            "reasoning_soundness": 0.55,
+            "execution_accuracy": 0.85,
+            "output_integrity": 0.2,
+            "aggregate": 0.5750000000000001,
+            "rationale": "The agent correctly identified both emotions but chose joy as dominant based on the intensifier 'wildly,' while the reference answer is fear/apprehension; the reasoning is plausible but leads to the w"
+          }
+        },
+        {
+          "query": "i am feeling a bit offended",
+          "gold": "anger",
+          "output": "The message expresses a feeling of being offended, which typically stems from a sense of disrespect or hurt. Being offended involves feeling wronged or insulted, which relates to negative emotions. This could involve elements of anger (at the perceived slight) or sadness (at feeling disrespected), but the core emotion here is anger—a reaction to something perceived as unjust or disrespectful.\n\nFINAL: anger",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.85,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.925,
+            "rationale": "The agent correctly identifies 'anger' as the dominant emotion, matching the reference answer, with coherent reasoning that acknowledges related emotions while arriving at the correct conclusion."
+          }
+        },
+        {
+          "query": "i kinda get real attached and excited when i feel that way and i never handle things as well as others would",
+          "gold": "joy",
+          "output": "This message reflects someone expressing vulnerability about their emotional patterns. The speaker is acknowledging that they become deeply invested and enthusiastic (\"attached and excited\"), but they're concerned about their ability to manage situations compared to others. There's a tone of self-awareness mixed with some self-criticism or worry.\n\nThe dominant emotion here is **sadness** — specifically a melancholic self-reflection tinged with disappointment in themselves or concern about their coping abilities.\n\nFINAL: sadness",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.7,
+            "reasoning_soundness": 0.45,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.2,
+            "aggregate": 0.5625,
+            "rationale": "The agent correctly identified the task and provided a clear final label, but chose 'sadness' instead of the reference answer 'joy,' misweighting the self-critical framing over the explicit 'attached "
+          }
+        },
+        {
+          "query": "i realize how much my little family leans on me and it felt so overwhelming and i feel so inadequate",
+          "gold": "sadness",
+          "output": "This message expresses a mix of emotions, but the dominant one appears to be **sadness** combined with feelings of inadequacy and being overwhelmed. The person is reflecting on their responsibility within their family and experiencing distress about whether they can meet those expectations. The language—\"overwhelming,\" \"inadequate\"—points to emotional vulnerability and self-doubt rather than anger, fear, joy, love, or surprise.\n\nFINAL: sadness",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.95,
+            "aggregate": 0.925,
+            "rationale": "The agent correctly identifies sadness as the dominant emotion, matching the reference answer, with sound reasoning grounded in the input text, though it adds some extra elaboration beyond what was st"
+          }
+        },
+        {
+          "query": "i think or feel but like this person i am still amazed by them",
+          "gold": "surprise",
+          "output": "The message expresses a sense of wonder and admiration toward another person. The speaker is describing an ongoing feeling of being \"amazed\" by someone they care about, which suggests positive regard and astonishment at their qualities or actions.\n\nFINAL: joy",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.7,
+            "reasoning_soundness": 0.5,
+            "execution_accuracy": 0.85,
+            "output_integrity": 0.3,
+            "aggregate": 0.5874999999999999,
+            "rationale": "The agent correctly identified the task and provided a label, but chose 'joy' instead of the reference answer 'surprise/amazement'; the word 'amazed' strongly signals surprise, and the reasoning incor"
+          }
+        },
+        {
+          "query": "i am definitely feeling the effects of the progesterone in two ways my breasts are tender and i m tired",
+          "gold": "love",
+          "output": "The message describes physical symptoms (breast tenderness and fatigue) that the speaker is experiencing as side effects of progesterone. The tone is matter-of-fact and informational rather than emotionally charged. There's no strong expression of anger, fear, joy, love, or surprise. \n\nThe closest emotion here would be mild sadness or resignation about experiencing these uncomfortable side effects, but it's quite subdued. However, the speaker is simply reporting their state rather than expressing distress about it.\n\nFINAL: sadness",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.6,
+            "reasoning_soundness": 0.55,
+            "execution_accuracy": 0.8,
+            "output_integrity": 0.1,
+            "aggregate": 0.5125,
+            "rationale": "The agent's output of 'sadness' does not match the reference answer of 'love', and while the reasoning about the matter-of-fact tone is plausible, it fails to identify the correct dominant emotion, re"
+          }
+        }
+      ]
+    },
+    "two_phase": {
+      "objective_mean": 0.43333333333333335,
+      "objective_ci95": [
+        0.26666666666666666,
+        0.6
+      ],
+      "gpa_mean": 0.7318333333333332,
+      "gpa_dims": {
+        "target_alignment": 0.8073333333333331,
+        "reasoning_soundness": 0.6940000000000002,
+        "execution_accuracy": 0.8716666666666665,
+        "output_integrity": 0.5543333333333332
+      },
+      "prompt": "You are an emotion-detection assistant.\n\n## Task\nDetect the **single dominant emotion** in the message and output **only that emotion label** — nothing else.\n\n## Emotion Labels\n- **anger** – irritation, frustration, rage, resentment, feeling ferocious or defiant\n- **fear** – anxiety, worry, dread, terror\n- **joy** – happiness, excitement, pleasure, contentment\n- **love** – affection, warmth, caring, adoration\n- **sadness** – grief, sorrow, disappointment, loneliness\n- **surprise** – shock, astonishment, disbelief, being stunned\n\n## Decision Rules\n1. Choose the **one** label that best captures the overall emotional tone.\n2. When multiple emotions appear, pick the one that feels most **primary or intense**.\n3. \"Shocked\" and \"saddened\" together → **surprise** (shock maps to surprise).\n4. Resistance, defiance, irritation, or annoyance → **anger**.\n5. Fierce, ferocious, hungry intensity directed outward → **anger**.\n6. Never explain your reasoning.\n\n## Output Format\nRespond with **exactly one word**: the emotion label.",
+      "examples": [
+        {
+          "query": "i feel shy about it all and also a little concerned whether my new title will distance me away from people i care for",
+          "gold": "fear",
+          "output": "The message expresses concern about potential negative consequences (distancing from loved ones) combined with shyness. The primary emotional tone centers on worry and anxiety about how a life change might affect important relationships.\n\nFINAL: fear",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.82,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.905,
+            "rationale": "The agent correctly identifies 'fear' as the dominant emotion, matching the reference answer, with reasonable supporting reasoning about worry and anxiety over relationship consequences."
+          }
+        },
+        {
+          "query": "i only do unwillingly and always leaves me feeling grouchy and unsettled",
+          "gold": "anger",
+          "output": "The message expresses reluctance, irritation, and discomfort with something being done unwillingly. The words \"grouchy\" and \"unsettled\" indicate frustration and annoyance.\n\nFINAL: anger",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly identified anger as the dominant emotion, supported by sound reasoning linking 'grouchy' and 'unsettled' to frustration and annoyance, matching the reference answer."
+          }
+        },
+        {
+          "query": "i am feeling profoundly peaceful",
+          "gold": "joy",
+          "output": "FINAL: joy",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.7,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.9,
+            "aggregate": 0.8749999999999999,
+            "rationale": "The agent correctly identified 'joy' matching the reference answer, though 'peaceful' could reasonably map to 'calm/serenity' rather than joy; the answer aligns with the gold standard and format is cl"
+          }
+        },
+        {
+          "query": "i was so focused on my heavy breathing my even strides the drops of sweat on my forehead that i forgot to feel socially awkward",
+          "gold": "sadness",
+          "output": "The message describes someone becoming absorbed in physical sensations and activity, which causes them to forget about social anxiety. The overall tone is positive—relief and freedom from awkwardness through focus and engagement.\n\nFINAL: joy",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.6,
+            "reasoning_soundness": 0.55,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.2,
+            "aggregate": 0.5625,
+            "rationale": "The agent identified 'joy' as the dominant emotion, which does not match the reference answer of 'sadness'; while the agent's reasoning about relief from social awkwardness has some surface plausibili"
+          }
+        },
+        {
+          "query": "i feel a little stunned but can t imagine what the folks who were working in the studio up until this morning are feeling",
+          "gold": "surprise",
+          "output": "The message expresses being stunned (shock) combined with empathy for others' distress. The primary emotional tone centers on shock and disbelief about an unexpected situation.\n\nFINAL: surprise",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.88,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.95,
+            "aggregate": 0.9199999999999999,
+            "rationale": "The agent correctly identifies 'surprise' as the dominant emotion, matching the reference answer, with coherent reasoning linking 'stunned' to shock/surprise."
+          }
+        },
+        {
+          "query": "i really feel like they were gentle reminders that while god hasnt always promised an easy road he has promised to be with us as we travel the rough ones",
+          "gold": "love",
+          "output": "This message expresses comfort, reassurance, and spiritual affection. The speaker finds solace in faith and feels cared for by a divine presence during difficult times. The tone is warm, hopeful, and deeply caring.\n\nFINAL: love",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly identified 'love' as the dominant emotion, with coherent reasoning about the warm, caring, and spiritually affectionate tone of the message, matching the reference answer exactly."
+          }
+        },
+        {
+          "query": "i find myself feeling anxious and unsure",
+          "gold": "fear",
+          "output": "FINAL: fear",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly identified 'fear' as the dominant emotion, matching the reference answer, and the output is concise and properly formatted."
+          }
+        },
+        {
+          "query": "i feel completely distracted and emotionally drained",
+          "gold": "anger",
+          "output": "The message expresses emotional exhaustion and difficulty concentrating. \"Emotionally drained\" suggests depletion and weariness, which aligns with sadness—a state of low energy, disappointment, and emotional heaviness.\n\nFINAL: sadness",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.85,
+            "reasoning_soundness": 0.75,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.2,
+            "aggregate": 0.675,
+            "rationale": "The agent's reasoning is coherent and the detected emotion (sadness) is a plausible interpretation of the message, but it does not match the reference answer (anger), resulting in a low output_integri"
+          }
+        },
+        {
+          "query": "i feel the need to compensate with only the most perfect jacket as a topper to cover where my boobs do not fulfill their duties",
+          "gold": "joy",
+          "output": "The message expresses self-criticism and dissatisfaction with one's body, seeking to hide or compensate for perceived inadequacy. This reflects disappointment and negative self-judgment.\n\nFINAL: sadness",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.7,
+            "reasoning_soundness": 0.55,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.2,
+            "aggregate": 0.5875,
+            "rationale": "The agent identified 'sadness' as the dominant emotion, but the reference answer is 'joy'; the message has a humorous, self-deprecating tone that leans playful rather than genuinely sad, making the ag"
+          }
+        },
+        {
+          "query": "i never feel lonely as long as people love and support my work",
+          "gold": "sadness",
+          "output": "This message expresses contentment and warmth about being supported and loved by others. The speaker is affirming the positive emotional connection they feel through people's love and support.\n\nFINAL: love",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.6,
+            "reasoning_soundness": 0.4,
+            "execution_accuracy": 0.7,
+            "output_integrity": 0.2,
+            "aggregate": 0.475,
+            "rationale": "The agent identified 'love' as the dominant emotion, missing the underlying sadness implied by the conditional framing ('as long as') which suggests loneliness is a real concern, contradicting the ref"
+          }
+        },
+        {
+          "query": "i feel curious because i would like to explore what is at the top of the helterskelter like plant",
+          "gold": "surprise",
+          "output": "The message expresses curiosity and interest in exploring something, which reflects a positive, engaged emotional state. This maps to **joy** — the pleasure and excitement of wanting to discover something new.\n\nFINAL: joy",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.6,
+            "reasoning_soundness": 0.45,
+            "execution_accuracy": 0.7,
+            "output_integrity": 0.2,
+            "aggregate": 0.4875,
+            "rationale": "The agent correctly identified curiosity/interest but mapped it to 'joy' rather than the reference answer 'surprise', and the reasoning that curiosity maps to joy is a logical stretch that doesn't ali"
+          }
+        },
+        {
+          "query": "i feel affirmed gracious sensuous and will have less self doubt when a href http generations",
+          "gold": "love",
+          "output": "The message expresses positive feelings of affirmation, graciousness, and sensuality, along with reduced self-doubt. These are indicators of contentment and happiness.\n\nFINAL: joy",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.7,
+            "reasoning_soundness": 0.65,
+            "execution_accuracy": 0.8,
+            "output_integrity": 0.4,
+            "aggregate": 0.6375000000000001,
+            "rationale": "The agent identified 'joy' as the dominant emotion while the reference answer is 'love'; the reasoning is plausible but misses the affectionate/loving tone implied by the input, resulting in a wrong f"
+          }
+        },
+        {
+          "query": "i didn t feel intimidated or overwhelmed with information though",
+          "gold": "fear",
+          "output": "The message expresses a lack of negative feelings (not intimidated, not overwhelmed). This suggests relief, contentment, or satisfaction with how things went.\n\nFINAL: joy",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.6,
+            "reasoning_soundness": 0.55,
+            "execution_accuracy": 0.75,
+            "output_integrity": 0.2,
+            "aggregate": 0.525,
+            "rationale": "The agent identified the surface-level positive framing but missed that the dominant emotion signaled by words like 'intimidated' and 'overwhelmed' is fear (negated), which the reference answer confir"
+          }
+        },
+        {
+          "query": "i always feel a little jealous of my son because when i joined the church i went almost directly into young women so i didnt learn the primary songs",
+          "gold": "anger",
+          "output": "This message expresses a wistful, slightly envious feeling about missing out on a childhood experience. The speaker feels a gentle longing for something their son had that they didn't—the experience of learning primary songs in church.\n\nThe dominant emotion here is **sadness** (specifically, a mild form of disappointment or regret about a missed experience).\n\nFINAL: sadness",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.72,
+            "reasoning_soundness": 0.75,
+            "execution_accuracy": 0.85,
+            "output_integrity": 0.3,
+            "aggregate": 0.6549999999999999,
+            "rationale": "The agent identified 'sadness' as the dominant emotion, which is a reasonable interpretation of the message, but the reference answer is 'anger'; the agent's reasoning is coherent and the format is ac"
+          }
+        },
+        {
+          "query": "i feel privileged in my world",
+          "gold": "joy",
+          "output": "FINAL: joy",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.85,
+            "execution_accuracy": 0.9,
+            "output_integrity": 1.0,
+            "aggregate": 0.9249999999999999,
+            "rationale": "The agent correctly identified 'joy' as the dominant emotion, matching the reference answer exactly, with a clean and direct output format."
+          }
+        },
+        {
+          "query": "i feel about these individuals but that opening line shows how inadequate simple words can be",
+          "gold": "sadness",
+          "output": "The message expresses frustration about the limitations of language to capture complex feelings toward certain people. There's a sense of exasperation with inadequacy—the speaker feels their emotions are too nuanced or intense for basic vocabulary.\n\nFINAL: anger",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.6,
+            "reasoning_soundness": 0.4,
+            "execution_accuracy": 0.8,
+            "output_integrity": 0.2,
+            "aggregate": 0.5,
+            "rationale": "The agent identified 'anger' as the dominant emotion, but the reference answer is 'sadness'; the reasoning about frustration/exasperation is a plausible but incorrect interpretation, and the final lab"
+          }
+        },
+        {
+          "query": "i can t help feeling curious about it",
+          "gold": "surprise",
+          "output": "FINAL: joy",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.85,
+            "reasoning_soundness": 0.3,
+            "execution_accuracy": 0.8,
+            "output_integrity": 0.2,
+            "aggregate": 0.5375,
+            "rationale": "The agent correctly performed the task format (detecting a single dominant emotion) but identified 'joy' rather than the reference answer 'surprise', and 'curiosity' would be the most intuitive label "
+          }
+        },
+        {
+          "query": "i could feel hundreds of loving people all around the world connecting with earth it was simply beautiful",
+          "gold": "love",
+          "output": "FINAL: joy",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.85,
+            "reasoning_soundness": 0.6,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.4,
+            "aggregate": 0.6875,
+            "rationale": "The agent correctly performed emotion detection in the right format, but identified 'joy' instead of the reference answer 'love,' despite the message explicitly containing 'loving' and describing a lo"
+          }
+        },
+        {
+          "query": "i do feel insecure sometimes but who doesnt",
+          "gold": "fear",
+          "output": "FINAL: fear",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.8,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.95,
+            "aggregate": 0.8999999999999999,
+            "rationale": "The agent correctly identified 'fear' as the dominant emotion, matching the reference answer, with a concise and properly formatted output."
+          }
+        },
+        {
+          "query": "i am not a people person but for some fuckin reason people feel that they can come bore me with their fuckin petty garbage",
+          "gold": "anger",
+          "output": "The message expresses frustration and irritation about unwanted social interactions. The repeated use of \"fuckin\" and words like \"bore\" and \"petty garbage\" indicate annoyance and resentment toward others' behavior.\n\nFINAL: anger",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.98,
+            "aggregate": 0.9500000000000001,
+            "rationale": "The agent correctly identified anger as the dominant emotion, supported by sound reasoning about the linguistic cues, and the final answer matches the reference exactly."
+          }
+        },
+        {
+          "query": "i think they have always been proponents of the idea and it is just slightly possible that his feelings for a particularly charming new england girl have brought him around to their way of thinking",
+          "gold": "joy",
+          "output": "This message expresses a thoughtful observation about someone's potential change of perspective, possibly influenced by romantic feelings. The tone is reflective and somewhat amused or pleased by this development. There's a gentle warmth in the mention of \"charming\" and the idea of someone being \"brought around\" to a better way of thinking through affection.\n\nFINAL: love",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.7,
+            "reasoning_soundness": 0.65,
+            "execution_accuracy": 0.75,
+            "output_integrity": 0.4,
+            "aggregate": 0.625,
+            "rationale": "The agent identified 'love' as the dominant emotion while the reference answer is 'joy'; although the reasoning about romantic warmth is plausible, the final label does not match the ground truth, and"
+          }
+        },
+        {
+          "query": "i feel that they ignored the systemic nature of a pattern of sexual abuse and mishandling of reports of sexual abuse in the service of understandably wishing to defend and protect a friend and his reputation",
+          "gold": "sadness",
+          "output": "The message expresses frustration and disappointment about how systemic abuse and mishandling were overlooked in favor of protecting someone's reputation. There's a sense of irritation at this prioritization, combined with sadness about the abuse itself.\n\nThe dominant emotion here is the frustration and irritation at being ignored or dismissed—the core complaint is about what \"they\" failed to do.\n\nFINAL: anger",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.7,
+            "reasoning_soundness": 0.55,
+            "execution_accuracy": 0.85,
+            "output_integrity": 0.35,
+            "aggregate": 0.6125,
+            "rationale": "The agent identified 'anger' as the dominant emotion, but the reference answer is 'sadness'; while the text does contain elements of frustration, the measured, reflective tone and focus on systemic ha"
+          }
+        },
+        {
+          "query": "im feeling absolutely amazing",
+          "gold": "surprise",
+          "output": "FINAL: joy",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.8,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.2,
+            "aggregate": 0.7125,
+            "rationale": "The agent correctly addressed the task and 'joy' is a reasonable interpretation of 'absolutely amazing,' but the reference answer is 'surprise,' making the output incorrect on output_integrity despite"
+          }
+        },
+        {
+          "query": "im so proud of you no words can describe the way that makes my heart feel thank you god for my supportive amazing hubbard",
+          "gold": "love",
+          "output": "The message expresses warmth, affection, and deep appreciation for someone close. The speaker is celebrating their partner with genuine care and gratitude, describing how their heart feels moved by this person's support.\n\nFINAL: love",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly identified 'love' as the dominant emotion, matching the reference answer, with coherent reasoning about warmth, affection, and gratitude expressed in the message."
+          }
+        },
+        {
+          "query": "i am feeling apprehensive about it but also wildly excited",
+          "gold": "fear",
+          "output": "The message expresses both apprehension (fear-based) and wild excitement (joy-based). The word \"wildly\" intensifies the excitement, and \"excited\" is a strong positive emotion that appears to dominate the overall tone despite the apprehension.\n\nFINAL: joy",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.7,
+            "reasoning_soundness": 0.55,
+            "execution_accuracy": 0.8,
+            "output_integrity": 0.2,
+            "aggregate": 0.5625,
+            "rationale": "The agent identified both emotions correctly but concluded 'joy' as dominant, while the reference answer is 'fear'; the reasoning that 'wildly' makes excitement dominant is plausible but contradicts t"
+          }
+        },
+        {
+          "query": "i am feeling a bit offended",
+          "gold": "anger",
+          "output": "FINAL: anger",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.85,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.95,
+            "aggregate": 0.9124999999999999,
+            "rationale": "The agent correctly identified 'anger' as the dominant emotion, matching the reference answer, and the output is concise and properly formatted."
+          }
+        },
+        {
+          "query": "i kinda get real attached and excited when i feel that way and i never handle things as well as others would",
+          "gold": "joy",
+          "output": "The message expresses a mix of self-awareness about attachment/excitement (which could suggest joy) but frames it negatively with concern about not handling things well. The underlying tone is one of worry and anxiety about personal shortcomings.\n\nFINAL: fear",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.6,
+            "reasoning_soundness": 0.45,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.2,
+            "aggregate": 0.5375000000000001,
+            "rationale": "The agent over-weighted the negative framing and missed that the dominant emotion expressed is joy/excitement (attachment and excitement when feeling that way), arriving at the wrong label 'fear' inst"
+          }
+        },
+        {
+          "query": "i realize how much my little family leans on me and it felt so overwhelming and i feel so inadequate",
+          "gold": "sadness",
+          "output": "The message expresses feeling overwhelmed by responsibility and inadequate to meet the needs of loved ones. This combines sadness (inadequacy, self-doubt) with anxiety (overwhelm), but the core emotional tone is one of disappointment in oneself and a sense of burden—rooted in sadness rather than fear.\n\nFINAL: sadness",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly identifies sadness as the dominant emotion, matching the reference answer, with sound reasoning that acknowledges the nuance of anxiety/overwhelm while correctly prioritizing sadne"
+          }
+        },
+        {
+          "query": "i think or feel but like this person i am still amazed by them",
+          "gold": "surprise",
+          "output": "The message expresses wonder and astonishment about someone, despite uncertainty about the exact nature of the feeling. The dominant emotional tone is one of being struck or impressed by this person.\n\nFINAL: surprise",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.85,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.925,
+            "rationale": "The agent correctly identified 'surprise' as the dominant emotion, matching the reference answer, with coherent reasoning about the amazement/astonishment expressed in the message."
+          }
+        },
+        {
+          "query": "i am definitely feeling the effects of the progesterone in two ways my breasts are tender and i m tired",
+          "gold": "love",
+          "output": "The message describes physical symptoms (breast tenderness and fatigue) resulting from progesterone. There's no strong emotional valence expressed—it's a factual statement about bodily sensations. However, if I must detect an emotion, the tone suggests mild discomfort or resignation about these side effects, which leans toward a subtle **sadness** or disappointment about the situation.\n\nFINAL: sadness",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.6,
+            "reasoning_soundness": 0.7,
+            "execution_accuracy": 0.8,
+            "output_integrity": 0.2,
+            "aggregate": 0.575,
+            "rationale": "The agent's reasoning about physical symptoms and mild discomfort is plausible, but the output 'sadness' does not match the reference answer 'love,' which likely reflects the context of progesterone u"
+          }
+        }
+      ],
+      "optimization": {
+        "baseline_val": 0.7,
+        "struct_best_val": 1.0,
+        "prompt_best_val": 1.0,
+        "final_val": 1.0,
+        "shipped_baseline": false,
+        "ship_prob_better": 0.73675,
+        "deployed_phase": "structural-only",
+        "struct_iters": 30,
+        "prompt_iters": 30,
+        "struct_prompt": "You are an emotion-detection assistant.\n\n## Task\nDetect the **single dominant emotion** in the message and output **only that emotion label** — nothing else.\n\n## Emotion Labels\n- **anger** – irritation, frustration, rage, resentment, feeling ferocious or defiant\n- **fear** – anxiety, worry, dread, terror\n- **joy** – happiness, excitement, pleasure, contentment\n- **love** – affection, warmth, caring, adoration\n- **sadness** – grief, sorrow, disappointment, loneliness\n- **surprise** – shock, astonishment, disbelief, being stunned\n\n## Decision Rules\n1. Choose the **one** label that best captures the overall emotional tone.\n2. When multiple emotions appear, pick the one that feels most **primary or intense**.\n3. \"Shocked\" and \"saddened\" together → **surprise** (shock maps to surprise).\n4. Resistance, defiance, irritation, or annoyance → **anger**.\n5. Fierce, ferocious, hungry intensity directed outward → **anger**.\n6. Never explain your reasoning.\n\n## Output Format\nRespond with **exactly one word**: the emotion label.",
+        "trajA": [
+          {
+            "iter": 0,
+            "val_obj": 0.7
+          },
+          {
+            "iter": 1,
+            "val_obj": 1.0,
+            "kept": true
+          },
+          {
+            "iter": 2,
+            "screened": true
+          },
+          {
+            "iter": 3,
+            "screened": true
+          },
+          {
+            "iter": 4,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 5,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 6,
+            "screened": true
+          },
+          {
+            "iter": 7,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 8,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 9,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 10,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 11,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 12,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 13,
+            "screened": true
+          },
+          {
+            "iter": 14,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 15,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 16,
+            "screened": true
+          },
+          {
+            "iter": 17,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 18,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 19,
+            "screened": true
+          },
+          {
+            "iter": 20,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 21,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 22,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 23,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 24,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 25,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 26,
+            "screened": true
+          },
+          {
+            "iter": 27,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 28,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 29,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 30,
+            "val_obj": 1.0,
+            "kept": false
+          }
+        ],
+        "trajB": [
+          {
+            "iter": 0,
+            "val_obj": 1.0
+          },
+          {
+            "iter": 1,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 2,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 3,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 4,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 5,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 6,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 7,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 8,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 9,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 10,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 11,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 12,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 13,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 14,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 15,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 16,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 17,
+            "screened": true
+          },
+          {
+            "iter": 18,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 19,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 20,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 21,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 22,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 23,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 24,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 25,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 26,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 27,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 28,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 29,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 30,
+            "screened": true
+          }
+        ]
+      }
+    }
+  },
+  "duration_s": 622.5
+}

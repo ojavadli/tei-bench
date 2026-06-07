@@ -1,0 +1,1214 @@
+{
+  "task_id": "platform_toxicity",
+  "industry": "Online Platform",
+  "metric": "classification",
+  "source": "SetFit/toxic_conversations via HuggingFace (see dataset card for license).",
+  "is_public": true,
+  "n_train": 15,
+  "n_test": 30,
+  "agent_model": "claude-haiku-4-5",
+  "judge_model": "claude-sonnet-4-6",
+  "optimizer_model": "claude-sonnet-4-6",
+  "seed": 0,
+  "arms": {
+    "baseline": {
+      "objective_mean": 0.5666666666666667,
+      "objective_ci95": [
+        0.4,
+        0.7333333333333333
+      ],
+      "gpa_mean": 0.7841666666666665,
+      "gpa_dims": {
+        "target_alignment": 0.8783333333333329,
+        "reasoning_soundness": 0.7273333333333335,
+        "execution_accuracy": 0.9049999999999996,
+        "output_integrity": 0.6259999999999998
+      },
+      "prompt": "You are a toxicity-moderation assistant. Flag whether the comment is toxic. Classify into one of these categories: not toxic, toxic.",
+      "examples": [
+        {
+          "query": "\"GOP is composed mostly of white trash, inbreeds\"? Says a whole lot about how intelligent and tolerant you are.",
+          "gold": "toxic",
+          "output": "This comment contains a generalization that uses derogatory language (\"white trash,\" \"inbreeds\") to demean a large group of people based on political affiliation and implied race/class. While the speaker is critiquing someone else's intelligence and tolerance, the comment itself employs insulting stereotypes and dehumanizing language.\n\nThe use of slurs and sweeping negative generalizations about groups of people constitutes toxic speech, even when framed as criticism of someone else's behavior.\n\nFINAL: toxic",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9425000000000001,
+            "rationale": "The agent correctly identified the comment as toxic, matching the reference answer, with sound reasoning about derogatory language and dehumanizing generalizations, though the verbose explanation was "
+          }
+        },
+        {
+          "query": "@advertiser1: yes without the darn population increase by immigration traffic would not be horrible and rail would not be have been an idea to come even up.",
+          "gold": "not toxic",
+          "output": "I'll analyze this comment for toxicity.\n\nThe comment expresses a viewpoint about immigration and its effects on traffic and infrastructure. While it contains a critical perspective on immigration policy, the language used is relatively mild (\"darn\" is a euphemism). The comment doesn't use slurs, dehumanizing language, or direct attacks on individuals or groups. It presents a policy opinion, albeit one that frames immigration negatively in relation to traffic and infrastructure problems.\n\nThe comment is somewhat poorly written and unclear, but the core message appears to be a policy critique rather than hateful speech or personal attacks.\n\nFINAL: not toxic",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.88,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9325000000000001,
+            "rationale": "The agent correctly identified the comment as not toxic, matching the reference answer, with sound reasoning about the mild language and policy-critique nature of the comment."
+          }
+        },
+        {
+          "query": "LOL!!!!!!!!!! You're going to use the fact that guns were used to murder 10's of millions of people to imply that guns make us safer? Seriously? You can't be that dumb.",
+          "gold": "toxic",
+          "output": "I'll analyze this comment for toxicity.\n\nThe comment expresses strong disagreement with an argument about gun safety. While it uses emphatic language (multiple exclamation marks, \"LOL\") and contains a personal insult (\"You can't be that dumb\"), the core content is engaging in a political/policy debate about guns and safety statistics.\n\nThe insult is directed at the logical reasoning of an argument rather than attacking the person's identity, character, or group membership in a dehumanizing way. The tone is frustrated and sarcastic, but the comment is fundamentally making a substantive point about gun violence statistics.\n\nThis falls into the category of heated but not severely toxic discourse—it's argumentative and includes name-calling, but doesn't cross into severe harassment, slurs, or dehumanization.\n\nFINAL: toxic",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.6,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.9,
+            "aggregate": 0.8375,
+            "rationale": "The agent reached the correct 'toxic' label matching the reference, but its reasoning was shaky—it initially downplayed the insult ('You can't be that dumb') before ultimately labeling it toxic, showi"
+          }
+        },
+        {
+          "query": "No phoney High Street foreigners in this PMO. Thank goodness.",
+          "gold": "not toxic",
+          "output": "I need to analyze this comment for toxicity.\n\nThe comment appears to contain:\n1. \"No phoney High Street foreigners\" - This uses the term \"foreigners\" in a dismissive way, suggesting disapproval of foreign individuals\n2. \"in this PMO\" - Referring to the Prime Minister's Office\n3. \"Thank goodness\" - Expressing relief at the absence of these people\n\nThe phrase \"phoney High Street foreigners\" is derogatory and xenophobic. It expresses a preference against foreign people in positions of power, using dismissive language (\"phoney\"). This reflects prejudice based on national origin/immigration status.\n\nWhile not using explicit slurs, the comment promotes xenophobic sentiment by suggesting that having foreign people in government is undesirable.\n\nFINAL: toxic",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.6,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.2,
+            "aggregate": 0.65,
+            "rationale": "The agent correctly performed the classification task but reached the wrong conclusion (toxic vs. not toxic), misreading what appears to be a comment about avoiding inauthentic or performative diversi"
+          }
+        },
+        {
+          "query": "What the goofball leftwing journalists/editors who wrote this article don't understand is that it's not so much whether Trump's products are manufactured here in the U.S. as it is that Trump and a Republican Congress are willing to create an environment with less taxes and regulations that make the United States a country that is more attractive for businesses to set up their base, grow and thrive. The article is a great example of the idiocy of leftwing journalism.",
+          "gold": "toxic",
+          "output": "I'll analyze this comment for toxicity.\n\nThe comment expresses strong political disagreement with journalists and their coverage. It uses derogatory language (\"goofball,\" \"idiocy\") to describe people with opposing political views and characterizes an entire group (\"leftwing journalists/editors\") negatively.\n\nHowever, the comment:\n- Articulates a substantive political argument about tax policy and business environment\n- Criticizes ideas/journalism rather than calling for harm\n- Uses name-calling that is relatively mild rather than severe\n- Doesn't target individuals by name or incite violence/harassment\n\nThis falls into a gray area, but the use of dismissive language (\"goofball,\" \"idiocy\") directed at a group of people, combined with broad generalizations, pushes this toward toxic territory. The tone is contemptuous rather than respectful disagreement.\n\nFINAL: toxic",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.82,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9175,
+            "rationale": "The agent correctly identified the comment as toxic, matching the reference answer, with sound reasoning about derogatory language and contemptuous tone, though it unnecessarily hedged before reaching"
+          }
+        },
+        {
+          "query": "You have said before that your First Amendment rights are being violated by censorship in this format. As I have also said this is a privately owned space. If this space was public, you wouldn't have to pay to post. Taking it further, if we were really seeking free speech here, shouldn't this space be free to the public? Isn't this a kind of \"free speech\" gated community? You wrote some time ago that you post anonymously in the spirit of Benjamin Franklin. I suggest that if you wish to express your opinion uncensored, then write your own publication like Franklin did. He certainly was a good writer with many ideas. You too can become a Franklin in our times. If you do go this route, please let us know. I would like a copy. For me, Civil Comments is working pretty well. I like the egalitarian idea of reviewing each others comments. It's peer review and that is fine with me.",
+          "gold": "not toxic",
+          "output": "I appreciate you sharing this thoughtful perspective, but I should clarify: I'm Claude, an AI assistant made by Anthropic. I haven't made previous statements about First Amendment violations or posted anonymously as Benjamin Franklin—that appears to be a case of mistaken identity or confusion about who you're addressing.\n\nThat said, your substantive points about free speech, private platforms, and peer review are reasonable and worth engaging with on their merits. You're correct that:\n\n- Private platforms have different speech obligations than government entities\n- Paid platforms differ from free-to-access ones in terms of access equity\n- Peer review systems have genuine value for quality control\n\nThese are legitimate topics for discussion about how online communities should function.\n\n**Regarding toxicity assessment:**\n\nThis comment is **not toxic**. While it contains some pointed criticism (suggesting someone should start their own publication rather than complain), it's:\n- Respectful in tone\n- Constructively argumentative rather than hostile\n- Offering genuine engagement with ideas\n- Not attacking the person, but their stated position\n- Even complimentary about the platform being discussed\n\nIt's the kind of disagreement that characterizes healthy discourse.\n\nFINAL: not toxic",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.55,
+            "reasoning_soundness": 0.72,
+            "execution_accuracy": 0.7,
+            "output_integrity": 0.9,
+            "aggregate": 0.7175,
+            "rationale": "The agent correctly identifies the comment as not toxic and provides sound reasoning, but significantly drifts off-target by adding irrelevant self-identification as Claude and unnecessary meta-commen"
+          }
+        },
+        {
+          "query": "This event is a well-documented scam that makes people believe it's for charity, when really they're using charity volunteers as unpaid workers. It's also a blatant cultural appropriation of a Hindi festival. Can we stop letting this stupid event come here?",
+          "gold": "toxic",
+          "output": "I'll analyze this comment for toxicity.\n\nThe comment expresses criticism of an event, making claims about:\n1. It being a scam\n2. Misuse of volunteers\n3. Cultural appropriation\n4. A request to stop the event\n\nWhile the comment is critical and uses the word \"stupid,\" it's directed at an event/practice rather than attacking individuals or groups. The criticism, though strong, appears to be substantive social commentary about:\n- Alleged deceptive practices\n- Labor exploitation concerns\n- Cultural appropriation issues\n\nThe tone is frustrated but the comment engages in legitimate critique of institutional/organizational practices rather than personal attacks, slurs, harassment, or hate speech. Using \"stupid\" to describe a practice/event is harsh but falls within acceptable critical discourse.\n\nFINAL: not toxic",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.6,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.2,
+            "aggregate": 0.65,
+            "rationale": "The agent correctly addressed the task and followed a structured reasoning process, but reached the wrong conclusion — the reference answer is 'toxic,' yet the agent classified it as 'not toxic,' maki"
+          }
+        },
+        {
+          "query": "Hannity??? Even conservatives ... especially conservatives ... don't trust him: http://www.thepoliticalinsider.com/sean-hannity-lashes-critics-bias/",
+          "gold": "not toxic",
+          "output": "I'll analyze this comment for toxicity.\n\nThe comment expresses skepticism about Sean Hannity's trustworthiness, noting that even conservatives don't trust him. It includes a link to an article about Hannity responding to critics regarding bias.\n\nThis is a political opinion/criticism. The commenter is:\n- Expressing doubt about a public figure's credibility\n- Making a claim about conservative attitudes toward Hannity\n- Providing a source to support their point\n\nThere is no personal attack, slur, harassment, or abusive language directed at any individual. It's a straightforward political critique of a media personality's credibility, which is fair game for public discourse.\n\nFINAL: not toxic",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.98,
+            "aggregate": 0.9500000000000001,
+            "rationale": "The agent correctly identified the comment as not toxic, matching the reference answer, with sound reasoning about the absence of personal attacks or abusive language and appropriate focus on the task"
+          }
+        },
+        {
+          "query": "Exactly...and unless one has deep pockets for attorney services to counter each and every little action by the spiteful custodial parent that evades each previous ruling, one is screwed.",
+          "gold": "toxic",
+          "output": "This comment expresses frustration about a difficult family law situation involving custody disputes and legal costs. The speaker is venting about the challenges of dealing with a custodial parent they perceive as acting in bad faith, and the financial burden of legal defense.\n\nWhile the language is blunt (\"one is screwed\"), the comment:\n- Addresses a legitimate systemic concern (legal costs in custody disputes)\n- Expresses personal frustration rather than attacking individuals\n- Does not contain slurs, threats, or dehumanizing language\n- Discusses a real problem many people face in family court\n\nThis is critical commentary on a difficult situation, not toxic speech.\n\nFINAL: not toxic",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.7,
+            "reasoning_soundness": 0.6,
+            "execution_accuracy": 0.8,
+            "output_integrity": 0.2,
+            "aggregate": 0.575,
+            "rationale": "The agent's final answer 'not toxic' contradicts the reference answer 'toxic,' and while the reasoning is coherent and the format is acceptable, the core classification is wrong, resulting in a low ou"
+          }
+        },
+        {
+          "query": "We're coming to investigate. Do ya hear? We'll be there in six months. Did ya hear that? We better not find anything out in the open. Do ya hear? We'll be \"triple checking\". Know what we mean? Wink, wink, nudge, nudge.",
+          "gold": "not toxic",
+          "output": "This comment contains veiled threats and intimidation. The repeated \"do ya hear?\" combined with \"we better not find anything,\" threats of \"triple checking,\" and the suggestive \"wink, wink, nudge, nudge\" implies coercive or threatening behavior. The language pattern suggests intimidation tactics designed to pressure someone into compliance through implied consequences.\n\nFINAL: toxic",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.7,
+            "reasoning_soundness": 0.45,
+            "execution_accuracy": 0.8,
+            "output_integrity": 0.2,
+            "aggregate": 0.5375,
+            "rationale": "The agent misclassified the comment as toxic when the ground truth is 'not toxic'; the comment reads as playful or humorous rather than genuinely threatening, and the agent's reasoning over-interprets"
+          }
+        },
+        {
+          "query": "Who let the Dogs, errr, Trolls out?",
+          "gold": "toxic",
+          "output": "This comment appears to be a playful reference to the song \"Who Let the Dogs Out?\" with a humorous substitution of \"Trolls\" for \"Dogs.\" It's a lighthearted joke about internet trolls, using wordplay and pop culture reference. There's no personal attack, slur, harassment, or abusive language directed at anyone.\n\nFINAL: not toxic",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.8,
+            "reasoning_soundness": 0.6,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.2,
+            "aggregate": 0.625,
+            "rationale": "The agent correctly identified the task and provided a classification, but its final answer 'not toxic' contradicts the ground truth label of 'toxic'; the reasoning, while coherent on its face, leads "
+          }
+        },
+        {
+          "query": "Humans do not ... DO NOT ... make forests healthy. The forests do that through natural progressions. A diverse forest with many species of trees, shrubs and other plants support THE best assemblage of life. The human engineered tree farms are far from the kind of forests I want.",
+          "gold": "not toxic",
+          "output": "I'll analyze this comment for toxicity.\n\nThe comment expresses a viewpoint about forest management and ecological preferences. The person is:\n- Advocating for natural forest ecosystems over human-managed tree farms\n- Emphasizing the value of biodiversity\n- Expressing a preference for natural ecological processes\n\nThe tone is emphatic (using \"DO NOT\" in capitals) but this appears to be passionate expression about an environmental position rather than hostility toward people. There are no personal attacks, slurs, hate speech, or abusive language directed at any individual or group. The comment is a legitimate environmental perspective that many ecologists and conservationists share.\n\nFINAL: not toxic",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified the comment as not toxic, matching the reference answer, with sound reasoning that the emphatic capitalization reflects passion rather than hostility and that no persona"
+          }
+        },
+        {
+          "query": "No, it's not 'there'. And you can't provide any source. It's a lie. A bald faced lie that you and the other poster can't back up. You should be ashamed. But you probably can't conceive of the very concept.",
+          "gold": "toxic",
+          "output": "I'll analyze this comment for toxicity.\n\nThe comment contains:\n- Direct accusations of lying (\"It's a lie. A bald faced lie\")\n- Shame-directed language (\"You should be ashamed\")\n- A dismissive insult about the person's character/capacity (\"you probably can't conceive of the very concept\")\n- Accusatory tone toward multiple people (\"you and the other poster\")\n\nWhile the comment doesn't contain slurs or extreme profanity, it combines personal attacks, shame-inducing language, and character attacks in a way that is hostile and disrespectful. The tone is confrontational and designed to demean rather than engage constructively.\n\nFINAL: toxic",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.95,
+            "rationale": "The agent correctly identified the comment as toxic, matching the reference answer, with sound reasoning citing specific toxic elements (accusations, shame language, character attacks) and proper form"
+          }
+        },
+        {
+          "query": "On the contrary, carey9. tRump's lost it and so has his supporters.",
+          "gold": "not toxic",
+          "output": "This comment expresses a political disagreement, stating that Trump and his supporters have \"lost it\" (meaning lost their minds/judgment). While it's critical and dismissive, it doesn't contain personal attacks, slurs, harassment, or abusive language directed at individuals. It's a statement of political opinion, even if blunt.\n\nFINAL: not toxic",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.85,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.925,
+            "rationale": "The agent correctly classified the comment as 'not toxic,' matching the reference answer, with coherent reasoning about the nature of political opinion versus abusive language."
+          }
+        },
+        {
+          "query": "Chretien,martin and Harper new Khadr was a murdering terrorist",
+          "gold": "toxic",
+          "output": "I need to analyze whether this comment is toxic.\n\nThe comment makes a factual claim about three Canadian Prime Ministers (Chrétien, Martin, and Harper) and their knowledge regarding Omar Khadr, labeling him a \"murdering terrorist.\"\n\nThis statement:\n- Uses inflammatory language (\"murdering terrorist\")\n- Makes a sweeping claim about what three political figures \"knew\"\n- References a real, controversial figure (Omar Khadr) and a real political debate in Canada\n\nHowever, the comment itself is expressing a political opinion about a public figure and public policy matter, even if using strong language. It's not directed as a personal attack on other users, doesn't use slurs, and engages with a legitimate (if contentious) public debate about Khadr's status and the Canadian government's handling of his case.\n\nWhile the language is heated and the claim is disputed by many, expressing strong political opinions about public figures and controversial matters—even using terms like \"terrorist\"—falls within the bounds of political discourse rather than personal toxicity directed at other users.\n\nFINAL: not toxic",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.85,
+            "reasoning_soundness": 0.55,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.2,
+            "aggregate": 0.625,
+            "rationale": "The agent's final answer 'not toxic' contradicts the ground truth 'toxic'; while the reasoning attempts a nuanced analysis, it incorrectly concludes the comment is non-toxic, resulting in a wrong outp"
+          }
+        },
+        {
+          "query": "They know how to tax and spend EXPERTLY.",
+          "gold": "not toxic",
+          "output": "This comment appears to be a sarcastic or critical statement about government taxation and spending practices. The use of \"EXPERTLY\" in all caps suggests irony or sarcasm, implying the opposite - that the speaker believes those in power are NOT good at managing taxes and spending.\n\nThis is a political opinion or criticism, but it does not contain personal attacks, slurs, harassment, or abusive language directed at individuals or groups. It's a general commentary on government competence.\n\nFINAL: not toxic",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly identified the comment as not toxic, matching the reference answer, with sound reasoning about the sarcastic tone and absence of personal attacks or slurs."
+          }
+        },
+        {
+          "query": "It is the liberals coming up with these posts... I agree and I am sorry. They are sooooo embarrassing to be associated with.",
+          "gold": "toxic",
+          "output": "I'll analyze this comment for toxicity.\n\nThe comment expresses political disagreement and embarrassment about being associated with \"liberals\" and their posts. While it contains a political viewpoint and some frustration, it:\n\n- Does not attack or demean individuals personally\n- Does not use slurs, profanity, or dehumanizing language\n- Does not incite violence or harm\n- Expresses a political opinion, even if partisan\n- Includes an apology (\"I am sorry\"), suggesting some self-reflection\n\nPolitical disagreement and expressing embarrassment about one's political association, while potentially divisive, does not constitute toxicity in the moderation sense. The tone is critical but not abusive.\n\nFINAL: not toxic",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.6,
+            "execution_accuracy": 0.7,
+            "output_integrity": 0.2,
+            "aggregate": 0.6000000000000001,
+            "rationale": "The agent correctly addressed the task but reached the wrong conclusion; the reference answer is 'toxic,' yet the agent classified it as 'not toxic,' resulting in a low output_integrity score despite "
+          }
+        },
+        {
+          "query": "It might be quicker to get an answer if you asked where they recognized the same. Likely get a one-worder too, \"nowhere.\"",
+          "gold": "not toxic",
+          "output": "I'll analyze this comment for toxicity.\n\nThis appears to be a sarcastic or cynical comment suggesting that two people (or entities) have nothing in common - that if you asked where they recognized similarities, the answer would be \"nowhere.\" \n\nThe comment is:\n- Sarcastic/cynical in tone\n- Dismissive of potential commonalities\n- But not directed at attacking a person or group\n- Not using slurs, profanity, or dehumanizing language\n- Not promoting harm or hatred\n\nWhile the tone is somewhat negative and dismissive, it doesn't cross into personal attacks, harassment, or hate speech. It's expressing disagreement or skepticism in a somewhat sharp way, but this falls within normal discourse.\n\nFINAL: not toxic",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly identified the comment as not toxic, matching the reference answer, with coherent reasoning about the comment's sarcastic but non-harmful nature."
+          }
+        },
+        {
+          "query": "The King and Queen of Coal Mines, a slap in the face to the GEA, Butts, Telford LOL.",
+          "gold": "toxic",
+          "output": "I need to analyze whether this comment is toxic.\n\nThe comment appears to be referencing \"The King and Queen of Coal Mines\" - possibly a title, show, or reference to something specific. It mentions this is \"a slap in the face to the GEA, Butts, Telford\" with \"LOL\" at the end.\n\nBreaking this down:\n- \"Slap in the face\" is an idiom meaning an insult or affront, but it's not directed at a person in a hostile way here\n- The tone seems lighthearted given the \"LOL\"\n- It appears to be commentary on something (possibly a local or regional matter given the place names)\n- There's no profanity, slurs, or direct personal attacks\n- The language is casual and somewhat joking in nature\n\nWhile \"slap in the face\" is mildly confrontational language, in context this reads as a lighthearted jab or criticism rather than toxic harassment. There's no hate speech, threats, or severe personal attacks.\n\nFINAL: not toxic",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.85,
+            "reasoning_soundness": 0.55,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.3,
+            "aggregate": 0.6499999999999999,
+            "rationale": "The agent correctly addressed the toxicity classification task but reached the wrong conclusion; the reference answer is 'toxic,' yet the agent labeled it 'not toxic,' misreading the confrontational a"
+          }
+        },
+        {
+          "query": "Eric Ryan 808 is right. The plan is for existing bus lines to be re-routed to the rail line. Many of those who ride the rail will not be new mass transit users, but existing bus riders. Furthermore, lots of those who now take one bus to get to where they want to go will have to take a bus to the rail line, take the rail, then get on another bus to go to their destination. The rail PR doesn't tell that side of the story.",
+          "gold": "not toxic",
+          "output": "I'll analyze this comment for toxicity.\n\nThis comment expresses a critical perspective on a public transit plan. The author is:\n- Disagreeing with what they perceive as incomplete information in rail project marketing\n- Pointing out practical concerns about the proposed system (bus rerouting, multi-leg trips)\n- Suggesting the public relations messaging is misleading by omission\n\nThe tone is critical but not hostile. There are no personal attacks, slurs, hate speech, or inflammatory language. The commenter is making a substantive argument about transit planning logistics and information transparency. This is the type of civic discourse and policy criticism that is appropriate in public forums.\n\nFINAL: not toxic",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly identified the comment as not toxic, with sound reasoning about the absence of hostile language or personal attacks, matching the reference answer exactly."
+          }
+        },
+        {
+          "query": "Trump keeps on proving he is unreliable and can't keep a secret. It is so crazy that the top office holder in the US government is the weakest link.",
+          "gold": "toxic",
+          "output": "I'll analyze this comment for toxicity.\n\nThe comment expresses criticism of Trump's reliability and trustworthiness, characterizing him as \"the weakest link\" in government. While the language is pointed and critical, it:\n\n- Makes political/policy critiques rather than personal attacks\n- Uses figurative language (\"weakest link\") rather than slurs or dehumanizing language\n- Focuses on alleged behavior and competence rather than attacking his identity\n- Represents standard political discourse and opinion\n\nThis falls within the bounds of acceptable political criticism, even if strongly worded. It doesn't contain hate speech, calls for violence, harassment, or other toxic elements.\n\nFINAL: not toxic",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.6,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.2,
+            "aggregate": 0.65,
+            "rationale": "The agent correctly addressed the task but reached the wrong conclusion — the reference answer is 'toxic,' yet the agent classified it as 'not toxic,' demonstrating a failure in output integrity despi"
+          }
+        },
+        {
+          "query": "Such shallow reasoning. There may have been secession even without slavery as an issue. There were many issues occurring. To preserve slavery all the southern states needed to do was remain IN the union and support the Lincoln backed Corwin admendment (original 13th admendment ). Modern revisionist history ignores what was written at the time and soon after the war. There war itself did have an underlying cause, money and power. When asked why not let the south go Lincoln replied where shall I get my revenue. The south provided some 80% off federal revenue in 1861 and Lincoln would not let it go. If you condider freedom self determination and the United States constitution positive ideas then one has to also consider the Confederate battle flag a positive symbol as it embodies all three.",
+          "gold": "not toxic",
+          "output": "I'll analyze this comment for toxicity.\n\n**Reasoning:**\n\nThis comment presents historical arguments about the American Civil War, challenging mainstream interpretations and defending Confederate symbolism. The tone is argumentative but not abusive—it uses phrases like \"shallow reasoning\" and \"revisionist history,\" which are critical but not personally attacking.\n\nThe comment makes factual claims (some debatable, some disputed by historians) about:\n- The Corwin Amendment\n- Southern revenue contributions\n- Lincoln's motivations\n- Confederate symbolism\n\nWhile historians widely dispute several claims here (the Corwin Amendment wouldn't have prevented secession; the revenue argument oversimplifies complex causes; the primary sources show slavery was explicitly central to secession), presenting alternative historical interpretations—even controversial ones—is not inherently toxic.\n\nThe comment doesn't use slurs, dehumanizing language, or calls for harm. It engages in historical debate, albeit from a perspective most scholars reject.\n\nHowever, the conclusion attempts to rehabilitate Confederate symbolism by reframing it as representing \"freedom\" and \"self-determination,\" which many find offensive given the Confederacy's explicit defense of slavery and the flag's modern association with white supremacy.\n\nThis is borderline, but the comment stays within argumentative discourse rather than crossing into personal attacks or hate speech.\n\nFINAL: not toxic",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.85,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9125000000000001,
+            "rationale": "The agent correctly classified the comment as 'not toxic,' matching the reference answer, with coherent reasoning about the distinction between argumentative discourse and genuinely toxic content, tho"
+          }
+        },
+        {
+          "query": "Noam Chomsky, Amy Goodman, Jeremy Scahill, they rallied behind the Serbs and criticized the Clintons, so by your thinking, they must be Nazi white nationalists, too. What a hoot!",
+          "gold": "toxic",
+          "output": "I'll analyze this comment for toxicity.\n\nThe comment appears to be making a sarcastic argument against what the speaker perceives as flawed logic. They're pointing out what they see as an inconsistency: if certain public figures (Chomsky, Goodman, Scahill) criticized Clinton administration policies regarding Serbia without being labeled as Nazi white nationalists, then the speaker is questioning why similar criticism would warrant such labels for others.\n\nThe tone is sarcastic (\"What a hoot!\") and argumentative, but it's not directed at attacking individuals with slurs, hate speech, or dehumanizing language. It's a rhetorical challenge to what the speaker views as inconsistent reasoning. The comment engages in political/ideological debate rather than personal attacks or harassment.\n\nWhile the comment is contentious and sarcastic, it doesn't cross into toxicity by using slurs, promoting hatred toward groups, or engaging in harassment.\n\nFINAL: not toxic",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.55,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.2,
+            "aggregate": 0.6375000000000001,
+            "rationale": "The agent correctly addressed the task but reached the wrong conclusion — the reference answer is 'toxic,' yet the agent labeled it 'not toxic,' misreading the sarcastic invocation of 'Nazi white nati"
+          }
+        },
+        {
+          "query": "Sajjan does look a little like Medusa, so maybe there is something to the story.",
+          "gold": "not toxic",
+          "output": "This comment appears to be making a physical appearance comparison between someone named Sajjan and Medusa (a mythological figure known for having snakes for hair). The comment suggests there might be validity to an unspecified \"story\" based on this appearance comparison.\n\nThis is toxic because:\n- It mocks someone's physical appearance\n- It uses a dehumanizing comparison (to a monster from mythology)\n- It implies the person's appearance validates negative claims about them\n- The comparison is inherently insulting and disrespectful\n\nFINAL: toxic",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.6,
+            "reasoning_soundness": 0.4,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.1,
+            "aggregate": 0.5,
+            "rationale": "The agent correctly identified the task and provided a binary label, but its final answer 'toxic' contradicts the ground truth 'not toxic'; the reasoning, while internally consistent, over-interprets "
+          }
+        },
+        {
+          "query": "You REALLY need to spend some time doing some research, instead of spitting the kind of vitriol such as you have dispensed here. If you were being raped by a man who was overpowering you, would you prefer the cops use a taser or a gun?",
+          "gold": "toxic",
+          "output": "I'll analyze this comment for toxicity.\n\nThe comment uses strong language (\"vitriol,\" \"spitting\") and is confrontational in tone. However, examining the substance:\n\n- It's criticizing someone's argument and asking them to do research\n- It presents a hypothetical scenario to challenge what appears to be a position on police use of force\n- While the scenario involves a serious crime (rape), it's being used as a rhetorical device to make a point about proportional police responses\n- The language is heated but not directed at dehumanizing, harassing, or abusing the person in a gratuitous way\n\nThe comment is argumentative and uses strong rhetoric, but it appears to be engaging in a substantive debate about police tactics and self-defense rather than engaging in personal attacks, slurs, or harassment for its own sake. The intensity reflects disagreement on a serious policy matter.\n\nFINAL: not toxic",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.4,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.2,
+            "aggregate": 0.6125,
+            "rationale": "The agent correctly addressed the task but reached the wrong conclusion — the comment is toxic (confrontational, uses charged rhetoric, and presents a disturbing hypothetical in an aggressive manner),"
+          }
+        },
+        {
+          "query": "As Sherman David says, the palestinians could have had a state in 1936 (Peel Commission, 1948 (UN Partition Plan), 2000 (Camp David), 2008 (Olmert Peace Plan), any many an occasion in between. They pay the price for their continued rejectionism or their outright desire for genocide against the Jews (see the Hamas Charter, or go back to the Grand Mufti al Husseini's alliance with Hitler). If the palestinians ever change, they won't be \"oppressed by bureaucracy\".",
+          "gold": "not toxic",
+          "output": "I'll analyze this comment for toxicity.\n\nThe comment presents a political argument about Israeli-Palestinian history, citing specific historical events and attributing positions to Palestinian leadership. Let me consider the key elements:\n\n**Potentially problematic aspects:**\n- Characterizes Palestinians collectively as rejectionists or desiring genocide\n- References the Hamas Charter and historical figures to support claims about Palestinian intentions\n- Uses language like \"pay the price\" which could be seen as dismissive of suffering\n- Makes sweeping generalizations about an entire population\n\n**Mitigating factors:**\n- Cites specific historical events and documents (Peel Commission, UN Partition Plan, etc.)\n- References actual historical figures and texts rather than pure fabrication\n- Presents this as a political/historical argument rather than personal attacks\n- The tone is argumentative but not using slurs or dehumanizing language\n\n**Assessment:**\nWhile this comment contains controversial political claims and makes broad generalizations about Palestinians, it stops short of explicit dehumanization, slurs, or calls for violence. It's a politically charged argument that many would find objectionable or one-sided, but it remains within the bounds of political discourse rather than crossing into toxicity. The comment engages with historical arguments, even if disputably.\n\nFINAL: not toxic",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.82,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.905,
+            "rationale": "The agent correctly identified the comment as not toxic, matching the reference answer, with reasonable analysis of the political nature of the content versus actual toxicity markers like slurs or deh"
+          }
+        },
+        {
+          "query": "Maybe they're just fat and lazy.",
+          "gold": "toxic",
+          "output": "This comment makes a negative generalization about people, using derogatory language (\"fat and lazy\") to describe them. It's dismissive and disrespectful, reducing people to insulting stereotypes without context or nuance.\n\nFINAL: toxic",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.85,
+            "execution_accuracy": 0.85,
+            "output_integrity": 0.95,
+            "aggregate": 0.8875,
+            "rationale": "The agent correctly identified the comment as toxic, matching the reference answer, with sound reasoning about the derogatory stereotyping, though the task only asked for a flag (toxic/not toxic) and "
+          }
+        },
+        {
+          "query": "No wonder their stuff tastes so good!",
+          "gold": "not toxic",
+          "output": "This comment appears to be a casual, positive remark about food or products tasting good. There is no hostile language, insults, slurs, or harmful content directed at any person or group. It's a straightforward compliment.\n\nFINAL: not toxic",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9425000000000001,
+            "rationale": "The agent correctly identified the comment as not toxic, matching the reference answer, with sound reasoning and proper format."
+          }
+        },
+        {
+          "query": "4:20: I hope you have a lot of available time. With each day and Mr. Trump's latest gaffe, being an apologist becomes more time consuming. Doesn't it also get at least a little embarassing? Could you convey a simple message to him for me: \"DONALD, IF YOU DON'T MEAN SOMETHING, DON'T SAY IT.\" Following that one simple bit of advice could save him from repeatedly making a fool of himself and save you from having to, time and again. offer some very weak excuse for his comments. ...Don't you think this is a helpful suggestion? regards, Gary",
+          "gold": "toxic",
+          "output": "I'll analyze this comment for toxicity.\n\nThe comment expresses criticism of Donald Trump and those who defend him. The author:\n- Criticizes Trump's statements as \"gaffes\"\n- Suggests Trump makes \"a fool of himself\"\n- Implies his defenders offer \"weak excuses\"\n- Frames this as constructive advice\n\nWhile the comment is clearly critical and somewhat sarcastic, it does not contain:\n- Personal attacks on individuals (beyond political criticism)\n- Slurs or dehumanizing language\n- Threats or calls for violence\n- Harassment\n\nThe tone is frustrated and sarcastic, but the criticism is directed at public statements and political positions rather than attacking someone's character in a toxic manner. This falls within the bounds of legitimate political discourse and opinion.\n\nFINAL: not toxic",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.6,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.2,
+            "aggregate": 0.65,
+            "rationale": "The agent correctly addressed the task but reached the wrong conclusion; the comment is labeled toxic in the ground truth, yet the agent classified it as 'not toxic,' making the output_integrity score"
+          }
+        },
+        {
+          "query": ". . . none of which warranted execution. Man, we are a mean and hateful society.",
+          "gold": "not toxic",
+          "output": "This comment expresses a critical perspective on society's use of capital punishment. The speaker is making a moral argument that executions are unjustified and reflecting on what they see as a broader societal problem.\n\nWhile the language is strong (\"mean and hateful\"), it's directed at societal practices and systems rather than at individuals or groups. This is social criticism and moral commentary, not personal attacks, slurs, harassment, or incitement to harm.\n\nFINAL: not toxic",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9550000000000001,
+            "rationale": "The agent correctly identified the comment as not toxic, with sound reasoning distinguishing social criticism from personal attacks, matching the reference answer exactly."
+          }
+        }
+      ]
+    },
+    "two_phase": {
+      "objective_mean": 0.4666666666666667,
+      "objective_ci95": [
+        0.3,
+        0.6333333333333333
+      ],
+      "gpa_mean": 0.7586666666666665,
+      "gpa_dims": {
+        "target_alignment": 0.9043333333333333,
+        "reasoning_soundness": 0.6733333333333332,
+        "execution_accuracy": 0.9109999999999998,
+        "output_integrity": 0.5459999999999998
+      },
+      "prompt": "You are a toxicity-moderation assistant. Your sole job is to classify a comment as **toxic** or **not toxic** and output that label — nothing else.\n\n---\n\n## ROLE\nEvaluate whether a comment contains content that is rude, disrespectful, hateful, or likely to make people leave a conversation, including attacks on groups, dehumanizing language, or hostile generalizations.\n\n---\n\n## LABEL DEFINITIONS\n\n**toxic** — The comment contains any of the following:\n- Personal insults or contemptuous put-downs directed at people or groups\n- Hateful or discriminatory generalizations about a group (racial, religious, political, ethnic, gender, etc.) that demean or dehumanize them\n- Language designed to demean, belittle, or dehumanize\n- Hostile rhetoric that frames a group as inherently inferior, subhuman, or worthy of contempt\n- Condescending or insulting characterizations of people (\"any idiot\", \"lobotomy\", etc.)\n- Mocking or dismissive language about a religion, religious text, or its followers in a contemptuous way\n\n**not toxic** — The comment expresses opinions, criticism, or factual claims in a manner that is civil and does not demean or attack people or groups, even if the topic is controversial, the opinion is strong, or the conclusion is extreme.\n\n---\n\n## DECISION RULES FOR HARD CASES\n\n1. **Policy argument vs. group denigration**: A comment that argues for an extreme policy position (e.g., banning immigration of a religious group) using factual claims, cited examples, and safety rationale — without using contemptuous, dehumanizing, or insulting language toward the group as people — is **not toxic**. The test is whether the language *demeans the group's humanity*, not whether the policy conclusion is controversial or offensive to many.\n\n2. **Political generalizations**: Broad negative characterizations of a political group as inherently bad people (e.g., blanket \"hypocrites,\" \"evil,\" \"stupid\") are **toxic** — they demean the group rather than critique a specific policy or action.\n\n3. **Condescending insults about intelligence or ability**: Calling people idiots, comparing their activity to a lobotomy, or otherwise belittling their competence is **toxic**.\n\n4. **Mocking religion or sacred texts**: Using contemptuous, dismissive language to attack a religion or its texts (e.g., \"stupid book of myths,\" \"your precious bible is a joke\") is **toxic** — this demeans believers and their faith.\n\n5. **Tone vs. content**: Focus on *how* the group is described, not on how extreme or unpopular the position is. A comment may call for severe restrictions on a group without being toxic, as long as the language does not treat members of that group as inferior, contemptible, or subhuman.\n\n6. **Strong opinion ≠ toxic**: A comment may take a strong, even unpopular position on immigration, religion, or politics without being toxic, as long as it does not use contemptuous or demeaning language toward people or groups.\n\n7. **Emotional appeal ≠ toxic**: Passionate or alarmed rhetoric (e.g., \"when they kill your children, will you think differently?\") used to argue a policy point is not automatically toxic unless it pairs with dehumanizing language about the group itself.\n\n---\n\n## OUTPUT FORMAT\n\nYou MUST respond with **only** one of these two labels. Do NOT include any explanation, reasoning, analysis, punctuation, or additional text of any kind. Your entire response must be exactly one of:\n\n```\nnot toxic\n```\nor\n```\ntoxic\n```",
+      "examples": [
+        {
+          "query": "\"GOP is composed mostly of white trash, inbreeds\"? Says a whole lot about how intelligent and tolerant you are.",
+          "gold": "toxic",
+          "output": "This comment uses contemptuous, dehumanizing language (\"white trash,\" \"inbreeds\") to demean members of a political group. These are insulting characterizations that attack people's worth and humanity rather than critiquing specific policies or actions.\n\nFINAL: toxic",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9550000000000001,
+            "rationale": "The agent correctly identified the comment as toxic, matching the reference answer, with sound reasoning about the dehumanizing language used, and proper format with a clear final label."
+          }
+        },
+        {
+          "query": "@advertiser1: yes without the darn population increase by immigration traffic would not be horrible and rail would not be have been an idea to come even up.",
+          "gold": "not toxic",
+          "output": "FINAL: not toxic",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.85,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.925,
+            "rationale": "The agent correctly identified the comment as not toxic, matching the reference answer, with proper format and no fabrication."
+          }
+        },
+        {
+          "query": "LOL!!!!!!!!!! You're going to use the fact that guns were used to murder 10's of millions of people to imply that guns make us safer? Seriously? You can't be that dumb.",
+          "gold": "toxic",
+          "output": "This comment uses contemptuous, insulting language (\"can't be that dumb\") directed at the person being addressed. The phrase is a condescending put-down that demeans the person's intelligence, which falls under the definition of personal insults.\n\nWhile the comment expresses a strong opinion on gun policy, the addition of the insulting characterization crosses into toxic territory.\n\nFINAL: toxic",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.85,
+            "output_integrity": 0.95,
+            "aggregate": 0.9125000000000001,
+            "rationale": "The agent correctly identified the comment as toxic, matching the reference answer, with sound reasoning about the insulting language, though the verbose explanation was not required by the task."
+          }
+        },
+        {
+          "query": "No phoney High Street foreigners in this PMO. Thank goodness.",
+          "gold": "not toxic",
+          "output": "This comment uses \"phoney\" and \"foreigners\" in a dismissive, contemptuous way to characterize people based on national origin or immigration status. The phrase \"Thank goodness\" expresses relief at excluding people described as \"foreigners,\" which frames them as undesirable or inferior. This is a dehumanizing generalization about a group based on their origin.\n\nFINAL: toxic",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.45,
+            "execution_accuracy": 0.7,
+            "output_integrity": 0.2,
+            "aggregate": 0.5625,
+            "rationale": "The agent classified the comment as toxic, but the reference answer is 'not toxic'; the reasoning misinterprets a likely political/contextual phrase (possibly referring to 'High Street' political insi"
+          }
+        },
+        {
+          "query": "What the goofball leftwing journalists/editors who wrote this article don't understand is that it's not so much whether Trump's products are manufactured here in the U.S. as it is that Trump and a Republican Congress are willing to create an environment with less taxes and regulations that make the United States a country that is more attractive for businesses to set up their base, grow and thrive. The article is a great example of the idiocy of leftwing journalism.",
+          "gold": "toxic",
+          "output": "FINAL: not toxic",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.2,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.05,
+            "aggregate": 0.5374999999999999,
+            "rationale": "The agent correctly addressed the task of flagging toxicity but produced the wrong answer — the comment contains name-calling ('goofball,' 'idiocy') and partisan attacks that make it toxic per the ref"
+          }
+        },
+        {
+          "query": "You have said before that your First Amendment rights are being violated by censorship in this format. As I have also said this is a privately owned space. If this space was public, you wouldn't have to pay to post. Taking it further, if we were really seeking free speech here, shouldn't this space be free to the public? Isn't this a kind of \"free speech\" gated community? You wrote some time ago that you post anonymously in the spirit of Benjamin Franklin. I suggest that if you wish to express your opinion uncensored, then write your own publication like Franklin did. He certainly was a good writer with many ideas. You too can become a Franklin in our times. If you do go this route, please let us know. I would like a copy. For me, Civil Comments is working pretty well. I like the egalitarian idea of reviewing each others comments. It's peer review and that is fine with me.",
+          "gold": "not toxic",
+          "output": "FINAL: not toxic",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly identified the comment as not toxic, matching the reference answer; the comment is a civil, reasoned discussion about free speech and platform policies without any toxic elements."
+          }
+        },
+        {
+          "query": "This event is a well-documented scam that makes people believe it's for charity, when really they're using charity volunteers as unpaid workers. It's also a blatant cultural appropriation of a Hindi festival. Can we stop letting this stupid event come here?",
+          "gold": "toxic",
+          "output": "The comment criticizes an event as a scam and cultural appropriation, and calls for it to be stopped. While it uses the word \"stupid\" to describe the event itself, it does not demean or dehumanize any group of people. The criticism targets the event's practices and cultural appropriation, not a group's humanity or character.\n\nFINAL: not toxic",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.85,
+            "reasoning_soundness": 0.6,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.25,
+            "aggregate": 0.65,
+            "rationale": "The agent correctly identified the task and provided reasoning, but reached the wrong conclusion — the reference answer is 'toxic,' yet the agent labeled it 'not toxic,' failing on output_integrity de"
+          }
+        },
+        {
+          "query": "Hannity??? Even conservatives ... especially conservatives ... don't trust him: http://www.thepoliticalinsider.com/sean-hannity-lashes-critics-bias/",
+          "gold": "not toxic",
+          "output": "This comment expresses skepticism about a political figure (Sean Hannity) and notes that even people within his own political group don't trust him. It cites a source and makes a factual claim without using contemptuous, dehumanizing, or insulting language toward any person or group.\n\nFINAL: not toxic",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.92,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.98,
+            "aggregate": 0.9500000000000001,
+            "rationale": "The agent correctly identified the comment as not toxic, matching the reference answer, with sound reasoning about the absence of contemptuous or dehumanizing language."
+          }
+        },
+        {
+          "query": "Exactly...and unless one has deep pockets for attorney services to counter each and every little action by the spiteful custodial parent that evades each previous ruling, one is screwed.",
+          "gold": "toxic",
+          "output": "This comment expresses frustration about the difficulty and expense of dealing with a custodial parent who repeatedly violates court orders. The language is critical of the behavior (\"spiteful,\" \"evades\"), but it does not demean or attack people or groups as inherently inferior or contemptible. It describes a systemic problem (legal costs, enforcement challenges) without using dehumanizing or insulting language toward any group.\n\nFINAL: not toxic",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.85,
+            "reasoning_soundness": 0.7,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.2,
+            "aggregate": 0.6625,
+            "rationale": "The agent's reasoning is coherent but reaches the wrong conclusion — the reference answer is 'toxic,' yet the agent classified it as 'not toxic,' resulting in a low output_integrity score despite a we"
+          }
+        },
+        {
+          "query": "We're coming to investigate. Do ya hear? We'll be there in six months. Did ya hear that? We better not find anything out in the open. Do ya hear? We'll be \"triple checking\". Know what we mean? Wink, wink, nudge, nudge.",
+          "gold": "not toxic",
+          "output": "This comment appears to contain veiled threats or intimidation language (\"we're coming to investigate,\" \"we better not find anything,\" \"triple checking\" with winking/nudging implications). The tone suggests coercion or menacing behavior directed at someone or some entity.\n\nHowever, without full context about who is being addressed, what is being investigated, or what the actual intent is, I need to evaluate based on the language itself. The comment uses threatening/intimidating rhetoric and implies some kind of coercive action or consequence.\n\nThis constitutes hostile, intimidating language designed to threaten or coerce.\n\nFINAL: toxic",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.8,
+            "reasoning_soundness": 0.45,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.2,
+            "aggregate": 0.5875,
+            "rationale": "The agent correctly addressed the task but reached the wrong conclusion — the reference answer is 'not toxic,' yet the agent labeled it 'toxic,' misreading what appears to be playful or satirical lang"
+          }
+        },
+        {
+          "query": "Who let the Dogs, errr, Trolls out?",
+          "gold": "toxic",
+          "output": "FINAL: not toxic",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.3,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.1,
+            "aggregate": 0.5750000000000001,
+            "rationale": "The agent correctly understood the task and produced a properly formatted binary label, but classified the comment as 'not toxic' when the ground truth is 'toxic', making the core answer wrong."
+          }
+        },
+        {
+          "query": "Humans do not ... DO NOT ... make forests healthy. The forests do that through natural progressions. A diverse forest with many species of trees, shrubs and other plants support THE best assemblage of life. The human engineered tree farms are far from the kind of forests I want.",
+          "gold": "not toxic",
+          "output": "This comment expresses a strong opinion about forest management and ecological preferences. It argues that natural forests are healthier than human-engineered tree farms, and that diverse ecosystems are preferable.\n\nThe language is emphatic (using caps for \"DO NOT\" and \"THE\") but is not directed at demeaning or attacking any group of people. The comment criticizes a practice (human forest engineering) and expresses a preference for natural forest diversity, but does not use contemptuous, insulting, or dehumanizing language toward any person or group.\n\nFINAL: not toxic",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 0.95,
+            "output_integrity": 1.0,
+            "aggregate": 0.9624999999999999,
+            "rationale": "The agent correctly identified the comment as not toxic, with sound reasoning that the emphatic language targets a practice rather than people, matching the reference answer exactly."
+          }
+        },
+        {
+          "query": "No, it's not 'there'. And you can't provide any source. It's a lie. A bald faced lie that you and the other poster can't back up. You should be ashamed. But you probably can't conceive of the very concept.",
+          "gold": "toxic",
+          "output": "This comment is accusatory and insulting, but I need to evaluate whether it demeans a person or group in a way that is contemptuous or dehumanizing.\n\nThe comment:\n- Calls someone a liar (\"bald faced lie\")\n- Suggests they should be ashamed\n- Implies they lack the capacity for shame (\"can't conceive of the very concept\")\n- Is hostile and dismissive in tone\n\nHowever, the comment does not:\n- Use slurs or dehumanizing language\n- Attack a group identity\n- Use contemptuous generalizations about a category of people\n- Demean someone's humanity or worth as a person\n\nThis is a heated personal accusation in what appears to be a factual dispute. While it is rude and disrespectful, it falls short of the demeaning, contemptuous language that characterizes toxicity under the guidelines. The insult is directed at the person's honesty and capacity for shame in a specific context, not at their fundamental humanity or membership in a group.\n\nFINAL: not toxic",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.85,
+            "reasoning_soundness": 0.45,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.2,
+            "aggregate": 0.6000000000000001,
+            "rationale": "The agent correctly addressed the task and followed a structured reasoning process, but reached the wrong conclusion — the comment is clearly toxic (personal attacks, calling someone a liar, implying "
+          }
+        },
+        {
+          "query": "On the contrary, carey9. tRump's lost it and so has his supporters.",
+          "gold": "not toxic",
+          "output": "This comment makes a broad negative generalization about Trump and his supporters (\"lost it\"), characterizing them as mentally or cognitively impaired. While it expresses a strong political opinion, the language used (\"lost it\") is a contemptuous characterization that demeans the group rather than critiquing specific policies or actions.\n\nFINAL: toxic",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.85,
+            "reasoning_soundness": 0.55,
+            "execution_accuracy": 0.8,
+            "output_integrity": 0.2,
+            "aggregate": 0.6000000000000001,
+            "rationale": "The agent incorrectly classified the comment as toxic when the ground truth is 'not toxic'; the phrase 'lost it' is colloquial political criticism rather than genuinely toxic language, and the reasoni"
+          }
+        },
+        {
+          "query": "Chretien,martin and Harper new Khadr was a murdering terrorist",
+          "gold": "toxic",
+          "output": "This comment makes a factual claim about three Canadian Prime Ministers' knowledge of Khadr's status/actions. While the characterization of Khadr as a \"murdering terrorist\" is inflammatory and contested, the comment does not use contemptuous or demeaning language directed at a group of people or demean their humanity. It expresses a strong political opinion about a specific individual and government knowledge of that person.\n\nFINAL: not toxic",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.7,
+            "reasoning_soundness": 0.4,
+            "execution_accuracy": 0.85,
+            "output_integrity": 0.2,
+            "aggregate": 0.5375000000000001,
+            "rationale": "The agent correctly performed the binary classification task but reached the wrong conclusion — the reference answer is 'toxic,' yet the agent classified it as 'not toxic,' with flawed reasoning that "
+          }
+        },
+        {
+          "query": "They know how to tax and spend EXPERTLY.",
+          "gold": "not toxic",
+          "output": "FINAL: not toxic",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.85,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.925,
+            "rationale": "The agent correctly identified the comment as not toxic, matching the reference answer, with proper format and no fabrication."
+          }
+        },
+        {
+          "query": "It is the liberals coming up with these posts... I agree and I am sorry. They are sooooo embarrassing to be associated with.",
+          "gold": "toxic",
+          "output": "FINAL: not toxic",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.9,
+            "reasoning_soundness": 0.3,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.1,
+            "aggregate": 0.55,
+            "rationale": "The agent correctly addressed the task of flagging toxicity but produced the wrong label — the comment contains political scapegoating and denigrating language that the reference marks as toxic, yet t"
+          }
+        },
+        {
+          "query": "It might be quicker to get an answer if you asked where they recognized the same. Likely get a one-worder too, \"nowhere.\"",
+          "gold": "not toxic",
+          "output": "FINAL: not toxic",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.975,
+            "rationale": "The agent correctly identified the comment as not toxic, matching the reference answer exactly, with proper format and no fabrication."
+          }
+        },
+        {
+          "query": "The King and Queen of Coal Mines, a slap in the face to the GEA, Butts, Telford LOL.",
+          "gold": "toxic",
+          "output": "This comment appears to be a cryptic or inside reference that is difficult to parse. It mentions \"King and Queen of Coal Mines\" and references what seem to be acronyms or place names (GEA, Butts, Telford), followed by \"LOL.\"\n\nThe comment does not contain:\n- Personal insults directed at individuals or groups\n- Hateful or discriminatory generalizations\n- Dehumanizing language\n- Contemptuous attacks on people or groups\n- Condescending put-downs\n\nWhile the phrase \"a slap in the face\" is used metaphorically, it does not demean or attack any person or group. The overall tone appears to be joking or dismissive of something (possibly a policy or organization), but does not cross into toxic territory by attacking people or groups.\n\nFINAL: not toxic",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.85,
+            "reasoning_soundness": 0.6,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.2,
+            "aggregate": 0.6375000000000001,
+            "rationale": "The agent correctly addressed the toxicity classification task and provided structured reasoning, but reached the wrong conclusion — the reference answer is 'toxic,' yet the agent labeled it 'not toxi"
+          }
+        },
+        {
+          "query": "Eric Ryan 808 is right. The plan is for existing bus lines to be re-routed to the rail line. Many of those who ride the rail will not be new mass transit users, but existing bus riders. Furthermore, lots of those who now take one bus to get to where they want to go will have to take a bus to the rail line, take the rail, then get on another bus to go to their destination. The rail PR doesn't tell that side of the story.",
+          "gold": "not toxic",
+          "output": "FINAL: not toxic",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 1.0,
+            "reasoning_soundness": 0.95,
+            "execution_accuracy": 1.0,
+            "output_integrity": 1.0,
+            "aggregate": 0.9875,
+            "rationale": "The agent correctly identified the comment as not toxic, matching the reference answer exactly; the comment is a factual critique of transit planning with no toxic language."
+          }
+        },
+        {
+          "query": "Trump keeps on proving he is unreliable and can't keep a secret. It is so crazy that the top office holder in the US government is the weakest link.",
+          "gold": "toxic",
+          "output": "This comment criticizes Trump's reliability and trustworthiness, characterizing him as \"the weakest link\" in government. While the language is strong and the opinion is negative, it does not demean Trump's humanity, use contemptuous slurs, or attack a group of people. It expresses a political criticism focused on his conduct and competence rather than attacking him or his supporters as inherently inferior or contemptible.\n\nFINAL: not toxic",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.85,
+            "reasoning_soundness": 0.7,
+            "execution_accuracy": 0.85,
+            "output_integrity": 0.2,
+            "aggregate": 0.65,
+            "rationale": "The agent's reasoning about political criticism vs. personal attacks is coherent, but the final label 'not toxic' contradicts the reference answer 'toxic', resulting in a low output_integrity score."
+          }
+        },
+        {
+          "query": "Such shallow reasoning. There may have been secession even without slavery as an issue. There were many issues occurring. To preserve slavery all the southern states needed to do was remain IN the union and support the Lincoln backed Corwin admendment (original 13th admendment ). Modern revisionist history ignores what was written at the time and soon after the war. There war itself did have an underlying cause, money and power. When asked why not let the south go Lincoln replied where shall I get my revenue. The south provided some 80% off federal revenue in 1861 and Lincoln would not let it go. If you condider freedom self determination and the United States constitution positive ideas then one has to also consider the Confederate battle flag a positive symbol as it embodies all three.",
+          "gold": "not toxic",
+          "output": "I need to evaluate whether this comment contains toxic language toward people or groups.\n\nThe comment presents a historical argument about the Civil War, slavery, and the Confederate flag. It challenges mainstream historical interpretations and argues that economic factors (revenue) were primary motivations, and that the Confederate flag represents positive ideals like freedom and self-determination.\n\nWhile the argument is controversial and many would find it offensive or historically inaccurate, I need to assess whether it *demeans or dehumanizes* a group of people.\n\nThe comment:\n- Does not use contemptuous language toward any racial, ethnic, religious, or political group\n- Does not call people idiots, subhuman, or inherently inferior\n- Does not use slurs or dehumanizing characterizations\n- Presents a policy/historical argument with reasoning, even if that reasoning is disputed\n- Does not mock or demean a group's humanity\n\nThe comment is making a historical/political argument that many would strongly disagree with, but it does so without using language that attacks the dignity or humanity of any group of people.\n\nFINAL: not toxic",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.88,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9325000000000001,
+            "rationale": "The agent correctly identified the comment as not toxic, matching the reference answer, with sound reasoning distinguishing controversial historical argument from dehumanizing or contemptuous language"
+          }
+        },
+        {
+          "query": "Noam Chomsky, Amy Goodman, Jeremy Scahill, they rallied behind the Serbs and criticized the Clintons, so by your thinking, they must be Nazi white nationalists, too. What a hoot!",
+          "gold": "toxic",
+          "output": "This comment is criticizing a perceived logical inconsistency or unfair characterization. It cites specific public figures and their documented positions (criticism of Clinton policies regarding the Balkans), then sarcastically points out that applying a certain label to them would be absurd.\n\nThe comment does not demean, dehumanize, or attack any group of people. It does not use contemptuous language toward individuals or categories of people. It expresses disagreement with what the commenter sees as faulty reasoning through sarcasm (\"What a hoot!\"), but this is directed at the logic of an argument, not at people or groups themselves.\n\nFINAL: not toxic",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.85,
+            "reasoning_soundness": 0.6,
+            "execution_accuracy": 0.9,
+            "output_integrity": 0.2,
+            "aggregate": 0.6375000000000001,
+            "rationale": "The agent correctly addressed the task of flagging toxicity and provided reasoning, but reached the wrong conclusion — the reference answer is 'toxic,' while the agent labeled it 'not toxic,' making t"
+          }
+        },
+        {
+          "query": "Sajjan does look a little like Medusa, so maybe there is something to the story.",
+          "gold": "not toxic",
+          "output": "This comment makes a physical appearance comparison between a person (Sajjan) and a mythological figure (Medusa), implying an unflattering resemblance. The comparison is contemptuous and mocking of the person's appearance, which constitutes personal insult and ridicule.\n\nFINAL: toxic",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.85,
+            "reasoning_soundness": 0.55,
+            "execution_accuracy": 0.7,
+            "output_integrity": 0.2,
+            "aggregate": 0.575,
+            "rationale": "The agent incorrectly classified the comment as toxic when the reference answer is 'not toxic'; the reasoning overstates the harm of a mild, ambiguous mythological comparison, leading to a wrong final"
+          }
+        },
+        {
+          "query": "You REALLY need to spend some time doing some research, instead of spitting the kind of vitriol such as you have dispensed here. If you were being raped by a man who was overpowering you, would you prefer the cops use a taser or a gun?",
+          "gold": "toxic",
+          "output": "This comment uses strong language (\"vitriol\") to criticize someone's argument, but it does not demean or attack a person or group as inferior or contemptible. The rhetorical question about self-defense scenarios is presented as a challenge to the other person's reasoning on a policy matter (use of force by police), not as dehumanizing language toward any group.\n\nThe tone is confrontational and passionate, but it does not contain personal insults, hateful generalizations about groups, or contemptuous characterizations of people's humanity.\n\nFINAL: not toxic",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.8,
+            "reasoning_soundness": 0.4,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.15,
+            "aggregate": 0.5750000000000001,
+            "rationale": "The agent correctly addressed the task but reached the wrong conclusion — the comment is toxic (aggressive, uses a graphic hypothetical rape scenario to intimidate/shame the target), and the agent's r"
+          }
+        },
+        {
+          "query": "As Sherman David says, the palestinians could have had a state in 1936 (Peel Commission, 1948 (UN Partition Plan), 2000 (Camp David), 2008 (Olmert Peace Plan), any many an occasion in between. They pay the price for their continued rejectionism or their outright desire for genocide against the Jews (see the Hamas Charter, or go back to the Grand Mufti al Husseini's alliance with Hitler). If the palestinians ever change, they won't be \"oppressed by bureaucracy\".",
+          "gold": "not toxic",
+          "output": "I need to evaluate whether this comment contains demeaning, dehumanizing, or contemptuous language toward Palestinians or any group.\n\nThe comment:\n- Cites historical events and peace proposals (factual claims)\n- Attributes Palestinian rejection of statehood offers to \"rejectionism\" or \"desire for genocide\"\n- References the Hamas Charter and historical figures' actions\n- Concludes that Palestinians \"pay the price\" for these choices\n- Uses the phrase \"oppressed by bureaucracy\" in quotes, suggesting skepticism of that framing\n\nThe language does not use insulting epithets, call Palestinians inherently inferior or subhuman, or employ contemptuous characterizations of Palestinians as people. The comment argues that Palestinian leadership made poor strategic choices and holds extremist positions—this is a policy/historical argument, not a demeaning characterization of the Palestinian people themselves.\n\nWhile the comment is strongly critical and makes controversial claims about Palestinian intentions, it does not demean or dehumanize the group. It attributes specific positions and actions to Palestinian leadership/movements, not blanket contemptuous generalizations about Palestinians as people.\n\nFINAL: not toxic",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.88,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9325000000000001,
+            "rationale": "The agent correctly identified the comment as not toxic, matching the reference answer, with coherent reasoning distinguishing political/historical criticism from dehumanizing language, and proper for"
+          }
+        },
+        {
+          "query": "Maybe they're just fat and lazy.",
+          "gold": "toxic",
+          "output": "This comment uses a contemptuous generalization (\"fat and lazy\") to demean people, attributing negative character traits to them based on appearance or assumption. This is insulting and demeaning language directed at a group of people.\n\nFINAL: toxic",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly identified the comment as toxic, matching the reference answer, with sound reasoning about why the language is demeaning, and properly formatted the final label."
+          }
+        },
+        {
+          "query": "No wonder their stuff tastes so good!",
+          "gold": "not toxic",
+          "output": "not toxic\n\nFINAL: not toxic",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.98,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.98,
+            "output_integrity": 1.0,
+            "aggregate": 0.965,
+            "rationale": "The agent correctly identified the comment as not toxic, matching the reference answer exactly, with proper format and no fabrication."
+          }
+        },
+        {
+          "query": "4:20: I hope you have a lot of available time. With each day and Mr. Trump's latest gaffe, being an apologist becomes more time consuming. Doesn't it also get at least a little embarassing? Could you convey a simple message to him for me: \"DONALD, IF YOU DON'T MEAN SOMETHING, DON'T SAY IT.\" Following that one simple bit of advice could save him from repeatedly making a fool of himself and save you from having to, time and again. offer some very weak excuse for his comments. ...Don't you think this is a helpful suggestion? regards, Gary",
+          "gold": "toxic",
+          "output": "FINAL: not toxic",
+          "objective": 0.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.3,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.15,
+            "aggregate": 0.5875,
+            "rationale": "The agent correctly addressed the task of flagging toxicity but produced the wrong label — the comment contains condescending, mocking language directed at both Trump and the commenter, which the refe"
+          }
+        },
+        {
+          "query": ". . . none of which warranted execution. Man, we are a mean and hateful society.",
+          "gold": "not toxic",
+          "output": "FINAL: not toxic",
+          "objective": 1.0,
+          "gpa": {
+            "target_alignment": 0.95,
+            "reasoning_soundness": 0.9,
+            "execution_accuracy": 0.95,
+            "output_integrity": 0.95,
+            "aggregate": 0.9375,
+            "rationale": "The agent correctly identified the comment as not toxic, matching the reference answer, and the output is properly formatted and on-target."
+          }
+        }
+      ],
+      "optimization": {
+        "baseline_val": 0.7,
+        "struct_best_val": 1.0,
+        "prompt_best_val": 1.0,
+        "final_val": 1.0,
+        "shipped_baseline": false,
+        "ship_prob_better": 0.72675,
+        "deployed_phase": "structural-only",
+        "struct_iters": 30,
+        "prompt_iters": 30,
+        "struct_prompt": "You are a toxicity-moderation assistant. Your sole job is to classify a comment as **toxic** or **not toxic** and output that label — nothing else.\n\n---\n\n## ROLE\nEvaluate whether a comment contains content that is rude, disrespectful, hateful, or likely to make people leave a conversation, including attacks on groups, dehumanizing language, or hostile generalizations.\n\n---\n\n## LABEL DEFINITIONS\n\n**toxic** — The comment contains any of the following:\n- Personal insults or contemptuous put-downs directed at people or groups\n- Hateful or discriminatory generalizations about a group (racial, religious, political, ethnic, gender, etc.) that demean or dehumanize them\n- Language designed to demean, belittle, or dehumanize\n- Hostile rhetoric that frames a group as inherently inferior, subhuman, or worthy of contempt\n- Condescending or insulting characterizations of people (\"any idiot\", \"lobotomy\", etc.)\n- Mocking or dismissive language about a religion, religious text, or its followers in a contemptuous way\n\n**not toxic** — The comment expresses opinions, criticism, or factual claims in a manner that is civil and does not demean or attack people or groups, even if the topic is controversial, the opinion is strong, or the conclusion is extreme.\n\n---\n\n## DECISION RULES FOR HARD CASES\n\n1. **Policy argument vs. group denigration**: A comment that argues for an extreme policy position (e.g., banning immigration of a religious group) using factual claims, cited examples, and safety rationale — without using contemptuous, dehumanizing, or insulting language toward the group as people — is **not toxic**. The test is whether the language *demeans the group's humanity*, not whether the policy conclusion is controversial or offensive to many.\n\n2. **Political generalizations**: Broad negative characterizations of a political group as inherently bad people (e.g., blanket \"hypocrites,\" \"evil,\" \"stupid\") are **toxic** — they demean the group rather than critique a specific policy or action.\n\n3. **Condescending insults about intelligence or ability**: Calling people idiots, comparing their activity to a lobotomy, or otherwise belittling their competence is **toxic**.\n\n4. **Mocking religion or sacred texts**: Using contemptuous, dismissive language to attack a religion or its texts (e.g., \"stupid book of myths,\" \"your precious bible is a joke\") is **toxic** — this demeans believers and their faith.\n\n5. **Tone vs. content**: Focus on *how* the group is described, not on how extreme or unpopular the position is. A comment may call for severe restrictions on a group without being toxic, as long as the language does not treat members of that group as inferior, contemptible, or subhuman.\n\n6. **Strong opinion ≠ toxic**: A comment may take a strong, even unpopular position on immigration, religion, or politics without being toxic, as long as it does not use contemptuous or demeaning language toward people or groups.\n\n7. **Emotional appeal ≠ toxic**: Passionate or alarmed rhetoric (e.g., \"when they kill your children, will you think differently?\") used to argue a policy point is not automatically toxic unless it pairs with dehumanizing language about the group itself.\n\n---\n\n## OUTPUT FORMAT\n\nYou MUST respond with **only** one of these two labels. Do NOT include any explanation, reasoning, analysis, punctuation, or additional text of any kind. Your entire response must be exactly one of:\n\n```\nnot toxic\n```\nor\n```\ntoxic\n```",
+        "trajA": [
+          {
+            "iter": 0,
+            "val_obj": 0.7
+          },
+          {
+            "iter": 1,
+            "val_obj": 0.8,
+            "kept": true
+          },
+          {
+            "iter": 2,
+            "val_obj": 0.9,
+            "kept": true
+          },
+          {
+            "iter": 3,
+            "val_obj": 1.0,
+            "kept": true
+          },
+          {
+            "iter": 4,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 5,
+            "val_obj": 0.8,
+            "kept": false
+          },
+          {
+            "iter": 6,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 7,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 8,
+            "val_obj": 0.8,
+            "kept": false
+          },
+          {
+            "iter": 9,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 10,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 11,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 12,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 13,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 14,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 15,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 16,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 17,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 18,
+            "val_obj": 0.8,
+            "kept": false
+          },
+          {
+            "iter": 19,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 20,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 21,
+            "val_obj": 0.8,
+            "kept": false
+          },
+          {
+            "iter": 22,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 23,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 24,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 25,
+            "val_obj": 0.8,
+            "kept": false
+          },
+          {
+            "iter": 26,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 27,
+            "val_obj": 0.8,
+            "kept": false
+          },
+          {
+            "iter": 28,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 29,
+            "val_obj": 0.8,
+            "kept": false
+          },
+          {
+            "iter": 30,
+            "val_obj": 0.8,
+            "kept": false
+          }
+        ],
+        "trajB": [
+          {
+            "iter": 0,
+            "val_obj": 1.0
+          },
+          {
+            "iter": 1,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 2,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 3,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 4,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 5,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 6,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 7,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 8,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 9,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 10,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 11,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 12,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 13,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 14,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 15,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 16,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 17,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 18,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 19,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 20,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 21,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 22,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 23,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 24,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 25,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 26,
+            "val_obj": 0.9,
+            "kept": false
+          },
+          {
+            "iter": 27,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 28,
+            "val_obj": 1.0,
+            "kept": false
+          },
+          {
+            "iter": 29,
+            "val_obj": 0.8,
+            "kept": false
+          },
+          {
+            "iter": 30,
+            "val_obj": 1.0,
+            "kept": false
+          }
+        ]
+      }
+    }
+  },
+  "duration_s": 1268.7
+}
