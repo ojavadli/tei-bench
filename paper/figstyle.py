@@ -36,6 +36,8 @@ ACCENT = "#2f5c8a"   # muted steel blue: TEI / deployed data series only
 GRAYD = "#6b7280"    # baseline / control / ceiling
 GRAYM = "#9aa1a9"    # mid gray
 GRAYL = "#c9ced4"    # light gray: individual population lines
+FRAME = "#3a3a3a"    # plot-box frame
+GRID = "#d6d6d6"     # subtle gridlines (behind data)
 
 plt.rcParams.update({
     "font.family": "serif", "font.serif": [LM, "CMU Serif", "cmr10"],
@@ -45,11 +47,17 @@ plt.rcParams.update({
     "font.size": 9, "axes.labelsize": 9, "axes.titlesize": 9,
     "axes.titleweight": "normal", "xtick.labelsize": 8, "ytick.labelsize": 8,
     "legend.fontsize": 8, "legend.frameon": False,
-    "axes.spines.top": False, "axes.spines.right": False,
-    "axes.linewidth": 0.6, "xtick.major.width": 0.6, "ytick.major.width": 0.6,
-    "xtick.major.size": 3, "ytick.major.size": 3,
-    "lines.linewidth": 1.1, "text.color": INK, "axes.labelcolor": INK,
-    "axes.edgecolor": INK, "xtick.color": INK, "ytick.color": INK,
+    # framed plot box (all four spines) + subtle gridlines behind the data +
+    # ticks pointing in: the polished scientific-tool / MATLAB-grade look.
+    "axes.spines.top": True, "axes.spines.right": True,
+    "axes.edgecolor": FRAME, "axes.linewidth": 0.7, "axes.axisbelow": True,
+    "axes.grid": True, "axes.grid.axis": "y", "grid.color": GRID,
+    "grid.linewidth": 0.5, "grid.alpha": 1.0,
+    "xtick.direction": "in", "ytick.direction": "in",
+    "xtick.major.width": 0.7, "ytick.major.width": 0.7,
+    "xtick.major.size": 3.2, "ytick.major.size": 3.2,
+    "lines.linewidth": 1.2, "text.color": INK, "axes.labelcolor": INK,
+    "xtick.color": FRAME, "ytick.color": FRAME,
     "pdf.fonttype": 3, "pdf.compression": 6, "figure.dpi": 300, "savefig.dpi": 300,
 })
 

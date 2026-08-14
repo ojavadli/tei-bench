@@ -680,7 +680,7 @@ for r in A:
     b = BLIND_BY_AGENT.get(r["dir"])
     blind = f"{b['patched']}/{b['patched']+b['baseline']+b['tie']}" if b else "--"
     rows.append(
-        f"{ob['rank']} & {esc(short_name(ob['system']), 24)} & {ob['split'][:4]} & "
+        f"{ob['rank']} & {esc(short_name(ob['system']), 18)} & {ob['split'][:4]} & "
         f"{ob['resolve_rate']:.1f} & {bpt:.3f} & {s_app:.3f} & "
         f"{f_app:.3f} & {d_app:+.3f} & {f_prop:.3f} & {blind} & \\checkmark & {na} & "
         f"{(res.get('noise_floor') or {}).get('noise_floor', float('nan')):+.4f} & "
@@ -690,7 +690,7 @@ rows.append(f"\\textbf{{Mean (patched, $n{{=}}26$)}} & & & & \\textbf{{{base26.m
             f"\\textbf{{{final26.mean():.3f}}} & \\textbf{{{d_fb26.mean():+.3f}}} & {final_prop[IS_P].mean():.3f} & & & & & \\\\")
 rows.append(f"Mean (all 30) & & & & {base_v.mean():.3f} & {struct_v.mean():.3f} & "
             f"{final_v.mean():.3f} & {delta_fb.mean():+.3f} & {final_prop.mean():.3f} & & & & & \\\\")
-wtab("pertask.tex", rows, "rlcrrrrrrccrrr",
+wtab("pertask.tex", rows, "r p{2.5cm} crrrrrrccrrr",
      r"\# & System & Split & Res.\% & Base & Struct & Final & $\Delta$ & Final$^{\ast}$ & Blind & AST & Appl & Floor & MDE$^{a}_{80}$")
 
 # selection funnel
@@ -973,12 +973,12 @@ out.append(r"""\bottomrule
 \label{app:tech}
 Table~\ref{tab:techniques} lists the most frequent proposal technique
 \emph{families} (normalized from the free-text technique field); the largest
-family covers \swTechTopN{} of \swVersions{} versions. Per-family mean deltas
+family covers \swTechTopN{} of six thousand versions. Per-family mean deltas
 are descriptive only and carry no inferential weight---families were not
 randomized across systems.
 
 \begin{table}[H]\centering
-\caption{Most frequent proposal technique families over all \swVersions{}
+\caption{Most frequent proposal technique families over all six thousand
 why-records; $n$ is the Versions column. Descriptive only: families were not
 randomized, so the mean $\Delta$ (\textsc{rubric}) carries no causal claim.}
 \label{tab:techniques}\footnotesize

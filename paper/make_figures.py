@@ -92,7 +92,8 @@ def fig_dims():
     ax.scatter([], [], facecolor="white", edgecolor=GRAYD, s=32, label="baseline")
     ax.scatter([], [], color=ACCENT, s=40, label="deployed")
     ax.legend(loc="lower left", fontsize=7.4, handletextpad=0.3, ncol=2, columnspacing=1.1)
-    ax.spines[["left"]].set_visible(False); ax.tick_params(axis="y", length=0)
+    ax.tick_params(axis="y", length=0)              # keep the box; drop y tick marks (categorical)
+    ax.grid(True, axis="x"); ax.grid(False, axis="y")  # value is on x -> vertical gridlines
     save(fig, "fig_dims.pdf")
 
 
@@ -182,7 +183,8 @@ def fig_validation():
     C.set_xlim(0, 0.088); C.set_ylim(-0.55, 1.55)
     C.set_xlabel("rubric delta", fontsize=8)
     C.set_title("Budget-matched random", fontsize=8.8, fontweight="bold")
-    C.spines[["left"]].set_visible(False); C.tick_params(axis="y", length=0)
+    C.tick_params(axis="y", length=0)               # keep the box; drop y tick marks (categorical)
+    C.grid(True, axis="x"); C.grid(False, axis="y")  # value is on x -> vertical gridlines
 
     barpair(D, [3, 6], ["patched\nmaj.", "baseline\nmaj."], [ACCENT, GRAYD], ["", "xxxx"],
             10, "agent majorities (of 10)", "Cross-provider", [0, 2, 4, 6, 8, 10])
