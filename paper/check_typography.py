@@ -40,9 +40,24 @@ def extract():
     pages = []
     for pm in re.finditer(r"<page\b[^>]*>(.*?)</page>", out.stdout, re.S):
         heights = []
-        for wm in re.finditer(r'<word[^>]*yMin="([\d.]+)"[^>]*yMax="([\d.]+)">([^<]*)</word>', pm.group(1)):
-            if wm.group(3).strip():
-                heights.append(round(float(wm.group(2)) - float(wm.group(1)), 1))
+        for wm in re.finditer(r'<word\b([^>]*)>([^<]*)</word>', pm.group(1)):
+            attrs, txt = wm.group(1), wm.group(2).strip()
+            if not txt:
+                continue
+            def _a(name):
+                m = re.search(name + r'="([\d.]+)"', attrs)
+                return float(m.group(1)) if m else None
+            xmin, ymin, xmax, ymax = _a("xMin"), _a("yMin"), _a("xMax"), _a("yMax")
+            if None in (xmin, ymin, xmax, ymax):
+                continue
+            w, h = xmax - xmin, ymax - ymin
+            # Rotation-invariant font-size proxy. A horizontal word (>=2 chars) is
+            # wider than tall, so its HEIGHT is the point size; a 90-degree rotated
+            # word (the two sidewaysfigure captions, Figs 8-9) is taller than wide,
+            # so its WIDTH is the point size. min(w,h) recovers the true size on
+            # both and removes the false OVERSIZED flag on the rotated caption pages.
+            size = min(w, h) if len(txt) >= 2 else h
+            heights.append(round(size, 1))
         pages.append(heights)
     return pages
 

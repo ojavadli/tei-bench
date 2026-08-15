@@ -32,7 +32,7 @@ def fig_trajectory():
     ax.plot(xs, ceil, ls=(0, (4, 2)), color=GRAYM, lw=0.9, marker="o", ms=3.4,
             mfc="white", mec=GRAYM, zorder=2, label="best proposed (not committed)")
     ax.plot(xs, dep, color=ACCENT, lw=1.6, marker="o", ms=5.2, mfc=ACCENT,
-            mec="white", mew=0.6, zorder=4, label="deployed mean ($n=26$)")
+            mec="white", mew=0.6, zorder=4, label="deployed mean (n = 26)")
     for xi, yi in zip(xs, dep):
         ax.annotate(f"{yi:.3f}", (xi, yi), textcoords="offset points", xytext=(0, -12),
                     ha="center", va="top", fontsize=8, color=INK)
@@ -56,7 +56,7 @@ def fig_population():
         ax.plot(xs, [b, s, f], color=GRAYL, lw=0.6, zorder=1)
     mean = [float(np.mean(c)) for c in cols]
     ax.plot(xs, mean, color=ACCENT, lw=1.7, marker="o", ms=4.8, mfc=ACCENT,
-            mec="white", mew=0.6, zorder=4, label="mean, all systems ($n=30$)")
+            mec="white", mew=0.6, zorder=4, label="mean, all systems (n = 30)")
     for xi, v in zip(xs, mean):
         ax.annotate(f"{v:.3f}", (xi, v), textcoords="offset points", xytext=(0, 6),
                     ha="center", fontsize=7.6, color=INK)
@@ -84,7 +84,7 @@ def fig_dims():
                     ha="right", va="center", fontsize=7.2, color=GRAYD)
         ax.annotate(f"{f:.3f}", (f, yi), textcoords="offset points", xytext=(6, 0),
                     ha="left", va="center", fontsize=7.2, color=INK)
-        ax.annotate(f"$+{f - b:.3f}$", ((b + f) / 2, yi), textcoords="offset points",
+        ax.annotate(f"+{f - b:.3f}", ((b + f) / 2, yi), textcoords="offset points",
                     xytext=(0, 5.5), ha="center", fontsize=6.8, color=GRAYD)
     ax.set_yticks(y); ax.set_yticklabels(labels, fontsize=8.2)
     ax.set_xlabel("anchored rubric dimension score (proxy)")
@@ -112,13 +112,13 @@ def fig_floor():
                                gridspec_kw={"height_ratios": [1, 1]})
     fig.subplots_adjust(left=0.125, right=0.965, top=0.965, bottom=0.135, hspace=0.18)
     a.hist(par, bins=edges, color=GRAYD, edgecolor="white", lw=0.3)
-    a.set_ylim(0, ptop * 1.12); a.set_ylabel("paraphrase\ncount ($n=90$)", fontsize=8)
-    a.annotate("max rewording $\\approx +0.0075$", (0.0075, ptop),
+    a.set_ylim(0, ptop * 1.12); a.set_ylabel("paraphrase\ncount (n = 90)", fontsize=8)
+    a.annotate("max rewording up to +0.0075", (0.0075, ptop),
                textcoords="offset points", xytext=(8, -2), ha="left", va="top",
                fontsize=7.2, color=INK)
     b.hist(shp, bins=edges, color=ACCENT, edgecolor="white", lw=0.3)
-    b.set_ylim(0, stop * 1.18); b.set_ylabel("shipped\ncount ($n=30$)", fontsize=8)
-    b.annotate("deployed deltas up to $+0.173$", (shp.max(), stop * 0.5),
+    b.set_ylim(0, stop * 1.18); b.set_ylabel("shipped\ncount (n = 30)", fontsize=8)
+    b.annotate("deployed deltas up to +0.173", (shp.max(), stop * 0.5),
                textcoords="offset points", xytext=(-8, 0), ha="right", va="center",
                fontsize=7.2, color=INK)
     b.set_xlabel("delta vs baseline (rubric / proxy)")
@@ -142,8 +142,8 @@ def fig_floor_ecdf():
     ax.step(xp, yp, where="post", color=GRAYD, lw=1.3)
     ax.step(xsq, ysq, where="post", color=ACCENT, lw=1.5)
     ax.axvline(0, color="0.6", lw=0.6, ls=(0, (2, 2)))
-    ax.text(0.006, 0.55, "paraphrase orbit\n($n=90$)", color=GRAYD, fontsize=7.4, va="center")
-    ax.text(0.093, 0.55, "shipped deltas\n($n=30$)", color=ACCENT, fontsize=7.4, va="center")
+    ax.text(0.006, 0.55, "paraphrase orbit\n(n = 90)", color=GRAYD, fontsize=7.4, va="center")
+    ax.text(0.093, 0.55, "shipped deltas\n(n = 30)", color=ACCENT, fontsize=7.4, va="center")
     ax.set_xlabel("delta vs baseline (rubric / proxy)")
     ax.set_ylabel("empirical cumulative prob.")
     ax.set_xlim(-0.02, 0.185); ax.set_ylim(0, 1.02)
@@ -177,7 +177,7 @@ def fig_validation():
     C.scatter([xv[0]], [1], s=40, color=ACCENT, zorder=3)
     C.scatter([xv[1]], [0], s=40, facecolor="white", edgecolor=GRAYD, lw=1.0, zorder=3)
     for yy, vv in zip(yv, xv):
-        C.annotate(f"$+{vv:.4f}$", (vv, yy), textcoords="offset points", xytext=(6, 0),
+        C.annotate(f"+{vv:.4f}", (vv, yy), textcoords="offset points", xytext=(6, 0),
                    ha="left", va="center", fontsize=7.4, color=INK)
     C.set_yticks(yv); C.set_yticklabels(["TEI", "random"])
     C.set_xlim(0, 0.088); C.set_ylim(-0.55, 1.55)

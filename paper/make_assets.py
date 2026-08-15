@@ -711,7 +711,7 @@ wtab("runnability.tex", rows, "lr", "Blocker & Systems")
 
 # stage means + contrasts
 def crow(P, label):
-    return (f"{label} & {P['mean']:+.3f} & $[{P['ci_lo']:+.3f},{P['ci_hi']:+.3f}]$ & "
+    return (f"{label} & {P['mean']:+.3f} & [{P['ci_lo']:+.3f},{P['ci_hi']:+.3f}] & "
             f"{fmt_p(P['p'])} & {fmt_p(P['wilcoxon_p'])} & {fmt_p(P['sign_p'])} & "
             f"{P['dz']:.2f} & {P['wins']}/{P['losses']}/{P['ties']} \\\\")
 
@@ -763,9 +763,9 @@ wtab("costs.tex", [
     f"Cost per scored candidate version & {M['swCostPerVersion']} \\\\",
     f"Cost per applied, syntax-clean committed patch & {M['swCostPerPatch']} \\\\",
     f"Judge calls, original-study decomposition (luna / terra) & {M['swLunaCalls']} / {M['swTerraCalls']} \\\\",
-    r"Per-model token split & not separately metered (list bounds, Table~\ref{tab:spend}) \\",
-    r"Syntax pre-gate savings (projection) & \$0 per parse-breaking candidate \\",
-], r"@{}p{0.72\linewidth}r@{}", "Quantity & Value")
+    r"Per-model token split (list bounds, Table~\ref{tab:spend}) & not separately metered \\",
+    r"Syntax pre-gate savings per parse-breaking candidate (projection) & \$0 \\",
+], r"@{}p{0.70\linewidth}r@{}", "Quantity & Value")
 
 # apply taxonomy
 wtab("apply.tex", [f"{esc(k)} & {v} \\\\" for k, v in apply_notes.most_common()], "lr", "Outcome & Versions")
