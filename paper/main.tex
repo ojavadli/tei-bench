@@ -58,34 +58,31 @@ six thousand why-records, blinded-vote and audit datasets, patches, and all scri
 \maketitle
 
 \begin{abstract}
-\noindent Automated optimization of LLM agents is typically shown on a few
-author-chosen tasks, with candidates selected by biased judges. We introduce
-TEI (Target--Evaluate--Improve), a
-loop built on sequential decision gating: candidates face sequential paired
-evaluation with exact futility bounds and Jeffreys posterior kills, Wilson
-lower-confidence-bound Pareto selection, and a Bayesian do-no-harm ship gate; a
-two-head Bayesian bandit credit ledger with Thompson selection steers each
-proposal's fix family. Applied to thirty real systems frozen from
-the SWE-bench leaderboard (TEI-SWE-30), TEI generated six thousand audited
-candidate versions---100 structural and 100 prompt iterations per system---and
-\swApplied{} committed patches, every version scored and why-recorded, at
-\swCostPerAgent{} per system ($\approx$\swCostPerVersion{} per candidate). On the
-\emph{deployed} artifact the anchored rubric aggregate rises
-$\swAppBase\to\swAppStruct\to\swAppFinal$ (\textbf{\swAppRelGain{} relative};
-proxy substrate; a best-\emph{proposed} ceiling of \swPropRelGain{} is reported
-separately). Under blinding (real diffs, randomized order, no
-narrative), \swBlindMajP/26 patched systems win a strict majority
-(\swBlindVotesP/130 votes, \swBlindPerfect{} unanimous) after repairing one
-import-time defect; a preregistered sham placebo draws \swShamReVotes{} votes,
-and diagnosis-guided proposals beat budget-matched random on
-\swRandTeiWins/\swRandN{}. Crucially, \textbf{zero executed benchmark rollouts
-were used as the selection signal}---the search runs on anchored-rubric proxy
-evaluation, gating, blinding, and static checks. Honest nulls bound the
-claims---a preregistered credit-ledger ablation shows no detectable benefit
-over a simpler proposer---and, in our primary-source review, contemporary
-optimizers report no comparable placebo-plus-blinded validation. We release
-TEI-SWE-30, the six thousand why-records, the blinded-vote datasets, a contributed
-syntax pre-gate, and a one-command audit tool.
+\noindent Automated optimization of LLM agents is typically evaluated on a
+small number of author-built systems, making it unclear whether a single
+optimization procedure can improve a heterogeneous population of existing
+agents at low cost and with credible validation. We introduce TEI
+(Target–Evaluate–Improve), a gated optimization framework that jointly searches
+structural and prompt-level modifications while preserving per-candidate
+score-and-rationale provenance. We apply TEI to 30 independently developed
+systems frozen from the SWE-bench leaderboard. Across 100 structural and 100
+prompt iterations per system, TEI evaluates six thousand candidate versions and
+commits 3,373 patches. On the 26 systems receiving deployable changes, the
+applied artifacts improve the anchored rubric aggregate from 0.606 to 0.667
+after structural optimization and to 0.684 after prompt optimization, a 13.0\%
+relative gain; the best-proposed search ceiling is 14.0\%. Crucially, the
+improvement survives direction-hidden evaluation of the actual code changes: 22
+of 26 systems receive a strict blinded majority (110/130 votes; 17 unanimous).
+Length-matched sham changes receive 26.9\% of votes versus 84.6\% for real
+patches, and diagnosis-guided proposals outperform budget-matched random search
+on all 10 tested systems. A within-study zero-patch control further shows that
+rubric movement alone is insufficient evidence of deployed improvement,
+motivating the blinded validation layer. TEI uses no executed benchmark
+rollouts as its candidate-selection signal and requires approximately \$1.79 in
+reported LLM cost per system (\$0.009 per candidate). These results establish a
+low-cost, auditable approach to population-scale structural-and-prompt agent
+optimization, while explicitly limiting the demonstrated performance claim to
+the bias-controlled proxy substrate.
 \end{abstract}
 
 \section{Introduction}
@@ -177,8 +174,9 @@ lacked, and \swNoSource{} linked repositories ship no runnable source at all)
 forced a discipline that we found to be the paper's second contribution: the
 \textbf{validation ladder}. Every claim is stated at the rung of evidence that
 supports it---narrative rubric, blinded A/B, deterministic static checks,
-execution---each rung cheaper than the next is trusted
-(Fig.~\ref{fig:ladder}). Climbing the ladder did exactly what such structure
+execution. The ladder is ordered by evidentiary strength, not cost; we use the
+cheapest applicable checks early, but marginal cost is not monotonic across
+rungs (Fig.~\ref{fig:ladder}). Climbing the ladder did exactly what such structure
 is for: the blinded rung confirmed the improvement signal was real rather than
 narrative, and the static rung caught a rare failure mode (exact-match patches
 splicing strings or landing at the wrong indentation in 6 files across 5

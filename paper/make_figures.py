@@ -73,8 +73,8 @@ def fig_dims():
     order = sorted(d["order"], key=lambda k: d["deployed"][k] - d["baseline"][k], reverse=True)
     labels = [d["labels"][k] for k in order]
     base = [d["baseline"][k] for k in order]; dep = [d["deployed"][k] for k in order]
-    fig, ax = plt.subplots(figsize=(6.1, 2.1))
-    fig.subplots_adjust(left=0.215, right=0.9, top=0.965, bottom=0.205)
+    fig, ax = plt.subplots(figsize=(6.1, 2.35))
+    fig.subplots_adjust(left=0.215, right=0.9, top=0.965, bottom=0.185)
     y = list(range(len(order)))[::-1]
     for yi, b, f in zip(y, base, dep):
         ax.plot([b, f], [yi, yi], color=GRAYM, lw=1.1, zorder=1)
@@ -88,10 +88,13 @@ def fig_dims():
                     xytext=(0, 5.5), ha="center", fontsize=6.8, color=GRAYD)
     ax.set_yticks(y); ax.set_yticklabels(labels, fontsize=8.2)
     ax.set_xlabel("anchored rubric dimension score (proxy)")
-    ax.set_xlim(0.45, 0.80); ax.set_ylim(-0.6, len(order) - 0.15)
-    ax.scatter([], [], facecolor="white", edgecolor=GRAYD, s=32, label="baseline")
-    ax.scatter([], [], color=ACCENT, s=40, label="deployed")
-    ax.legend(loc="lower left", fontsize=7.4, handletextpad=0.3, ncol=2, columnspacing=1.1)
+    ax.set_xlim(0.45, 0.80); ax.set_ylim(-0.6, len(order) + 0.30)
+    # No legend: label the two states directly on the top (largest-gain) row.
+    ty = len(order) - 1
+    ax.annotate("baseline", (base[0], ty), textcoords="offset points", xytext=(0, 14),
+                ha="center", va="bottom", fontsize=7.4, color=GRAYD)
+    ax.annotate("deployed", (dep[0], ty), textcoords="offset points", xytext=(0, 14),
+                ha="center", va="bottom", fontsize=7.4, color=ACCENT)
     ax.tick_params(axis="y", length=0)              # keep the box; drop y tick marks (categorical)
     ax.grid(True, axis="x"); ax.grid(False, axis="y")  # value is on x -> vertical gridlines
     save(fig, "fig_dims.pdf")
@@ -153,41 +156,43 @@ def fig_floor_ecdf():
 # ================================================= FIGURE 7 — validation panels
 def fig_validation():
     fig, axs = plt.subplots(2, 2, figsize=(5.4, 3.6))
-    fig.subplots_adjust(hspace=0.6, wspace=0.42, left=0.11, right=0.965,
-                        top=0.93, bottom=0.10)
+    fig.subplots_adjust(hspace=0.62, wspace=0.46, left=0.12, right=0.965,
+                        top=0.93, bottom=0.11)
     A, B, C, D = axs[0, 0], axs[0, 1], axs[1, 0], axs[1, 1]
 
-    def barpair(ax, vals, labels, colors, hatches, ymax, ylab, title, yticks):
-        ax.bar([0, 1], vals, width=0.6, color=colors, hatch=hatches, edgecolor=INK, lw=0.5)
-        ax.set_xticks([0, 1]); ax.set_xticklabels(labels)
-        ax.set_ylim(0, ymax); ax.set_yticks(yticks)
-        ax.set_ylabel(ylab, fontsize=8)
+    def dotpair(ax, vals, ylabels, xmax, xlabel, title, xticks, fmt):
+        """One comparison grammar for every panel: a horizontal Cleveland
+        lollipop per condition. Top row = TEI / real / patched series (filled
+        accent dot); bottom row = the control (open gray dot). No bars, so the
+        four panels read identically; the adverse cross-provider panel (D) is
+        shown at the same scale and prominence as the favourable ones."""
+        yv = [1, 0]
+        ax.hlines(yv, 0, vals, color=GRAYM, lw=1.1, zorder=1)
+        ax.scatter([vals[0]], [1], s=46, color=ACCENT, zorder=3)
+        ax.scatter([vals[1]], [0], s=46, facecolor="white", edgecolor=GRAYD, lw=1.0, zorder=3)
+        for yy, vv in zip(yv, vals):
+            if vv > 0.70 * xmax:                     # near axis max: label to the left of the dot
+                ax.annotate(fmt(vv), (vv, yy), textcoords="offset points", xytext=(-6, 0),
+                            ha="right", va="center", fontsize=7.4, color=INK)
+            else:
+                ax.annotate(fmt(vv), (vv, yy), textcoords="offset points", xytext=(6, 0),
+                            ha="left", va="center", fontsize=7.4, color=INK)
+        ax.set_yticks(yv); ax.set_yticklabels(ylabels)
+        ax.set_xlim(0, xmax); ax.set_ylim(-0.55, 1.55)
+        ax.set_xticks(xticks)
+        ax.set_xlabel(xlabel, fontsize=8)
         ax.set_title(title, fontsize=8.8, fontweight="bold")
-        for xi, v, s in zip([0, 1], vals, [f"{v:g}" for v in vals]):
-            ax.text(xi, v + ymax * 0.02, s, ha="center", fontsize=8, color=INK)
+        ax.tick_params(axis="y", length=0)               # keep the box; drop y tick marks (categorical)
+        ax.grid(True, axis="x"); ax.grid(False, axis="y")  # value is on x -> vertical gridlines
 
-    barpair(A, [22, 4], ["TEI\nmaj.", "baseline\nmaj."], [ACCENT, GRAYD], ["", "////"],
-            26, "systems (of 26)", "Blinded A/B", [0, 6, 13, 20, 26])
-    barpair(B, [84.6, 26.9], ["real", "sham"], [ACCENT, GRAYD], ["", "////"],
-            100, "% of votes", "Sham placebo", [0, 25, 50, 75, 100])
-
-    # C dot plot (Cleveland), continuous rubric-delta axis incl. zero
-    yv = [1, 0]; xv = [0.0630, 0.0165]
-    C.hlines(yv, 0, xv, color=GRAYM, lw=1.1, zorder=1)
-    C.scatter([xv[0]], [1], s=40, color=ACCENT, zorder=3)
-    C.scatter([xv[1]], [0], s=40, facecolor="white", edgecolor=GRAYD, lw=1.0, zorder=3)
-    for yy, vv in zip(yv, xv):
-        C.annotate(f"+{vv:.4f}", (vv, yy), textcoords="offset points", xytext=(6, 0),
-                   ha="left", va="center", fontsize=7.4, color=INK)
-    C.set_yticks(yv); C.set_yticklabels(["TEI", "random"])
-    C.set_xlim(0, 0.088); C.set_ylim(-0.55, 1.55)
-    C.set_xlabel("rubric delta", fontsize=8)
-    C.set_title("Budget-matched random", fontsize=8.8, fontweight="bold")
-    C.tick_params(axis="y", length=0)               # keep the box; drop y tick marks (categorical)
-    C.grid(True, axis="x"); C.grid(False, axis="y")  # value is on x -> vertical gridlines
-
-    barpair(D, [3, 6], ["patched\nmaj.", "baseline\nmaj."], [ACCENT, GRAYD], ["", "xxxx"],
-            10, "agent majorities (of 10)", "Cross-provider", [0, 2, 4, 6, 8, 10])
+    dotpair(A, [22, 4], ["TEI\nmaj.", "baseline\nmaj."], 26, "systems (of 26)",
+            "Blinded A/B", [0, 6, 13, 20, 26], lambda v: f"{int(round(v))}")
+    dotpair(B, [84.6, 26.9], ["real", "sham"], 100, "% of votes",
+            "Sham placebo", [0, 25, 50, 75, 100], lambda v: f"{v:.1f}%")
+    dotpair(C, [0.0630, 0.0165], ["TEI", "random"], 0.088, "rubric delta",
+            "Budget-matched random", [0, 0.02, 0.04, 0.06, 0.08], lambda v: f"+{v:.4f}")
+    dotpair(D, [3, 6], ["patched\nmaj.", "baseline\nmaj."], 10, "agent majorities (of 10)",
+            "Cross-provider", [0, 2, 4, 6, 8, 10], lambda v: f"{int(round(v))}")
     save(fig, "fig_validation.pdf")
 
 
